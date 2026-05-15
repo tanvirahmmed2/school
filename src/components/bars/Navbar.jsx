@@ -42,13 +42,14 @@ const Navbar = () => {
     <div className="w-full fixed top-0 left-0 z-50 flex flex-col">
 
       <div
-        className={`bg-blue-500 text-white transition-all duration-300 overflow-hidden ${hideTop ? "h-0 opacity-0" : "h-12 opacity-100"
+        className={`bg-blue-500 w-full flex items-center justify-around flex-row text-white transition-all duration-300 overflow-hidden ${hideTop ? "h-0 opacity-0" : "h-12 opacity-100"
           }`}
       >
         <div className="h-12 flex items-center justify-center  gap-4">
-          <p className="text-4xl bg-white text-blue-500 px-2 rounded-2xl">G</p>
+          <p className="text-2xl bg-white text-blue-500 px-2 rounded-2xl">G</p>
           <h1>Goverment Primary School</h1>
         </div>
+        <Link href={'/dashboard'}>Panel</Link>
       </div>
 
       <div className="h-12 bg-white shadow-md flex flex-row items-center justify-center px-6 w-full">
