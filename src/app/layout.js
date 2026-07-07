@@ -1,4 +1,5 @@
 
+import { ContextProvider } from "@/component/helper/Context";
 import "./globals.css";
 
 export const metadata = {
@@ -11,7 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="w-full h-full">
       <body className="min-h-full w-full overflow-x-hidden">
-        {children}
+        <ContextProvider>
+          <main>{children}</main>
+        </ContextProvider>
       </body>
     </html>
   );
