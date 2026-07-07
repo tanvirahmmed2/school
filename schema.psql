@@ -1,0 +1,1702 @@
+-- School Management System Schema
+-- PostgreSQL Version compatibility
+
+-- Enable UUID extension if needed in the future
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- ============================================================================
+-- UTILITY FUNCTIONS & TRIGGERS
+-- ============================================================================
+
+-- Function to automatically update updated_at timestamp on row modification
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- ============================================================================
+-- 1. BASE SETTINGS & SYSTEM CONFIGURATION
+-- ============================================================================
+
+CREATE TABLE payment_methods (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    config JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_payment_methods_updated_at
+    BEFORE UPDATE ON payment_methods
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE system_settings (
+    id BIGSERIAL PRIMARY KEY,
+    school_name VARCHAR(255) NOT NULL,
+    school_code VARCHAR(50),
+    email VARCHAR(100),
+    phone VARCHAR(50),
+    address TEXT,
+    currency VARCHAR(10) DEFAULT 'USD',
+    currency_symbol VARCHAR(10) DEFAULT '$',
+    timezone VARCHAR(50) DEFAULT 'UTC',
+    logo_path VARCHAR(255),
+    favicon_path VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_system_settings_updated_at
+    BEFORE UPDATE ON system_settings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE website_settings (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    meta_description TEXT,
+    meta_keywords TEXT,
+    about_us TEXT,
+    contact_email VARCHAR(100),
+    contact_phone VARCHAR(50),
+    facebook_url VARCHAR(255),
+    twitter_url VARCHAR(255),
+    linkedin_url VARCHAR(255),
+    instagram_url VARCHAR(255),
+    map_iframe TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_website_settings_updated_at
+    BEFORE UPDATE ON website_settings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 2. ACADEMIC CALENDAR & CORE STRUCTURES
+-- ============================================================================
+
+CREATE TABLE academic_years (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(100) UNIQUE NOT NULL, -- e.g., "2026-2027"
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    is_current BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_academic_years_updated_at
+    BEFORE UPDATE ON academic_years
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE classes (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL, -- e.g., "Class 10"
+    numeric_name INT NOT NULL,         -- e.g., 10
+    code VARCHAR(50) UNIQUE NOT NULL,  -- e.g., "C10"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_classes_updated_at
+    BEFORE UPDATE ON classes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE sections (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,        -- e.g., "Section A"
+    capacity INT DEFAULT 40,
+    room_number VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, name)
+);
+
+CREATE TRIGGER update_sections_updated_at
+    BEFORE UPDATE ON sections
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE subjects (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    type VARCHAR(50) DEFAULT 'Theory', -- e.g., "Theory", "Practical", "Viva"
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_subjects_updated_at
+    BEFORE UPDATE ON subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE class_subjects (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    pass_marks NUMERIC(5, 2) NOT NULL DEFAULT 33.00,
+    total_marks NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, subject_id)
+);
+
+CREATE TRIGGER update_class_subjects_updated_at
+    BEFORE UPDATE ON class_subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 3. USER MANAGEMENT & CREDENTIALS
+-- ============================================================================
+
+CREATE TABLE admins (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(50),
+    role VARCHAR(50) DEFAULT 'Admin', -- e.g., "Admin", "SuperAdmin"
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_admins_updated_at
+    BEFORE UPDATE ON admins
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teachers (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id_code VARCHAR(50) UNIQUE NOT NULL, -- e.g., "TCH001"
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(50),
+    gender VARCHAR(20),
+    dob DATE,
+    joining_date DATE,
+    qualification TEXT,
+    experience_details TEXT,
+    designation VARCHAR(100),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_teachers_updated_at
+    BEFORE UPDATE ON teachers
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE staff (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id_code VARCHAR(50) UNIQUE NOT NULL, -- e.g., "STF001"
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(50),
+    gender VARCHAR(20),
+    dob DATE,
+    joining_date DATE,
+    qualification TEXT,
+    designation VARCHAR(100),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_staff_updated_at
+    BEFORE UPDATE ON staff
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE students (
+    id BIGSERIAL PRIMARY KEY,
+    admission_number VARCHAR(100) UNIQUE NOT NULL, -- e.g., "STD20260001"
+    roll_number INT,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    phone VARCHAR(50),
+    gender VARCHAR(20),
+    dob DATE,
+    admission_date DATE NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_students_updated_at
+    BEFORE UPDATE ON students
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teacher_subjects (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(teacher_id, subject_id, class_id, section_id)
+);
+
+CREATE TRIGGER update_teacher_subjects_updated_at
+    BEFORE UPDATE ON teacher_subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 4. STUDENT DETAILS & ACADEMIC TRANSITIONS
+-- ============================================================================
+
+CREATE TABLE student_guardians (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    name VARCHAR(200) NOT NULL,
+    relation VARCHAR(100) NOT NULL, -- e.g., "Father", "Mother", "Guardian"
+    phone VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    occupation VARCHAR(100),
+    address TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_guardians_updated_at
+    BEFORE UPDATE ON student_guardians
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_admissions (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE RESTRICT,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE RESTRICT,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    previous_school VARCHAR(255),
+    transfer_certificate_number VARCHAR(100),
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_admissions_updated_at
+    BEFORE UPDATE ON student_admissions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_documents (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    document_name VARCHAR(150) NOT NULL,
+    document_type VARCHAR(50), -- e.g., "Birth Certificate", "NID", "Report Card"
+    file_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_documents_updated_at
+    BEFORE UPDATE ON student_documents
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_enrollments (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE RESTRICT,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE RESTRICT,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    roll_number INT,
+    status VARCHAR(50) DEFAULT 'Enrolled', -- e.g., "Enrolled", "Withdrawn", "Suspended"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(student_id, academic_year_id)
+);
+
+CREATE TRIGGER update_student_enrollments_updated_at
+    BEFORE UPDATE ON student_enrollments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_transfers (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    from_class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE RESTRICT,
+    to_class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE RESTRICT,
+    transfer_date DATE NOT NULL,
+    reason TEXT,
+    approved_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_transfers_updated_at
+    BEFORE UPDATE ON student_transfers
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_leaves (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending', -- e.g., "Pending", "Approved", "Rejected"
+    approved_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_leaves_updated_at
+    BEFORE UPDATE ON student_leaves
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_attendance (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE RESTRICT,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL, -- e.g., "Present", "Absent", "Late", "Half Day"
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(student_id, date)
+);
+
+CREATE TRIGGER update_student_attendance_updated_at
+    BEFORE UPDATE ON student_attendance
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_attendance_logs (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    log_timestamp TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    device_id VARCHAR(100),
+    direction VARCHAR(10) DEFAULT 'IN', -- 'IN' or 'OUT'
+    raw_data TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_attendance_logs_updated_at
+    BEFORE UPDATE ON student_attendance_logs
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 5. TEACHER & STAFF ASSIGNMENTS, ATTENDANCE & PAYMENTS
+-- ============================================================================
+
+CREATE TABLE teacher_classes (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(teacher_id, class_id, section_id)
+);
+
+CREATE TRIGGER update_teacher_classes_updated_at
+    BEFORE UPDATE ON teacher_classes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teacher_attendance (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL, -- e.g., "Present", "Absent", "Late", "On Leave"
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(teacher_id, date)
+);
+
+CREATE TRIGGER update_teacher_attendance_updated_at
+    BEFORE UPDATE ON teacher_attendance
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teacher_leaves (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending', -- e.g., "Pending", "Approved", "Rejected"
+    approved_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_teacher_leaves_updated_at
+    BEFORE UPDATE ON teacher_leaves
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teacher_salary (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT UNIQUE NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    basic_salary NUMERIC(12, 2) NOT NULL,
+    allowances NUMERIC(12, 2) DEFAULT 0.00,
+    deductions NUMERIC(12, 2) DEFAULT 0.00,
+    net_salary NUMERIC(12, 2) GENERATED ALWAYS AS (basic_salary + allowances - deductions) STORED,
+    effective_date DATE NOT NULL,
+    status VARCHAR(50) DEFAULT 'Active',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_teacher_salary_updated_at
+    BEFORE UPDATE ON teacher_salary
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teacher_payments (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    payment_month INT NOT NULL,
+    payment_year INT NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    payment_date DATE NOT NULL,
+    payment_method_id BIGINT REFERENCES payment_methods(id) ON DELETE SET NULL,
+    transaction_id VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'Paid', -- e.g., "Paid", "Pending", "Failed"
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_teacher_payments_updated_at
+    BEFORE UPDATE ON teacher_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE teacher_documents (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    document_name VARCHAR(150) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_teacher_documents_updated_at
+    BEFORE UPDATE ON teacher_documents
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 6. STAFF CLASSES, ATTENDANCE & PAYMENTS
+-- ============================================================================
+
+CREATE TABLE staff_classes (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(staff_id, class_id, section_id)
+);
+
+CREATE TRIGGER update_staff_classes_updated_at
+    BEFORE UPDATE ON staff_classes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE staff_attendance (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL, -- e.g., "Present", "Absent", "Late", "On Leave"
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(staff_id, date)
+);
+
+CREATE TRIGGER update_staff_attendance_updated_at
+    BEFORE UPDATE ON staff_attendance
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE staff_leaves (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending', -- e.g., "Pending", "Approved", "Rejected"
+    approved_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_staff_leaves_updated_at
+    BEFORE UPDATE ON staff_leaves
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE staff_salary (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT UNIQUE NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    basic_salary NUMERIC(12, 2) NOT NULL,
+    allowances NUMERIC(12, 2) DEFAULT 0.00,
+    deductions NUMERIC(12, 2) DEFAULT 0.00,
+    net_salary NUMERIC(12, 2) GENERATED ALWAYS AS (basic_salary + allowances - deductions) STORED,
+    effective_date DATE NOT NULL,
+    status VARCHAR(50) DEFAULT 'Active',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_staff_salary_updated_at
+    BEFORE UPDATE ON staff_salary
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE staff_payments (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    payment_month INT NOT NULL,
+    payment_year INT NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    payment_date DATE NOT NULL,
+    payment_method_id BIGINT REFERENCES payment_methods(id) ON DELETE SET NULL,
+    transaction_id VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'Paid', -- e.g., "Paid", "Pending", "Failed"
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_staff_payments_updated_at
+    BEFORE UPDATE ON staff_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE staff_documents (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    document_name VARCHAR(150) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_staff_documents_updated_at
+    BEFORE UPDATE ON staff_documents
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 7. ACADEMIC OPERATIONS: SCHEDULING, MATERIALS & ASSIGNMENTS
+-- ============================================================================
+
+CREATE TABLE periods (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,         -- e.g., "Period 1", "Recess"
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    is_break BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_periods_updated_at
+    BEFORE UPDATE ON periods
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE class_routines (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    period_id BIGINT NOT NULL REFERENCES periods(id) ON DELETE CASCADE,
+    day_of_week VARCHAR(20) NOT NULL,  -- e.g., "Monday", "Tuesday"
+    room_number VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, section_id, period_id, day_of_week)
+);
+
+CREATE TRIGGER update_class_routines_updated_at
+    BEFORE UPDATE ON class_routines
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE lesson_plans (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    topic TEXT NOT NULL,
+    duration_hours NUMERIC(4, 2),
+    start_date DATE,
+    end_date DATE,
+    status VARCHAR(50) DEFAULT 'Planned', -- e.g., "Planned", "In Progress", "Completed"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_lesson_plans_updated_at
+    BEFORE UPDATE ON lesson_plans
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE syllabuses (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    file_path VARCHAR(255),
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_syllabuses_updated_at
+    BEFORE UPDATE ON syllabuses
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE study_materials (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    file_path VARCHAR(255) NOT NULL,
+    uploaded_by_teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_study_materials_updated_at
+    BEFORE UPDATE ON study_materials
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE assignments (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    max_marks NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    due_date TIMESTAMPTZ NOT NULL,
+    file_path VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_assignments_updated_at
+    BEFORE UPDATE ON assignments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE assignment_submissions (
+    id BIGSERIAL PRIMARY KEY,
+    assignment_id BIGINT NOT NULL REFERENCES assignments(id) ON DELETE CASCADE,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    submission_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    submission_text TEXT,
+    file_path VARCHAR(255),
+    marks_obtained NUMERIC(5, 2),
+    feedback TEXT,
+    status VARCHAR(50) DEFAULT 'Submitted', -- e.g., "Submitted", "Graded", "Late"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(assignment_id, student_id)
+);
+
+CREATE TRIGGER update_assignment_submissions_updated_at
+    BEFORE UPDATE ON assignment_submissions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 8. EXAMINATIONS
+-- ============================================================================
+
+CREATE TABLE exam_types (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL, -- e.g., "Midterm Exam", "Final Exam"
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_exam_types_updated_at
+    BEFORE UPDATE ON exam_types
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE exams (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    exam_type_id BIGINT NOT NULL REFERENCES exam_types(id) ON DELETE RESTRICT,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE RESTRICT,
+    term VARCHAR(50), -- e.g., "Spring", "Fall"
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_exams_updated_at
+    BEFORE UPDATE ON exams
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE exam_schedules (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    exam_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    room_number VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(exam_id, class_id, section_id, subject_id)
+);
+
+CREATE TRIGGER update_exam_schedules_updated_at
+    BEFORE UPDATE ON exam_schedules
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE exam_subjects (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    total_marks NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    pass_marks NUMERIC(5, 2) NOT NULL DEFAULT 33.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(exam_id, class_id, subject_id)
+);
+
+CREATE TRIGGER update_exam_subjects_updated_at
+    BEFORE UPDATE ON exam_subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE grade_scales (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL, -- e.g., "A+", "B"
+    grade_point NUMERIC(3, 2) NOT NULL, -- e.g., 4.00, 3.00
+    mark_from NUMERIC(5, 2) NOT NULL,
+    mark_to NUMERIC(5, 2) NOT NULL,
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_grade_scales_updated_at
+    BEFORE UPDATE ON grade_scales
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE marks (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    marks_obtained NUMERIC(5, 2) NOT NULL,
+    is_absent BOOLEAN DEFAULT FALSE,
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(exam_id, student_id, subject_id)
+);
+
+CREATE TRIGGER update_marks_updated_at
+    BEFORE UPDATE ON marks
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE results (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE RESTRICT,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    total_marks NUMERIC(7, 2) DEFAULT 0.00,
+    marks_obtained NUMERIC(7, 2) DEFAULT 0.00,
+    gpa NUMERIC(3, 2),
+    grade VARCHAR(20),
+    status VARCHAR(50), -- e.g., "Pass", "Fail"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(student_id, exam_id)
+);
+
+CREATE TRIGGER update_results_updated_at
+    BEFORE UPDATE ON results
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE result_publish (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    publish_date DATE NOT NULL,
+    is_published BOOLEAN DEFAULT FALSE,
+    published_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(exam_id, class_id)
+);
+
+CREATE TRIGGER update_result_publish_updated_at
+    BEFORE UPDATE ON result_publish
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE transcripts (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    gpa NUMERIC(3, 2),
+    status VARCHAR(50),
+    generated_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(student_id, academic_year_id)
+);
+
+CREATE TRIGGER update_transcripts_updated_at
+    BEFORE UPDATE ON transcripts
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 9. GENERAL ATTENDANCE SETTINGS
+-- ============================================================================
+
+CREATE TABLE attendance_settings (
+    id BIGSERIAL PRIMARY KEY,
+    setting_key VARCHAR(100) UNIQUE NOT NULL, -- e.g., "school_start_time"
+    setting_value TEXT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_attendance_settings_updated_at
+    BEFORE UPDATE ON attendance_settings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE attendance_reports (
+    id BIGSERIAL PRIMARY KEY,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE CASCADE,
+    report_month INT NOT NULL,
+    report_year INT NOT NULL,
+    report_file_path VARCHAR(255),
+    generated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_attendance_reports_updated_at
+    BEFORE UPDATE ON attendance_reports
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 10. FINANCE & FEES
+-- ============================================================================
+
+CREATE TABLE fee_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL, -- e.g., "Tuition Fee", "Admission Fee"
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_fee_categories_updated_at
+    BEFORE UPDATE ON fee_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE fee_structures (
+    id BIGSERIAL PRIMARY KEY,
+    fee_category_id BIGINT NOT NULL REFERENCES fee_categories(id) ON DELETE RESTRICT,
+    class_id BIGINT REFERENCES classes(id) ON DELETE CASCADE, -- if NULL, applies to all classes
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE RESTRICT,
+    amount NUMERIC(10, 2) NOT NULL,
+    due_date DATE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_fee_structures_updated_at
+    BEFORE UPDATE ON fee_structures
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_fees (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    fee_structure_id BIGINT NOT NULL REFERENCES fee_structures(id) ON DELETE RESTRICT,
+    amount NUMERIC(10, 2) NOT NULL,
+    discount_amount NUMERIC(10, 2) DEFAULT 0.00,
+    fine_amount NUMERIC(10, 2) DEFAULT 0.00,
+    paid_amount NUMERIC(10, 2) DEFAULT 0.00,
+    status VARCHAR(50) DEFAULT 'Unpaid', -- e.g., "Unpaid", "Paid", "Partially Paid", "Overdue"
+    due_date DATE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fees_updated_at
+    BEFORE UPDATE ON student_fees
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_fee_discounts (
+    id BIGSERIAL PRIMARY KEY,
+    student_fee_id BIGINT NOT NULL REFERENCES student_fees(id) ON DELETE CASCADE,
+    discount_name VARCHAR(100) NOT NULL,
+    discount_type VARCHAR(50) NOT NULL, -- e.g., "Fixed", "Percentage"
+    value NUMERIC(10, 2) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fee_discounts_updated_at
+    BEFORE UPDATE ON student_fee_discounts
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_fee_fines (
+    id BIGSERIAL PRIMARY KEY,
+    student_fee_id BIGINT NOT NULL REFERENCES student_fees(id) ON DELETE CASCADE,
+    fine_name VARCHAR(100) NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    is_applied BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fee_fines_updated_at
+    BEFORE UPDATE ON student_fee_fines
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE payment_transactions (
+    id BIGSERIAL PRIMARY KEY,
+    payment_method_id BIGINT REFERENCES payment_methods(id) ON DELETE SET NULL,
+    transaction_number VARCHAR(100) UNIQUE NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending', -- e.g., "Pending", "Success", "Failed"
+    transaction_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_payment_transactions_updated_at
+    BEFORE UPDATE ON payment_transactions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE student_fee_payments (
+    id BIGSERIAL PRIMARY KEY,
+    student_fee_id BIGINT NOT NULL REFERENCES student_fees(id) ON DELETE RESTRICT,
+    payment_transaction_id BIGINT NOT NULL REFERENCES payment_transactions(id) ON DELETE RESTRICT,
+    amount NUMERIC(10, 2) NOT NULL,
+    payment_date DATE NOT NULL,
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fee_payments_updated_at
+    BEFORE UPDATE ON student_fee_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 11. EXPENSES & INCOMES
+-- ============================================================================
+
+CREATE TABLE expense_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_expense_categories_updated_at
+    BEFORE UPDATE ON expense_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE expenses (
+    id BIGSERIAL PRIMARY KEY,
+    expense_category_id BIGINT NOT NULL REFERENCES expense_categories(id) ON DELETE RESTRICT,
+    title VARCHAR(200) NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    date DATE NOT NULL,
+    description TEXT,
+    file_path VARCHAR(255),
+    paid_by_staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    paid_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_expenses_updated_at
+    BEFORE UPDATE ON expenses
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE income_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_income_categories_updated_at
+    BEFORE UPDATE ON income_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE incomes (
+    id BIGSERIAL PRIMARY KEY,
+    income_category_id BIGINT NOT NULL REFERENCES income_categories(id) ON DELETE RESTRICT,
+    title VARCHAR(200) NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    date DATE NOT NULL,
+    description TEXT,
+    received_by_staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    received_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_incomes_updated_at
+    BEFORE UPDATE ON incomes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 12. PAYROLL & SALARY SCALES
+-- ============================================================================
+
+CREATE TABLE salary_scales (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL, -- e.g., "Scale Level 1"
+    basic_salary NUMERIC(12, 2) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_salary_scales_updated_at
+    BEFORE UPDATE ON salary_scales
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE allowances (
+    id BIGSERIAL PRIMARY KEY,
+    salary_scale_id BIGINT NOT NULL REFERENCES salary_scales(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    type VARCHAR(50) DEFAULT 'Fixed', -- e.g., "Fixed", "Percentage"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_allowances_updated_at
+    BEFORE UPDATE ON allowances
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE deductions (
+    id BIGSERIAL PRIMARY KEY,
+    salary_scale_id BIGINT NOT NULL REFERENCES salary_scales(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    type VARCHAR(50) DEFAULT 'Fixed', -- e.g., "Fixed", "Percentage"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_deductions_updated_at
+    BEFORE UPDATE ON deductions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE payroll (
+    id BIGSERIAL PRIMARY KEY,
+    user_type VARCHAR(50) NOT NULL,    -- 'Teacher' or 'Staff'
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    basic_salary NUMERIC(12, 2) NOT NULL,
+    allowance_amount NUMERIC(12, 2) DEFAULT 0.00,
+    deduction_amount NUMERIC(12, 2) DEFAULT 0.00,
+    net_salary NUMERIC(12, 2) NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL,
+    payment_date DATE,
+    status VARCHAR(50) DEFAULT 'Unpaid', -- e.g., "Unpaid", "Paid"
+    payment_transaction_id BIGINT REFERENCES payment_transactions(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_payroll_updated_at
+    BEFORE UPDATE ON payroll
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 13. TRANSPORT SYSTEM
+-- ============================================================================
+
+CREATE TABLE vehicles (
+    id BIGSERIAL PRIMARY KEY,
+    vehicle_number VARCHAR(100) UNIQUE NOT NULL, -- e.g., "REG1234"
+    vehicle_model VARCHAR(100),
+    driver_name VARCHAR(150) NOT NULL,
+    driver_phone VARCHAR(50),
+    driver_license VARCHAR(100),
+    capacity INT DEFAULT 30,
+    status VARCHAR(50) DEFAULT 'Active', -- e.g., "Active", "Maintenance"
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_vehicles_updated_at
+    BEFORE UPDATE ON vehicles
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE transport_routes (
+    id BIGSERIAL PRIMARY KEY,
+    route_title VARCHAR(200) UNIQUE NOT NULL,
+    start_place VARCHAR(200) NOT NULL,
+    end_place VARCHAR(200) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_transport_routes_updated_at
+    BEFORE UPDATE ON transport_routes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE transport_stops (
+    id BIGSERIAL PRIMARY KEY,
+    route_id BIGINT NOT NULL REFERENCES transport_routes(id) ON DELETE CASCADE,
+    stop_name VARCHAR(200) NOT NULL,
+    arrival_time TIME,
+    stop_fare NUMERIC(10, 2) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_transport_stops_updated_at
+    BEFORE UPDATE ON transport_stops
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE transport_assignments (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT UNIQUE NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    route_id BIGINT NOT NULL REFERENCES transport_routes(id) ON DELETE RESTRICT,
+    stop_id BIGINT NOT NULL REFERENCES transport_stops(id) ON DELETE RESTRICT,
+    vehicle_id BIGINT REFERENCES vehicles(id) ON DELETE SET NULL,
+    assign_date DATE NOT NULL,
+    status VARCHAR(50) DEFAULT 'Active',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_transport_assignments_updated_at
+    BEFORE UPDATE ON transport_assignments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE transport_fees (
+    id BIGSERIAL PRIMARY KEY,
+    route_id BIGINT NOT NULL REFERENCES transport_routes(id) ON DELETE CASCADE,
+    vehicle_id BIGINT NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
+    monthly_fee NUMERIC(10, 2) NOT NULL,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(route_id, vehicle_id, academic_year_id)
+);
+
+CREATE TRIGGER update_transport_fees_updated_at
+    BEFORE UPDATE ON transport_fees
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 14. HOSTELS & ACCOMMODATIONS
+-- ============================================================================
+
+CREATE TABLE hostels (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(200) UNIQUE NOT NULL,
+    type VARCHAR(50) NOT NULL, -- e.g., "Boys", "Girls", "Mixed"
+    address TEXT,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_hostels_updated_at
+    BEFORE UPDATE ON hostels
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE hostel_rooms (
+    id BIGSERIAL PRIMARY KEY,
+    hostel_id BIGINT NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+    room_number VARCHAR(50) NOT NULL,
+    room_type VARCHAR(100) NOT NULL, -- e.g., "AC Single", "Non-AC Double"
+    capacity INT DEFAULT 4,
+    cost_per_bed NUMERIC(10, 2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'Available',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(hostel_id, room_number)
+);
+
+CREATE TRIGGER update_hostel_rooms_updated_at
+    BEFORE UPDATE ON hostel_rooms
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE hostel_allocations (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT UNIQUE NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    hostel_id BIGINT NOT NULL REFERENCES hostels(id) ON DELETE RESTRICT,
+    room_id BIGINT NOT NULL REFERENCES hostel_rooms(id) ON DELETE RESTRICT,
+    bed_number INT,
+    allocation_date DATE NOT NULL,
+    status VARCHAR(50) DEFAULT 'Active',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_hostel_allocations_updated_at
+    BEFORE UPDATE ON hostel_allocations
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE hostel_fees (
+    id BIGSERIAL PRIMARY KEY,
+    hostel_id BIGINT NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+    room_type VARCHAR(100) NOT NULL,
+    monthly_fee NUMERIC(10, 2) NOT NULL,
+    academic_year_id BIGINT NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(hostel_id, room_type, academic_year_id)
+);
+
+CREATE TRIGGER update_hostel_fees_updated_at
+    BEFORE UPDATE ON hostel_fees
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 15. CERTIFICATES & DOCUMENTS
+-- ============================================================================
+
+CREATE TABLE certificate_templates (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(150) UNIQUE NOT NULL,
+    type VARCHAR(50) NOT NULL, -- e.g., "Student", "Teacher", "Staff"
+    content_html TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_certificate_templates_updated_at
+    BEFORE UPDATE ON certificate_templates
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE certificate_issues (
+    id BIGSERIAL PRIMARY KEY,
+    template_id BIGINT NOT NULL REFERENCES certificate_templates(id) ON DELETE RESTRICT,
+    user_type VARCHAR(50) NOT NULL,    -- 'Student', 'Teacher', or 'Staff'
+    student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    issued_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    unique_serial_number VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_certificate_issues_updated_at
+    BEFORE UPDATE ON certificate_issues
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE testimonials (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    issued_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    certificate_serial VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_testimonials_updated_at
+    BEFORE UPDATE ON testimonials
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 16. COMMUNICATION & EVENTS
+-- ============================================================================
+
+CREATE TABLE announcements (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    target_audience VARCHAR(50) DEFAULT 'All', -- e.g., 'All', 'Students', 'Teachers', 'Staff'
+    published_by_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_announcements_updated_at
+    BEFORE UPDATE ON announcements
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE notices (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    target_audience VARCHAR(50) DEFAULT 'All',
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_notices_updated_at
+    BEFORE UPDATE ON notices
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE news (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    featured_image_path VARCHAR(255),
+    is_published BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_news_updated_at
+    BEFORE UPDATE ON news
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE notifications (
+    id BIGSERIAL PRIMARY KEY,
+    user_type VARCHAR(50) NOT NULL, -- 'Admin', 'Teacher', 'Staff', or 'Student'
+    admin_id BIGINT REFERENCES admins(id) ON DELETE CASCADE,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE CASCADE,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE CASCADE,
+    student_id BIGINT REFERENCES students(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    read_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_notifications_updated_at
+    BEFORE UPDATE ON notifications
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE messages (
+    id BIGSERIAL PRIMARY KEY,
+    sender_type VARCHAR(50) NOT NULL,   -- 'Admin', 'Teacher', 'Staff', 'Student'
+    sender_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    sender_teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    sender_staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    sender_student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
+    receiver_type VARCHAR(50) NOT NULL, -- 'Admin', 'Teacher', 'Staff', 'Student'
+    receiver_admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    receiver_teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    receiver_staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    receiver_student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
+    subject VARCHAR(255),
+    body TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    sent_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_messages_updated_at
+    BEFORE UPDATE ON messages
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE events (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    location VARCHAR(200),
+    start_date TIMESTAMPTZ NOT NULL,
+    end_date TIMESTAMPTZ NOT NULL,
+    is_public BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_events_updated_at
+    BEFORE UPDATE ON events
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE event_registrations (
+    id BIGSERIAL PRIMARY KEY,
+    event_id BIGINT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    participant_type VARCHAR(50) NOT NULL, -- 'Student', 'Teacher', 'Staff', 'Guest'
+    student_id BIGINT REFERENCES students(id) ON DELETE CASCADE,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE CASCADE,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE CASCADE,
+    guest_name VARCHAR(150),
+    guest_email VARCHAR(100),
+    registration_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_event_registrations_updated_at
+    BEFORE UPDATE ON event_registrations
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 17. INVENTORY SYSTEM
+-- ============================================================================
+
+CREATE TABLE inventory_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_inventory_categories_updated_at
+    BEFORE UPDATE ON inventory_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE inventory_items (
+    id BIGSERIAL PRIMARY KEY,
+    category_id BIGINT NOT NULL REFERENCES inventory_categories(id) ON DELETE RESTRICT,
+    name VARCHAR(150) NOT NULL,
+    description TEXT,
+    quantity_in_stock INT DEFAULT 0,
+    unit VARCHAR(50) DEFAULT 'pcs', -- e.g., 'pcs', 'box', 'kg'
+    status VARCHAR(50) DEFAULT 'In Stock', -- e.g., 'In Stock', 'Out Of Stock'
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_inventory_items_updated_at
+    BEFORE UPDATE ON inventory_items
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE suppliers (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(200) NOT NULL,
+    contact_person VARCHAR(150),
+    phone VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    address TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_suppliers_updated_at
+    BEFORE UPDATE ON suppliers
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE purchases (
+    id BIGSERIAL PRIMARY KEY,
+    supplier_id BIGINT NOT NULL REFERENCES suppliers(id) ON DELETE RESTRICT,
+    purchase_date DATE NOT NULL,
+    total_amount NUMERIC(12, 2) NOT NULL,
+    payment_status VARCHAR(50) DEFAULT 'Pending', -- e.g., 'Paid', 'Pending', 'Partial'
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_purchases_updated_at
+    BEFORE UPDATE ON purchases
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE purchase_items (
+    id BIGSERIAL PRIMARY KEY,
+    purchase_id BIGINT NOT NULL REFERENCES purchases(id) ON DELETE CASCADE,
+    item_id BIGINT NOT NULL REFERENCES inventory_items(id) ON DELETE RESTRICT,
+    quantity INT NOT NULL,
+    unit_price NUMERIC(10, 2) NOT NULL,
+    total_price NUMERIC(12, 2) GENERATED ALWAYS AS (quantity * unit_price) STORED,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_purchase_items_updated_at
+    BEFORE UPDATE ON purchase_items
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE stock_movements (
+    id BIGSERIAL PRIMARY KEY,
+    item_id BIGINT NOT NULL REFERENCES inventory_items(id) ON DELETE CASCADE,
+    movement_type VARCHAR(50) NOT NULL, -- e.g., 'IN', 'OUT', 'ADJUSTMENT'
+    quantity INT NOT NULL,
+    movement_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    description TEXT,
+    reference_id VARCHAR(100),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_stock_movements_updated_at
+    BEFORE UPDATE ON stock_movements
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 18. LOGS & AUDIT TRAILS
+-- ============================================================================
+
+CREATE TABLE activity_logs (
+    id BIGSERIAL PRIMARY KEY,
+    user_type VARCHAR(50) NOT NULL, -- 'Admin', 'Teacher', 'Staff', 'Student'
+    admin_id BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE SET NULL,
+    student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
+    action VARCHAR(100) NOT NULL,  -- e.g., "LOGIN", "CREATE_RECORD", "UPDATE_MARKS"
+    detail TEXT,
+    ip_address VARCHAR(50),
+    user_agent TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE login_logs (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    user_type VARCHAR(50) NOT NULL, -- 'Admin', 'Teacher', 'Staff', 'Student'
+    ip_address VARCHAR(50),
+    user_agent TEXT,
+    login_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    logout_time TIMESTAMPTZ,
+    status VARCHAR(50) DEFAULT 'Success', -- 'Success', 'Failed'
+    failure_reason TEXT
+);
+
+-- ============================================================================
+-- PERFORMANCE OPTIMIZATION INDEXES
+-- ============================================================================
+
+-- Sections & Classes
+CREATE INDEX idx_sections_class_id ON sections(class_id);
+CREATE INDEX idx_class_subjects_class_id ON class_subjects(class_id);
+CREATE INDEX idx_class_subjects_subject_id ON class_subjects(subject_id);
+
+-- Teacher & Class scheduling
+CREATE INDEX idx_teacher_subjects_teacher_id ON teacher_subjects(teacher_id);
+CREATE INDEX idx_teacher_subjects_subject_id ON teacher_subjects(subject_id);
+CREATE INDEX idx_teacher_classes_teacher_id ON teacher_classes(teacher_id);
+CREATE INDEX idx_teacher_classes_class_id ON teacher_classes(class_id);
+CREATE INDEX idx_teacher_classes_section_id ON teacher_classes(section_id);
+
+-- Staff assignments
+CREATE INDEX idx_staff_classes_staff_id ON staff_classes(staff_id);
+CREATE INDEX idx_staff_classes_class_id ON staff_classes(class_id);
+
+-- Students & Enrollment
+CREATE INDEX idx_students_admission_number ON students(admission_number);
+CREATE INDEX idx_student_guardians_student_id ON student_guardians(student_id);
+CREATE INDEX idx_student_admissions_student_id ON student_admissions(student_id);
+CREATE INDEX idx_student_documents_student_id ON student_documents(student_id);
+CREATE INDEX idx_student_enrollments_student_id ON student_enrollments(student_id);
+CREATE INDEX idx_student_enrollments_class_id ON student_enrollments(class_id);
+CREATE INDEX idx_student_enrollments_section_id ON student_enrollments(section_id);
+CREATE INDEX idx_student_enrollments_academic_year_id ON student_enrollments(academic_year_id);
+CREATE INDEX idx_student_transfers_student_id ON student_transfers(student_id);
+CREATE INDEX idx_student_leaves_student_id ON student_leaves(student_id);
+CREATE INDEX idx_student_attendance_student_id ON student_attendance(student_id);
+CREATE INDEX idx_student_attendance_date ON student_attendance(date);
+CREATE INDEX idx_student_attendance_logs_student_id ON student_attendance_logs(student_id);
+
+-- Teacher & Staff Details
+CREATE INDEX idx_teacher_attendance_teacher_id ON teacher_attendance(teacher_id);
+CREATE INDEX idx_teacher_attendance_date ON teacher_attendance(date);
+CREATE INDEX idx_teacher_leaves_teacher_id ON teacher_leaves(teacher_id);
+CREATE INDEX idx_teacher_payments_teacher_id ON teacher_payments(teacher_id);
+CREATE INDEX idx_teacher_documents_teacher_id ON teacher_documents(teacher_id);
+
+CREATE INDEX idx_staff_attendance_staff_id ON staff_attendance(staff_id);
+CREATE INDEX idx_staff_attendance_date ON staff_attendance(date);
+CREATE INDEX idx_staff_leaves_staff_id ON staff_leaves(staff_id);
+CREATE INDEX idx_staff_payments_staff_id ON staff_payments(staff_id);
+CREATE INDEX idx_staff_documents_staff_id ON staff_documents(staff_id);
+
+-- Routines & Assignments
+CREATE INDEX idx_class_routines_class_section ON class_routines(class_id, section_id);
+CREATE INDEX idx_class_routines_teacher_id ON class_routines(teacher_id);
+CREATE INDEX idx_lesson_plans_teacher_id ON lesson_plans(teacher_id);
+CREATE INDEX idx_lesson_plans_class_section ON lesson_plans(class_id, section_id);
+CREATE INDEX idx_syllabuses_class_subject ON syllabuses(class_id, subject_id);
+CREATE INDEX idx_study_materials_class_subject ON study_materials(class_id, subject_id);
+CREATE INDEX idx_assignments_class_section ON assignments(class_id, section_id);
+CREATE INDEX idx_assignments_subject_id ON assignments(subject_id);
+CREATE INDEX idx_assignment_submissions_assignment_id ON assignment_submissions(assignment_id);
+CREATE INDEX idx_assignment_submissions_student_id ON assignment_submissions(student_id);
+
+-- Exams & Grading
+CREATE INDEX idx_exams_academic_year_id ON exams(academic_year_id);
+CREATE INDEX idx_exam_schedules_exam_id ON exam_schedules(exam_id);
+CREATE INDEX idx_exam_schedules_class_section ON exam_schedules(class_id, section_id);
+CREATE INDEX idx_exam_subjects_exam_id ON exam_subjects(exam_id);
+CREATE INDEX idx_marks_exam_student ON marks(exam_id, student_id);
+CREATE INDEX idx_marks_subject_id ON marks(subject_id);
+CREATE INDEX idx_results_student_exam ON results(student_id, exam_id);
+CREATE INDEX idx_result_publish_exam_id ON result_publish(exam_id);
+CREATE INDEX idx_transcripts_student_id ON transcripts(student_id);
+
+-- Finance & Accounting
+CREATE INDEX idx_fee_structures_category_class ON fee_structures(fee_category_id, class_id);
+CREATE INDEX idx_student_fees_student_id ON student_fees(student_id);
+CREATE INDEX idx_student_fees_status ON student_fees(status);
+CREATE INDEX idx_student_fee_discounts_fee_id ON student_fee_discounts(student_fee_id);
+CREATE INDEX idx_student_fee_fines_fee_id ON student_fee_fines(student_fee_id);
+CREATE INDEX idx_student_fee_payments_fee_id ON student_fee_payments(student_fee_id);
+CREATE INDEX idx_student_fee_payments_transaction_id ON student_fee_payments(payment_transaction_id);
+
+CREATE INDEX idx_expenses_category_id ON expenses(expense_category_id);
+CREATE INDEX idx_incomes_category_id ON incomes(income_category_id);
+CREATE INDEX idx_allowances_salary_scale_id ON allowances(salary_scale_id);
+CREATE INDEX idx_deductions_salary_scale_id ON deductions(salary_scale_id);
+CREATE INDEX idx_payroll_teacher_id ON payroll(teacher_id);
+CREATE INDEX idx_payroll_staff_id ON payroll(staff_id);
+
+-- Transport
+CREATE INDEX idx_transport_stops_route_id ON transport_stops(route_id);
+CREATE INDEX idx_transport_assignments_student_id ON transport_assignments(student_id);
+CREATE INDEX idx_transport_assignments_route_stop ON transport_assignments(route_id, stop_id);
+
+-- Hostels
+CREATE INDEX idx_hostel_rooms_hostel_id ON hostel_rooms(hostel_id);
+CREATE INDEX idx_hostel_allocations_student_id ON hostel_allocations(student_id);
+CREATE INDEX idx_hostel_allocations_hostel_room ON hostel_allocations(hostel_id, room_id);
+
+-- Certificates & Document Issues
+CREATE INDEX idx_certificate_issues_template_id ON certificate_issues(template_id);
+CREATE INDEX idx_certificate_issues_student_id ON certificate_issues(student_id);
+CREATE INDEX idx_certificate_issues_teacher_id ON certificate_issues(teacher_id);
+CREATE INDEX idx_certificate_issues_staff_id ON certificate_issues(staff_id);
+CREATE INDEX idx_testimonials_student_id ON testimonials(student_id);
+
+-- Communication & Events
+CREATE INDEX idx_announcements_published_by ON announcements(published_by_admin_id);
+CREATE INDEX idx_notifications_admin_id ON notifications(admin_id);
+CREATE INDEX idx_notifications_teacher_id ON notifications(teacher_id);
+CREATE INDEX idx_notifications_staff_id ON notifications(staff_id);
+CREATE INDEX idx_notifications_student_id ON notifications(student_id);
+CREATE INDEX idx_messages_sender_receiver ON messages(sender_admin_id, receiver_admin_id);
+CREATE INDEX idx_event_registrations_event_id ON event_registrations(event_id);
+
+-- Inventory
+CREATE INDEX idx_inventory_items_category_id ON inventory_items(category_id);
+CREATE INDEX idx_purchases_supplier_id ON purchases(supplier_id);
+CREATE INDEX idx_purchase_items_purchase_id ON purchase_items(purchase_id);
+CREATE INDEX idx_purchase_items_item_id ON purchase_items(item_id);
+CREATE INDEX idx_stock_movements_item_id ON stock_movements(item_id);
+
+-- Logs
+CREATE INDEX idx_activity_logs_admin_id ON activity_logs(admin_id);
+CREATE INDEX idx_activity_logs_teacher_id ON activity_logs(teacher_id);
+CREATE INDEX idx_activity_logs_staff_id ON activity_logs(staff_id);
+CREATE INDEX idx_activity_logs_student_id ON activity_logs(student_id);
+CREATE INDEX idx_login_logs_username ON login_logs(username);
