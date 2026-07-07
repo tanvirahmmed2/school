@@ -1,5 +1,6 @@
 
 import { ContextProvider } from "@/component/helper/Context";
+import ToastProvider from "@/component/helper/ToastProvider";
 import "./globals.css";
 
 export const metadata = {
@@ -13,9 +14,11 @@ export default function RootLayout({ children }) {
     <html lang="en" className="w-full h-full">
       <body className="min-h-full w-full overflow-x-hidden">
         <ContextProvider>
+          <ToastProvider />
           <main>{children}</main>
         </ContextProvider>
       </body>
     </html>
   );
 }
+
