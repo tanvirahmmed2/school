@@ -4,9 +4,9 @@ import ToastProvider from "@/component/helper/ToastProvider";
 import "./globals.css";
 
 export const metadata = {
-  title: "Govt. Primary School — Excellence in Education",
+  title: "Institution",
   description:
-    "Government Primary School — A leading primary institution offering quality education, modern facilities, and dedicated teachers since 1985.",
+    "Institution Home Page",
 };
 
 export default function RootLayout({ children }) {
