@@ -5,7 +5,7 @@ import { IoCall, IoMail } from 'react-icons/io5'
 
 const Footer = () => {
     return (
-        <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 bg-blue-950 overflow-x-hidden text-white text-xs md:text-sm '>
+        <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 bg-sky-950 overflow-x-hidden text-white text-xs md:text-sm '>
             <div className='w-full flex flex-col gap-2'>
                 <p>Contact with FIT</p>
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At dolor ea repudiandae culpa possimus aperiam vel ratione delectus optio mollitia.</p>
@@ -18,7 +18,7 @@ const Footer = () => {
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae praesentium, ab possimus reiciendis architecto explicabo in vero nulla modi nostrum temporibus? Qui quod veniam esse, quam architecto quae voluptatem mollitia sunt magni rerum sapiente illo doloribus numquam neque ratione itaque maiores! Quo omnis tempore temporibus voluptatem corrupti! Maiores, sed explicabo.</p>
                 <Link href={'/about'}>About</Link>
             </div>
-            <div className='w-full flex flex-col items-center justify-between gap-3'>
+            <div className='w-full flex flex-col items-center  gap-3'>
                 <p>Quick Links</p>
                 <div className='w-full flex flex-row gap-4'>
                     <div className='w-full flex flex-col gap-2'>
