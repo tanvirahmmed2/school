@@ -1,15 +1,32 @@
+import React from 'react'
+import { redirect } from 'next/navigation';
+import { isTeacher } from '@/lib/auth';
 import Navbar from '@/component/bars/teacher/Navbar'
 import Sidebar from '@/component/bars/teacher/Sidebar'
-import React from 'react'
 
-const TeacherLayout = ({children}) => {
+const TeacherLayout = async ({children}) => {
+  const authenticated = await isTeacher();
+
+  if (!authenticated) {
+    redirect('/auth/teacher/login');
+  }
+
   return (
-    <div className='w-full flex flex-col relative overflow-x-hidden'>
-      <Navbar/>
-      <Sidebar/>
-      {children}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+      {/* Top Navbar */}
+      <Navbar />
+
+      <div className="flex flex-1 relative pt-16">
+        {/* Left Sidebar */}
+        <Sidebar />
+
+        {/* Main Content Area */}
+        <main className="flex-1 w-full min-w-0 p-4 md:p-8 md:pl-[280px] transition-all duration-200">
+          {children}
+        </main>
+      </div>
     </div>
   )
 }
 
-export default TeacherLayout
+export default TeacherLayout
