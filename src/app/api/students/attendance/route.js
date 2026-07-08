@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isTeacher } from '@/lib/auth';
 
 // GET student attendance sheets (Admin/Teachers)
 export async function GET(request) {
@@ -48,9 +48,9 @@ export async function GET(request) {
 // POST bulk log student attendance (Admin/Teachers only)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isTeacher());
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins/Teachers only.' }, { status: 403 });
     }
 
     const { class_id, section_id, date, records } = await request.json();
