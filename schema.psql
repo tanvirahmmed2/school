@@ -39,6 +39,29 @@ CREATE TRIGGER update_admins_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
+-- STAFF TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    number VARCHAR(50) NOT NULL,
+    address TEXT NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'staff' CHECK (role IN ('staff', 'register', 'editor')),
+    password_hash VARCHAR(255) NOT NULL,
+    recovery_token VARCHAR(255),
+    recovery_token_expires TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_staff_updated_at
+    BEFORE UPDATE ON staff
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
 -- CLASSES TABLE
 -- ============================================================================
 
@@ -127,4 +150,127 @@ CREATE TABLE IF NOT EXISTS class_subjects (
 
 CREATE TRIGGER update_class_subjects_updated_at
     BEFORE UPDATE ON class_subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLUBS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS clubs (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_clubs_updated_at
+    BEFORE UPDATE ON clubs
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLUBS ADMINS TABLE (TEACHERS ASSIGNED TO CLUBS)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS clubs_admins (
+    id BIGSERIAL PRIMARY KEY,
+    club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(club_id, teacher_id)
+);
+
+CREATE TRIGGER update_clubs_admins_updated_at
+    BEFORE UPDATE ON clubs_admins
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLUB NEWS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS club_news (
+    id BIGSERIAL PRIMARY KEY,
+    club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    image_url TEXT,
+    image_id VARCHAR(100),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_club_news_updated_at
+    BEFORE UPDATE ON club_news
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- SALARIES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS salaries (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE CASCADE,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE CASCADE,
+    month VARCHAR(50) NOT NULL,
+    basic DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    allowance DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    deductions DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CHECK (
+        (teacher_id IS NOT NULL AND staff_id IS NULL) OR
+        (teacher_id IS NULL AND staff_id IS NOT NULL)
+    )
+);
+
+CREATE TRIGGER update_salaries_updated_at
+    BEFORE UPDATE ON salaries
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- LEAVE APPLICATIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS leave_applications (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE CASCADE,
+    staff_id BIGINT REFERENCES staff(id) ON DELETE CASCADE,
+    type VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CHECK (
+        (teacher_id IS NOT NULL AND staff_id IS NULL) OR
+        (teacher_id IS NULL AND staff_id IS NOT NULL)
+    )
+);
+
+CREATE TRIGGER update_leave_applications_updated_at
+    BEFORE UPDATE ON leave_applications
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- TEACHER ATTENDANCES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teacher_attendances (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    check_in VARCHAR(50),
+    check_out VARCHAR(50),
+    status VARCHAR(50) NOT NULL DEFAULT 'Present',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(teacher_id, date)
+);
+
+CREATE TRIGGER update_teacher_attendances_updated_at
+    BEFORE UPDATE ON teacher_attendances
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

@@ -2,18 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiFileText, FiCheck, FiX } from 'react-icons/fi';
+import { FiFileText, FiCheck, FiX, FiShield } from 'react-icons/fi';
 
-const AdminApplicationsPage = () => {
+const AdminStaffApplicationsPage = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchApplications = async () => {
     try {
-      const response = await fetch('/api/leave-applications?type=teacher');
+      const response = await fetch('/api/leave-applications?type=staff');
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch leave applications.');
+        throw new Error(data.error || 'Failed to fetch staff leave applications.');
       }
       setApplications(data.applications || []);
     } catch (error) {
@@ -54,10 +54,10 @@ const AdminApplicationsPage = () => {
       {/* Top Header Section */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiFileText className="text-blue-600" /> Applications Drawer
+          <FiFileText className="text-blue-600" /> Staff Applications Drawer
         </h1>
         <p className="text-sm text-slate-500">
-          Review, approve, or reject teacher job requests or leave applications.
+          Review, approve, or reject staff job requests or leave applications.
         </p>
       </div>
 
@@ -65,7 +65,7 @@ const AdminApplicationsPage = () => {
       <div className="w-full bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100">
           <h2 className="text-base font-bold text-slate-800">
-            Leave Applications Registry
+            Staff Leave Applications Registry
           </h2>
         </div>
 
@@ -84,7 +84,8 @@ const AdminApplicationsPage = () => {
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Teacher</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Staff Member</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Role</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Request Type</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Date/Duration</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Reason</th>
@@ -101,8 +102,23 @@ const AdminApplicationsPage = () => {
 
                   return (
                     <tr key={app.id} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">{app.teacher_name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-550 text-slate-500">{app.type}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">{app.staff_name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {app.staff_role === 'register' ? (
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-600 border border-purple-100">
+                            <FiShield className="text-[10px]" /> Register
+                          </span>
+                        ) : app.staff_role === 'editor' ? (
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                            Editor
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                            Staff
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-5050 text-slate-500">{app.type}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-600">{startStr} to {endStr} ({diffDays} {diffDays === 1 ? 'Day' : 'Days'})</td>
                       <td className="px-6 py-4 text-xs text-slate-600 max-w-[200px] truncate" title={app.reason}>{app.reason}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -147,4 +163,4 @@ const AdminApplicationsPage = () => {
   );
 };
 
-export default AdminApplicationsPage;
+export default AdminStaffApplicationsPage;
