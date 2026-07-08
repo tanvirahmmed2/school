@@ -6,13 +6,14 @@ import { usePathname } from 'next/navigation';
 import {
   FiHome, FiShield, FiLayers, FiGrid, FiBook,
   FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText,
-  FiChevronDown, FiChevronRight, FiLayers as FiModuleIcon
+  FiChevronDown, FiChevronRight, FiClock, FiLayers as FiModuleIcon
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 
 const Sidebar = () => {
   const pathname = usePathname();
   const { adminSidebar, setAdminSidebar } = useContext(Context);
+  const [classesOpen, setClassesOpen] = useState(pathname.startsWith('/admin/classes'));
   const [teachersOpen, setTeachersOpen] = useState(pathname.startsWith('/admin/teachers'));
   const [staffOpen, setStaffOpen] = useState(pathname.startsWith('/admin/staff'));
   const [examsOpen, setExamsOpen] = useState(pathname.startsWith('/admin/exams'));
@@ -20,9 +21,14 @@ const Sidebar = () => {
   const academicLinks = [
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
     { label: 'Access Control', href: '/admin/access', icon: FiShield },
-    { label: 'Class Management', href: '/admin/classes', icon: FiLayers },
-    { label: 'Section Management', href: '/admin/sections', icon: FiGrid },
     { label: 'Subject Management', href: '/admin/subjects', icon: FiBook },
+  ];
+
+  const classLinks = [
+    { label: 'Classes List', href: '/admin/classes/class', icon: FiLayers },
+    { label: 'Sections List', href: '/admin/classes/section', icon: FiGrid },
+    { label: 'Class Routine', href: '/admin/classes/routine', icon: FiClock },
+    { label: 'Syllabus', href: '/admin/classes/syllabus', icon: FiFileText },
   ];
 
   const teacherLinks = [
@@ -91,6 +97,56 @@ const Sidebar = () => {
                 );
               })}
             </nav>
+          </div>
+
+          {/* Section 1.5: Class Management (Dropdown collapsible) */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-0.5">
+              <FiLayers /> Class Management
+            </span>
+
+            <button
+              onClick={() => setClassesOpen(!classesOpen)}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${pathname.startsWith('/admin/classes')
+                  ? 'bg-slate-50 text-slate-850'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+            >
+              <div className="flex items-center gap-3">
+                <FiLayers className={`text-base ${pathname.startsWith('/admin/classes') ? 'text-blue-600' : 'text-slate-400'}`} />
+                <span>Classes</span>
+              </div>
+              {classesOpen ? (
+                <FiChevronDown className="text-slate-400 text-sm" />
+              ) : (
+                <FiChevronRight className="text-slate-400 text-sm" />
+              )}
+            </button>
+
+            {/* Collapsible Sub-links Container */}
+            {classesOpen && (
+              <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 animate-fade-down duration-200">
+                {classLinks.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = pathname === link.href;
+
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setAdminSidebar(false)}
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-155 ${isActive
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                        }`}
+                    >
+                      <Icon className={`text-sm ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                      <span>{link.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Section 2: Teacher Management (Dropdown collapsible) */}
