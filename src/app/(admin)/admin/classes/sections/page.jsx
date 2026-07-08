@@ -138,7 +138,7 @@ const AdminSectionsPage = () => {
           </div>
         ) : sections.length === 0 ? (
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-            <span className="text-slate-350 text-5xl mb-3">📂</span>
+            <span className="text-slate-355 text-5xl mb-3">📂</span>
             <h3 className="text-sm font-bold text-slate-600">No Sections Found</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
               Create section branches to organize students inside academic classes.
