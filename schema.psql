@@ -1,4 +1,4 @@
--- Admin Schema Only
+-- Admin & Classes & Sections Schema Only
 
 -- Enable UUID extension if needed in the future
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -36,4 +36,40 @@ CREATE TABLE IF NOT EXISTS admins (
 
 CREATE TRIGGER update_admins_updated_at
     BEFORE UPDATE ON admins
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLASSES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS classes (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    numeric_name INT NOT NULL,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_classes_updated_at
+    BEFORE UPDATE ON classes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- SECTIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS sections (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    capacity INT DEFAULT 40,
+    room_number VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, name)
+);
+
+CREATE TRIGGER update_sections_updated_at
+    BEFORE UPDATE ON sections
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
