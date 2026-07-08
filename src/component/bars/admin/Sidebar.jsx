@@ -15,6 +15,7 @@ const Sidebar = () => {
   const { adminSidebar, setAdminSidebar } = useContext(Context);
   const [teachersOpen, setTeachersOpen] = useState(pathname.startsWith('/admin/teachers'));
   const [staffOpen, setStaffOpen] = useState(pathname.startsWith('/admin/staff'));
+  const [examsOpen, setExamsOpen] = useState(pathname.startsWith('/admin/exams'));
 
   const academicLinks = [
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
@@ -38,6 +39,13 @@ const Sidebar = () => {
     { label: 'Staff List', href: '/admin/staff/list', icon: FiUsers },
     { label: 'Salary Ledger', href: '/admin/staff/salary', icon: FiDollarSign },
     { label: 'Applications Drawer', href: '/admin/staff/applications', icon: FiFileText },
+  ];
+
+  const examLinks = [
+    { label: 'New Exam Routine', href: '/admin/exams/new', icon: FiUserPlus },
+    { label: 'Current Exams', href: '/admin/exams/current', icon: FiCalendar },
+    { label: 'Upcoming Exams', href: '/admin/exams/upcoming', icon: FiCalendar },
+    { label: 'Previous Exams', href: '/admin/exams/previous', icon: FiFileText },
   ];
 
   return (
@@ -163,6 +171,56 @@ const Sidebar = () => {
             {staffOpen && (
               <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 animate-fade-down duration-200">
                 {staffLinks.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = pathname === link.href;
+
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setAdminSidebar(false)}
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-155 ${isActive
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                        }`}
+                    >
+                      <Icon className={`text-sm ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                      <span>{link.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section 4: Exams Management (Dropdown collapsible) */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-0.5">
+              <FiCalendar /> Exams Management
+            </span>
+
+            <button
+              onClick={() => setExamsOpen(!examsOpen)}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${pathname.startsWith('/admin/exams')
+                  ? 'bg-slate-50 text-slate-850'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+            >
+              <div className="flex items-center gap-3">
+                <FiCalendar className={`text-base ${pathname.startsWith('/admin/exams') ? 'text-blue-600' : 'text-slate-400'}`} />
+                <span>Exams</span>
+              </div>
+              {examsOpen ? (
+                <FiChevronDown className="text-slate-400 text-sm" />
+              ) : (
+                <FiChevronRight className="text-slate-400 text-sm" />
+              )}
+            </button>
+
+            {/* Collapsible Sub-links Container */}
+            {examsOpen && (
+              <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 animate-fade-down duration-200">
+                {examLinks.map((link) => {
                   const Icon = link.icon;
                   const isActive = pathname === link.href;
 
