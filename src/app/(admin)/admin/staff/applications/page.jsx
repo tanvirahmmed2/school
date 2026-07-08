@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiFileText, FiCheck, FiX, FiShield } from 'react-icons/fi';
 
@@ -10,14 +11,10 @@ const AdminStaffApplicationsPage = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await fetch('/api/leave-applications?type=staff');
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch staff leave applications.');
-      }
-      setApplications(data.applications || []);
+      const response = await axios.get('/api/leave-applications?type=staff');
+      setApplications(response.data.applications || []);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
     } finally {
       setLoading(false);
     }
@@ -29,23 +26,13 @@ const AdminStaffApplicationsPage = () => {
 
   const handleUpdateStatus = async (id, status) => {
     try {
-      const response = await fetch(`/api/leave-applications/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to update leave status.');
-      }
-
-      toast.success(data.message || `Leave application status updated.`);
+      const response = await axios.put(`/api/leave-applications/${id}`, { status });
+      toast.success(response.data.message || `Leave application status updated.`);
       setApplications(
         applications.map((app) => (app.id === id ? { ...app, status } : app))
       );
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 

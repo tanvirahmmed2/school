@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiUserPlus } from 'react-icons/fi';
 
@@ -22,19 +23,9 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
 
     setSubmitting(true);
     try {
-      const response = await fetch('/api/staff', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, number, address, role, password }),
-      });
+      const response = await axios.post('/api/staff', { name, email, number, address, role, password });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create staff member.');
-      }
-
-      toast.success(data.message || 'Staff member registered successfully!');
+      toast.success(response.data.message || 'Staff member registered successfully!');
       setName('');
       setEmail('');
       setNumber('');
@@ -43,7 +34,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
       setPassword('');
       if (onSuccess) onSuccess();
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     } finally {
       setSubmitting(false);
     }

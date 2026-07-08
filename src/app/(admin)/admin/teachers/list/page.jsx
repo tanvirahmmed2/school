@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 
@@ -10,14 +11,10 @@ const AdminTeachersListPage = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch('/api/teachers');
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch teachers.');
-      }
-      setTeachers(data.teachers || []);
+      const response = await axios.get('/api/teachers');
+      setTeachers(response.data.teachers || []);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
     } finally {
       setLoading(false);
     }
@@ -30,23 +27,13 @@ const AdminTeachersListPage = () => {
   const handleToggleStatus = async (teacher) => {
     const nextStatus = !teacher.is_active;
     try {
-      const response = await fetch(`/api/teachers/${teacher.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: teacher.name,
-          email: teacher.email,
-          number: teacher.number,
-          address: teacher.address,
-          is_active: nextStatus,
-        }),
+      await axios.put(`/api/teachers/${teacher.id}`, {
+        name: teacher.name,
+        email: teacher.email,
+        number: teacher.number,
+        address: teacher.address,
+        is_active: nextStatus,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to toggle status.');
-      }
 
       toast.success(
         `Teacher ${teacher.name} has been ${nextStatus ? 'activated' : 'deactivated'}.`
@@ -57,7 +44,7 @@ const AdminTeachersListPage = () => {
         teachers.map((t) => (t.id === teacher.id ? { ...t, is_active: nextStatus } : t))
       );
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 
@@ -68,19 +55,11 @@ const AdminTeachersListPage = () => {
     if (!confirm) return;
 
     try {
-      const response = await fetch(`/api/teachers/${id}`, {
-        method: 'DELETE',
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to delete teacher.');
-      }
-
-      toast.success(data.message || 'Teacher account deleted.');
+      const response = await axios.delete(`/api/teachers/${id}`);
+      toast.success(response.data.message || 'Teacher account deleted.');
       setTeachers(teachers.filter((t) => t.id !== id));
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 

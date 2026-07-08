@@ -274,3 +274,44 @@ CREATE TABLE IF NOT EXISTS teacher_attendances (
 CREATE TRIGGER update_teacher_attendances_updated_at
     BEFORE UPDATE ON teacher_attendances
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- EXAMS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS exams (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    term VARCHAR(100),
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'upcoming' CHECK (status IN ('current', 'upcoming', 'previous')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_exams_updated_at
+    BEFORE UPDATE ON exams
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- EXAM SCHEDULES (ROUTINES) TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS exam_schedules (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    exam_date DATE NOT NULL,
+    start_time VARCHAR(50) NOT NULL,
+    end_time VARCHAR(50) NOT NULL,
+    room_number VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(exam_id, class_id, subject_id)
+);
+
+CREATE TRIGGER update_exam_schedules_updated_at
+    BEFORE UPDATE ON exam_schedules
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

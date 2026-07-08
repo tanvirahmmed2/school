@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiDollarSign, FiDownload, FiShield } from 'react-icons/fi';
 
@@ -10,14 +11,10 @@ const AdminStaffSalaryPage = () => {
 
   const fetchSalaries = async () => {
     try {
-      const response = await fetch('/api/salaries?type=staff');
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch salaries.');
-      }
-      setSalaries(data.salaries || []);
+      const response = await axios.get('/api/salaries?type=staff');
+      setSalaries(response.data.salaries || []);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiShield } from 'react-icons/fi';
 
@@ -10,14 +11,10 @@ const AdminStaffListPage = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await fetch('/api/staff');
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch staff members.');
-      }
-      setStaffList(data.staff || []);
+      const response = await axios.get('/api/staff');
+      setStaffList(response.data.staff || []);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || error.message);
     } finally {
       setLoading(false);
     }
@@ -30,24 +27,14 @@ const AdminStaffListPage = () => {
   const handleToggleStatus = async (staff) => {
     const nextStatus = !staff.is_active;
     try {
-      const response = await fetch(`/api/staff/${staff.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: staff.name,
-          email: staff.email,
-          number: staff.number,
-          address: staff.address,
-          role: staff.role,
-          is_active: nextStatus,
-        }),
+      await axios.put(`/api/staff/${staff.id}`, {
+        name: staff.name,
+        email: staff.email,
+        number: staff.number,
+        address: staff.address,
+        role: staff.role,
+        is_active: nextStatus,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to toggle status.');
-      }
 
       toast.success(
         `Staff member ${staff.name} has been ${nextStatus ? 'activated' : 'deactivated'}.`
@@ -58,30 +45,20 @@ const AdminStaffListPage = () => {
         staffList.map((s) => (s.id === staff.id ? { ...s, is_active: nextStatus } : s))
       );
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 
   const handleRoleChange = async (staff, nextRole) => {
     try {
-      const response = await fetch(`/api/staff/${staff.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: staff.name,
-          email: staff.email,
-          number: staff.number,
-          address: staff.address,
-          role: nextRole,
-          is_active: staff.is_active,
-        }),
+      await axios.put(`/api/staff/${staff.id}`, {
+        name: staff.name,
+        email: staff.email,
+        number: staff.number,
+        address: staff.address,
+        role: nextRole,
+        is_active: staff.is_active,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to update role.');
-      }
 
       toast.success(
         `Staff member ${staff.name} has been updated to role ${nextRole.toUpperCase()}.`
@@ -92,7 +69,7 @@ const AdminStaffListPage = () => {
         staffList.map((s) => (s.id === staff.id ? { ...s, role: nextRole } : s))
       );
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 
@@ -103,19 +80,11 @@ const AdminStaffListPage = () => {
     if (!confirm) return;
 
     try {
-      const response = await fetch(`/api/staff/${id}`, {
-        method: 'DELETE',
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to delete staff member.');
-      }
-
-      toast.success(data.message || 'Staff account deleted.');
+      const response = await axios.delete(`/api/staff/${id}`);
+      toast.success(response.data.message || 'Staff account deleted.');
       setStaffList(staffList.filter((s) => s.id !== id));
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 

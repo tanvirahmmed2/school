@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiUserPlus } from 'react-icons/fi';
 
@@ -21,19 +22,9 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
 
     setSubmitting(true);
     try {
-      const response = await fetch('/api/teachers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, number, address, password }),
-      });
+      const response = await axios.post('/api/teachers', { name, email, number, address, password });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create teacher.');
-      }
-
-      toast.success(data.message || 'Teacher registered successfully!');
+      toast.success(response.data.message || 'Teacher registered successfully!');
       setName('');
       setEmail('');
       setNumber('');
@@ -41,7 +32,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
       setPassword('');
       if (onSuccess) onSuccess();
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     } finally {
       setSubmitting(false);
     }
