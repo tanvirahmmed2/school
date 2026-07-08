@@ -1,4 +1,4 @@
--- Admin & Classes & Sections Schema Only
+-- Admin & Classes & Sections & Teachers & Subjects Schema
 
 -- Enable UUID extension if needed in the future
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -72,4 +72,59 @@ CREATE TABLE IF NOT EXISTS sections (
 
 CREATE TRIGGER update_sections_updated_at
     BEFORE UPDATE ON sections
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- TEACHERS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teachers (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    number VARCHAR(50) NOT NULL,
+    address TEXT NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_teachers_updated_at
+    BEFORE UPDATE ON teachers
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- SUBJECTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS subjects (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_subjects_updated_at
+    BEFORE UPDATE ON subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLASS SUBJECTS MAPPING & ASSIGNMENT TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS class_subjects (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, section_id, subject_id)
+);
+
+CREATE TRIGGER update_class_subjects_updated_at
+    BEFORE UPDATE ON class_subjects
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
