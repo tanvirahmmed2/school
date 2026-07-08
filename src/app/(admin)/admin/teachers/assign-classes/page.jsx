@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiPlus, FiTrash2, FiX, FiAward, FiLayers, FiGrid, FiBook } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiX, FiAward, FiLayers, FiGrid, FiBook, FiUser } from 'react-icons/fi';
 import ClassSubjectAssignForm from '@/component/forms/ClassSubjectAssignForm';
 
 const AdminAssignClassesPage = () => {
@@ -188,8 +188,8 @@ const AdminAssignClassesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {assign.teacher_name ? (
                         <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                          <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-[10px] text-slate-600">
-                            {assign.teacher_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                          <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
+                            <FiUser className="text-xs" />
                           </span>
                           {assign.teacher_name}
                         </span>

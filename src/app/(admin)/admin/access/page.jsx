@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiPlus, FiTrash2, FiX, FiShield, FiPhone, FiMapPin, FiMail } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiX, FiShield, FiPhone, FiMapPin, FiMail, FiUser } from 'react-icons/fi';
 import AdminCreateForm from '@/component/forms/AdminCreateForm';
 
 const AdminAccessPage = () => {
@@ -138,8 +138,8 @@ const AdminAccessPage = () => {
                   <tr key={admin.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-bold text-sm">
-                          {admin.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center">
+                          <FiUser className="text-base" />
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{admin.name}</p>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiShield } from 'react-icons/fi';
+import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiShield, FiUser } from 'react-icons/fi';
 
 const AdminStaffListPage = () => {
   const [staffList, setStaffList] = useState([]);
@@ -151,8 +151,8 @@ const AdminStaffListPage = () => {
                   <tr key={staff.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-bold text-sm">
-                          {staff.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center">
+                          <FiUser className="text-base" />
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{staff.name}</p>

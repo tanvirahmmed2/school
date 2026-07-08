@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiBriefcase, FiUser } from 'react-icons/fi';
 
 const AdminTeachersListPage = () => {
   const [teachers, setTeachers] = useState([]);
@@ -31,15 +31,15 @@ const AdminTeachersListPage = () => {
         name: teacher.name,
         email: teacher.email,
         number: teacher.number,
+        designation: teacher.designation,
         address: teacher.address,
         is_active: nextStatus,
       });
 
       toast.success(
-        `Teacher ${teacher.name} has been ${nextStatus ? 'activated' : 'deactivated'}.`
+        `Teacher ${teacher.name} status updated successfully.`
       );
       
-      // Update state directly
       setTeachers(
         teachers.map((t) => (t.id === teacher.id ? { ...t, is_active: nextStatus } : t))
       );
@@ -102,13 +102,16 @@ const AdminTeachersListPage = () => {
               <thead>
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Teacher
+                    Teacher Details
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Contact Details
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Address
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Account Setup
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Status
@@ -123,30 +126,38 @@ const AdminTeachersListPage = () => {
                   <tr key={teacher.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-bold text-sm">
-                          {teacher.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center">
+                          <FiUser className="text-base" />
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{teacher.name}</p>
-                          <span className="text-[10px] text-slate-400 font-semibold">
-                            Teacher ID: {teacher.id}
+                          <span className="text-[10px] text-slate-400 font-bold flex items-center gap-1 mt-0.5">
+                            <FiBriefcase className="text-slate-450" /> {teacher.designation || 'Unset designation'}
                           </span>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1 text-xs text-slate-600">
-                        <span className="flex items-center gap-1.5">
-                          <FiMail className="text-slate-400" /> {teacher.email}
+                      <div className="flex flex-col gap-1 text-xs text-slate-655">
+                        <span className="flex items-center gap-1.5 text-slate-700">
+                          <FiMail className="text-slate-400 text-xs" /> {teacher.email}
                         </span>
-                        <span className="flex items-center gap-1.5">
-                          <FiPhone className="text-slate-400" /> {teacher.number}
+                        <span className="flex items-center gap-1.5 text-slate-700">
+                          <FiPhone className="text-slate-400 text-xs" /> {teacher.number}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-xs text-slate-600 flex items-center gap-1.5">
-                        <FiMapPin className="text-slate-400" /> {teacher.address}
+                        <FiMapPin className="text-slate-400" /> 
+                        {teacher.address || <span className="text-slate-400 italic">Address Pending Setup</span>}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${teacher.is_registered 
+                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
+                        : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
+                        {teacher.is_registered ? 'Setup Completed' : 'Pending Register'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -173,7 +184,7 @@ const AdminTeachersListPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
-                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-red-50 hover:bg-red-100 text-red-655 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Remove Teacher"
                       >
                         <FiTrash2 className="text-sm" />

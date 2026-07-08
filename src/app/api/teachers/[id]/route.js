@@ -11,11 +11,11 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, email, number, address, is_active, password } = await request.json();
+    const { name, email, number, designation, address, is_active, password } = await request.json();
 
-    if (!name || !email || !number || !address || is_active === undefined) {
+    if (!name || !email || !number || !designation || is_active === undefined) {
       return NextResponse.json(
-        { error: 'All fields (name, email, number, address, is_active) are required.' },
+        { error: 'Name, email, phone number, designation, and is_active parameters are required.' },
         { status: 400 }
       );
     }
@@ -23,7 +23,7 @@ export async function PUT(request, { params }) {
     // Check email uniqueness (excluding current teacher id)
     const duplicateCheck = await query(
       'SELECT id FROM teachers WHERE email = $1 AND id <> $2',
-      [email, id]
+      [email.trim(), id]
     );
 
     if (duplicateCheck.rows.length > 0) {
@@ -36,23 +36,23 @@ export async function PUT(request, { params }) {
       const passwordHash = await hashPassword(password);
       updatedTeacher = await query(
         `UPDATE teachers 
-         SET name = $1, email = $2, number = $3, address = $4, is_active = $5, password_hash = $6, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = $7 
-         RETURNING id, name, email, number, address, is_active`,
-        [name.trim(), email.trim().toLowerCase(), number.trim(), address.trim(), is_active, passwordHash, id]
+         SET name = $1, email = $2, number = $3, designation = $4, address = $5, is_active = $6, password_hash = $7, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $8 
+         RETURNING id, name, email, number, designation, address, is_active, is_registered`,
+        [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), address ? address.trim() : null, is_active, passwordHash, id]
       );
     } else {
       updatedTeacher = await query(
         `UPDATE teachers 
-         SET name = $1, email = $2, number = $3, address = $4, is_active = $5, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = $6 
-         RETURNING id, name, email, number, address, is_active`,
-        [name.trim(), email.trim().toLowerCase(), number.trim(), address.trim(), is_active, id]
+         SET name = $1, email = $2, number = $3, designation = $4, address = $5, is_active = $6, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $7 
+         RETURNING id, name, email, number, designation, address, is_active, is_registered`,
+        [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), address ? address.trim() : null, is_active, id]
       );
     }
 
     if (updatedTeacher.rowCount === 0) {
-      return NextResponse.json({ error: 'Teacher not found.' }, { status: 404 });
+      return NextResponse.json({ error: 'Teacher record not found.' }, { status: 404 });
     }
 
     return NextResponse.json({

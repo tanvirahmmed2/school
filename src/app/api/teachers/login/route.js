@@ -15,7 +15,7 @@ export async function POST(request) {
     }
 
     // Find teacher
-    const result = await query('SELECT * FROM teachers WHERE email = $1', [email]);
+    const result = await query('SELECT * FROM teachers WHERE LOWER(email) = LOWER($1)', [email.trim()]);
     if (result.rows.length === 0) {
       return NextResponse.json(
         { error: 'Invalid email or password.' },
@@ -24,6 +24,14 @@ export async function POST(request) {
     }
 
     const teacher = result.rows[0];
+
+    // Check if teacher completed registration setup
+    if (!teacher.is_registered) {
+      return NextResponse.json(
+        { error: 'This teacher account has not completed setup yet. Please self-register first.' },
+        { status: 403 }
+      );
+    }
 
     // Check if teacher is active
     if (!teacher.is_active) {
@@ -62,8 +70,10 @@ export async function POST(request) {
         name: teacher.name,
         email: teacher.email,
         number: teacher.number,
+        designation: teacher.designation,
         address: teacher.address,
         is_active: teacher.is_active,
+        is_registered: teacher.is_registered
       }
     });
   } catch (error) {

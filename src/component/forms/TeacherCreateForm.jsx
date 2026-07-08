@@ -9,27 +9,30 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [password, setPassword] = useState('');
+  const [designation, setDesignation] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !email || !number || !address || !password) {
-      toast.error('All fields are required.');
+    if (!name || !email || !number || !designation) {
+      toast.error('All fields (Name, Email, Phone Number, Designation) are required.');
       return;
     }
 
     setSubmitting(true);
     try {
-      const response = await axios.post('/api/teachers', { name, email, number, address, password });
+      const response = await axios.post('/api/teachers', { 
+        name: name.trim(), 
+        email: email.trim(), 
+        number: number.trim(), 
+        designation: designation.trim() 
+      });
 
-      toast.success(response.data.message || 'Teacher registered successfully!');
+      toast.success(response.data.message || 'Teacher account placeholder created successfully!');
       setName('');
       setEmail('');
       setNumber('');
-      setAddress('');
-      setPassword('');
+      setDesignation('');
       if (onSuccess) onSuccess();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -41,7 +44,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiUserPlus className="text-blue-600" /> Register New Teacher
+        <FiUserPlus className="text-blue-600" /> Pre-create Teacher Profile
       </h2>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -52,7 +55,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. John Doe"
+            placeholder="e.g. Professor John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
@@ -92,35 +95,20 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
 
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            Password
+            Designation
           </label>
           <input
-            type="password"
+            type="text"
             required
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="e.g. Assistant Professor"
+            value={designation}
+            onChange={(e) => setDesignation(e.target.value)}
             disabled={submitting}
             className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
           />
         </div>
 
-        <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            Address
-          </label>
-          <textarea
-            required
-            rows={2}
-            placeholder="e.g. Dhaka, Bangladesh"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 resize-none"
-          />
-        </div>
-
-        <div className="flex justify-end gap-3 md:col-span-2 mt-2">
+        <div className="flex justify-end gap-3 md:col-span-2 mt-4 pt-3 border-t border-slate-100">
           <button
             type="button"
             onClick={onCancel}
@@ -136,7 +124,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             {submitting ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
-              'Create Account'
+              'Save Teacher Profile'
             )}
           </button>
         </div>

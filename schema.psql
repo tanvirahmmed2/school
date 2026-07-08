@@ -106,9 +106,13 @@ CREATE TABLE IF NOT EXISTS teachers (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     number VARCHAR(50) NOT NULL,
-    address TEXT NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
+    designation VARCHAR(255),
+    address TEXT,
+    password_hash VARCHAR(255),
+    recovery_token VARCHAR(255),
+    recovery_token_expires TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_registered BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -177,6 +181,7 @@ CREATE TABLE IF NOT EXISTS clubs_admins (
     id BIGSERIAL PRIMARY KEY,
     club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
     teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    designation VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(club_id, teacher_id)
@@ -357,4 +362,201 @@ CREATE TABLE IF NOT EXISTS syllabuses (
 CREATE TRIGGER update_syllabuses_updated_at
     BEFORE UPDATE ON syllabuses
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STUDENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS students (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    phone VARCHAR(50),
+    registration_number VARCHAR(100) UNIQUE NOT NULL,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    date_of_birth DATE,
+    address TEXT,
+    parents_info TEXT,
+    birth_certificate_number VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255),
+    recovery_token VARCHAR(255),
+    recovery_token_expires TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_registered BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_students_updated_at
+    BEFORE UPDATE ON students
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STUDENT ATTENDANCES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_attendances (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    status VARCHAR(50) NOT NULL DEFAULT 'Present' CHECK (status IN ('Present', 'Absent', 'Late', 'Half Day')),
+    remarks VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(student_id, date)
+);
+
+CREATE TRIGGER update_student_attendances_updated_at
+    BEFORE UPDATE ON student_attendances
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STUDENT FEES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_fees (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    due_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid', 'Partially Paid')),
+    paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_date TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fees_updated_at
+    BEFORE UPDATE ON student_fees
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STUDENT FINES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_fines (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    fee_id BIGINT REFERENCES student_fees(id) ON DELETE SET NULL,
+    title VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fines_updated_at
+    BEFORE UPDATE ON student_fines
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- MARKS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS marks (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    marks_obtained DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
+    total_marks DECIMAL(5, 2) NOT NULL DEFAULT 100.00,
+    remarks VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_student_exam_subject UNIQUE(student_id, exam_id, subject_id)
+);
+
+CREATE TRIGGER update_marks_updated_at
+    BEFORE UPDATE ON marks
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- RESULTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS results (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    gpa DECIMAL(3, 2) DEFAULT 0.00,
+    grade VARCHAR(10),
+    total_marks DECIMAL(6, 2) DEFAULT 0.00,
+    status VARCHAR(50) DEFAULT 'Pass',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_student_exam UNIQUE(student_id, exam_id)
+);
+
+CREATE TRIGGER update_results_updated_at
+    BEFORE UPDATE ON results
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- RESULT PUBLISH TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS result_publish (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT UNIQUE NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    is_published BOOLEAN DEFAULT FALSE,
+    published_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_result_publish_updated_at
+    BEFORE UPDATE ON result_publish
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- TRANSCRIPTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS transcripts (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    gpa DECIMAL(3, 2) DEFAULT 0.00,
+    remarks TEXT,
+    generated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================================
+-- CLUB EDITORS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS club_editors (
+    id BIGSERIAL PRIMARY KEY,
+    club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
+    staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_club_staff UNIQUE(club_id, staff_id)
+);
+
+CREATE TRIGGER update_club_editors_updated_at
+    BEFORE UPDATE ON club_editors
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLUB MEMBERS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS club_members (
+    id BIGSERIAL PRIMARY KEY,
+    club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_club_student UNIQUE(club_id, student_id)
+);
+
+CREATE TRIGGER update_club_members_updated_at
+    BEFORE UPDATE ON club_members
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+
 

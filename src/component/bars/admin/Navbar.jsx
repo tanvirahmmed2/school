@@ -40,9 +40,7 @@ const Navbar = () => {
 
         {/* Logo/Brand */}
         <div className="flex items-center gap-2">
-          <span className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
-            A
-          </span>
+          
           <span className="font-bold text-slate-800 text-sm md:text-base hidden sm:inline-block">
             Institution Admin
           </span>
