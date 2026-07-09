@@ -15,7 +15,7 @@ export async function GET(request) {
 
     // Load static lookups
     const teachersPromise = query('SELECT id, name, email FROM teachers ORDER BY name ASC');
-    const staffPromise = query("SELECT id, name, email FROM staff WHERE role = 'register' ORDER BY name ASC");
+    const staffPromise = query("SELECT id, name, email FROM staff WHERE role = 'registrar' ORDER BY name ASC");
     const studentsPromise = query('SELECT id, name, registration_number FROM students ORDER BY name ASC');
 
     const [teachersRes, staffRes, studentsRes] = await Promise.all([

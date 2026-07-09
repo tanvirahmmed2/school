@@ -1,9 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { redirect } from 'next/navigation';
+import { isStaff } from '@/lib/auth';
 
-const StaffLayout = ({children}) => {
-  return (
-    <div>{children}</div>
-  )
-}
+const StaffLayout = async ({ children }) => {
+  const authenticated = await isStaff();
 
-export default StaffLayout
+  if (!authenticated) {
+    redirect('/auth/staff/login');
+  }
+
+  return <>{children}</>;
+};
+
+export default StaffLayout;

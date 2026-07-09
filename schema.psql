@@ -47,13 +47,14 @@ CREATE TABLE IF NOT EXISTS staff (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     number VARCHAR(50) NOT NULL,
-    address TEXT NOT NULL,
-    role VARCHAR(50) NOT NULL DEFAULT 'staff' CHECK (role IN ('staff', 'register')),
+    address TEXT,
+    role VARCHAR(50) NOT NULL DEFAULT 'staff' CHECK (role IN ('staff', 'registrar')),
     designation VARCHAR(255),
-    password_hash VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255),
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,
-    is_active BOOLEAN DEFAULT TRUE,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_registered BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -557,6 +558,91 @@ CREATE TABLE IF NOT EXISTS club_members (
 CREATE TRIGGER update_club_members_updated_at
     BEFORE UPDATE ON club_members
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- NEWS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS news (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    image TEXT,
+    image_id VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_news_updated_at
+    BEFORE UPDATE ON news
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- EVENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS events (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    event_date TIMESTAMPTZ NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_events_updated_at
+    BEFORE UPDATE ON events
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- EVENT PARTICIPANTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS event_participants (
+    event_id BIGINT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    joined_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (event_id, student_id)
+);
+
+-- ============================================================================
+-- NOTICES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS notices (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    link TEXT NOT NULL,
+    is_pinned BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_notices_updated_at
+    BEFORE UPDATE ON notices
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STUDENT FEE PAYMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_fee_payments (
+    id BIGSERIAL PRIMARY KEY,
+    student_fee_id BIGINT NOT NULL REFERENCES student_fees(id) ON DELETE CASCADE,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'Cash',
+    transaction_id VARCHAR(100),
+    remarks TEXT,
+    payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_student_fee_payments_updated_at
+    BEFORE UPDATE ON student_fee_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 
 
 

@@ -141,6 +141,9 @@ const AdminStaffListPage = () => {
                     Address
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Registration
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
@@ -171,13 +174,13 @@ const AdminStaffListPage = () => {
                         value={staff.role}
                         onChange={(e) => handleRoleChange(staff, e.target.value)}
                         className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border cursor-pointer outline-none transition-all duration-150 ${
-                          staff.role === 'register'
+                          staff.role === 'registrar'
                             ? 'bg-purple-50 text-purple-600 border-purple-100 focus:ring-2 focus:ring-purple-500/20'
                             : 'bg-blue-50 text-blue-600 border-blue-100 focus:ring-2 focus:ring-blue-500/20'
                         }`}
                       >
                         <option value="staff">Staff</option>
-                        <option value="register">Register</option>
+                        <option value="registrar">Registrar</option>
                       </select>
                     </td>
                     <td className="px-6 py-4">
@@ -192,8 +195,19 @@ const AdminStaffListPage = () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-xs text-slate-600 flex items-center gap-1.5">
-                        <FiMapPin className="text-slate-400" /> {staff.address}
+                        <FiMapPin className="text-slate-400" /> {staff.address || 'Not set'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {staff.is_registered ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                          Registered
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100 animate-pulse">
+                          Pending Setup
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button

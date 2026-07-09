@@ -97,3 +97,47 @@ export async function isStudent() {
   }
 }
 
+
+export async function isStaff() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-staff')?.value;
+    if (!token) return false;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return false;
+
+    // Direct database validation check
+    const result = await query('SELECT id, is_active, is_registered FROM staff WHERE id = $1', [decoded.id]);
+    if (result.rows.length === 0) return false;
+
+    const staff = result.rows[0];
+    return !!(staff.is_active && staff.is_registered);
+  } catch (error) {
+    console.error('Error verifying staff authorization:', error);
+    return false;
+  }
+}
+
+
+export async function isRegistrar() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-staff')?.value;
+    if (!token) return false;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return false;
+
+    // Direct database validation check
+    const result = await query('SELECT id, is_active, is_registered, role FROM staff WHERE id = $1', [decoded.id]);
+    if (result.rows.length === 0) return false;
+
+    const staff = result.rows[0];
+    return !!(staff.is_active && staff.is_registered && staff.role === 'registrar');
+  } catch (error) {
+    console.error('Error verifying registrar authorization:', error);
+    return false;
+  }
+}
+

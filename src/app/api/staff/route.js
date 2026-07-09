@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin, hashPassword } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
 // GET all staff members
 export async function GET() {
   try {
     const result = await query(
-      'SELECT id, name, email, number, designation, address, role, is_active, created_at FROM staff ORDER BY name ASC'
+      'SELECT id, name, email, number, designation, address, role, is_active, is_registered, created_at FROM staff ORDER BY name ASC'
     );
     return NextResponse.json({ staff: result.rows });
   } catch (error) {
@@ -18,7 +18,7 @@ export async function GET() {
   }
 }
 
-// POST register a new staff member (Admin only)
+// POST register a new staff member (Admin pre-creates placeholder)
 export async function POST(request) {
   try {
     const authenticated = await isAdmin();
@@ -26,11 +26,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
-    const { name, email, number, designation, address, role, password } = await request.json();
+    const { name, email, number, designation, role } = await request.json();
 
-    if (!name || !email || !number || !designation || !address || !role || !password) {
+    if (!name || !email || !number || !designation || !role) {
       return NextResponse.json(
-        { error: 'All fields (name, email, number, designation, address, role, password) are required.' },
+        { error: 'All fields (name, email, number, designation, role) are required.' },
         { status: 400 }
       );
     }
@@ -55,24 +55,21 @@ export async function POST(request) {
       return NextResponse.json({ error: 'This email is already in use by an administrative account.' }, { status: 400 });
     }
 
-    // Hash password
-    const passwordHash = await hashPassword(password);
-
     const newStaff = await query(
-      `INSERT INTO staff (name, email, number, designation, address, role, password_hash) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7) 
-       RETURNING id, name, email, number, designation, address, role, is_active`,
-      [name.trim(), trimmedEmail, number.trim(), designation.trim(), address.trim(), role.trim().toLowerCase(), passwordHash]
+      `INSERT INTO staff (name, email, number, designation, role, is_active, is_registered) 
+       VALUES ($1, $2, $3, $4, $5, FALSE, FALSE) 
+       RETURNING id, name, email, number, designation, role, is_active, is_registered`,
+      [name.trim(), trimmedEmail, number.trim(), designation.trim(), role.trim().toLowerCase()]
     );
 
     return NextResponse.json(
-      { message: 'Staff member registered successfully.', staff: newStaff.rows[0] },
+      { message: 'Staff profile pre-created successfully.', staff: newStaff.rows[0] },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating staff:', error);
+    console.error('Error creating staff placeholder:', error);
     return NextResponse.json(
-      { error: 'Failed to create staff member. Internal server error.' },
+      { error: 'Failed to create staff placeholder. Internal server error.' },
       { status: 500 }
     );
   }

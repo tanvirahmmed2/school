@@ -96,3 +96,4 @@ purchase_items
 stock_movements
 activity_logs
 login_logs
+student_fee_payments

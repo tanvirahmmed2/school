@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiBriefcase, FiCompass } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiBriefcase, FiShield } from 'react-icons/fi';
 
-const StaffHomePage = () => {
-  const [staff, setStaff] = useState(null);
+const RegistrarHomePage = () => {
+  const [registrar, setRegistrar] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -13,10 +13,10 @@ const StaffHomePage = () => {
         const response = await fetch('/api/staff/me');
         if (response.ok) {
           const data = await response.json();
-          setStaff(data.staff);
+          setRegistrar(data.staff);
         }
       } catch (error) {
-        console.error('Failed to fetch staff profile:', error);
+        console.error('Failed to fetch registrar profile:', error);
       } finally {
         setLoading(false);
       }
@@ -32,7 +32,7 @@ const StaffHomePage = () => {
     );
   }
 
-  if (!staff) {
+  if (!registrar) {
     return (
       <div className="p-6 bg-red-50 text-red-600 border border-red-100 rounded-2xl">
         Failed to load profile. Please sign in again.
@@ -42,20 +42,20 @@ const StaffHomePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto flex flex-col gap-6 animate-fade-up">
-      {/* Header card with glassmorphism style or gradient */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-indigo-650 to-purple-650 bg-indigo-600 text-white rounded-3xl p-6 md:p-8 shadow-[0_15px_30px_rgba(79,70,229,0.15)]">
+      {/* Header card with gradient */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-3xl p-6 md:p-8 shadow-[0_15px_30px_rgba(124,58,237,0.15)]">
         <div className="absolute top-0 right-0 w-[40%] aspect-square rounded-full bg-white/5 blur-[80px] pointer-events-none"></div>
         <div className="relative z-10 flex flex-col sm:flex-row items-center gap-5">
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-2xl font-bold">
-            {staff.name.charAt(0)}
+            {registrar.name.charAt(0)}
           </div>
           <div className="flex flex-col text-center sm:text-left gap-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-200">
-              Staff Portal Profile
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-purple-200 flex items-center justify-center sm:justify-start gap-1">
+              <FiShield /> Registrar Workspace
             </span>
-            <h1 className="text-2xl font-bold tracking-tight">{staff.name}</h1>
-            <p className="text-xs text-indigo-100 flex items-center justify-center sm:justify-start gap-1">
-              <FiBriefcase className="text-sm" /> {staff.designation} • {staff.role.toUpperCase()}
+            <h1 className="text-2xl font-bold tracking-tight">{registrar.name}</h1>
+            <p className="text-xs text-purple-100 flex items-center justify-center sm:justify-start gap-1">
+              <FiBriefcase className="text-sm" /> {registrar.designation} • System Registrar
             </p>
           </div>
         </div>
@@ -66,7 +66,7 @@ const StaffHomePage = () => {
         {/* Profile Card */}
         <div className="md:col-span-2 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_35px_rgba(0,0,0,0.01)] flex flex-col gap-5">
           <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-slate-50 pb-3">
-            <FiUser className="text-indigo-600 text-base" /> Personal Information
+            <FiUser className="text-purple-600 text-base" /> Registrar Profile
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -76,7 +76,7 @@ const StaffHomePage = () => {
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address</span>
-                <span className="text-xs font-bold text-slate-700">{staff.email}</span>
+                <span className="text-xs font-bold text-slate-700">{registrar.email}</span>
               </div>
             </div>
 
@@ -86,7 +86,7 @@ const StaffHomePage = () => {
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contact Number</span>
-                <span className="text-xs font-bold text-slate-700">{staff.number}</span>
+                <span className="text-xs font-bold text-slate-700">{registrar.number}</span>
               </div>
             </div>
 
@@ -96,38 +96,38 @@ const StaffHomePage = () => {
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Residential Address</span>
-                <span className="text-xs font-bold text-slate-700">{staff.address || 'Not specified'}</span>
+                <span className="text-xs font-bold text-slate-700">{registrar.address || 'Not specified'}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Status panel */}
+        {/* Roles and Status Panel */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_35px_rgba(0,0,0,0.01)] flex flex-col justify-between gap-5">
           <div className="flex flex-col gap-4">
             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-slate-50 pb-3">
-              <FiCompass className="text-indigo-600 text-base" /> Account Status
+              <FiShield className="text-purple-600 text-base" /> Registrar Status
             </h2>
 
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Authentication</span>
+                <span className="text-slate-400 font-medium">Status</span>
                 <span className="px-2 py-0.5 font-bold rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
                   Active
                 </span>
               </div>
 
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Registry Status</span>
-                <span className="px-2 py-0.5 font-bold rounded-full bg-blue-50 text-blue-600 border border-blue-100">
-                  Registered
+                <span className="text-slate-400 font-medium">Registrations</span>
+                <span className="px-2 py-0.5 font-bold rounded-full bg-purple-50 text-purple-600 border border-purple-100">
+                  Registrar
                 </span>
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-2 text-[10px] text-slate-400 border-t border-slate-50 pt-4">
-            <FiCalendar /> Joined the school registry
+            <FiCalendar /> Verified system authority
           </div>
         </div>
       </div>
@@ -135,4 +135,4 @@ const StaffHomePage = () => {
   );
 };
 
-export default StaffHomePage;
+export default RegistrarHomePage;

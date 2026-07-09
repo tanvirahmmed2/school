@@ -286,7 +286,7 @@ const AdminClubsAssignPage = () => {
                     );
                   })}
                   {filteredStaff.length === 0 && (
-                    <div className="text-center text-xs text-slate-400 py-8">No staff with 'register' role found.</div>
+                    <div className="text-center text-xs text-slate-400 py-8">No staff with 'registrar' role found.</div>
                   )}
                 </div>
               </div>

@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import pool, { query } from '@/lib/db';
+import { isAdmin, isRegistrar } from '@/lib/auth';
 
-// GET student fees logs (Admin and Students)
+// GET student fees logs (Admin and Registrars)
 export async function GET(request) {
   try {
+    const authenticated = (await isAdmin()) || (await isRegistrar());
+    if (!authenticated) {
+      return NextResponse.json({ error: 'Unauthorized. Admins or Registrars only.' }, { status: 403 });
+    }
     const { searchParams } = new URL(request.url);
     const studentId = searchParams.get('student_id');
     const classId = searchParams.get('class_id');
@@ -138,15 +142,16 @@ export async function POST(request) {
   }
 }
 
-// PUT: Process student fee payments (Admin only)
+// PUT: Process student fee payments (Admin and Registrars)
 export async function PUT(request) {
+  let client;
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegistrar());
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins or Registrars only.' }, { status: 403 });
     }
 
-    const { fee_id, paid_amount } = await request.json();
+    const { fee_id, paid_amount, payment_method, transaction_id, remarks } = await request.json();
 
     if (!fee_id || paid_amount === undefined) {
       return NextResponse.json(
@@ -156,23 +161,40 @@ export async function PUT(request) {
     }
 
     const numPaid = parseFloat(paid_amount);
-    if (isNaN(numPaid) || numPaid < 0) {
+    if (isNaN(numPaid) || numPaid <= 0) {
       return NextResponse.json(
-        { error: 'Paid Amount must be a valid non-negative number.' },
+        { error: 'Paid Amount must be a valid positive number.' },
         { status: 400 }
       );
     }
 
+    // Connect client for transaction
+    client = await pool.connect();
+    await client.query('BEGIN');
+
     // Fetch existing fee details
-    const feeRes = await query('SELECT * FROM student_fees WHERE id = $1', [fee_id]);
+    const feeRes = await client.query('SELECT * FROM student_fees WHERE id = $1 FOR UPDATE', [fee_id]);
     if (feeRes.rows.length === 0) {
+      await client.query('ROLLBACK');
+      client.release();
+      client = null;
       return NextResponse.json({ error: 'Fee invoice record not found.' }, { status: 404 });
     }
 
     const fee = feeRes.rows[0];
     const totalAmount = parseFloat(fee.amount);
     const prevPaid = parseFloat(fee.paid_amount);
-    const newCumulativePaid = prevPaid + numPaid;
+    const newCumulativePaid = Math.round((prevPaid + numPaid) * 100) / 100;
+
+    if (newCumulativePaid > totalAmount) {
+      await client.query('ROLLBACK');
+      client.release();
+      client = null;
+      return NextResponse.json(
+        { error: `Paid amount exceeds the remaining balance. Total due: $${(totalAmount - prevPaid).toFixed(2)}` },
+        { status: 400 }
+      );
+    }
 
     let newStatus = 'Unpaid';
     let paymentDate = fee.payment_date;
@@ -184,7 +206,7 @@ export async function PUT(request) {
       newStatus = 'Partially Paid';
     }
 
-    const result = await query(
+    const result = await client.query(
       `UPDATE student_fees
        SET paid_amount = $1,
            status = $2,
@@ -195,11 +217,31 @@ export async function PUT(request) {
       [newCumulativePaid, newStatus, paymentDate, fee_id]
     );
 
+    // Log payment transaction details
+    const method = payment_method ? payment_method.trim() : 'Cash';
+    await client.query(
+      `INSERT INTO student_fee_payments (student_fee_id, amount_paid, payment_method, transaction_id, remarks, payment_date)
+       VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
+      [fee_id, numPaid, method, transaction_id ? transaction_id.trim() : null, remarks ? remarks.trim() : null]
+    );
+
+    await client.query('COMMIT');
+    client.release();
+    client = null;
+
     return NextResponse.json({
       message: 'Payment processed successfully.',
       fee: result.rows[0]
     });
   } catch (error) {
+    if (client) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (rollbackErr) {
+        console.error('Error during rollback:', rollbackErr);
+      }
+      client.release();
+    }
     console.error('Error logging payment:', error);
     return NextResponse.json(
       { error: 'Failed to process payment. Internal server error.' },
