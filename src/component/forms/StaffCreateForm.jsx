@@ -9,6 +9,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
+  const [designation, setDesignation] = useState('');
   const [address, setAddress] = useState('');
   const [role, setRole] = useState('staff');
   const [password, setPassword] = useState('');
@@ -16,19 +17,20 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !email || !number || !address || !role || !password) {
+    if (!name || !email || !number || !designation || !address || !role || !password) {
       toast.error('All fields are required.');
       return;
     }
 
     setSubmitting(true);
     try {
-      const response = await axios.post('/api/staff', { name, email, number, address, role, password });
+      const response = await axios.post('/api/staff', { name, email, number, designation, address, role, password });
 
       toast.success(response.data.message || 'Staff member registered successfully!');
       setName('');
       setEmail('');
       setNumber('');
+      setDesignation('');
       setAddress('');
       setRole('staff');
       setPassword('');
@@ -120,11 +122,23 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           >
             <option value="staff">Staff</option>
             <option value="register">Register / Registrar</option>
-            <option value="editor">Editor</option>
           </select>
         </div>
 
-        <div className="hidden md:block"></div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Designation
+          </label>
+          <input
+            type="text"
+            required
+            placeholder="e.g. Accountant, Librarian"
+            value={designation}
+            onChange={(e) => setDesignation(e.target.value)}
+            disabled={submitting}
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+          />
+        </div>
 
         <div className="flex flex-col gap-1.5 md:col-span-2">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">

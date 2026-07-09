@@ -1,425 +1,124 @@
-# 🚀 School / Coaching Management System Development Roadmap
+# 🏫 School & Coaching Management System
 
-# Phase 1 — Planning & Research (Week 1)
-
-## Goals
-
-* Finalize project requirements
-* Define core features
-* Identify user roles
-* Plan UI/UX structure
-
-## Tasks
-
-### Requirement Analysis
-
-* Student features
-* Teacher features
-* Admin features
-* Staff features
-
-### Define User Roles
-
-* Super Admin
-* Admin
-* Teacher
-* Student
-* Accountant
-* Staff
-
-### Create Project Architecture
-
-* Frontend architecture
-* Backend architecture
-* Database structure
-
-### Create Wireframes
-
-Main pages:
-
-* Home Page
-* Student Dashboard
-* Teacher Dashboard
-* Admin Dashboard
-* Result Portal
-* Purchase System
+A modern, responsive, and full-featured **School & Institution Management Portal** built using **Next.js (App Router)**, **Tailwind CSS**, and **PostgreSQL**. The platform supports multiple distinct user portals (Admin, Teacher, Student, and Staff) with complete role-based authorization, database-backed dashboard metrics, interactive roll call registers, grade sheets, fee systems, and co-curricular club memberships.
 
 ---
 
-# Phase 2 — UI/UX Design (Week 2)
+## 🏗️ Project Architecture & Tech Stack
 
-## Goals
+### Frontend & Core
+* **Framework**: [Next.js](https://nextjs.org/) (App Router & Server Actions / Route Handlers)
+* **React Engine**: [React 19](https://react.dev/)
+* **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & Vanilla CSS variables
+* **Icons**: [React Icons](https://react-icons.github.io/react-icons/) (Feather & Flat icons)
+* **Toasters**: `react-hot-toast` for micro-animations and status updates
 
-Create a modern, responsive, and user-friendly interface.
-
-## Tasks
-
-### Design System
-
-* Color palette
-* Typography
-* Buttons
-* Cards
-* Forms
-* Tables
-* Dashboard components
-
-### Design Main Pages
-
-#### Public Website
-
-* Home
-* About
-* Courses
-* Admission
-* Contact
-
-#### Dashboard Interfaces
-
-* Admin Dashboard
-* Student Dashboard
-* Teacher Dashboard
-
-### Responsive Design
-
-* Mobile optimization
-* Tablet support
-* Responsive navigation
+### Backend & Databases
+* **Server**: Next.js Route Handlers (RESTful APIs)
+* **Database**: [PostgreSQL](https://www.postgresql.org/) with raw SQL query pools (`pg` client)
+* **Authentication**: JSON Web Token (JWT) with HTTP-only cookies
+* **Security & Password Hashing**: `bcryptjs` for secure teacher/student/admin credentials hashing
 
 ---
 
-# Phase 3 — Project Setup (Week 3)
+## 🔐 Core Portals & Key Features
 
-## Frontend Setup
+### 👤 1. Admin Portal (`/admin`)
+* **Access Control**: Super admin page to manage system settings, notices, and announcements.
+* **Class & Curriculum Management**: Set up classes, section capacities, timetables, and subjects.
+* **Account Provisioning**: Form triggers to create, approve, and toggle status of teachers, staff, and student admissions.
+* **Financial Oversight**: Allocate monthly salary slips and record incoming invoices and tuition fees.
+* **Exams & Grading**: Configure term schedules, publish GPAs, and generate student transcripts.
 
-### Technologies
+### 👩‍🏫 2. Teacher Portal (`/teacher`)
+* **Responsive Dashboard**: Summary statistics of active teaching subjects, total student capacity, leave records, and received salaries.
+* **Class Schedule**: Weekday-filterable daily timetable reflecting timing schedules and assigned classrooms.
+* **Student Attendance Registry**: Multi-class and section roll call interface allowing daily submissions (Present, Absent, Late, Half Day) with remarks.
+* **Marks Evaluation**: Batched marks entry ledger for student exams, mapping percentage thresholds.
+* **Leaves Management**: Self-apply portal for Casual, Medical, or Duty leaves with status tracking (Pending, Approved, Rejected).
+* **Financial Records**: View monthly salary ledgers and paid/pending billing slips.
+* **Teacher Profile**: Official credentials, designations, and contact cards.
 
-* Next.js
-* Tailwind CSS
-* TypeScript
-* Framer Motion
-* React Icons
-
-## Backend Setup
-
-### Technologies
-
-* Node.js
-* Express.js
-* PostgreSQL
-* Prisma ORM
-
-## Authentication Setup
-
-* JWT Authentication
-* Role-based authorization
-* Protected routes
-
-## Development Environment
-
-* GitHub repository
-* Branch structure
-* CI/CD planning
+### 👨‍🎓 3. Student Portal (`/student`)
+* **Student Dashboard**: Welcome banner displaying active academic information alongside subjects, co-curricular club counts, and attendance ratings.
+* **Class Routine**: Responsive day-by-day class routine cards.
+* **Attendance Registry**: Visual representation of logs indicating present rates, absences, and late tallies.
+* **Coursework & Syllabus**: List assigned class subjects with associated teachers, including direct PDF download links for curriculums.
+* **Exam routines**: Chronological view of exams, timing structures, and locations.
+* **Report Cards**: Grade cards highlighting cumulative term GPAs and letter grades (A+, A-, F).
+* **Ledgers & Fines**: Detail listing of outstanding tuition bills and late penalties.
+* **Clubs Hub**: Directory of school clubs, allowing students to dynamically join/leave clubs with real-time membership state tracking.
 
 ---
 
-# Phase 4 — Database Development (Week 4)
+## 📁 Repository Structure
 
-## Main Database Tables
-
-### Users
-
-* Students
-* Teachers
-* Admins
-* Staff
-
-### Academic
-
-* Classes
-* Subjects
-* Batches
-* Routines
-
-### Financial & Purchase
-
-* Purchases
-* Purchase Categories
-* Expenses
-* Salaries
-
-### Exams
-
-* Exams
-* Results
-* Marks
-
-### Communication
-
-* Notifications
-* SMS Logs
-* Notices
-
-## Tasks
-
-* Database schema design
-* Table relationships
-* Database migrations
-* Seed/sample data
+```
+├── .next/                  # Built Next.js output
+├── public/                 # Static asset resources
+├── scripts/                # Database seed and table setup scripts
+│   ├── setup-db-tables.js  # Main tables (classes, students, attendance, fees)
+│   ├── setup-clubs.js      # Clubs and co-curricular tables
+│   └── setup-results.js    # Exam routines, marks, and GPA tables
+└── src/
+    ├── app/                # App Router Page Views & API Handler Directories
+    │   ├── (admin)/        # Admin dashboard layouts & page routes
+    │   ├── (auth)/         # Login portals (Admin, Teacher, Student, Staff)
+    │   ├── (student)/      # Student portal layout, dashboard, and routine views
+    │   ├── (teacher)/      # Teacher portal layout, roll call registry, and leaves
+    │   ├── (home)/         # Public landing pages (Noticeboard, Contact, Facilities)
+    │   └── api/            # API Route Handlers (REST controllers)
+    ├── component/          # Shared layout frames & bars
+    │   ├── bars/           # Responsive Navbar & Sidebar components for all portals
+    │   └── helper/         # Context providers & wrappers
+    └── lib/                # Shared utilities
+        ├── auth.js         # JWT signing/verification & password hashing helpers
+        ├── db.js           # PostgreSQL query pools
+        └── secret.js       # Secret variables loadout
+```
 
 ---
 
-# Phase 5 — Authentication & User System (Week 5)
-
-## Features
-
-### Login System
-
-* Email login
-* Phone login
-* Password reset
-
-### Access Control
-
-* User permissions
-* Dashboard access management
-
-### User Profiles
-
-* Student profiles
-* Teacher profiles
-* Admin profiles
-
----
-
-# Phase 6 — Core Module Development (Week 6–10)
-
-# Module 1 — Student Management
-
-## Features
-
-* Admission system
-* Student profiles
-* ID card generation
-* Batch assignment
-
----
-
-# Module 2 — Attendance Management
-
-## Features
-
-* Daily attendance
-* Late attendance tracking
-* Attendance reports
-* SMS notifications
-
----
-
-# Module 3 — Class & Routine Management
-
-## Features
-
-* Class schedules
-* Teacher schedules
-* Exam routines
-
----
-
-# Module 4 — Purchase Management System
-
-## Features
-
-* Purchase entry management
-* Purchase categories
-* Invoice generation
-* Expense tracking
-* Supplier information
-* Purchase history
-* Stock/purchase reports
-
----
-
-# Module 5 — Exam & Result Management
-
-## Features
-
-* Exam creation
-* Marks entry
-* GPA calculation
-* PDF result generation
-* Online result portal
-
----
-
-# Module 6 — Financial Management
-
-## Features
-
-* Income tracking
-* Expense tracking
-* Net balance reports
-* Salary management
-* Monthly financial reports
-
----
-
-# Module 7 — SMS & Notification System
-
-## Features
-
-* Attendance SMS
-* Notice notifications
-* Exam notifications
-* Marketing SMS
-* Emergency announcements
-
----
-
-# Phase 7 — Dashboard Analytics (Week 11)
-
-## Admin Analytics
-
-* Total students
-* Attendance overview
-* Revenue & expenses
-* Performance reports
-
-## Dashboard Charts
-
-* Monthly income graph
-* Attendance graph
-* Student growth analytics
-
----
-
-# Phase 8 — Public Website Development (Week 12)
-
-## Public Pages
-
-* Home
-* About
-* Teachers
-* Admission
-* Gallery
-* Notices
-* Contact
-
-## SEO Optimization
-
-* Meta tags
-* Sitemap
-* Open Graph tags
-* Structured data
-
----
-
-# Phase 9 — Testing & Optimization (Week 13)
-
-## Testing Types
-
-### Functional Testing
-
-* Authentication system
-* Attendance system
-* Result system
-* Purchase system
-
-### Security Testing
-
-* SQL injection prevention
-* XSS protection
-* Rate limiting
-
-### Performance Optimization
-
-* Image optimization
-* Lazy loading
-* Database optimization
-
----
-
-# Phase 10 — Deployment (Week 14)
-
-## Frontend Deployment
-
-* Vercel
-
-## Backend Deployment
-
-* Railway / VPS
-
-## Database Hosting
-
-* Supabase / Neon
-
-## Domain Setup
-
-Examples:
-
-* schoolname.edu.bd
-* app.schoolname.edu.bd
-
-## Security Setup
-
-* HTTPS
-* SSL certificates
-* Security headers
-
----
-
-# Phase 11 — Future Upgrades
-
-## Mobile Application
-
-* React Native app
-
-## AI Features
-
-* AI assistant
-* Smart analytics
-
-## Parent Portal
-
-* Child progress tracking
-* Parent notifications
-
-## E-Learning System
-
-* Live classes
-* Assignment submission
-* Video lectures
-
----
-
-# 🛠️ Recommended Tech Stack
-
-## Frontend
-
-* Next.js
-* Tailwind CSS
-* TypeScript
-
-## Backend
-
-* Node.js
-* Express.js
-
-## Database
-
-* PostgreSQL
-
-
-
-## Authentication
-
-* JWT 
-
-## Storage
-
-* Cloudinary
-
-## SMS Service
-
-* brevo
-
+## 🛠️ Installation & Setup
+
+1. **Clone the Repository**:
+   ```bash
+   git clone <repository_url>
+   cd school
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root directory:
+   ```env
+   PG_USER=your_postgres_user
+   PG_PASSWORD=your_postgres_password
+   PG_HOST=localhost
+   PG_PORT=5432
+   PG_DATABASE=school_db
+   JWT_SECRET=your_jwt_secret
+   ```
+
+4. **Initialize Database Tables**:
+   Run the initial setup scripts:
+   ```bash
+   node scripts/setup-db-tables.js
+   node scripts/setup-clubs-tables.js
+   node scripts/setup-results-tables.js
+   ```
+
+5. **Run the Development Server**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+6. **Production Build Compilation**:
+   Verify everything compiles:
+   ```bash
+   npm run build
+   ```

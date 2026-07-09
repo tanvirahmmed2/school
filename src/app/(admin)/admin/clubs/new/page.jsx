@@ -78,7 +78,7 @@ const AdminClubsNewPage = () => {
 
   const handleDeleteClub = async (id, clubName) => {
     const confirm = window.confirm(
-      `Are you sure you want to delete "${clubName}"? This will permanently delete all logs, assigned admins, editors, and student memberships.`
+      `Are you sure you want to delete "${clubName}"? This will permanently delete all logs, assigned admins, registers, and student memberships.`
     );
     if (!confirm) return;
 

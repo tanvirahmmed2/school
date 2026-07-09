@@ -11,11 +11,11 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, email, number, address, role, is_active, password } = await request.json();
+    const { name, email, number, designation, address, role, is_active, password } = await request.json();
 
-    if (!name || !email || !number || !address || !role || is_active === undefined) {
+    if (!name || !email || !number || !designation || !address || !role || is_active === undefined) {
       return NextResponse.json(
-        { error: 'All fields (name, email, number, address, role, is_active) are required.' },
+        { error: 'All fields (name, email, number, designation, address, role, is_active) are required.' },
         { status: 400 }
       );
     }
@@ -49,18 +49,18 @@ export async function PUT(request, { params }) {
       const passwordHash = await hashPassword(password);
       updatedStaff = await query(
         `UPDATE staff 
-         SET name = $1, email = $2, number = $3, address = $4, role = $5, is_active = $6, password_hash = $7, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = $8 
-         RETURNING id, name, email, number, address, role, is_active`,
-        [name.trim(), trimmedEmail, number.trim(), address.trim(), role.trim().toLowerCase(), is_active, passwordHash, id]
+         SET name = $1, email = $2, number = $3, designation = $4, address = $5, role = $6, is_active = $7, password_hash = $8, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $9 
+         RETURNING id, name, email, number, designation, address, role, is_active`,
+        [name.trim(), trimmedEmail, number.trim(), designation.trim(), address.trim(), role.trim().toLowerCase(), is_active, passwordHash, id]
       );
     } else {
       updatedStaff = await query(
         `UPDATE staff 
-         SET name = $1, email = $2, number = $3, address = $4, role = $5, is_active = $6, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = $7 
-         RETURNING id, name, email, number, address, role, is_active`,
-        [name.trim(), trimmedEmail, number.trim(), address.trim(), role.trim().toLowerCase(), is_active, id]
+         SET name = $1, email = $2, number = $3, designation = $4, address = $5, role = $6, is_active = $7, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $8 
+         RETURNING id, name, email, number, designation, address, role, is_active`,
+        [name.trim(), trimmedEmail, number.trim(), designation.trim(), address.trim(), role.trim().toLowerCase(), is_active, id]
       );
     }
 

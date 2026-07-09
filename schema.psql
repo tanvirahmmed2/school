@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS staff (
     email VARCHAR(255) UNIQUE NOT NULL,
     number VARCHAR(50) NOT NULL,
     address TEXT NOT NULL,
-    role VARCHAR(50) NOT NULL DEFAULT 'staff' CHECK (role IN ('staff', 'register', 'editor')),
+    role VARCHAR(50) NOT NULL DEFAULT 'staff' CHECK (role IN ('staff', 'register')),
+    designation VARCHAR(255),
     password_hash VARCHAR(255) NOT NULL,
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,
@@ -524,10 +525,10 @@ CREATE TABLE IF NOT EXISTS transcripts (
 );
 
 -- ============================================================================
--- CLUB EDITORS TABLE
+-- CLUB REGISTERS TABLE
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS club_editors (
+CREATE TABLE IF NOT EXISTS club_registers (
     id BIGSERIAL PRIMARY KEY,
     club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
     staff_id BIGINT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
@@ -536,8 +537,8 @@ CREATE TABLE IF NOT EXISTS club_editors (
     CONSTRAINT unique_club_staff UNIQUE(club_id, staff_id)
 );
 
-CREATE TRIGGER update_club_editors_updated_at
-    BEFORE UPDATE ON club_editors
+CREATE TRIGGER update_club_registers_updated_at
+    BEFORE UPDATE ON club_registers
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================

@@ -17,7 +17,7 @@ const AdminClubsAssignPage = () => {
 
   // Selections arrays (selectedAdmins contains objects: [{ teacher_id, designation }])
   const [selectedAdmins, setSelectedAdmins] = useState([]);
-  const [selectedEditors, setSelectedEditors] = useState([]);
+  const [selectedRegisters, setSelectedRegisters] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
 
   // Search queries
@@ -48,7 +48,7 @@ const AdminClubsAssignPage = () => {
       setStaff([]);
       setStudents([]);
       setSelectedAdmins([]);
-      setSelectedEditors([]);
+      setSelectedRegisters([]);
       setSelectedMembers([]);
     }
   }, [selectedClub]);
@@ -62,7 +62,7 @@ const AdminClubsAssignPage = () => {
       setStudents(response.data.students || []);
 
       setSelectedAdmins(response.data.assignedAdmins || []);
-      setSelectedEditors(response.data.assignedEditors || []);
+      setSelectedRegisters(response.data.assignedRegisters || []);
       setSelectedMembers(response.data.assignedMembers || []);
     } catch (error) {
       toast.error('Failed to load assignments.');
@@ -92,8 +92,8 @@ const AdminClubsAssignPage = () => {
     }));
   };
 
-  const handleToggleEditor = (staffId) => {
-    setSelectedEditors(prev => 
+  const handleToggleRegister = (staffId) => {
+    setSelectedRegisters(prev => 
       prev.includes(staffId) ? prev.filter(id => id !== staffId) : [...prev, staffId]
     );
   };
@@ -129,7 +129,7 @@ const AdminClubsAssignPage = () => {
       const response = await axios.post('/api/clubs/assign', {
         club_id: selectedClub,
         teachers: selectedAdmins,
-        staff_ids: selectedEditors,
+        staff_ids: selectedRegisters,
         student_ids: selectedMembers
       });
 
@@ -149,8 +149,8 @@ const AdminClubsAssignPage = () => {
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
           <FiUsers className="text-blue-600" /> Assign Club Roles & Members
         </h1>
-        <p className="text-sm text-slate-500">
-          Select a club to assign teachers as Admins, staff as Editors, and students as Members.
+        <p className="text-sm text-slate-5050 text-slate-500">
+          Select a club to assign teachers as Admins, staff as Registers, and students as Members.
         </p>
       </div>
 
@@ -243,11 +243,11 @@ const AdminClubsAssignPage = () => {
                 </div>
               </div>
 
-              {/* Editors (Staff) */}
+              {/* Registers (Staff) */}
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
                 <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
                   <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
-                    <FiUserCheck className="text-indigo-600" /> Club Editors (Register Staff)
+                    <FiUserCheck className="text-indigo-600" /> Club Registers (Register Staff)
                   </h3>
                   <div className="relative">
                     <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
@@ -262,7 +262,7 @@ const AdminClubsAssignPage = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
                   {filteredStaff.map(s => {
-                    const isChecked = selectedEditors.includes(s.id);
+                    const isChecked = selectedRegisters.includes(s.id);
                     return (
                       <label 
                         key={s.id} 
@@ -275,7 +275,7 @@ const AdminClubsAssignPage = () => {
                         <input
                           type="checkbox"
                           checked={isChecked}
-                          onChange={() => handleToggleEditor(s.id)}
+                          onChange={() => handleToggleRegister(s.id)}
                           className="w-4 h-4 rounded text-indigo-600 border-slate-350 outline-none"
                         />
                         <div className="flex flex-col">

@@ -31,6 +31,7 @@ const AdminStaffListPage = () => {
         name: staff.name,
         email: staff.email,
         number: staff.number,
+        designation: staff.designation,
         address: staff.address,
         role: staff.role,
         is_active: nextStatus,
@@ -55,6 +56,7 @@ const AdminStaffListPage = () => {
         name: staff.name,
         email: staff.email,
         number: staff.number,
+        designation: staff.designation,
         address: staff.address,
         role: nextRole,
         is_active: staff.is_active,
@@ -156,9 +158,11 @@ const AdminStaffListPage = () => {
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{staff.name}</p>
-                          <span className="text-[10px] text-slate-400 font-semibold">
-                            Staff ID: {staff.id}
-                          </span>
+                          <div className="flex gap-2 items-center text-[10px] text-slate-400 font-semibold">
+                            <span>Staff ID: {staff.id}</span>
+                            <span>•</span>
+                            <span className="text-slate-500 font-bold">{staff.designation || 'Unset designation'}</span>
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -169,14 +173,11 @@ const AdminStaffListPage = () => {
                         className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border cursor-pointer outline-none transition-all duration-150 ${
                           staff.role === 'register'
                             ? 'bg-purple-50 text-purple-600 border-purple-100 focus:ring-2 focus:ring-purple-500/20'
-                            : staff.role === 'editor'
-                            ? 'bg-emerald-50 text-emerald-600 border-emerald-100 focus:ring-2 focus:ring-emerald-500/20'
                             : 'bg-blue-50 text-blue-600 border-blue-100 focus:ring-2 focus:ring-blue-500/20'
                         }`}
                       >
                         <option value="staff">Staff</option>
                         <option value="register">Register</option>
-                        <option value="editor">Editor</option>
                       </select>
                     </td>
                     <td className="px-6 py-4">

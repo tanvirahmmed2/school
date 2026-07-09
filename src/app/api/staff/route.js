@@ -6,7 +6,7 @@ import { isAdmin, hashPassword } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query(
-      'SELECT id, name, email, number, address, role, is_active, created_at FROM staff ORDER BY name ASC'
+      'SELECT id, name, email, number, designation, address, role, is_active, created_at FROM staff ORDER BY name ASC'
     );
     return NextResponse.json({ staff: result.rows });
   } catch (error) {
@@ -26,11 +26,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
-    const { name, email, number, address, role, password } = await request.json();
+    const { name, email, number, designation, address, role, password } = await request.json();
 
-    if (!name || !email || !number || !address || !role || !password) {
+    if (!name || !email || !number || !designation || !address || !role || !password) {
       return NextResponse.json(
-        { error: 'All fields (name, email, number, address, role, password) are required.' },
+        { error: 'All fields (name, email, number, designation, address, role, password) are required.' },
         { status: 400 }
       );
     }
@@ -59,10 +59,10 @@ export async function POST(request) {
     const passwordHash = await hashPassword(password);
 
     const newStaff = await query(
-      `INSERT INTO staff (name, email, number, address, role, password_hash) 
-       VALUES ($1, $2, $3, $4, $5, $6) 
-       RETURNING id, name, email, number, address, role, is_active`,
-      [name.trim(), trimmedEmail, number.trim(), address.trim(), role.trim().toLowerCase(), passwordHash]
+      `INSERT INTO staff (name, email, number, designation, address, role, password_hash) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7) 
+       RETURNING id, name, email, number, designation, address, role, is_active`,
+      [name.trim(), trimmedEmail, number.trim(), designation.trim(), address.trim(), role.trim().toLowerCase(), passwordHash]
     );
 
     return NextResponse.json(

@@ -25,7 +25,7 @@ export async function GET(request) {
     ]);
 
     let assignedAdmins = [];
-    let assignedEditors = [];
+    let assignedRegisters = [];
     let assignedMembers = [];
 
     if (clubId) {
@@ -33,8 +33,8 @@ export async function GET(request) {
         `SELECT teacher_id AS id, designation FROM clubs_admins WHERE club_id = $1`,
         [clubId]
       );
-      const editorsPromise = query(
-        `SELECT staff_id AS id FROM club_editors WHERE club_id = $1`,
+      const registersPromise = query(
+        `SELECT staff_id AS id FROM club_registers WHERE club_id = $1`,
         [clubId]
       );
       const membersPromise = query(
@@ -42,14 +42,14 @@ export async function GET(request) {
         [clubId]
       );
 
-      const [adminsRes, editorsRes, membersRes] = await Promise.all([
+      const [adminsRes, registersRes, membersRes] = await Promise.all([
         adminsPromise,
-        editorsPromise,
+        registersPromise,
         membersPromise
       ]);
 
       assignedAdmins = adminsRes.rows.map(r => ({ teacher_id: parseInt(r.id, 10), designation: r.designation || '' }));
-      assignedEditors = editorsRes.rows.map(r => r.id);
+      assignedRegisters = registersRes.rows.map(r => r.id);
       assignedMembers = membersRes.rows.map(r => r.id);
     }
 
@@ -58,7 +58,7 @@ export async function GET(request) {
       staff: staffRes.rows,
       students: studentsRes.rows,
       assignedAdmins,
-      assignedEditors,
+      assignedRegisters,
       assignedMembers
     });
   } catch (error) {
@@ -87,7 +87,7 @@ export async function POST(request) {
 
     // 1. Wipe old assignments
     await query('DELETE FROM clubs_admins WHERE club_id = $1', [club_id]);
-    await query('DELETE FROM club_editors WHERE club_id = $1', [club_id]);
+    await query('DELETE FROM club_registers WHERE club_id = $1', [club_id]);
     await query('DELETE FROM club_members WHERE club_id = $1', [club_id]);
 
     // 2. Insert new ones
@@ -112,7 +112,7 @@ export async function POST(request) {
     if (staff_ids && Array.isArray(staff_ids)) {
       for (const sId of staff_ids) {
         await query(
-          'INSERT INTO club_editors (club_id, staff_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+          'INSERT INTO club_registers (club_id, staff_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
           [club_id, sId]
         );
       }
@@ -128,7 +128,7 @@ export async function POST(request) {
     }
 
     return NextResponse.json({
-      message: 'Club administrative, editor, and member roles updated successfully.'
+      message: 'Club administrative, register, and member roles updated successfully.'
     });
   } catch (error) {
     console.error('Error updating club assignments:', error);
