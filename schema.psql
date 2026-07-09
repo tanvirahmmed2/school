@@ -516,6 +516,7 @@ CREATE TRIGGER update_club_members_updated_at
 CREATE TABLE IF NOT EXISTS news (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE,
     content TEXT NOT NULL,
     image TEXT,
     image_id VARCHAR(255),
@@ -534,6 +535,7 @@ CREATE TRIGGER update_news_updated_at
 CREATE TABLE IF NOT EXISTS events (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE,
     description TEXT NOT NULL,
     event_date TIMESTAMPTZ NOT NULL,
     location VARCHAR(255) NOT NULL,
