@@ -31,18 +31,6 @@ const AuthPortalSelectionPage = () => {
       gradient: 'from-indigo-500/5 to-transparent'
     },
     {
-      title: 'Staff Portal',
-      description: 'Submit leave request applications, view monthly salary breakdown files, and keep up with structural system notice updates.',
-      href: '/auth/staff/login',
-      icon: FiBriefcase,
-      badge: 'Workspace',
-      cardClass: 'bg-white hover:border-emerald-350 hover:shadow-[0_15px_35px_rgba(16,185,129,0.08)] border-slate-200/80',
-      iconClass: 'bg-emerald-50 text-emerald-600 border border-emerald-100 group-hover:bg-emerald-100',
-      badgeClass: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
-      footerClass: 'group-hover:text-emerald-600',
-      gradient: 'from-emerald-500/5 to-transparent'
-    },
-    {
       title: 'Administrative Portal',
       description: 'Manage academic classes, sections, subject catalogs, teacher routines, student rosters, exam timelines, and billing ledgers.',
       href: '/auth/access/login',

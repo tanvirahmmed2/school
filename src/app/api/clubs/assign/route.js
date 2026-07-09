@@ -15,17 +15,14 @@ export async function GET(request) {
 
     // Load static lookups
     const teachersPromise = query('SELECT id, name, email FROM teachers ORDER BY name ASC');
-    const staffPromise = query("SELECT id, name, email FROM staff WHERE role = 'registrar' ORDER BY name ASC");
     const studentsPromise = query('SELECT id, name, registration_number FROM students ORDER BY name ASC');
 
-    const [teachersRes, staffRes, studentsRes] = await Promise.all([
+    const [teachersRes, studentsRes] = await Promise.all([
       teachersPromise,
-      staffPromise,
       studentsPromise
     ]);
 
     let assignedAdmins = [];
-    let assignedRegisters = [];
     let assignedMembers = [];
 
     if (clubId) {
@@ -33,32 +30,24 @@ export async function GET(request) {
         `SELECT teacher_id AS id, designation FROM clubs_admins WHERE club_id = $1`,
         [clubId]
       );
-      const registersPromise = query(
-        `SELECT staff_id AS id FROM club_registers WHERE club_id = $1`,
-        [clubId]
-      );
       const membersPromise = query(
         `SELECT student_id AS id FROM club_members WHERE club_id = $1`,
         [clubId]
       );
 
-      const [adminsRes, registersRes, membersRes] = await Promise.all([
+      const [adminsRes, membersRes] = await Promise.all([
         adminsPromise,
-        registersPromise,
         membersPromise
       ]);
 
       assignedAdmins = adminsRes.rows.map(r => ({ teacher_id: parseInt(r.id, 10), designation: r.designation || '' }));
-      assignedRegisters = registersRes.rows.map(r => r.id);
       assignedMembers = membersRes.rows.map(r => r.id);
     }
 
     return NextResponse.json({
       teachers: teachersRes.rows,
-      staff: staffRes.rows,
       students: studentsRes.rows,
       assignedAdmins,
-      assignedRegisters,
       assignedMembers
     });
   } catch (error) {
@@ -79,7 +68,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { club_id, teachers, teacher_ids, staff_ids, student_ids } = body;
+    const { club_id, teachers, teacher_ids, student_ids } = body;
 
     if (!club_id) {
       return NextResponse.json({ error: 'Parameter club_id is required.' }, { status: 400 });
@@ -87,7 +76,6 @@ export async function POST(request) {
 
     // 1. Wipe old assignments
     await query('DELETE FROM clubs_admins WHERE club_id = $1', [club_id]);
-    await query('DELETE FROM club_registers WHERE club_id = $1', [club_id]);
     await query('DELETE FROM club_members WHERE club_id = $1', [club_id]);
 
     // 2. Insert new ones
@@ -109,15 +97,6 @@ export async function POST(request) {
       }
     }
 
-    if (staff_ids && Array.isArray(staff_ids)) {
-      for (const sId of staff_ids) {
-        await query(
-          'INSERT INTO club_registers (club_id, staff_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
-          [club_id, sId]
-        );
-      }
-    }
-
     if (student_ids && Array.isArray(student_ids)) {
       for (const stId of student_ids) {
         await query(
@@ -128,7 +107,7 @@ export async function POST(request) {
     }
 
     return NextResponse.json({
-      message: 'Club administrative, register, and member roles updated successfully.'
+      message: 'Club administrative and member roles updated successfully.'
     });
   } catch (error) {
     console.error('Error updating club assignments:', error);

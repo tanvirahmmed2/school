@@ -14,18 +14,13 @@ export async function GET(request) {
 
     let sql = `
       SELECT s.*, 
-             t.name as teacher_name, 
-             st.name as staff_name, 
-             st.role as staff_role
+             t.name as teacher_name
       FROM salaries s
       LEFT JOIN teachers t ON s.teacher_id = t.id
-      LEFT JOIN staff st ON s.staff_id = st.id
     `;
 
     if (type === 'teacher') {
       sql += ` WHERE s.teacher_id IS NOT NULL`;
-    } else if (type === 'staff') {
-      sql += ` WHERE s.staff_id IS NOT NULL`;
     }
 
     sql += ` ORDER BY s.id DESC`;

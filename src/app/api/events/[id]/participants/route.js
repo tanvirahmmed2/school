@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isRegistrar } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
-// GET participants for a specific event (Registrar only)
+// GET participants for a specific event (Admin only)
 export async function GET(request, { params }) {
   try {
-    const authenticated = await isRegistrar();
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { id } = await params;

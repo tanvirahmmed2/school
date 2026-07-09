@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import pool, { query } from '@/lib/db';
-import { isAdmin, isRegistrar } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
-// GET student fees logs (Admin and Registrars)
+// GET student fees logs (Admin only)
 export async function GET(request) {
   try {
-    const authenticated = (await isAdmin()) || (await isRegistrar());
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins or Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
     const { searchParams } = new URL(request.url);
     const studentId = searchParams.get('student_id');
@@ -142,13 +142,13 @@ export async function POST(request) {
   }
 }
 
-// PUT: Process student fee payments (Admin and Registrars)
+// PUT: Process student fee payments (Admin only)
 export async function PUT(request) {
   let client;
   try {
-    const authenticated = (await isAdmin()) || (await isRegistrar());
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins or Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { fee_id, paid_amount, payment_method, transaction_id, remarks } = await request.json();

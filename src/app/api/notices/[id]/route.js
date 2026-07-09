@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isRegistrar } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
-// PUT update notice (Registrar only)
+// PUT update notice (Admin only)
 export async function PUT(request, { params }) {
   try {
-    const authenticated = await isRegistrar();
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { id } = await params;
@@ -45,12 +45,12 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE notice (Registrar only)
+// DELETE notice (Admin only)
 export async function DELETE(request, { params }) {
   try {
-    const authenticated = await isRegistrar();
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { id } = await params;

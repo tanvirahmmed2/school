@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isRegistrar } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
 // GET all notices
 export async function GET() {
@@ -16,12 +16,12 @@ export async function GET() {
   }
 }
 
-// POST create notice (Registrar only)
+// POST create notice (Admin only)
 export async function POST(request) {
   try {
-    const authenticated = await isRegistrar();
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { title, link, is_pinned = false } = await request.json();

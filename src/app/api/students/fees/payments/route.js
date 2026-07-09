@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin, isRegistrar } from '@/lib/auth';
+import { isAdmin } from '@/lib/auth';
 
-// GET student fee payment logs (Admin and Registrars only)
+// GET student fee payment logs (Admin only)
 export async function GET(request) {
   try {
-    const authenticated = (await isAdmin()) || (await isRegistrar());
+    const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins or Registrars only.' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);

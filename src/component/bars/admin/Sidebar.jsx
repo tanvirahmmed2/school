@@ -16,7 +16,7 @@ const Sidebar = () => {
   const [classesOpen, setClassesOpen] = useState(pathname.startsWith('/admin/classes'));
   const [subjectsOpen, setSubjectsOpen] = useState(pathname.startsWith('/admin/subjects'));
   const [teachersOpen, setTeachersOpen] = useState(pathname.startsWith('/admin/teachers'));
-  const [staffOpen, setStaffOpen] = useState(pathname.startsWith('/admin/staff'));
+  const [authoritiesOpen, setAuthoritiesOpen] = useState(pathname.startsWith('/admin/authorities'));
   const [examsOpen, setExamsOpen] = useState(pathname.startsWith('/admin/exams'));
   const [studentsOpen, setStudentsOpen] = useState(pathname.startsWith('/admin/students'));
   const [clubsOpen, setClubsOpen] = useState(pathname.startsWith('/admin/clubs'));
@@ -59,13 +59,13 @@ const Sidebar = () => {
     { label: 'Attendance Registry', href: '/admin/teachers/attendences', icon: FiCalendar },
     { label: 'Salary Ledger', href: '/admin/teachers/salary', icon: FiDollarSign },
     { label: 'Applications Drawer', href: '/admin/teachers/applications', icon: FiFileText },
+    { label: 'Manage Qualifications', href: '/admin/teachers/qualification', icon: FiAward },
   ];
 
-  const staffLinks = [
-    { label: 'New Staff Account', href: '/admin/staff/new', icon: FiUserPlus },
-    { label: 'Staff List', href: '/admin/staff/list', icon: FiUsers },
-    { label: 'Salary Ledger', href: '/admin/staff/salary', icon: FiDollarSign },
-    { label: 'Applications Drawer', href: '/admin/staff/applications', icon: FiFileText },
+  const authorityLinks = [
+    { label: 'New Board Member', href: '/admin/authorities/new', icon: FiUserPlus },
+    { label: 'Board Members List', href: '/admin/authorities/list', icon: FiUsers },
+    { label: 'Board Qualifications', href: '/admin/authorities/qualification', icon: FiAward },
   ];
 
   const examLinks = [
@@ -269,24 +269,24 @@ const Sidebar = () => {
             )}
           </div>
 
-          {/* Section 3: Staff Management (Dropdown collapsible) */}
+          {/* Section 2.5: Board Authorities Management (Dropdown collapsible) */}
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-0.5">
-              <FiUsers /> Staff Management
+              <FiShield /> Board Management
             </span>
 
             <button
-              onClick={() => setStaffOpen(!staffOpen)}
-              className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${pathname.startsWith('/admin/staff')
+              onClick={() => setAuthoritiesOpen(!authoritiesOpen)}
+              className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${pathname.startsWith('/admin/authorities')
                   ? 'bg-slate-50 text-slate-850'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
                 }`}
             >
               <div className="flex items-center gap-3">
-                <FiUsers className={`text-base ${pathname.startsWith('/admin/staff') ? 'text-blue-600' : 'text-slate-400'}`} />
-                <span>Staff</span>
+                <FiShield className={`text-base ${pathname.startsWith('/admin/authorities') ? 'text-blue-600' : 'text-slate-400'}`} />
+                <span>Board Members</span>
               </div>
-              {staffOpen ? (
+              {authoritiesOpen ? (
                 <FiChevronDown className="text-slate-400 text-sm" />
               ) : (
                 <FiChevronRight className="text-slate-400 text-sm" />
@@ -294,9 +294,9 @@ const Sidebar = () => {
             </button>
 
             {/* Collapsible Sub-links Container */}
-            {staffOpen && (
+            {authoritiesOpen && (
               <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 animate-fade-down duration-200">
-                {staffLinks.map((link) => {
+                {authorityLinks.map((link) => {
                   const Icon = link.icon;
                   const isActive = pathname === link.href;
 

@@ -12,17 +12,14 @@ const AdminClubsAssignPage = () => {
 
   // Lookups lists
   const [teachers, setTeachers] = useState([]);
-  const [staff, setStaff] = useState([]);
   const [students, setStudents] = useState([]);
 
   // Selections arrays (selectedAdmins contains objects: [{ teacher_id, designation }])
   const [selectedAdmins, setSelectedAdmins] = useState([]);
-  const [selectedRegisters, setSelectedRegisters] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
 
   // Search queries
   const [searchTeacher, setSearchTeacher] = useState('');
-  const [searchStaff, setSearchStaff] = useState('');
   const [searchStudent, setSearchStudent] = useState('');
 
   const [saving, setSaving] = useState(false);
@@ -45,10 +42,8 @@ const AdminClubsAssignPage = () => {
       fetchClubAssignments();
     } else {
       setTeachers([]);
-      setStaff([]);
       setStudents([]);
       setSelectedAdmins([]);
-      setSelectedRegisters([]);
       setSelectedMembers([]);
     }
   }, [selectedClub]);
@@ -58,11 +53,9 @@ const AdminClubsAssignPage = () => {
     try {
       const response = await axios.get(`/api/clubs/assign?club_id=${selectedClub}`);
       setTeachers(response.data.teachers || []);
-      setStaff(response.data.staff || []);
       setStudents(response.data.students || []);
 
       setSelectedAdmins(response.data.assignedAdmins || []);
-      setSelectedRegisters(response.data.assignedRegisters || []);
       setSelectedMembers(response.data.assignedMembers || []);
     } catch (error) {
       toast.error('Failed to load assignments.');
@@ -92,12 +85,6 @@ const AdminClubsAssignPage = () => {
     }));
   };
 
-  const handleToggleRegister = (staffId) => {
-    setSelectedRegisters(prev => 
-      prev.includes(staffId) ? prev.filter(id => id !== staffId) : [...prev, staffId]
-    );
-  };
-
   const handleToggleMember = (studentId) => {
     setSelectedMembers(prev => 
       prev.includes(studentId) ? prev.filter(id => id !== studentId) : [...prev, studentId]
@@ -108,11 +95,6 @@ const AdminClubsAssignPage = () => {
   const filteredTeachers = teachers.filter(t => 
     t.name.toLowerCase().includes(searchTeacher.toLowerCase()) || 
     t.email.toLowerCase().includes(searchTeacher.toLowerCase())
-  );
-
-  const filteredStaff = staff.filter(s => 
-    s.name.toLowerCase().includes(searchStaff.toLowerCase()) || 
-    s.email.toLowerCase().includes(searchStaff.toLowerCase())
   );
 
   const filteredStudents = students.filter(st => 
@@ -129,7 +111,6 @@ const AdminClubsAssignPage = () => {
       const response = await axios.post('/api/clubs/assign', {
         club_id: selectedClub,
         teachers: selectedAdmins,
-        staff_ids: selectedRegisters,
         student_ids: selectedMembers
       });
 
@@ -150,7 +131,7 @@ const AdminClubsAssignPage = () => {
           <FiUsers className="text-blue-600" /> Assign Club Roles & Members
         </h1>
         <p className="text-sm text-slate-5050 text-slate-500">
-          Select a club to assign teachers as Admins, staff as Registers, and students as Members.
+          Select a club to assign teachers as Admins and students as Members.
         </p>
       </div>
 
@@ -181,7 +162,7 @@ const AdminClubsAssignPage = () => {
               <span className="text-sm font-semibold text-slate-400">Loading assignments...</span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Admins (Teachers) */}
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
@@ -243,53 +224,6 @@ const AdminClubsAssignPage = () => {
                 </div>
               </div>
 
-              {/* Registers (Staff) */}
-              <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
-                <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
-                  <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
-                    <FiUserCheck className="text-indigo-600" /> Club Registers (Register Staff)
-                  </h3>
-                  <div className="relative">
-                    <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
-                    <input
-                      type="text"
-                      placeholder="Search staff..."
-                      value={searchStaff}
-                      onChange={(e) => setSearchStaff(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
-                  {filteredStaff.map(s => {
-                    const isChecked = selectedRegisters.includes(s.id);
-                    return (
-                      <label 
-                        key={s.id} 
-                        className={`flex items-center gap-3 p-3 rounded-xl border text-xs font-semibold cursor-pointer transition-all duration-155 ${
-                          isChecked 
-                            ? 'bg-indigo-50/50 border-indigo-200 text-indigo-800' 
-                            : 'bg-white border-slate-100 text-slate-600 hover:bg-slate-50'
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => handleToggleRegister(s.id)}
-                          className="w-4 h-4 rounded text-indigo-600 border-slate-350 outline-none"
-                        />
-                        <div className="flex flex-col">
-                          <span className="font-extrabold">{s.name}</span>
-                          <span className="text-[10px] text-slate-400">{s.email}</span>
-                        </div>
-                      </label>
-                    );
-                  })}
-                  {filteredStaff.length === 0 && (
-                    <div className="text-center text-xs text-slate-400 py-8">No staff with 'registrar' role found.</div>
-                  )}
-                </div>
-              </div>
 
               {/* Members (Students) */}
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">

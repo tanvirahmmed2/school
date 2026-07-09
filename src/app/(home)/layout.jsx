@@ -1,12 +1,16 @@
 import Footer from '@/component/bars/Footer'
 import Navbar from '@/component/bars/Navbar'
+import Sidebar from '@/component/bars/Sidebar'
 import React from 'react'
 
 const HomeLayout = ({children}) => {
   return (
-    <div className='w-full flex flex-col items-center justify-between overflow-x-hidden'>
+    <div className='relative min-h-screen flex flex-col justify-between overflow-x-hidden bg-slate-50/50 text-slate-800'>
       <Navbar/>
-      {children}
+      <Sidebar/>
+      <main className='w-full flex-1 flex flex-col pt-[72px] md:pt-[92px]'>
+        {children}
+      </main>
       <Footer/>
     </div>
   )

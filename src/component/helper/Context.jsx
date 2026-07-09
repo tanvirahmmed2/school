@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export const Context = createContext();
 
@@ -9,7 +9,35 @@ export const ContextProvider = ({ children }) => {
   const [adminSidebar, setAdminSidebar] = useState(false);
   const [TeacherSidebar, setTeacherSidebar] = useState(false);
   const [studentSidebar, setStudentSidebar] = useState(false);
-  const [staffSidebar, setStaffSidebar] = useState(false);
+
+  const [classes, setClasses]=useState([])
+  const [clubs, setClubs]=useState([])
+
+  useEffect(() => {
+    const fetchClassesAndClubs = async () => {
+      try {
+        const classesRes = await fetch('/api/classes');
+        if (classesRes.ok) {
+          const data = await classesRes.json();
+          setClasses(data.classes || []);
+        }
+      } catch (err) {
+        console.error('Error fetching classes in Context:', err);
+      }
+
+      try {
+        const clubsRes = await fetch('/api/clubs');
+        if (clubsRes.ok) {
+          const data = await clubsRes.json();
+          setClubs(data.clubs || []);
+        }
+      } catch (err) {
+        console.error('Error fetching clubs in Context:', err);
+      }
+    };
+
+    fetchClassesAndClubs();
+  }, []);
 
   const values = {
     sidebar,
@@ -20,8 +48,7 @@ export const ContextProvider = ({ children }) => {
     setTeacherSidebar,
     studentSidebar,
     setStudentSidebar,
-    staffSidebar,
-    setStaffSidebar,
+    classes, setClasses,clubs, setClubs
   };
 
   return (
