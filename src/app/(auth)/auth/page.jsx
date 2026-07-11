@@ -8,8 +8,7 @@ const AuthPortalSelectionPage = () => {
   const portals = [
     {
       title: 'Student Portal',
-      description: 'Review your personalized timetable routines, daily attendance tracking sheet, downloadable syllabus guidelines, and invoice ledger transactions.',
-      href: '/auth/student/login',
+     href: '/auth/student/login',
       icon: FiBookOpen,
       badge: 'Student Log',
       cardClass: 'bg-white hover:border-blue-350 hover:shadow-[0_15px_35px_rgba(59,130,246,0.08)] border-slate-200/80',
@@ -20,7 +19,6 @@ const AuthPortalSelectionPage = () => {
     },
     {
       title: 'Teacher Portal',
-      description: 'Log daily student attendance sheets, configure dynamic class timetables, organize syllabus publications, and view salary ledger summaries.',
       href: '/auth/teacher/login',
       icon: FiUsers,
       badge: 'Academic Panel',
@@ -32,7 +30,6 @@ const AuthPortalSelectionPage = () => {
     },
     {
       title: 'Administrative Portal',
-      description: 'Manage academic classes, sections, subject catalogs, teacher routines, student rosters, exam timelines, and billing ledgers.',
       href: '/auth/access/login',
       icon: FiShield,
       badge: 'System Admin',
@@ -46,18 +43,16 @@ const AuthPortalSelectionPage = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-white text-slate-800 relative px-4 py-16 overflow-hidden">
-      {/* Soft background glow circles */}
+     
       <div className="absolute top-[-10%] left-[-10%] w-[50%] aspect-square rounded-full bg-blue-500/5 blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] aspect-square rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none"></div>
       
-      {/* Background grid line overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f080_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f080_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-40"></div>
 
-      <div className="w-full max-w-4xl z-10 animate-fade-up">
+      <div className="w-full flex items-center justify-center flex-col relative z-10">
         
-
-        {/* Portal Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-4">
           {portals.map((portal) => {
             const Icon = portal.icon;
 
@@ -65,13 +60,10 @@ const AuthPortalSelectionPage = () => {
               <Link
                 key={portal.href}
                 href={portal.href}
-                className={`group relative border p-7 md:p-8 rounded-[28px] transition-all duration-300 ease-out hover:-translate-y-1 ${portal.cardClass} flex flex-col justify-between overflow-hidden cursor-pointer`}
+                className={`group relative border p-7 md:p-8 rounded-[28px] transition-all duration-300 ease-out hover:-translate-y-1 ${portal.cardClass} flex flex-col justify-between overflow-hidden cursor-pointer min-h-[220px]`}
               >
-                {/* Radial glow background on hover */}
-                <div className={`absolute -right-24 -top-24 w-48 h-48 rounded-full bg-gradient-to-br ${portal.gradient} blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}></div>
-
+               
                 <div>
-                  {/* Top Bar with Icon and Badge */}
                   <div className="flex items-center justify-between mb-6 relative z-10">
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${portal.iconClass}`}>
                       <Icon className="text-xl" />
@@ -81,16 +73,12 @@ const AuthPortalSelectionPage = () => {
                     </span>
                   </div>
 
-                  {/* Title & Description */}
                   <h2 className="text-xl font-bold text-slate-800 tracking-tight relative z-10 group-hover:text-slate-900">
                     {portal.title}
                   </h2>
-                  <p className="text-slate-500 text-sm mt-3.5 leading-relaxed relative z-10 font-normal">
-                    {portal.description}
-                  </p>
+                  
                 </div>
 
-                {/* Redirect Action Footer */}
                 <div className={`mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 transition-colors relative z-10 ${portal.footerClass}`}>
                   <span>Enter Portal Dashboard</span>
                   <FiArrowRight className="text-lg transition-transform duration-300 group-hover:translate-x-1.5" />
@@ -100,7 +88,6 @@ const AuthPortalSelectionPage = () => {
           })}
         </div>
 
-        {/* Back to Home Button */}
         <div className="w-full text-center mt-12">
           <Link
             href="/"
