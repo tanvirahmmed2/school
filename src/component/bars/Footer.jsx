@@ -40,7 +40,7 @@ const Footer = () => {
                     <div className='w-full flex flex-row gap-4 mt-1'>
                         <div className='w-1/2 flex flex-col gap-2'>
                             <Link href={'/'} className='hover:text-amber-200 transition-colors duration-200'>Home</Link>
-                            <Link href={'/administations/teacher'} className='hover:text-amber-200 transition-colors duration-200'>Teachers</Link>
+                            <Link href={'/teachers'} className='hover:text-amber-200 transition-colors duration-200'>Teachers</Link>
                             <Link href={'/notices'} className='hover:text-amber-200 transition-colors duration-200'>Notice</Link>
                             <Link href={'/results'} className='hover:text-amber-200 transition-colors duration-200'>Results</Link>
                             <Link href={'/acheivements'} className='hover:text-amber-200 transition-colors duration-200'>Achievements</Link>
