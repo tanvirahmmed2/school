@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { uploadImage } from '@/lib/cloudinary';
 
 // GET all achievements
 export async function GET() {
@@ -24,20 +25,36 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
-    const { title, description, category } = await request.json();
+    const { title, description, image } = await request.json();
 
-    if (!title || !description || !category) {
+    if (!title || !description) {
       return NextResponse.json(
-        { error: 'Title, description, and category are required.' },
+        { error: 'Title and description are required.' },
         { status: 400 }
       );
     }
 
+    let imageUrl = null;
+    let imageId = null;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        const uploadResult = await uploadImage(image, 'achievements');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+      } catch (uploadErr) {
+        console.error('Cloudinary achievements upload failed:', uploadErr);
+        return NextResponse.json({ error: 'Failed to upload cover image.' }, { status: 500 });
+      }
+    } else if (image) {
+      imageUrl = image;
+    }
+
     const result = await query(
-      `INSERT INTO achievements (title, description, category) 
-       VALUES ($1, $2, $3) 
+      `INSERT INTO achievements (title, description, image_url, image_id) 
+       VALUES ($1, $2, $3, $4) 
        RETURNING *`,
-      [title.trim(), description.trim(), category.trim()]
+      [title.trim(), description.trim(), imageUrl, imageId]
     );
 
     return NextResponse.json(

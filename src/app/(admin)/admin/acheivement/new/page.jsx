@@ -18,19 +18,10 @@ const CreateAchievementPage = () => {
       placeholder: 'e.g. Regional Hackathon Championship'
     },
     {
-      name: 'category',
-      label: 'Category',
-      type: 'select',
-      required: true,
-      placeholder: 'Select a category',
-      options: [
-        { value: 'Innovation', label: 'Innovation' },
-        { value: 'Sports', label: 'Sports' },
-        { value: 'Research', label: 'Research' },
-        { value: 'Placements', label: 'Placements' },
-        { value: 'Academic', label: 'Academic' },
-        { value: 'General', label: 'General' }
-      ]
+      name: 'image',
+      label: 'Achievement Image',
+      type: 'file',
+      required: false
     },
     {
       name: 'description',

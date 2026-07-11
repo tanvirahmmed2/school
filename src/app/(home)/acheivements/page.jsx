@@ -1,33 +1,28 @@
-import React from 'react';
-import { FiAward, FiBook, FiGlobe, FiUsers } from 'react-icons/fi';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { FiAward } from 'react-icons/fi';
 
 const AchievementsPage = () => {
-  const highlights = [
-    {
-      title: 'Outstanding Science Fair Project 2026',
-      description: 'FIT department students won first place in the Regional Innovation Challenge for AI-driven environmental monitoring.',
-      category: 'Innovation',
-      icon: FiAward,
-    },
-    {
-      title: 'National Athletics Championship Runner-up',
-      description: 'The Fontana Institute track and field team secured 4 gold medals in the inter-university sports league.',
-      category: 'Sports',
-      icon: FiGlobe,
-    },
-    {
-      title: 'Top Research Citations Record',
-      description: 'FIT researchers published over 15 papers in IEEE, Nature, and ACM journals regarding microgrid designs.',
-      category: 'Research',
-      icon: FiBook,
-    },
-    {
-      title: 'Industry Recruitment Excellence',
-      description: 'Over 85% of our graduating computer science class received internship offers from tech partners.',
-      category: 'Placements',
-      icon: FiUsers,
-    },
-  ];
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      try {
+        const res = await fetch('/api/achievements');
+        if (res.ok) {
+          const data = await res.json();
+          setAchievements(data.achievements || []);
+        }
+      } catch (err) {
+        console.error('Error fetching achievements:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAchievements();
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
@@ -46,34 +41,41 @@ const AchievementsPage = () => {
         </div>
 
         {/* Highlights List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {highlights.map((h, idx) => {
-            const Icon = h.icon;
-            return (
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : achievements.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {achievements.map((h, idx) => (
               <div
-                key={idx}
-                className="bg-white rounded-3xl border border-slate-100 p-6 flex flex-col justify-between hover:shadow-xs transition-shadow duration-150"
+                key={h.id || idx}
+                className="bg-white rounded-3xl border border-slate-100 overflow-hidden flex flex-col hover:shadow-xs transition-shadow duration-150"
               >
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
-                    <Icon />
+                {h.image_url && (
+                  <div className="w-full h-48 bg-slate-100">
+                    <img src={h.image_url} alt={h.title} className="w-full h-full object-cover" />
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded w-fit uppercase tracking-wider">
-                      {h.category}
-                    </span>
-                    <h3 className="font-extrabold text-slate-900 text-base mt-1">
-                      {h.title}
-                    </h3>
-                    <p className="text-slate-500 text-xs md:text-sm leading-relaxed">
-                      {h.description}
-                    </p>
-                  </div>
+                )}
+                <div className="p-6 flex flex-col gap-1.5 flex-1">
+                  <h3 className="font-extrabold text-slate-900 text-base">
+                    {h.title}
+                  </h3>
+                  <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-2 whitespace-pre-wrap">
+                    {h.description}
+                  </p>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
+              <FiAward />
+            </div>
+            <h3 className="font-bold text-slate-800">No achievements recorded yet</h3>
+          </div>
+        )}
       </div>
     </div>
   );

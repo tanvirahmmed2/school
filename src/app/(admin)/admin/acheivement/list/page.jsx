@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FiPlus, FiAward, FiCalendar, FiExternalLink } from 'react-icons/fi';
+import { FiPlus, FiAward, FiCalendar, FiExternalLink, FiImage } from 'react-icons/fi';
 
 const AchievementListPage = () => {
   const [achievements, setAchievements] = useState([]);
@@ -58,8 +58,8 @@ const AchievementListPage = () => {
             <table className="w-full border-collapse text-left text-xs text-slate-650">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6">Achievement Title</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Category</th>
+                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6">Image</th>
+                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Achievement Title</th>
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Date Recorded</th>
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right">Actions</th>
                 </tr>
@@ -67,14 +67,20 @@ const AchievementListPage = () => {
               <tbody className="divide-y divide-slate-50 font-semibold text-slate-800">
                 {achievements.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/40 transition-colors">
-                    <td className="p-4 pl-6 max-w-sm md:max-w-md">
+                    <td className="p-4 pl-6">
+                      {item.image_url ? (
+                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-slate-100 bg-slate-50">
+                          <img src={item.image_url} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg border border-dashed border-slate-200 bg-slate-50 flex items-center justify-center text-slate-400">
+                          <FiImage className="text-sm" />
+                        </div>
+                      )}
+                    </td>
+                    <td className="p-4 max-w-sm md:max-w-md">
                       <div className="font-extrabold text-slate-900">{item.title}</div>
                       <div className="text-slate-450 text-[10px] mt-0.5 max-w-[400px] font-medium leading-relaxed">{item.description}</div>
-                    </td>
-                    <td className="p-4">
-                      <span className="text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded uppercase tracking-wider">
-                        {item.category}
-                      </span>
                     </td>
                     <td className="p-4 text-slate-500 font-medium">
                       <span className="flex items-center gap-1.5">
