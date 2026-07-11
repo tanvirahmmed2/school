@@ -43,9 +43,7 @@ const Sidebar = () => {
           {/* Header with Brand & Close Button */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <Link href="/" onClick={closeSidebar} className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-700 to-indigo-600 flex items-center justify-center text-white font-black text-lg">
-                F
-              </div>
+              
               <div className="flex flex-col">
                 <span className="font-extrabold text-slate-800 text-sm leading-tight">
                   Fontana

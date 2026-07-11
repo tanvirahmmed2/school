@@ -8,7 +8,7 @@ const HomeLayout = ({children}) => {
     <div className='relative min-h-screen flex flex-col justify-between overflow-x-hidden bg-slate-50/50 text-slate-800'>
       <Navbar/>
       <Sidebar/>
-      <main className='w-full flex-1 flex flex-col pt-[72px] md:pt-[92px]'>
+      <main className='w-full flex-1 flex flex-col'>
         {children}
       </main>
       <Footer/>

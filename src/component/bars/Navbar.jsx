@@ -10,114 +10,125 @@ const Navbar = () => {
   const { classes, clubs, sidebar, setSidebar } = useContext(Context);
   const pathname = usePathname();
 
-  // Helper function to check if active
   const isActive = (path) => pathname === path;
   const isDropdownActive = (prefix) => pathname.startsWith(prefix);
+  const isAboutActive = () => pathname.startsWith('/about') || pathname === '/missions';
+
+  const linkStyle = (path) => `px-3 h-10 flex w-full items-center justify-center  transition-all duration-200 cursor-pointer text-xs lg:text-sm font-semibold ${
+    isActive(path)
+      ? 'bg-sky-50 text-sky-600 font-bold'
+      : 'text-white hover:bg-slate-50 hover:text-slate-900 font-medium'
+  }`;
+const dropDownStyle={}
+  const dropdownTriggerStyle = (isActiveDropdown) => `px-3 w-full px-3 h-10 flex items-center justify-center  transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 ${
+    isActiveDropdown
+      ? 'bg-sky-50 text-sky-600 font-bold'
+      : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900 font-medium'
+  }`;
 
   return (
-    <nav className="w-full bg-sky-950 text-white flex flex-row items-center justify-between px-4 md:px-6 py-2 h-[72px] md:h-[92px] fixed top-0 left-0 right-0 z-50 border-b border-sky-900/60 shadow-lg shadow-sky-950/10">
-      {/* Brand / Logo */}
-      <Link href={'/'} className="font-extrabold text-base md:text-lg tracking-tight shrink-0 mr-4 hover:text-amber-300 transition-colors duration-200">
-        Fontana Institute of Technology
-      </Link>
-
-      {/* Main Desktop Sections (Hidden on Mobile) */}
-      <section className="w-full hidden md:flex flex-col items-end justify-center gap-1">
-        {/* Top utility row */}
-        <section className="w-full flex flex-row items-center justify-end">
-          <div className="w-auto flex flex-row items-center justify-center gap-4 text-xs font-semibold text-sky-200">
-            <Link href={'/notices'} className={`hover:text-amber-300 transition-colors ${isActive('/notices') ? 'text-amber-300' : ''}`}>Notices</Link>
-            <Link href={'/apply'} className={`hover:text-amber-300 transition-colors ${isActive('/apply') ? 'text-amber-300' : ''}`}>Apply</Link>
-            <Link href={'/auth'} className="text-white hover:text-amber-300 transition-all bg-sky-900 border border-sky-850 hover:bg-sky-850 px-2.5 py-0.5 rounded shadow-xs">Login</Link>
+    <nav className="relative w-full bg-amber-600 text-white flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
+      
+      <section className="w-full max-w-7xl flex flex-row items-center justify-between h-14 md:h-16">
+        <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-extrabold text-white hover:text-sky-600 transition-colors tracking-tight">
+          Fontana Institute of Technology
+        </Link>
+        
+        <section className="hidden md:flex flex-row items-center justify-end gap-5">
+          <div className="w-auto flex flex-row items-center justify-center gap-4 text-sm font-semibold text-slate-650">
+            <Link href={'/apply'} className={`transition-colors hover:text-sky-600 ${isActive('/apply') ? 'text-sky-600 font-bold' : ''}`}>
+              Apply
+            </Link>
+            <Link href={'/auth'} className="text-amber-600 transition-all bg-white hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs">
+              Login
+            </Link>
           </div>
         </section>
 
-        {/* Bottom primary row */}
-        <section className="w-full flex flex-row items-center justify-end gap-5 text-[13px] font-semibold text-sky-100/90">
-          <Link href={'/'} className={`hover:text-amber-300 transition-colors ${isActive('/') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>Home</Link>
-          <Link href={'/events'} className={`hover:text-amber-300 transition-colors ${isActive('/events') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>Events</Link>
-          
-          {/* Authorities Dropdown */}
-          <div className="relative group py-1">
-            <Link href={'/authorities'} className={`hover:text-amber-300 transition-colors flex items-center gap-0.5 cursor-pointer ${isDropdownActive('/authorities') ? 'text-amber-300' : ''}`}>
-              Authorities
-            </Link>
-            <div className="absolute top-full right-0 mt-1.5 hidden group-hover:flex flex-col bg-sky-900 text-sky-100 border border-sky-850 rounded-lg shadow-xl py-1.5 min-w-40 z-50">
-              <Link href={'/authorities/principal'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Principle</Link>
-              <Link href={'/authorities/chairman'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Chairman</Link>
-              <Link href={'/authorities/director'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Director</Link>
-              <Link href={'/authorities/council'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Council</Link>
-              <Link href={'/authorities/registrar'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Registrar</Link>
-              <Link href={'/authorities/staff'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Staffs</Link>
-              <Link href={'/authorities/officers'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Officers</Link>
-            </div>
-          </div>
-
-          {/* About Dropdown */}
-          <div className="relative group py-1">
-            <Link href={'/about'} className={`hover:text-amber-300 transition-colors flex items-center gap-0.5 cursor-pointer ${isDropdownActive('/about') ? 'text-amber-300' : ''}`}>
-              About
-            </Link>
-            <div className="absolute top-full right-0 mt-1.5 hidden group-hover:flex flex-col bg-sky-900 text-sky-100 border border-sky-850 rounded-lg shadow-xl py-1.5 min-w-36 z-50">
-              <Link href={'/about/campus'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">My Campus</Link>
-              <Link href={'/missions'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Mission</Link>
-              <Link href={'/about/vision'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">Vision</Link>
-              <Link href={'/about/history'} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">History</Link>
-            </div>
-          </div>
-
-          {/* Classes Dropdown */}
-          <div className="relative group py-1">
-            <button className="hover:text-amber-300 transition-colors flex items-center gap-0.5 cursor-pointer bg-transparent border-none text-[13px] font-semibold text-sky-100/90 p-0">
-              Classes
-            </button>
-            <div className="absolute top-full right-0 mt-1.5 hidden group-hover:flex flex-col bg-sky-900 text-sky-100 border border-sky-850 rounded-lg shadow-xl py-1.5 min-w-36 z-50 max-h-52 overflow-y-auto">
-              {classes && classes.length > 0 ? (
-                classes.map((c) => (
-                  <Link href={`/classes/${c.code || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">
-                    {c.name || c}
-                  </Link>
-                ))
-              ) : (
-                <span className="px-4 py-2 text-sky-400 text-xs italic text-left">No classes</span>
-              )}
-            </div>
-          </div>
-
-          {/* Clubs Dropdown */}
-          <div className="relative group py-1">
-            <button className="hover:text-amber-300 transition-colors flex items-center gap-0.5 cursor-pointer bg-transparent border-none text-[13px] font-semibold text-sky-100/90 p-0">
-              Clubs
-            </button>
-            <div className="absolute top-full right-0 mt-1.5 hidden group-hover:flex flex-col bg-sky-900 text-sky-100 border border-sky-850 rounded-lg shadow-xl py-1.5 min-w-36 z-50 max-h-52 overflow-y-auto">
-              {clubs && clubs.length > 0 ? (
-                clubs.map((c) => (
-                  <Link href={`/clubs/${c.slug || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-sky-850 hover:text-amber-300 transition-colors text-xs font-bold text-left">
-                    {c.name || c}
-                  </Link>
-                ))
-              ) : (
-                <span className="px-4 py-2 text-sky-400 text-xs italic text-left">No clubs</span>
-              )}
-            </div>
-          </div>
-
-          <Link href={'/teachers'} className={`hover:text-amber-300 transition-colors ${isActive('/teachers') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>Teachers</Link>
-          <Link href={'/acheivements'} className={`hover:text-amber-300 transition-colors ${isActive('/acheivements') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>Acheivements</Link>
-          <Link href={'/news'} className={`hover:text-amber-300 transition-colors ${isActive('/news') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>News</Link>
-          <Link href={'/results'} className={`hover:text-amber-300 transition-colors ${isActive('/results') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>Results</Link>
-          <Link href={'/contact'} className={`hover:text-amber-300 transition-colors ${isActive('/contact') ? 'text-amber-300 border-b-2 border-amber-400 pb-0.5' : ''}`}>Contact</Link>
-        </section>
+        <button
+          onClick={() => setSidebar(!sidebar)}
+          className="md:hidden text-2xl transition-colors cursor-pointer p-2 rounded-lg text-white hover:bg-slate-100"
+          aria-label="Toggle Menu"
+        >
+          <MdMenu />
+        </button>
       </section>
 
-      {/* Mobile Menu Toggle Button */}
-      <button 
-        onClick={() => setSidebar(!sidebar)} 
-        className="md:hidden text-2xl hover:text-amber-300 transition-colors cursor-pointer p-1.5 rounded hover:bg-sky-900/60"
-        aria-label="Toggle Menu"
-      >
-        <MdMenu />
-      </button>
+      <section className="w-full max-w-7xl hidden md:flex flex-row items-center justify-between gap-1 text-[13px] font-semibold text-white h-10 ">
+        <Link href={'/'} className={linkStyle('/')}>Home</Link>
+        <Link href={'/events'} className={linkStyle('/events')}>Events</Link>
+
+        <div className="relative group py-1 w-full">
+          <Link href={'/authorities'} className={dropdownTriggerStyle(isDropdownActive('/authorities'))}>
+            Authorities
+          </Link>
+          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col bg-white rounded-xl shadow-xl py-1.5 min-w-40 z-50 text-slate-700">
+            <Link href={'/authorities/principal'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Principal</Link>
+            <Link href={'/authorities/chairman'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Chairman</Link>
+            <Link href={'/authorities/director'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Director</Link>
+            <Link href={'/authorities/council'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Council</Link>
+            <Link href={'/authorities/registrar'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Registrar</Link>
+            <Link href={'/authorities/staff'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Staff</Link>
+            <Link href={'/authorities/officers'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Officers</Link>
+          </div>
+        </div>
+
+        {/* About Dropdown */}
+        <div className="relative group py-1 w-full">
+          <Link href={'/about'} className={dropdownTriggerStyle(isAboutActive())}>
+            About
+          </Link>
+          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col bg-white rounded-xl shadow-xl py-1.5 min-w-36 z-50 text-slate-700">
+            <Link href={'/about/campus'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">My Campus</Link>
+            <Link href={'/missions'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Mission</Link>
+            <Link href={'/about/vision'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Vision</Link>
+            <Link href={'/about/history'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">History</Link>
+          </div>
+        </div>
+
+        {/* Classes Dropdown */}
+        <div className="relative group py-1 w-full">
+          <button className={dropdownTriggerStyle(isDropdownActive('/classes'))}>
+            Classes
+          </button>
+          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col bg-white rounded-xl shadow-xl py-1.5 min-w-36 z-50 max-h-52 overflow-y-auto text-slate-700">
+            {classes && classes.length > 0 ? (
+              classes.map((c) => (
+                <Link href={`/classes/${c.code || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">
+                  {c.name || c}
+                </Link>
+              ))
+            ) : (
+              <span className="px-4 py-2 text-slate-400 text-xs italic text-left">No classes</span>
+            )}
+          </div>
+        </div>
+
+        <div className="relative group py-1 w-full">
+          <button className={dropdownTriggerStyle(isDropdownActive('/clubs'))}>
+            Clubs
+          </button>
+          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col bg-white rounded-xl shadow-xl py-1.5 min-w-36 z-50 max-h-52 overflow-y-auto text-slate-700">
+            {clubs && clubs.length > 0 ? (
+              clubs.map((c) => (
+                <Link href={`/clubs/${c.slug || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">
+                  {c.name || c}
+                </Link>
+              ))
+            ) : (
+              <span className="px-4 py-2 text-slate-400 text-xs italic text-left">No clubs</span>
+            )}
+          </div>
+        </div>
+
+        <Link href={'/teachers'} className={linkStyle('/teachers')}>Teachers</Link>
+        <Link href={'/acheivements'} className={linkStyle('/acheivements')}>Achievements</Link>
+        <Link href={'/news'} className={linkStyle('/news')}>News</Link>
+        <Link href={'/results'} className={linkStyle('/results')}>Results</Link>
+        <Link href={'/notices'} className={linkStyle('/notices')}>Notices</Link>
+        <Link href={'/contact'} className={linkStyle('/contact')}>Contact</Link>
+      </section>
+
     </nav>
   );
 };
