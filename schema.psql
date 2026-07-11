@@ -656,6 +656,24 @@ CREATE TRIGGER update_teacher_qualifications_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
+-- ============================================================================
+-- ACHIEVEMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS achievements (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_achievements_updated_at
+    BEFORE UPDATE ON achievements
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
 
 
 

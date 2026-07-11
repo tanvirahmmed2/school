@@ -1,0 +1,79 @@
+'use client';
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { FiPlusCircle, FiAward } from 'react-icons/fi';
+import Link from 'next/link';
+import AdminForm from '@/component/forms/AdminForm';
+
+const CreateAchievementPage = () => {
+  const router = useRouter();
+
+  const achievementFields = [
+    {
+      name: 'title',
+      label: 'Achievement Title',
+      type: 'text',
+      required: true,
+      placeholder: 'e.g. Regional Hackathon Championship'
+    },
+    {
+      name: 'category',
+      label: 'Category',
+      type: 'select',
+      required: true,
+      placeholder: 'Select a category',
+      options: [
+        { value: 'Innovation', label: 'Innovation' },
+        { value: 'Sports', label: 'Sports' },
+        { value: 'Research', label: 'Research' },
+        { value: 'Placements', label: 'Placements' },
+        { value: 'Academic', label: 'Academic' },
+        { value: 'General', label: 'General' }
+      ]
+    },
+    {
+      name: 'description',
+      label: 'Description / Details',
+      type: 'textarea',
+      required: true,
+      placeholder: 'Provide detailed information about this institutional or student achievement milestone...',
+      rows: 6
+    }
+  ];
+
+  return (
+    <div className="max-w-3xl mx-auto py-4">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+            Control Panel
+          </span>
+          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+            Record New Achievement
+          </h1>
+        </div>
+        <Link
+          href="/admin/acheivement/list"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+        >
+          <FiAward />
+          <span>View Recorded Achievements</span>
+        </Link>
+      </div>
+
+      <AdminForm
+        title="Achievement Entry Details"
+        fields={achievementFields}
+        apiEndpoint="/api/achievements"
+        icon={FiAward}
+        onSuccess={() => {
+          router.push('/admin/acheivement/list');
+        }}
+      />
+    </div>
+  );
+};
+
+export default CreateAchievementPage;
