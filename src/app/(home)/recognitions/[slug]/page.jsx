@@ -1,0 +1,134 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { FiAward, FiCalendar, FiUser, FiArrowLeft } from 'react-icons/fi';
+
+const RecognitionDetailPage = () => {
+  const { slug } = useParams();
+  const [recognition, setRecognition] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    if (!slug) return;
+    const fetchRecognition = async () => {
+      try {
+        const res = await fetch(`/api/recognitions/by-slug/${slug}`);
+        if (res.status === 404) {
+          setNotFound(true);
+          return;
+        }
+        if (res.ok) {
+          const data = await res.json();
+          setRecognition(data.recognition);
+        }
+      } catch (err) {
+        console.error('Error fetching recognition:', err);
+        setNotFound(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecognition();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50/50">
+        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (notFound || !recognition) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50/50 text-center px-4">
+        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-3xl mb-4">
+          <FiAward />
+        </div>
+        <h1 className="text-2xl font-black text-slate-900">Recognition Not Found</h1>
+        <p className="text-slate-500 text-sm mt-2">This recognition may have been removed or the link is invalid.</p>
+        <Link
+          href="/"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-sky-600 hover:text-sky-800 transition-colors"
+        >
+          <FiArrowLeft />
+          Back to Home
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        {/* Back Link */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-slate-700 transition-colors mb-8"
+        >
+          <FiArrowLeft />
+          Back to Home
+        </Link>
+
+        {/* Card */}
+        <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.04)]">
+          {/* Hero Image */}
+          {recognition.image ? (
+            <div className="w-full h-64 sm:h-80 overflow-hidden bg-slate-100">
+              <img
+                src={recognition.image}
+                alt={recognition.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-full h-48 bg-gradient-to-br from-amber-50 to-sky-50 flex items-center justify-center">
+              <FiAward className="text-6xl text-amber-300" />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="p-8 md:p-10">
+            {/* Badge */}
+            <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+              Recognition &amp; Award
+            </span>
+
+            {/* Title */}
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
+              {recognition.name}
+            </h1>
+
+            {/* Meta */}
+            <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 mb-6">
+              <span className="flex items-center gap-1.5">
+                <FiUser className="text-sky-500" />
+                Awarded by <strong className="text-slate-700 ml-1">{recognition.awarded_by}</strong>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <FiCalendar className="text-sky-500" />
+                {new Date(recognition.date).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+            </div>
+
+            {/* Description */}
+            {recognition.description && (
+              <div className="prose prose-sm max-w-none text-slate-600 leading-relaxed whitespace-pre-wrap">
+                {recognition.description}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RecognitionDetailPage;

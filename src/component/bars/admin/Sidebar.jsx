@@ -24,6 +24,7 @@ const Sidebar = () => {
   const [clubsOpen, setClubsOpen] = useState(pathname.startsWith('/admin/clubs'));
   const [newsOpen, setNewsOpen] = useState(pathname.startsWith('/admin/news'));
   const [achievementsOpen, setAchievementsOpen] = useState(pathname.startsWith('/admin/acheivement'));
+  const [recognitionsOpen, setRecognitionsOpen] = useState(pathname.startsWith('/admin/recognition'));
 
   const systemLinks = [
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
@@ -66,6 +67,11 @@ const Sidebar = () => {
   const achievementLinks = [
     { label: 'Recorded Achievements', href: '/admin/acheivement/list', icon: FiAward },
     { label: 'Add Achievement', href: '/admin/acheivement/new', icon: FiPlus },
+  ];
+
+  const recognitionLinks = [
+    { label: 'All Recognitions', href: '/admin/recognition/list', icon: FiAward },
+    { label: 'Add Recognition', href: '/admin/recognition/new', icon: FiPlus },
   ];
 
   const teacherLinks = [
@@ -369,6 +375,54 @@ const Sidebar = () => {
                           isActive
                             ? 'text-sky-600 font-bold bg-sky-50/50'
                             : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/60'
+                        }`}
+                      >
+                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                        <span>{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+            {/* Collapsible: Recognitions */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setRecognitionsOpen(!recognitionsOpen)}
+                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  pathname.startsWith('/admin/recognition')
+                    ? 'bg-slate-50/80 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiAward className={`text-base ${pathname.startsWith('/admin/recognition') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Recognitions</span>
+                </div>
+                {recognitionsOpen ? (
+                  <FiChevronDown className="text-slate-400 text-sm" />
+                ) : (
+                  <FiChevronRight className="text-slate-400 text-sm" />
+                )}
+              </button>
+
+              {recognitionsOpen && (
+                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
+                  {recognitionLinks.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setAdminSidebar(false)}
+                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'text-sky-600 font-bold bg-sky-50/50'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-sky-50/60'
                         }`}
                       >
                         <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
