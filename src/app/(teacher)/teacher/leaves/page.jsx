@@ -23,7 +23,7 @@ const LeavesPage = () => {
         const res = await fetch('/api/teacher/leaves');
         if (res.ok) {
           const data = await res.json();
-          setApplications(data.applications || []);
+          setApplications(data.paylod.applications || []);
         }
       } catch (err) {
         console.error('Failed to load leave history:', err);

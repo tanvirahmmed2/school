@@ -32,7 +32,7 @@ const EditRecognitionPage = () => {
           return;
         }
         const data = await res.json();
-        const r = data.recognition;
+        const r = data.paylod.recognition;
         setFormData({
           name: r.name || '',
           awarded_by: r.awarded_by || '',

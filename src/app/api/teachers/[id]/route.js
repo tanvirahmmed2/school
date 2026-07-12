@@ -7,17 +7,26 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_307 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_307?.error || res_err_307?.message || 'An error occurred',
+        error: res_err_307?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { name, email, number, designation, address, is_active, password } = await request.json();
 
     if (!name || !email || !number || !designation || is_active === undefined) {
-      return NextResponse.json(
-        { error: 'Name, email, phone number, designation, and is_active parameters are required.' },
-        { status: 400 }
-      );
+      const res_err_848 = { error: 'Name, email, phone number, designation, and is_active parameters are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_848?.error || res_err_848?.message || 'An error occurred',
+        error: res_err_848?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check email uniqueness (excluding current teacher id)
@@ -27,7 +36,13 @@ export async function PUT(request, { params }) {
     );
 
     if (duplicateCheck.rows.length > 0) {
-      return NextResponse.json({ error: 'This email is already in use by another teacher.' }, { status: 400 });
+      const res_err_1464 = { error: 'This email is already in use by another teacher.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1464?.error || res_err_1464?.message || 'An error occurred',
+        error: res_err_1464?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     let updatedTeacher;
@@ -52,19 +67,33 @@ export async function PUT(request, { params }) {
     }
 
     if (updatedTeacher.rowCount === 0) {
-      return NextResponse.json({ error: 'Teacher record not found.' }, { status: 404 });
+      const res_err_2912 = { error: 'Teacher record not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2912?.error || res_err_2912?.message || 'An error occurred',
+        error: res_err_2912?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_2360 = {
       message: 'Teacher details updated successfully.',
       teacher: updatedTeacher.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2360?.message || 'Successfully fecthed data',
+        paylod: res_data_2360
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating teacher:', error);
-    return NextResponse.json(
-      { error: 'Failed to update teacher. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3720 = { error: 'Failed to update teacher. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3720?.error || res_err_3720?.message || 'An error occurred',
+        error: res_err_3720?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -73,7 +102,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_4233 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4233?.error || res_err_4233?.message || 'An error occurred',
+        error: res_err_4233?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -81,17 +116,31 @@ export async function DELETE(request, { params }) {
     const deleteResult = await query('DELETE FROM teachers WHERE id = $1 RETURNING id', [id]);
 
     if (deleteResult.rowCount === 0) {
-      return NextResponse.json({ error: 'Teacher not found.' }, { status: 404 });
+      const res_err_4731 = { error: 'Teacher not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4731?.error || res_err_4731?.message || 'An error occurred',
+        error: res_err_4731?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_3476 = {
       message: 'Teacher account deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3476?.message || 'Successfully fecthed data',
+        paylod: res_data_3476
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting teacher:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete teacher. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5493 = { error: 'Failed to delete teacher. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5493?.error || res_err_5493?.message || 'An error occurred',
+        error: res_err_5493?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

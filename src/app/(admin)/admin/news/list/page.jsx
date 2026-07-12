@@ -14,7 +14,7 @@ const NewsListPage = () => {
         const res = await fetch('/api/news');
         if (res.ok) {
           const data = await res.json();
-          setNews(data.news || []);
+          setNews(data.paylod.news || []);
         }
       } catch (err) {
         console.error('Error fetching news:', err);

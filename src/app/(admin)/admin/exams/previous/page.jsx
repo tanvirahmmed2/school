@@ -13,7 +13,7 @@ const AdminPreviousExamsPage = () => {
   const fetchExams = async () => {
     try {
       const response = await axios.get('/api/exams?status=previous');
-      const examsList = response.data.exams || [];
+      const examsList = response.data.paylod.exams || [];
       setExams(examsList);
 
       // Fetch schedules for each exam
@@ -32,7 +32,7 @@ const AdminPreviousExamsPage = () => {
       const res = await axios.get(`/api/exams/${examId}`);
       setSelectedExamSchedules((prev) => ({
         ...prev,
-        [examId]: res.data.schedules || [],
+        [examId]: res.data.paylod.schedules || [],
       }));
     } catch (err) {
       console.error(`Failed to fetch schedules for exam ${examId}`, err);

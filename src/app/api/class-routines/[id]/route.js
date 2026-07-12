@@ -7,24 +7,36 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_299 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_299?.error || res_err_299?.message || 'An error occurred',
+        error: res_err_299?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { class_id, section_id, subject_id, teacher_id, day_of_week, start_time, end_time, room_number } = await request.json();
 
     if (!class_id || !section_id || !subject_id || !day_of_week || !start_time || !end_time) {
-      return NextResponse.json(
-        { error: 'Class, Section, Subject, Day, Start Time, and End Time are required.' },
-        { status: 400 }
-      );
+      const res_err_884 = { error: 'Class, Section, Subject, Day, Start Time, and End Time are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_884?.error || res_err_884?.message || 'An error occurred',
+        error: res_err_884?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     if (start_time >= end_time) {
-      return NextResponse.json(
-        { error: 'Start time must be strictly before end time.' },
-        { status: 400 }
-      );
+      const res_err_1285 = { error: 'Start time must be strictly before end time.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1285?.error || res_err_1285?.message || 'An error occurred',
+        error: res_err_1285?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check Section Overlap (excluding this routine entry)
@@ -42,10 +54,13 @@ export async function PUT(request, { params }) {
 
     if (sectionOverlap.rows.length > 0) {
       const existing = sectionOverlap.rows[0];
-      return NextResponse.json(
-        { error: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled from ${existing.start_time} to ${existing.end_time} on ${day_of_week}.` },
-        { status: 400 }
-      );
+      const res_err_2199 = { error: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled from ${existing.start_time} to ${existing.end_time} on ${day_of_week}.` };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2199?.error || res_err_2199?.message || 'An error occurred',
+        error: res_err_2199?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check Teacher Overlap (excluding this routine entry)
@@ -65,10 +80,13 @@ export async function PUT(request, { params }) {
 
       if (teacherOverlap.rows.length > 0) {
         const existing = teacherOverlap.rows[0];
-        return NextResponse.json(
-          { error: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} from ${existing.start_time} to ${existing.end_time} on ${day_of_week}.` },
-          { status: 400 }
-        );
+        const res_err_3344 = { error: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} from ${existing.start_time} to ${existing.end_time} on ${day_of_week}.` };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3344?.error || res_err_3344?.message || 'An error occurred',
+        error: res_err_3344?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
     }
 
@@ -93,19 +111,33 @@ export async function PUT(request, { params }) {
     );
 
     if (updatedRoutine.rowCount === 0) {
-      return NextResponse.json({ error: 'Class routine entry not found.' }, { status: 404 });
+      const res_err_4452 = { error: 'Class routine entry not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4452?.error || res_err_4452?.message || 'An error occurred',
+        error: res_err_4452?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_3441 = {
       message: 'Class routine entry updated successfully.',
       routine: updatedRoutine.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3441?.message || 'Successfully fecthed data',
+        paylod: res_data_3441
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating class routine:', error);
-    return NextResponse.json(
-      { error: 'Failed to update class routine. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5275 = { error: 'Failed to update class routine. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5275?.error || res_err_5275?.message || 'An error occurred',
+        error: res_err_5275?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -114,7 +146,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_5800 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5800?.error || res_err_5800?.message || 'An error occurred',
+        error: res_err_5800?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -122,17 +160,31 @@ export async function DELETE(request, { params }) {
     const deleteResult = await query('DELETE FROM class_routines WHERE id = $1 RETURNING id', [id]);
 
     if (deleteResult.rowCount === 0) {
-      return NextResponse.json({ error: 'Class routine entry not found.' }, { status: 404 });
+      const res_err_6304 = { error: 'Class routine entry not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6304?.error || res_err_6304?.message || 'An error occurred',
+        error: res_err_6304?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_4597 = {
       message: 'Class routine entry deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4597?.message || 'Successfully fecthed data',
+        paylod: res_data_4597
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting class routine:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete class routine. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_7088 = { error: 'Failed to delete class routine. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7088?.error || res_err_7088?.message || 'An error occurred',
+        error: res_err_7088?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

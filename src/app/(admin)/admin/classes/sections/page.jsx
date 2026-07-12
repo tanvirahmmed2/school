@@ -26,7 +26,7 @@ const AdminSectionsPage = () => {
       if (!classesRes.ok) throw new Error(classesData.error || 'Failed to fetch classes.');
 
       setSections(sectionsData.sections || []);
-      setClasses(classesData.classes || []);
+      setClasses(classesData.paylod.classes || []);
     } catch (error) {
       toast.error(error.message);
     } finally {

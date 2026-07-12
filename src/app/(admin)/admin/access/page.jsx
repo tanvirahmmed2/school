@@ -17,7 +17,7 @@ const AdminAccessPage = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch admins.');
       }
-      setAdmins(data.admins || []);
+      setAdmins(data.paylod.admins || []);
     } catch (error) {
       toast.error(error.message);
     } finally {

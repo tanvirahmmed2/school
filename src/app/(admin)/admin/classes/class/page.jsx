@@ -19,7 +19,7 @@ const AdminClassesPage = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch classes.');
       }
-      setClasses(data.classes || []);
+      setClasses(data.paylod.classes || []);
     } catch (error) {
       toast.error(error.message);
     } finally {

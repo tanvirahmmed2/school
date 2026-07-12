@@ -6,7 +6,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_244 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_244?.error || res_err_244?.message || 'An error occurred',
+        error: res_err_244?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -14,10 +20,13 @@ export async function GET(request) {
     const examId = searchParams.get('exam_id');
 
     if (!studentId || !examId) {
-      return NextResponse.json(
-        { error: 'Parameters student_id and exam_id are required.' },
-        { status: 400 }
-      );
+      const res_err_756 = { error: 'Parameters student_id and exam_id are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_756?.error || res_err_756?.message || 'An error occurred',
+        error: res_err_756?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // 1. Fetch student info
@@ -32,7 +41,13 @@ export async function GET(request) {
     );
 
     if (studentRes.rows.length === 0) {
-      return NextResponse.json({ error: 'Student profile not found.' }, { status: 404 });
+      const res_err_1508 = { error: 'Student profile not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1508?.error || res_err_1508?.message || 'An error occurred',
+        error: res_err_1508?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const student = studentRes.rows[0];
@@ -70,16 +85,24 @@ export async function GET(request) {
       ]
     );
 
-    return NextResponse.json({
+    const res_data_2287 = {
       student,
       overallResult,
       subjectMarks: marksRes.rows
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2287?.message || 'Successfully fecthed data',
+        paylod: res_data_2287
+      }, { status: 200 });
   } catch (error) {
     console.error('Error compiling transcript card:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve transcript details. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3400 = { error: 'Failed to retrieve transcript details. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3400?.error || res_err_3400?.message || 'An error occurred',
+        error: res_err_3400?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

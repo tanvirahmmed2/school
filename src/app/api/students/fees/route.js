@@ -7,7 +7,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_288 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_288?.error || res_err_288?.message || 'An error occurred',
+        error: res_err_288?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
     const { searchParams } = new URL(request.url);
     const studentId = searchParams.get('student_id');
@@ -43,13 +49,21 @@ export async function GET(request) {
     sql += ' ORDER BY sf.due_date DESC, s.registration_number ASC';
 
     const result = await query(sql, params);
-    return NextResponse.json({ fees: result.rows });
+    const res_data_1321 = { fees: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1321?.message || 'Successfully fecthed data',
+        paylod: res_data_1321
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student fees:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve student fees. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1914 = { error: 'Failed to retrieve student fees. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1914?.error || res_err_1914?.message || 'An error occurred',
+        error: res_err_1914?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -58,31 +72,49 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2462 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2462?.error || res_err_2462?.message || 'An error occurred',
+        error: res_err_2462?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { student_id, class_id, title, amount, due_date } = await request.json();
 
     if (!title || amount === undefined || !due_date) {
-      return NextResponse.json(
-        { error: 'Fee Title, Amount, and Due Date are required.' },
-        { status: 400 }
-      );
+      const res_err_2931 = { error: 'Fee Title, Amount, and Due Date are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2931?.error || res_err_2931?.message || 'An error occurred',
+        error: res_err_2931?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount < 0) {
-      return NextResponse.json(
-        { error: 'Amount must be a valid non-negative number.' },
-        { status: 400 }
-      );
+      const res_err_3366 = { error: 'Amount must be a valid non-negative number.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3366?.error || res_err_3366?.message || 'An error occurred',
+        error: res_err_3366?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Case 1: Individual student fee log
     if (student_id) {
       const studentCheck = await query('SELECT id FROM students WHERE id = $1', [student_id]);
       if (studentCheck.rows.length === 0) {
-        return NextResponse.json({ error: 'Target student not found.' }, { status: 404 });
+        const res_err_3917 = { error: 'Target student not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3917?.error || res_err_3917?.message || 'An error occurred',
+        error: res_err_3917?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
       }
 
       const newFee = await query(
@@ -92,27 +124,37 @@ export async function POST(request) {
         [student_id, title.trim(), numAmount, due_date]
       );
 
-      return NextResponse.json(
-        { message: 'Individual student fee invoice logged successfully.', fee: newFee.rows[0] },
-        { status: 201 }
-      );
+      const res_data_3166 = { message: 'Individual student fee invoice logged successfully.', fee: newFee.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3166?.message || 'Successfully fecthed data',
+        paylod: res_data_3166
+      }, { status: 201 });
     }
 
     // Case 2: Class-wide student fee logs
     if (class_id) {
       const classCheck = await query('SELECT id FROM classes WHERE id = $1', [class_id]);
       if (classCheck.rows.length === 0) {
-        return NextResponse.json({ error: 'Target academic class not found.' }, { status: 404 });
+        const res_err_5113 = { error: 'Target academic class not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5113?.error || res_err_5113?.message || 'An error occurred',
+        error: res_err_5113?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
       }
 
       // Fetch all registered students in this class
       const studentsInClass = await query('SELECT id FROM students WHERE class_id = $1 AND is_registered = TRUE', [class_id]);
       
       if (studentsInClass.rows.length === 0) {
-        return NextResponse.json(
-          { message: 'Class selected has no registered students. Invoices not created.' },
-          { status: 200 }
-        );
+        const res_data_4108 = { message: 'Class selected has no registered students. Invoices not created.' };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4108?.message || 'Successfully fecthed data',
+        paylod: res_data_4108
+      }, { status: 200 });
       }
 
       for (const std of studentsInClass.rows) {
@@ -123,22 +165,30 @@ export async function POST(request) {
         );
       }
 
-      return NextResponse.json(
-        { message: `Class fee invoices generated successfully for ${studentsInClass.rows.length} students.` },
-        { status: 201 }
-      );
+      const res_data_4797 = { message: `Class fee invoices generated successfully for ${studentsInClass.rows.length} students.` };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4797?.message || 'Successfully fecthed data',
+        paylod: res_data_4797
+      }, { status: 201 });
     }
 
-    return NextResponse.json(
-      { error: 'Either Student ID or Class ID must be specified to assign fees.' },
-      { status: 400 }
-    );
+    const res_err_6791 = { error: 'Either Student ID or Class ID must be specified to assign fees.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6791?.error || res_err_6791?.message || 'An error occurred',
+        error: res_err_6791?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
   } catch (error) {
     console.error('Error generating fees:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate student fees. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_7220 = { error: 'Failed to generate student fees. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7220?.error || res_err_7220?.message || 'An error occurred',
+        error: res_err_7220?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -148,24 +198,36 @@ export async function PUT(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_7756 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7756?.error || res_err_7756?.message || 'An error occurred',
+        error: res_err_7756?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { fee_id, paid_amount, payment_method, transaction_id, remarks } = await request.json();
 
     if (!fee_id || paid_amount === undefined) {
-      return NextResponse.json(
-        { error: 'Fee ID and Paid Amount are required.' },
-        { status: 400 }
-      );
+      const res_err_8233 = { error: 'Fee ID and Paid Amount are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_8233?.error || res_err_8233?.message || 'An error occurred',
+        error: res_err_8233?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const numPaid = parseFloat(paid_amount);
     if (isNaN(numPaid) || numPaid <= 0) {
-      return NextResponse.json(
-        { error: 'Paid Amount must be a valid positive number.' },
-        { status: 400 }
-      );
+      const res_err_8659 = { error: 'Paid Amount must be a valid positive number.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_8659?.error || res_err_8659?.message || 'An error occurred',
+        error: res_err_8659?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Connect client for transaction
@@ -178,7 +240,13 @@ export async function PUT(request) {
       await client.query('ROLLBACK');
       client.release();
       client = null;
-      return NextResponse.json({ error: 'Fee invoice record not found.' }, { status: 404 });
+      const res_err_9370 = { error: 'Fee invoice record not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_9370?.error || res_err_9370?.message || 'An error occurred',
+        error: res_err_9370?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const fee = feeRes.rows[0];
@@ -190,10 +258,13 @@ export async function PUT(request) {
       await client.query('ROLLBACK');
       client.release();
       client = null;
-      return NextResponse.json(
-        { error: `Paid amount exceeds the remaining balance. Total due: $${(totalAmount - prevPaid).toFixed(2)}` },
-        { status: 400 }
-      );
+      const res_err_10035 = { error: `Paid amount exceeds the remaining balance. Total due: $${(totalAmount - prevPaid).toFixed(2)}` };
+      return NextResponse.json({
+        success: false,
+        message: res_err_10035?.error || res_err_10035?.message || 'An error occurred',
+        error: res_err_10035?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     let newStatus = 'Unpaid';
@@ -229,10 +300,15 @@ export async function PUT(request) {
     client.release();
     client = null;
 
-    return NextResponse.json({
+    const res_data_8290 = {
       message: 'Payment processed successfully.',
       fee: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_8290?.message || 'Successfully fecthed data',
+        paylod: res_data_8290
+      }, { status: 200 });
   } catch (error) {
     if (client) {
       try {
@@ -243,9 +319,12 @@ export async function PUT(request) {
       client.release();
     }
     console.error('Error logging payment:', error);
-    return NextResponse.json(
-      { error: 'Failed to process payment. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_12159 = { error: 'Failed to process payment. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_12159?.error || res_err_12159?.message || 'An error occurred',
+        error: res_err_12159?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -17,7 +17,7 @@ const CreateClubNewsPage = () => {
         const res = await fetch('/api/clubs');
         if (res.ok) {
           const data = await res.json();
-          setClubs(data.clubs || []);
+          setClubs(data.paylod.clubs || []);
         }
       } catch (err) {
         console.error('Failed to load clubs:', err);

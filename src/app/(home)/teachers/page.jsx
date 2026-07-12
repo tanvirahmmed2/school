@@ -13,7 +13,7 @@ const TeachersPage = () => {
         const res = await fetch('/api/teachers');
         if (res.ok) {
           const data = await res.json();
-          setTeachers(data.teachers || []);
+          setTeachers(data.paylod.teachers || []);
         }
       } catch (err) {
         console.error('Failed to fetch teachers:', err);

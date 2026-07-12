@@ -6,13 +6,21 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query('SELECT * FROM classes ORDER BY numeric_name ASC, name ASC');
-    return NextResponse.json({ classes: result.rows });
+    const res_data_320 = { classes: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_320?.message || 'Successfully fecthed data',
+        paylod: res_data_320
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching classes:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve classes. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_677 = { error: 'Failed to retrieve classes. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_677?.error || res_err_677?.message || 'An error occurred',
+        error: res_err_677?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -21,24 +29,36 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1181 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1181?.error || res_err_1181?.message || 'An error occurred',
+        error: res_err_1181?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { name, numeric_name, code } = await request.json();
 
     if (!name || numeric_name === undefined || !code) {
-      return NextResponse.json(
-        { error: 'All fields (name, numeric_name, code) are required.' },
-        { status: 400 }
-      );
+      const res_err_1630 = { error: 'All fields (name, numeric_name, code) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1630?.error || res_err_1630?.message || 'An error occurred',
+        error: res_err_1630?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const numericVal = parseInt(numeric_name, 10);
     if (isNaN(numericVal)) {
-      return NextResponse.json(
-        { error: 'Numeric name must be a valid number.' },
-        { status: 400 }
-      );
+      const res_err_2064 = { error: 'Numeric name must be a valid number.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2064?.error || res_err_2064?.message || 'An error occurred',
+        error: res_err_2064?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check unique constraints
@@ -50,10 +70,22 @@ export async function POST(request) {
     if (duplicateCheck.rows.length > 0) {
       const match = duplicateCheck.rows[0];
       if (match.name === name) {
-        return NextResponse.json({ error: 'A class with this name already exists.' }, { status: 400 });
+        const res_err_2692 = { error: 'A class with this name already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2692?.error || res_err_2692?.message || 'An error occurred',
+        error: res_err_2692?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
       if (match.code === code) {
-        return NextResponse.json({ error: 'A class with this code already exists.' }, { status: 400 });
+        const res_err_3069 = { error: 'A class with this code already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3069?.error || res_err_3069?.message || 'An error occurred',
+        error: res_err_3069?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
     }
 
@@ -64,15 +96,20 @@ export async function POST(request) {
       [name, numericVal, code]
     );
 
-    return NextResponse.json(
-      { message: 'Class created successfully.', class: newClass.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2247 = { message: 'Class created successfully.', class: newClass.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2247?.message || 'Successfully fecthed data',
+        paylod: res_data_2247
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating class:', error);
-    return NextResponse.json(
-      { error: 'Failed to create class. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4039 = { error: 'Failed to create class. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4039?.error || res_err_4039?.message || 'An error occurred',
+        error: res_err_4039?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

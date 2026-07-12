@@ -25,7 +25,7 @@ const AdminClubsNewPage = () => {
     setLoading(true);
     try {
       const response = await axios.get('/api/clubs');
-      setClubs(response.data.clubs || []);
+      setClubs(response.data.paylod.clubs || []);
     } catch (error) {
       toast.error('Failed to load clubs registry.');
     } finally {

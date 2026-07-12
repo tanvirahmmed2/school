@@ -48,7 +48,7 @@ const StudentRegistration = () => {
       }
 
       toast.success(data.message || 'Registration number verified. Complete your details below.');
-      setVerifiedClass(data.student.class_name);
+      setVerifiedClass(data.paylod.student.class_name);
       setStep(2);
     } catch (err) {
       toast.error(err.message);

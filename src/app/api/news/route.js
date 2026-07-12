@@ -17,13 +17,21 @@ function slugify(text) {
 export async function GET() {
   try {
     const result = await query('SELECT * FROM news ORDER BY created_at DESC');
-    return NextResponse.json({ news: result.rows });
+    const res_data_638 = { news: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_638?.message || 'Successfully fecthed data',
+        paylod: res_data_638
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching news:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve news. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_989 = { error: 'Failed to retrieve news. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_989?.error || res_err_989?.message || 'An error occurred',
+        error: res_err_989?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -32,16 +40,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1483 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1483?.error || res_err_1483?.message || 'An error occurred',
+        error: res_err_1483?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { title, content, image, image_id, slug } = await request.json();
 
     if (!title || !content) {
-      return NextResponse.json(
-        { error: 'Title and content are required.' },
-        { status: 400 }
-      );
+      const res_err_1919 = { error: 'Title and content are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1919?.error || res_err_1919?.message || 'An error occurred',
+        error: res_err_1919?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Generate unique slug
@@ -64,7 +81,13 @@ export async function POST(request) {
         imageId = uploadResult.publicId;
       } catch (uploadErr) {
         console.error('Cloudinary news upload failed:', uploadErr);
-        return NextResponse.json({ error: 'Failed to upload cover image.' }, { status: 500 });
+        const res_err_2939 = { error: 'Failed to upload cover image.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2939?.error || res_err_2939?.message || 'An error occurred',
+        error: res_err_2939?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
       }
     } else if (image) {
       imageUrl = image;
@@ -78,15 +101,20 @@ export async function POST(request) {
       [title.trim(), finalSlug, content.trim(), imageUrl, imageId]
     );
 
-    return NextResponse.json(
-      { message: 'News article created successfully.', news: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2706 = { message: 'News article created successfully.', news: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2706?.message || 'Successfully fecthed data',
+        paylod: res_data_2706
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating news:', error);
-    return NextResponse.json(
-      { error: 'Failed to create news article. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4037 = { error: 'Failed to create news article. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4037?.error || res_err_4037?.message || 'An error occurred',
+        error: res_err_4037?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -34,7 +34,7 @@ const AdminClassRoutinePage = () => {
         const response = await fetch('/api/classes');
         const data = await response.json();
         if (!response.ok) throw new Error(data.error);
-        setClasses(data.classes || []);
+        setClasses(data.paylod.classes || []);
       } catch (err) {
         toast.error('Failed to retrieve academic classes.');
       }
@@ -56,9 +56,9 @@ const AdminClassRoutinePage = () => {
         const response = await fetch(`/api/sections?class_id=${selectedClassId}`);
         const data = await response.json();
         if (!response.ok) throw new Error(data.error);
-        setSections(data.sections || []);
-        if (data.sections?.length > 0) {
-          setSelectedSectionId(data.sections[0].id.toString());
+        setSections(data.paylod.sections || []);
+        if (data.paylod.sections?.length > 0) {
+          setSelectedSectionId(data.paylod.sections[0].id.toString());
         } else {
           setSelectedSectionId('');
           setRoutines([]);
@@ -81,7 +81,7 @@ const AdminClassRoutinePage = () => {
       );
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
-      setRoutines(data.routines || []);
+      setRoutines(data.paylod.routines || []);
     } catch (err) {
       toast.error('Failed to load routine timetables.');
     } finally {

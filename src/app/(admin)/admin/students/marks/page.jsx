@@ -34,10 +34,10 @@ const StudentMarksPage = () => {
         axios.get('/api/sections'),
         axios.get('/api/subjects')
       ]);
-      setExams(examsRes.data.exams || []);
-      setClasses(classesRes.data.classes || []);
-      setSections(sectionsRes.data.sections || []);
-      setSubjects(subjectsRes.data.subjects || []);
+      setExams(examsRes.data.paylod.exams || []);
+      setClasses(classesRes.data.paylod.classes || []);
+      setSections(sectionsRes.data.paylod.sections || []);
+      setSubjects(subjectsRes.data.paylod.subjects || []);
     } catch (error) {
       toast.error('Failed to load filter metadata.');
     }
@@ -59,7 +59,7 @@ const StudentMarksPage = () => {
         `/api/students/marks?exam_id=${selectedExam}&class_id=${selectedClass}&subject_id=${selectedSubject}&section_id=${selectedSection || 'all'}`
       );
       
-      const initialMarks = (response.data.students || []).map(student => ({
+      const initialMarks = (response.data.paylod.students || []).map(student => ({
         student_id: student.student_id,
         name: student.name,
         registration_number: student.registration_number,

@@ -69,7 +69,7 @@ const AdminClassSubjectsPage = () => {
       try {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         const data = await res.json();
-        setCreateSectionsList(data.sections || []);
+        setCreateSectionsList(data.paylod.sections || []);
         setSectionId('');
       } catch (err) {
         toast.error('Failed to retrieve class sections.');
@@ -89,7 +89,7 @@ const AdminClassSubjectsPage = () => {
       try {
         const res = await fetch(`/api/sections?class_id=${editClassId}`);
         const data = await res.json();
-        setEditSectionsList(data.sections || []);
+        setEditSectionsList(data.paylod.sections || []);
       } catch (err) {
         toast.error('Failed to retrieve class sections.');
       }

@@ -8,12 +8,24 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-student')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_326 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_326?.error || res_err_326?.message || 'An error occurred',
+        error: res_err_326?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_715 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_715?.error || res_err_715?.message || 'An error occurred',
+        error: res_err_715?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const studentId = decoded.id;
@@ -24,7 +36,13 @@ export async function GET() {
     `, [studentId]);
 
     if (studentRes.rows.length === 0) {
-      return NextResponse.json({ error: 'Student not found' }, { status: 404 });
+      const res_err_1258 = { error: 'Student not found' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1258?.error || res_err_1258?.message || 'An error occurred',
+        error: res_err_1258?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const { class_id, section_id } = studentRes.rows[0];
@@ -42,9 +60,20 @@ export async function GET() {
       ORDER BY sub.name ASC
     `, [class_id, section_id]);
 
-    return NextResponse.json({ subjects: subjectsRes.rows });
+    const res_data_1698 = { subjects: subjectsRes.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1698?.message || 'Successfully fecthed data',
+        paylod: res_data_1698
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student subjects and syllabus:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_2777 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2777?.error || res_err_2777?.message || 'An error occurred',
+        error: res_err_2777?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

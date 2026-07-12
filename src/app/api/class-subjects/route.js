@@ -21,13 +21,21 @@ export async function GET() {
       LEFT JOIN teachers t ON cs.teacher_id = t.id
       ORDER BY c.numeric_name ASC, s.name ASC, sub.name ASC
     `);
-    return NextResponse.json({ assignments: result.rows });
+    const res_data_790 = { assignments: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_790?.message || 'Successfully fecthed data',
+        paylod: res_data_790
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching class-subjects assignments:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve assignments. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1170 = { error: 'Failed to retrieve assignments. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1170?.error || res_err_1170?.message || 'An error occurred',
+        error: res_err_1170?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -36,16 +44,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1694 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1694?.error || res_err_1694?.message || 'An error occurred',
+        error: res_err_1694?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { class_id, section_id, subject_id, teacher_id } = await request.json();
 
     if (!class_id || !subject_id) {
-      return NextResponse.json(
-        { error: 'Class ID and Subject ID are required.' },
-        { status: 400 }
-      );
+      const res_err_2143 = { error: 'Class ID and Subject ID are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2143?.error || res_err_2143?.message || 'An error occurred',
+        error: res_err_2143?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Clean up nullable IDs
@@ -67,10 +84,13 @@ export async function POST(request) {
     }
 
     if (checkDup.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'This subject is already mapped to the selected class/section. Edit the mapping to change the teacher.' },
-        { status: 400 }
-      );
+      const res_err_3129 = { error: 'This subject is already mapped to the selected class/section. Edit the mapping to change the teacher.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3129?.error || res_err_3129?.message || 'An error occurred',
+        error: res_err_3129?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const newMapping = await query(
@@ -80,15 +100,20 @@ export async function POST(request) {
       [class_id, sectId, subject_id, teachId]
     );
 
-    return NextResponse.json(
-      { message: 'Class subject assignment created successfully.', assignment: newMapping.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2870 = { message: 'Class subject assignment created successfully.', assignment: newMapping.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2870?.message || 'Successfully fecthed data',
+        paylod: res_data_2870
+      }, { status: 201 });
   } catch (error) {
     console.error('Error assigning class subject:', error);
-    return NextResponse.json(
-      { error: 'Failed to create class subject mapping. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4237 = { error: 'Failed to create class subject mapping. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4237?.error || res_err_4237?.message || 'An error occurred',
+        error: res_err_4237?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

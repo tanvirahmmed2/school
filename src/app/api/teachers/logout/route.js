@@ -12,9 +12,20 @@ export async function POST() {
       sameSite: 'strict',
     });
 
-    return NextResponse.json({ message: 'Teacher logged out successfully.' });
+    const res_data_403 = { message: 'Teacher logged out successfully.' };
+      return NextResponse.json({
+        success: true,
+        message: res_data_403?.message || 'Successfully fecthed data',
+        paylod: res_data_403
+      }, { status: 200 });
   } catch (error) {
     console.error('Teacher logout error:', error);
-    return NextResponse.json({ error: 'Internal server error during logout.' }, { status: 500 });
+    const res_err_781 = { error: 'Internal server error during logout.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_781?.error || res_err_781?.message || 'An error occurred',
+        error: res_err_781?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -31,9 +31,9 @@ const StudentTranscriptsPage = () => {
         axios.get('/api/classes'),
         axios.get('/api/sections')
       ]);
-      setExams(examsRes.data.exams || []);
-      setClasses(classesRes.data.classes || []);
-      setSections(sectionsRes.data.sections || []);
+      setExams(examsRes.data.paylod.exams || []);
+      setClasses(classesRes.data.paylod.classes || []);
+      setSections(sectionsRes.data.paylod.sections || []);
     } catch (error) {
       toast.error('Failed to load filter metadata.');
     }
@@ -58,7 +58,7 @@ const StudentTranscriptsPage = () => {
         url += `&section_id=${transSection}`;
       }
       const response = await axios.get(url);
-      setStudents(response.data.students || []);
+      setStudents(response.data.paylod.students || []);
     } catch (error) {
       toast.error('Failed to load students.');
     }

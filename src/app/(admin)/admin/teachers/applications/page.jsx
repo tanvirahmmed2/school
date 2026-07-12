@@ -12,7 +12,7 @@ const AdminApplicationsPage = () => {
   const fetchApplications = async () => {
     try {
       const response = await axios.get('/api/leave-applications?type=teacher');
-      setApplications(response.data.applications || []);
+      setApplications(response.data.paylod.applications || []);
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     } finally {

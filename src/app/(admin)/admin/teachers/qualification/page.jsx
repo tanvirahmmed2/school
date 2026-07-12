@@ -43,7 +43,7 @@ export default function AdminTeacherQualificationsPage() {
     setListLoading(true);
     try {
       const res = await axios.get('/api/teachers');
-      setTeachers(res.data.teachers || []);
+      setTeachers(res.data.paylod.teachers || []);
     } catch (err) {
       toast.error('Failed to load teachers lookup.');
     } finally {
@@ -55,7 +55,7 @@ export default function AdminTeacherQualificationsPage() {
     setLoading(true);
     try {
       const res = await axios.get(`/api/teachers/qualifications?teacher_id=${teacherId}`);
-      setQualifications(res.data.qualifications || []);
+      setQualifications(res.data.paylod.qualifications || []);
     } catch (err) {
       toast.error('Failed to retrieve teacher qualifications.');
     } finally {

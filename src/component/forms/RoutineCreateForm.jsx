@@ -46,9 +46,9 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
         const subjectsData = await subjectsRes.json();
         const teachersData = await teachersRes.json();
 
-        setClasses(classesData.classes || []);
-        setSubjects(subjectsData.subjects || []);
-        setTeachers(teachersData.teachers || []);
+        setClasses(classesData.paylod.classes || []);
+        setSubjects(subjectsData.paylod.subjects || []);
+        setTeachers(teachersData.paylod.teachers || []);
       } catch (err) {
         toast.error('Failed to load form lookup data.');
       } finally {
@@ -70,13 +70,13 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
       try {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         const data = await res.json();
-        setSections(data.sections || []);
+        setSections(data.paylod.sections || []);
         // Auto-select first section if none selected or if not in initial setup
-        if (data.sections?.length > 0) {
+        if (data.paylod.sections?.length > 0) {
           if (initialClassId === classId && initialSectionId) {
             setSectionId(initialSectionId);
           } else {
-            setSectionId(data.sections[0].id.toString());
+            setSectionId(data.paylod.sections[0].id.toString());
           }
         } else {
           setSectionId('');

@@ -6,13 +6,21 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query('SELECT * FROM notices ORDER BY is_pinned DESC, created_at DESC');
-    return NextResponse.json({ notices: result.rows });
+    const res_data_325 = { notices: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_325?.message || 'Successfully fecthed data',
+        paylod: res_data_325
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching notices:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve notices. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_682 = { error: 'Failed to retrieve notices. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_682?.error || res_err_682?.message || 'An error occurred',
+        error: res_err_682?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -21,16 +29,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1181 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1181?.error || res_err_1181?.message || 'An error occurred',
+        error: res_err_1181?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { title, link, is_pinned = false } = await request.json();
 
     if (!title || !link) {
-      return NextResponse.json(
-        { error: 'Title and Google Drive Link are required.' },
-        { status: 400 }
-      );
+      const res_err_1607 = { error: 'Title and Google Drive Link are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1607?.error || res_err_1607?.message || 'An error occurred',
+        error: res_err_1607?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -40,15 +57,20 @@ export async function POST(request) {
       [title.trim(), link.trim(), !!is_pinned]
     );
 
-    return NextResponse.json(
-      { message: 'Notice created successfully.', notice: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_1488 = { message: 'Notice created successfully.', notice: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1488?.message || 'Successfully fecthed data',
+        paylod: res_data_1488
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating notice:', error);
-    return NextResponse.json(
-      { error: 'Failed to create notice. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2585 = { error: 'Failed to create notice. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2585?.error || res_err_2585?.message || 'An error occurred',
+        error: res_err_2585?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

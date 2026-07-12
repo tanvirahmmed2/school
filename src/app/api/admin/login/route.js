@@ -8,38 +8,50 @@ export async function POST(request) {
     const { email, password } = await request.json();
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required.' },
-        { status: 400 }
-      );
+      const res_err_319 = { error: 'Email and password are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_319?.error || res_err_319?.message || 'An error occurred',
+        error: res_err_319?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Find admin
     const result = await query('SELECT * FROM admins WHERE email = $1', [email]);
     if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Invalid email or password.' },
-        { status: 401 }
-      );
+      const res_err_786 = { error: 'Invalid email or password.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_786?.error || res_err_786?.message || 'An error occurred',
+        error: res_err_786?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const admin = result.rows[0];
 
     // Check if admin is active
     if (!admin.is_active) {
-      return NextResponse.json(
-        { error: 'This administrative account has been deactivated. Please contact support.' },
-        { status: 403 }
-      );
+      const res_err_1206 = { error: 'This administrative account has been deactivated. Please contact support.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1206?.error || res_err_1206?.message || 'An error occurred',
+        error: res_err_1206?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     // Verify password
     const isPasswordValid = await comparePassword(password, admin.password_hash);
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: 'Invalid email or password.' },
-        { status: 401 }
-      );
+      const res_err_1715 = { error: 'Invalid email or password.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1715?.error || res_err_1715?.message || 'An error occurred',
+        error: res_err_1715?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     // Generate JWT token
@@ -55,7 +67,7 @@ export async function POST(request) {
       sameSite: 'strict',
     });
 
-    return NextResponse.json({
+    const res_data_1544 = {
       message: 'Login successful.',
       admin: {
         id: admin.id,
@@ -65,12 +77,20 @@ export async function POST(request) {
         address: admin.address,
         is_active: admin.is_active,
       }
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1544?.message || 'Successfully fecthed data',
+        paylod: res_data_1544
+      }, { status: 200 });
   } catch (error) {
     console.error('Error logging in admin:', error);
-    return NextResponse.json(
-      { error: 'Failed to authenticate. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3043 = { error: 'Failed to authenticate. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3043?.error || res_err_3043?.message || 'An error occurred',
+        error: res_err_3043?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

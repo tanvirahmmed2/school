@@ -9,36 +9,48 @@ export async function POST(request) {
     const { email, recovery_token, new_password } = body;
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email address is required.' },
-        { status: 400 }
-      );
+      const res_err_338 = { error: 'Email address is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_338?.error || res_err_338?.message || 'An error occurred',
+        error: res_err_338?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Find student by email
     const result = await query('SELECT * FROM students WHERE LOWER(email) = LOWER($1)', [email.trim()]);
     if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Student account with this email not found.' },
-        { status: 404 }
-      );
+      const res_err_833 = { error: 'Student account with this email not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_833?.error || res_err_833?.message || 'An error occurred',
+        error: res_err_833?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const student = result.rows[0];
 
     // Verify account is active and registered
     if (!student.is_registered) {
-      return NextResponse.json(
-        { error: 'This account has not yet completed setup.' },
-        { status: 403 }
-      );
+      const res_err_1292 = { error: 'This account has not yet completed setup.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1292?.error || res_err_1292?.message || 'An error occurred',
+        error: res_err_1292?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     if (!student.is_active) {
-      return NextResponse.json(
-        { error: 'This student account is inactive.' },
-        { status: 403 }
-      );
+      const res_err_1666 = { error: 'This student account is inactive.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1666?.error || res_err_1666?.message || 'An error occurred',
+        error: res_err_1666?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     // Step 1: Token Request (when recovery_token or new_password is not provided)
@@ -76,38 +88,55 @@ export async function POST(request) {
         });
       } catch (emailError) {
         console.error('Failed to send recovery email via Brevo:', emailError);
-        return NextResponse.json(
-          { error: 'Failed to send recovery email. Please check your Brevo mail configurations.' },
-          { status: 500 }
-        );
+        const res_err_4242 = { error: 'Failed to send recovery email. Please check your Brevo mail configurations.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4242?.error || res_err_4242?.message || 'An error occurred',
+        error: res_err_4242?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
       }
 
-      return NextResponse.json({
+      const res_data_3512 = {
         message: 'A 6-digit recovery token has been sent to your email.'
-      });
+      };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3512?.message || 'Successfully fecthed data',
+        paylod: res_data_3512
+      }, { status: 200 });
     }
 
     // Step 2: Password Reset (when recovery_token and new_password are provided)
     if (!student.recovery_token) {
-      return NextResponse.json(
-        { error: 'No active recovery request found. Please request a new token.' },
-        { status: 400 }
-      );
+      const res_err_5138 = { error: 'No active recovery request found. Please request a new token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5138?.error || res_err_5138?.message || 'An error occurred',
+        error: res_err_5138?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const tokenExpiry = new Date(student.recovery_token_expires);
     if (tokenExpiry < new Date()) {
-      return NextResponse.json(
-        { error: 'Recovery token has expired. Please request a new token.' },
-        { status: 400 }
-      );
+      const res_err_5604 = { error: 'Recovery token has expired. Please request a new token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5604?.error || res_err_5604?.message || 'An error occurred',
+        error: res_err_5604?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     if (student.recovery_token.trim() !== recovery_token.trim()) {
-      return NextResponse.json(
-        { error: 'Invalid recovery token.' },
-        { status: 400 }
-      );
+      const res_err_6029 = { error: 'Invalid recovery token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6029?.error || res_err_6029?.message || 'An error occurred',
+        error: res_err_6029?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const hashedPass = await hashPassword(new_password);
@@ -119,14 +148,22 @@ export async function POST(request) {
       [hashedPass, student.id]
     );
 
-    return NextResponse.json({
+    const res_data_4825 = {
       message: 'Password reset successful. You can now login with your new password.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4825?.message || 'Successfully fecthed data',
+        paylod: res_data_4825
+      }, { status: 200 });
   } catch (error) {
     console.error('Error recovering student account:', error);
-    return NextResponse.json(
-      { error: 'Failed to process password recovery. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_7115 = { error: 'Failed to process password recovery. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7115?.error || res_err_7115?.message || 'An error occurred',
+        error: res_err_7115?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

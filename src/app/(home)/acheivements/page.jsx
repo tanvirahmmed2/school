@@ -13,7 +13,7 @@ const AchievementsPage = () => {
         const res = await fetch('/api/achievements');
         if (res.ok) {
           const data = await res.json();
-          setAchievements(data.achievements || []);
+          setAchievements(data.paylod.achievements || []);
         }
       } catch (err) {
         console.error('Error fetching achievements:', err);

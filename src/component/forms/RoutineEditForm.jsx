@@ -46,9 +46,9 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
         const subjectsData = await subjectsRes.json();
         const teachersData = await teachersRes.json();
 
-        setClasses(classesData.classes || []);
-        setSubjects(subjectsData.subjects || []);
-        setTeachers(teachersData.teachers || []);
+        setClasses(classesData.paylod.classes || []);
+        setSubjects(subjectsData.paylod.subjects || []);
+        setTeachers(teachersData.paylod.teachers || []);
       } catch (err) {
         toast.error('Failed to load lookup data.');
       } finally {
@@ -69,7 +69,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
       try {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         const data = await res.json();
-        setSections(data.sections || []);
+        setSections(data.paylod.sections || []);
       } catch (err) {
         toast.error('Failed to fetch sections.');
       }

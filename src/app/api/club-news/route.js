@@ -12,13 +12,21 @@ export async function GET() {
       JOIN clubs c ON cn.club_id = c.id
       ORDER BY cn.created_at DESC
     `);
-    return NextResponse.json({ clubNews: result.rows });
+    const res_data_456 = { clubNews: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_456?.message || 'Successfully fecthed data',
+        paylod: res_data_456
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching club news:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve club news. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_816 = { error: 'Failed to retrieve club news. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_816?.error || res_err_816?.message || 'An error occurred',
+        error: res_err_816?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -27,16 +35,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1320 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1320?.error || res_err_1320?.message || 'An error occurred',
+        error: res_err_1320?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { club_id, title, content, image } = await request.json();
 
     if (!club_id || !title || !content) {
-      return NextResponse.json(
-        { error: 'Club, title, and content are required.' },
-        { status: 400 }
-      );
+      const res_err_1761 = { error: 'Club, title, and content are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1761?.error || res_err_1761?.message || 'An error occurred',
+        error: res_err_1761?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     let imageUrl = null;
@@ -49,7 +66,13 @@ export async function POST(request) {
         imageId = uploadResult.publicId;
       } catch (uploadErr) {
         console.error('Cloudinary club news upload failed:', uploadErr);
-        return NextResponse.json({ error: 'Failed to upload cover image.' }, { status: 500 });
+        const res_err_2464 = { error: 'Failed to upload cover image.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2464?.error || res_err_2464?.message || 'An error occurred',
+        error: res_err_2464?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
       }
     } else if (image) {
       imageUrl = image;
@@ -62,15 +85,20 @@ export async function POST(request) {
       [club_id, title.trim(), content.trim(), imageUrl, imageId]
     );
 
-    return NextResponse.json(
-      { message: 'Club news created successfully.', clubNews: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2207 = { message: 'Club news created successfully.', clubNews: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2207?.message || 'Successfully fecthed data',
+        paylod: res_data_2207
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating club news:', error);
-    return NextResponse.json(
-      { error: 'Failed to create club news. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3544 = { error: 'Failed to create club news. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3544?.error || res_err_3544?.message || 'An error occurred',
+        error: res_err_3544?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

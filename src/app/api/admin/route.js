@@ -9,12 +9,24 @@ export async function GET() {
     const token = cookieStore.get('fit-admin')?.value;
 
     if (!token) {
-      return NextResponse.json({ error: 'Unauthorized. Missing token.' }, { status: 401 });
+      const res_err_325 = { error: 'Unauthorized. Missing token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_325?.error || res_err_325?.message || 'An error occurred',
+        error: res_err_325?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Unauthorized. Invalid or expired token.' }, { status: 401 });
+      const res_err_725 = { error: 'Unauthorized. Invalid or expired token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_725?.error || res_err_725?.message || 'An error occurred',
+        error: res_err_725?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     // Retrieve admin list
@@ -24,12 +36,20 @@ export async function GET() {
        ORDER BY id ASC`
     );
 
-    return NextResponse.json({ admins: result.rows });
+    const res_data_829 = { admins: result.rows };
+    return NextResponse.json({
+      success: true,
+      message: res_data_829?.message || 'Successfully fecthed data',
+      paylod: res_data_829
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching admins:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve admins. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1628 = { error: 'Failed to retrieve admins. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1628?.error || res_err_1628?.message || 'An error occurred',
+        error: res_err_1628?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

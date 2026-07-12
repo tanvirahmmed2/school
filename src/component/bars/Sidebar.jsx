@@ -25,7 +25,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* 1. Backdrop Overlay (Fades In/Out) */}
       <div
         className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 transition-opacity duration-300 md:hidden ${
           sidebar ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -33,23 +32,18 @@ const Sidebar = () => {
         onClick={closeSidebar}
       />
 
-      {/* 2. Side Panel Drawer (Slides In/Out from Right) */}
       <aside
         className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
           sidebar ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex flex-col gap-6">
-          {/* Header with Brand & Close Button */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <Link href="/" onClick={closeSidebar} className="flex items-center gap-2 group">
               
               <div className="flex flex-col">
                 <span className="font-extrabold text-slate-800 text-sm leading-tight">
                   Fontana
-                </span>
-                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider leading-none">
-                  FIT Portal
                 </span>
               </div>
             </Link>

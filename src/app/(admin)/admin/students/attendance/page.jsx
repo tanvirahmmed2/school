@@ -23,7 +23,7 @@ const AdminStudentAttendancePage = () => {
       try {
         const res = await fetch('/api/classes');
         const data = await res.json();
-        setClasses(data.classes || []);
+        setClasses(data.paylod.classes || []);
       } catch (err) {
         toast.error('Failed to load classes.');
       }
@@ -44,9 +44,9 @@ const AdminStudentAttendancePage = () => {
       try {
         const res = await fetch(`/api/sections?class_id=${selectedClassId}`);
         const data = await res.json();
-        setSections(data.sections || []);
-        if (data.sections?.length > 0) {
-          setSelectedSectionId(data.sections[0].id.toString());
+        setSections(data.paylod.sections || []);
+        if (data.paylod.sections?.length > 0) {
+          setSelectedSectionId(data.paylod.sections[0].id.toString());
         } else {
           setSelectedSectionId('');
           setStudents([]);

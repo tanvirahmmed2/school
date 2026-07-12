@@ -8,46 +8,61 @@ export async function POST(request) {
     const { email, password } = await request.json();
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required.' },
-        { status: 400 }
-      );
+      const res_err_319 = { error: 'Email and password are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_319?.error || res_err_319?.message || 'An error occurred',
+        error: res_err_319?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Find teacher
     const result = await query('SELECT * FROM teachers WHERE LOWER(email) = LOWER($1)', [email.trim()]);
     if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Invalid email or password.' },
-        { status: 401 }
-      );
+      const res_err_811 = { error: 'Invalid email or password.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_811?.error || res_err_811?.message || 'An error occurred',
+        error: res_err_811?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const teacher = result.rows[0];
 
     // Check if teacher completed registration setup
     if (!teacher.is_registered) {
-      return NextResponse.json(
-        { error: 'This teacher account has not completed setup yet. Please self-register first.' },
-        { status: 403 }
-      );
+      const res_err_1260 = { error: 'This teacher account has not completed setup yet. Please self-register first.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1260?.error || res_err_1260?.message || 'An error occurred',
+        error: res_err_1260?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     // Check if teacher is active
     if (!teacher.is_active) {
-      return NextResponse.json(
-        { error: 'This teacher account has been deactivated. Please contact administration.' },
-        { status: 403 }
-      );
+      const res_err_1704 = { error: 'This teacher account has been deactivated. Please contact administration.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1704?.error || res_err_1704?.message || 'An error occurred',
+        error: res_err_1704?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     // Verify password
     const isPasswordValid = await comparePassword(password, teacher.password_hash);
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: 'Invalid email or password.' },
-        { status: 401 }
-      );
+      const res_err_2215 = { error: 'Invalid email or password.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2215?.error || res_err_2215?.message || 'An error occurred',
+        error: res_err_2215?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     // Generate JWT token
@@ -63,7 +78,7 @@ export async function POST(request) {
       sameSite: 'strict',
     });
 
-    return NextResponse.json({
+    const res_data_1837 = {
       message: 'Teacher login successful.',
       teacher: {
         id: teacher.id,
@@ -75,12 +90,20 @@ export async function POST(request) {
         is_active: teacher.is_active,
         is_registered: teacher.is_registered
       }
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1837?.message || 'Successfully fecthed data',
+        paylod: res_data_1837
+      }, { status: 200 });
   } catch (error) {
     console.error('Error logging in teacher:', error);
-    return NextResponse.json(
-      { error: 'Failed to authenticate. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3679 = { error: 'Failed to authenticate. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3679?.error || res_err_3679?.message || 'An error occurred',
+        error: res_err_3679?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

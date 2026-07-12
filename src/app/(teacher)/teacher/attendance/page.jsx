@@ -24,7 +24,7 @@ const AttendanceRegistryPage = () => {
         const res = await fetch('/api/classes');
         if (res.ok) {
           const data = await res.json();
-          setClasses(data.classes || []);
+          setClasses(data.paylod.classes || []);
         }
       } catch (err) {
         console.error('Failed to load classes:', err);
@@ -50,7 +50,7 @@ const AttendanceRegistryPage = () => {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         if (res.ok) {
           const data = await res.json();
-          setSections(data.sections || []);
+          setSections(data.paylod.sections || []);
         }
       } catch (err) {
         console.error('Failed to load sections:', err);

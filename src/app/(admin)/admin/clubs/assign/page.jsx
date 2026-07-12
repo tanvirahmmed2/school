@@ -31,7 +31,7 @@ const AdminClubsAssignPage = () => {
   const fetchClubs = async () => {
     try {
       const response = await axios.get('/api/clubs');
-      setClubs(response.data.clubs || []);
+      setClubs(response.data.paylod.clubs || []);
     } catch (error) {
       toast.error('Failed to load clubs registry.');
     }
@@ -52,11 +52,11 @@ const AdminClubsAssignPage = () => {
     setLoading(true);
     try {
       const response = await axios.get(`/api/clubs/assign?club_id=${selectedClub}`);
-      setTeachers(response.data.teachers || []);
-      setStudents(response.data.students || []);
+      setTeachers(response.data.paylod.teachers || []);
+      setStudents(response.data.paylod.students || []);
 
-      setSelectedAdmins(response.data.assignedAdmins || []);
-      setSelectedMembers(response.data.assignedMembers || []);
+      setSelectedAdmins(response.data.paylod.assignedAdmins || []);
+      setSelectedMembers(response.data.paylod.assignedMembers || []);
     } catch (error) {
       toast.error('Failed to load assignments.');
     } finally {

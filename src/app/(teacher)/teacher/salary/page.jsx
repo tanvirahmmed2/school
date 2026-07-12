@@ -13,7 +13,7 @@ const SalaryHistoryPage = () => {
         const res = await fetch('/api/teacher/salary');
         if (res.ok) {
           const data = await res.json();
-          setSalaries(data.salaries || []);
+          setSalaries(data.paylod.salaries || []);
         }
       } catch (err) {
         console.error('Failed to load salary ledger:', err);

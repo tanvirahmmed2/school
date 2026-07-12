@@ -27,8 +27,8 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
           axios.get('/api/classes'),
           axios.get('/api/subjects'),
         ]);
-        setClasses(classesRes.data.classes || []);
-        setSubjects(subjectsRes.data.subjects || []);
+        setClasses(classesRes.data.paylod.classes || []);
+        setSubjects(subjectsRes.data.paylod.subjects || []);
 
         if (examId) {
           const examRes = await axios.get(`/api/exams/${examId}`);

@@ -9,29 +9,38 @@ export async function POST(request) {
     const { email, recovery_token, new_password } = body;
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email address is required.' },
-        { status: 400 }
-      );
+      const res_err_338 = { error: 'Email address is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_338?.error || res_err_338?.message || 'An error occurred',
+        error: res_err_338?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Find admin by email
     const result = await query('SELECT * FROM admins WHERE email = $1', [email]);
     if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Admin account with this email not found.' },
-        { status: 404 }
-      );
+      const res_err_808 = { error: 'Admin account with this email not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_808?.error || res_err_808?.message || 'An error occurred',
+        error: res_err_808?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const admin = result.rows[0];
 
     // Verify account is active
     if (!admin.is_active) {
-      return NextResponse.json(
-        { error: 'This administrative account is inactive.' },
-        { status: 403 }
-      );
+      const res_err_1242 = { error: 'This administrative account is inactive.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1242?.error || res_err_1242?.message || 'An error occurred',
+        error: res_err_1242?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     // Step 1: Token Request (when recovery_token or new_password is not provided)
@@ -69,40 +78,57 @@ export async function POST(request) {
         });
       } catch (emailError) {
         console.error('Failed to send recovery email via Brevo:', emailError);
-        return NextResponse.json(
-          { error: 'Failed to send recovery email. Please check your Brevo mail configurations.' },
-          { status: 500 }
-        );
+        const res_err_3823 = { error: 'Failed to send recovery email. Please check your Brevo mail configurations.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3823?.error || res_err_3823?.message || 'An error occurred',
+        error: res_err_3823?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
       }
 
-      return NextResponse.json({
+      const res_data_3325 = {
         message: 'A 6-digit recovery token has been sent to your email.'
-      });
+      };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3325?.message || 'Successfully fecthed data',
+        paylod: res_data_3325
+      }, { status: 200 });
     }
 
     // Step 2: Password Reset (when recovery_token and new_password are provided)
     if (!admin.recovery_token) {
-      return NextResponse.json(
-        { error: 'No active recovery request found. Please request a new token.' },
-        { status: 400 }
-      );
+      const res_err_4717 = { error: 'No active recovery request found. Please request a new token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4717?.error || res_err_4717?.message || 'An error occurred',
+        error: res_err_4717?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check expiry
     const tokenExpiry = new Date(admin.recovery_token_expires);
     if (tokenExpiry < new Date()) {
-      return NextResponse.json(
-        { error: 'Recovery token has expired. Please request a new token.' },
-        { status: 400 }
-      );
+      const res_err_5201 = { error: 'Recovery token has expired. Please request a new token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5201?.error || res_err_5201?.message || 'An error occurred',
+        error: res_err_5201?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Compare token
     if (admin.recovery_token.trim() !== recovery_token.trim()) {
-      return NextResponse.json(
-        { error: 'Invalid recovery token.' },
-        { status: 401 }
-      );
+      const res_err_5645 = { error: 'Invalid recovery token.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5645?.error || res_err_5645?.message || 'An error occurred',
+        error: res_err_5645?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     // Update password
@@ -114,15 +140,23 @@ export async function POST(request) {
       [hashedNewPassword, admin.id]
     );
 
-    return NextResponse.json({
+    const res_data_4705 = {
       message: 'Password reset successfully. You can now log in with your new password.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4705?.message || 'Successfully fecthed data',
+        paylod: res_data_4705
+      }, { status: 200 });
 
   } catch (error) {
     console.error('Error recovering admin password:', error);
-    return NextResponse.json(
-      { error: 'Failed to process password recovery. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_6766 = { error: 'Failed to process password recovery. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6766?.error || res_err_6766?.message || 'An error occurred',
+        error: res_err_6766?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

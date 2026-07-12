@@ -7,14 +7,26 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_277 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_277?.error || res_err_277?.message || 'An error occurred',
+        error: res_err_277?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { name, slug, description } = await request.json();
 
     if (!name) {
-      return NextResponse.json({ error: 'Club name is required.' }, { status: 400 });
+      const res_err_715 = { error: 'Club name is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_715?.error || res_err_715?.message || 'An error occurred',
+        error: res_err_715?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const finalSlug = slug 
@@ -28,7 +40,13 @@ export async function PUT(request, { params }) {
     );
 
     if (duplicate.rows.length > 0) {
-      return NextResponse.json({ error: 'Another club with this name or slug already exists.' }, { status: 400 });
+      const res_err_1439 = { error: 'Another club with this name or slug already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1439?.error || res_err_1439?.message || 'An error occurred',
+        error: res_err_1439?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -40,19 +58,33 @@ export async function PUT(request, { params }) {
     );
 
     if (result.rowCount === 0) {
-      return NextResponse.json({ error: 'Club profile not found.' }, { status: 404 });
+      const res_err_2115 = { error: 'Club profile not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2115?.error || res_err_2115?.message || 'An error occurred',
+        error: res_err_2115?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_1561 = {
       message: 'Club details updated successfully.',
       club: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1561?.message || 'Successfully fecthed data',
+        paylod: res_data_1561
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating club:', error);
-    return NextResponse.json(
-      { error: 'Failed to update club. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2904 = { error: 'Failed to update club. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2904?.error || res_err_2904?.message || 'An error occurred',
+        error: res_err_2904?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -61,7 +93,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_3398 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3398?.error || res_err_3398?.message || 'An error occurred',
+        error: res_err_3398?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -69,17 +107,31 @@ export async function DELETE(request, { params }) {
     const result = await query('DELETE FROM clubs WHERE id = $1 RETURNING id', [id]);
 
     if (result.rowCount === 0) {
-      return NextResponse.json({ error: 'Club not found.' }, { status: 404 });
+      const res_err_3881 = { error: 'Club not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3881?.error || res_err_3881?.message || 'An error occurred',
+        error: res_err_3881?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_2623 = {
       message: 'Club deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2623?.message || 'Successfully fecthed data',
+        paylod: res_data_2623
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting club:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete club. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4626 = { error: 'Failed to delete club. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4626?.error || res_err_4626?.message || 'An error occurred',
+        error: res_err_4626?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

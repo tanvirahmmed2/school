@@ -8,12 +8,24 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-student')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_326 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_326?.error || res_err_326?.message || 'An error occurred',
+        error: res_err_326?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_715 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_715?.error || res_err_715?.message || 'An error occurred',
+        error: res_err_715?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const studentId = decoded.id;
@@ -24,7 +36,13 @@ export async function GET() {
     `, [studentId]);
 
     if (studentRes.rows.length === 0) {
-      return NextResponse.json({ error: 'Student not found' }, { status: 404 });
+      const res_err_1261 = { error: 'Student not found' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1261?.error || res_err_1261?.message || 'An error occurred',
+        error: res_err_1261?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const { class_id, section_id } = studentRes.rows[0];
@@ -68,7 +86,7 @@ export async function GET() {
     `, [studentId]);
     const clubsCount = parseInt(clubsCountRes.rows[0]?.count || 0, 10);
 
-    return NextResponse.json({
+    const res_data_2636 = {
       stats: {
         subjectsCount,
         attendanceRate,
@@ -78,9 +96,20 @@ export async function GET() {
         totalAttendanceDays: totalDays,
         presentAttendanceDays: presentDays
       }
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2636?.message || 'Successfully fecthed data',
+        paylod: res_data_2636
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student dashboard stats:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_3910 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3910?.error || res_err_3910?.message || 'An error occurred',
+        error: res_err_3910?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

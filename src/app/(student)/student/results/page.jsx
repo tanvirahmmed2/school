@@ -15,8 +15,8 @@ const ResultsPage = () => {
         if (res.ok) {
           const resData = await res.json();
           setData(resData);
-          if (resData.results && resData.results.length > 0) {
-            setSelectedExamId(resData.results[0].exam_id);
+          if (resData.paylod.results && resData.paylod.results.length > 0) {
+            setSelectedExamId(resData.paylod.results[0].exam_id);
           }
         }
       } catch (error) {

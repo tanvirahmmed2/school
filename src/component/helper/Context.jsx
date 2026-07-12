@@ -19,7 +19,7 @@ export const ContextProvider = ({ children }) => {
         const classesRes = await fetch('/api/classes');
         if (classesRes.ok) {
           const data = await classesRes.json();
-          setClasses(data.classes || []);
+          setClasses(data.paylod.classes || []);
         }
       } catch (err) {
         console.error('Error fetching classes in Context:', err);
@@ -29,7 +29,7 @@ export const ContextProvider = ({ children }) => {
         const clubsRes = await fetch('/api/clubs');
         if (clubsRes.ok) {
           const data = await clubsRes.json();
-          setClubs(data.clubs || []);
+          setClubs(data.paylod.clubs || []);
         }
       } catch (err) {
         console.error('Error fetching clubs in Context:', err);

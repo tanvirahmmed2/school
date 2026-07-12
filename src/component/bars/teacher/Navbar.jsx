@@ -18,7 +18,7 @@ const Navbar = () => {
         const response = await fetch('/api/teacher/me');
         if (response.ok) {
           const data = await response.json();
-          setTeacher(data.teacher);
+          setTeacher(data.paylod.teacher);
         }
       } catch (error) {
         console.error('Failed to fetch teacher profile:', error);

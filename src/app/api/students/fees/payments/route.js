@@ -7,7 +7,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_289 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_289?.error || res_err_289?.message || 'An error occurred',
+        error: res_err_289?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -47,12 +53,20 @@ export async function GET(request) {
     sql += ' ORDER BY sfp.payment_date DESC';
 
     const result = await query(sql, params);
-    return NextResponse.json({ payments: result.rows });
+    const res_data_1445 = { payments: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1445?.message || 'Successfully fecthed data',
+        paylod: res_data_1445
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student fee payments:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve payment logs. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2050 = { error: 'Failed to retrieve payment logs. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2050?.error || res_err_2050?.message || 'An error occurred',
+        error: res_err_2050?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

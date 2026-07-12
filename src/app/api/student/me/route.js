@@ -8,12 +8,24 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-student')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_326 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_326?.error || res_err_326?.message || 'An error occurred',
+        error: res_err_326?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_715 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_715?.error || res_err_715?.message || 'An error occurred',
+        error: res_err_715?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     // Direct database validation check, returning class/section info
@@ -27,14 +39,31 @@ export async function GET() {
     `, [decoded.id]);
 
     if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'Student account is inactive or not found' }, { status: 404 });
+      const res_err_1582 = { error: 'Student account is inactive or not found' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1582?.error || res_err_1582?.message || 'An error occurred',
+        error: res_err_1582?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_1277 = {
       student: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1277?.message || 'Successfully fecthed data',
+        paylod: res_data_1277
+      }, { status: 200 });
   } catch (error) {
     console.error('Error in student/me endpoint:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_2347 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2347?.error || res_err_2347?.message || 'An error occurred',
+        error: res_err_2347?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

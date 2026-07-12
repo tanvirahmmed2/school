@@ -39,7 +39,7 @@ const AdminStudentListsPage = () => {
     try {
       const classesRes = await fetch('/api/classes');
       const classesData = await classesRes.json();
-      setClasses(classesData.classes || []);
+      setClasses(classesData.paylod.classes || []);
 
       let url = '/api/students';
       const params = [];
@@ -71,7 +71,7 @@ const AdminStudentListsPage = () => {
     const fetchFilterSections = async () => {
       const res = await fetch(`/api/sections?class_id=${filterClassId}`);
       const data = await res.json();
-      setSections(data.sections || []);
+      setSections(data.paylod.sections || []);
       setFilterSectionId('');
     };
     fetchFilterSections();
@@ -87,9 +87,9 @@ const AdminStudentListsPage = () => {
     const fetchPreSections = async () => {
       const res = await fetch(`/api/sections?class_id=${preClassId}`);
       const data = await res.json();
-      setPreSectionsList(data.sections || []);
-      if (data.sections?.length > 0) {
-        setPreSectionId(data.sections[0].id.toString());
+      setPreSectionsList(data.paylod.sections || []);
+      if (data.paylod.sections?.length > 0) {
+        setPreSectionId(data.paylod.sections[0].id.toString());
       } else {
         setPreSectionId('');
       }
@@ -107,7 +107,7 @@ const AdminStudentListsPage = () => {
     const fetchEditSections = async () => {
       const res = await fetch(`/api/sections?class_id=${editClassId}`);
       const data = await res.json();
-      setEditSectionsList(data.sections || []);
+      setEditSectionsList(data.paylod.sections || []);
     };
     fetchEditSections();
   }, [editClassId]);

@@ -43,7 +43,7 @@ export default function AuthorityQualificationsPage() {
     setListLoading(true);
     try {
       const res = await axios.get('/api/authorities');
-      setMembers(res.data.authorities || []);
+      setMembers(res.data.paylod.authorities || []);
     } catch (err) {
       toast.error('Failed to load board members lookup.');
     } finally {
@@ -55,7 +55,7 @@ export default function AuthorityQualificationsPage() {
     setLoading(true);
     try {
       const res = await axios.get(`/api/authorities/qualifications?authority_id=${memberId}`);
-      setQualifications(res.data.qualifications || []);
+      setQualifications(res.data.paylod.qualifications || []);
     } catch (err) {
       toast.error('Failed to retrieve member qualifications.');
     } finally {

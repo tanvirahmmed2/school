@@ -19,7 +19,7 @@ const AdminSubjectsPage = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch subjects.');
       }
-      setSubjects(data.subjects || []);
+      setSubjects(data.paylod.subjects || []);
     } catch (error) {
       toast.error(error.message);
     } finally {

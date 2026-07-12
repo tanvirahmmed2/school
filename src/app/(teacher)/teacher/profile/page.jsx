@@ -27,8 +27,8 @@ const ProfilePage = () => {
         const res = await fetch('/api/teacher/me');
         if (res.ok) {
           const data = await res.json();
-          setProfile(data.teacher);
-          fetchQualifications(data.teacher.id);
+          setProfile(data.paylod.teacher);
+          fetchQualifications(data.paylod.teacher.id);
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -45,7 +45,7 @@ const ProfilePage = () => {
       const res = await fetch(`/api/teachers/qualifications?teacher_id=${teacherId}`);
       if (res.ok) {
         const data = await res.json();
-        setQualifications(data.qualifications || []);
+        setQualifications(data.paylod.qualifications || []);
       }
     } catch (err) {
       console.error('Error fetching qualifications:', err);

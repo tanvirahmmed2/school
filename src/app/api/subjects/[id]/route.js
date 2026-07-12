@@ -7,17 +7,26 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_293 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_293?.error || res_err_293?.message || 'An error occurred',
+        error: res_err_293?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { name, code } = await request.json();
 
     if (!name || !code) {
-      return NextResponse.json(
-        { error: 'Subject Name and Subject Code are required.' },
-        { status: 400 }
-      );
+      const res_err_727 = { error: 'Subject Name and Subject Code are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_727?.error || res_err_727?.message || 'An error occurred',
+        error: res_err_727?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check unique constraints (excluding current ID)
@@ -29,10 +38,22 @@ export async function PUT(request, { params }) {
     if (duplicateCheck.rows.length > 0) {
       const match = duplicateCheck.rows[0];
       if (match.name === name.trim()) {
-        return NextResponse.json({ error: 'A subject with this name already exists.' }, { status: 400 });
+        const res_err_1440 = { error: 'A subject with this name already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1440?.error || res_err_1440?.message || 'An error occurred',
+        error: res_err_1440?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
       if (match.code === code.trim().toUpperCase()) {
-        return NextResponse.json({ error: 'A subject with this code already exists.' }, { status: 400 });
+        const res_err_1840 = { error: 'A subject with this code already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1840?.error || res_err_1840?.message || 'An error occurred',
+        error: res_err_1840?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
     }
 
@@ -45,19 +66,33 @@ export async function PUT(request, { params }) {
     );
 
     if (updatedSubject.rowCount === 0) {
-      return NextResponse.json({ error: 'Subject not found.' }, { status: 404 });
+      const res_err_2463 = { error: 'Subject not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2463?.error || res_err_2463?.message || 'An error occurred',
+        error: res_err_2463?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_1672 = {
       message: 'Subject updated successfully.',
       subject: updatedSubject.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1672?.message || 'Successfully fecthed data',
+        paylod: res_data_1672
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating subject:', error);
-    return NextResponse.json(
-      { error: 'Failed to update subject. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3256 = { error: 'Failed to update subject. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3256?.error || res_err_3256?.message || 'An error occurred',
+        error: res_err_3256?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -66,7 +101,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_3769 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3769?.error || res_err_3769?.message || 'An error occurred',
+        error: res_err_3769?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -74,17 +115,31 @@ export async function DELETE(request, { params }) {
     const deleteResult = await query('DELETE FROM subjects WHERE id = $1 RETURNING id', [id]);
 
     if (deleteResult.rowCount === 0) {
-      return NextResponse.json({ error: 'Subject not found.' }, { status: 404 });
+      const res_err_4267 = { error: 'Subject not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4267?.error || res_err_4267?.message || 'An error occurred',
+        error: res_err_4267?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_2780 = {
       message: 'Subject deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2780?.message || 'Successfully fecthed data',
+        paylod: res_data_2780
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting subject:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete subject. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5021 = { error: 'Failed to delete subject. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5021?.error || res_err_5021?.message || 'An error occurred',
+        error: res_err_5021?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

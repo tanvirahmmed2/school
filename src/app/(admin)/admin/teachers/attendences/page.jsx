@@ -12,7 +12,7 @@ const AdminAttendancesPage = () => {
   const fetchAttendances = async () => {
     try {
       const response = await axios.get('/api/attendances');
-      setAttendances(response.data.attendances || []);
+      setAttendances(response.data.paylod.attendances || []);
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     } finally {

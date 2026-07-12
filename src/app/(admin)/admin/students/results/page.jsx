@@ -17,7 +17,7 @@ const StudentResultsPage = () => {
     setLoadingExams(true);
     try {
       const response = await axios.get('/api/students/results');
-      setExams(response.data.exams || []);
+      setExams(response.data.paylod.exams || []);
     } catch (error) {
       toast.error('Failed to load exam publications.');
     } finally {

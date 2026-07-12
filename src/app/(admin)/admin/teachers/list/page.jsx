@@ -12,7 +12,7 @@ const AdminTeachersListPage = () => {
   const fetchTeachers = async () => {
     try {
       const response = await axios.get('/api/teachers');
-      setTeachers(response.data.teachers || []);
+      setTeachers(response.data.paylod.teachers || []);
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     } finally {

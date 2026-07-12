@@ -22,7 +22,7 @@ const AdminSyllabusPage = () => {
         const response = await fetch('/api/classes');
         const data = await response.json();
         if (!response.ok) throw new Error(data.error);
-        setClasses(data.classes || []);
+        setClasses(data.paylod.classes || []);
       } catch (err) {
         toast.error('Failed to retrieve academic classes.');
       }
@@ -41,7 +41,7 @@ const AdminSyllabusPage = () => {
       const response = await fetch(url);
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
-      setSyllabuses(data.syllabuses || []);
+      setSyllabuses(data.paylod.syllabuses || []);
     } catch (err) {
       toast.error('Failed to load syllabus records.');
     } finally {

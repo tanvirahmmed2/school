@@ -6,13 +6,21 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query('SELECT * FROM subjects ORDER BY name ASC');
-    return NextResponse.json({ subjects: result.rows });
+    const res_data_304 = { subjects: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_304?.message || 'Successfully fecthed data',
+        paylod: res_data_304
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching subjects:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve subjects. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_663 = { error: 'Failed to retrieve subjects. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_663?.error || res_err_663?.message || 'An error occurred',
+        error: res_err_663?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -21,16 +29,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1164 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1164?.error || res_err_1164?.message || 'An error occurred',
+        error: res_err_1164?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { name, code } = await request.json();
 
     if (!name || !code) {
-      return NextResponse.json(
-        { error: 'Subject Name and Subject Code are required.' },
-        { status: 400 }
-      );
+      const res_err_1569 = { error: 'Subject Name and Subject Code are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1569?.error || res_err_1569?.message || 'An error occurred',
+        error: res_err_1569?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check unique constraints
@@ -42,10 +59,22 @@ export async function POST(request) {
     if (duplicateCheck.rows.length > 0) {
       const match = duplicateCheck.rows[0];
       if (match.name === name.trim()) {
-        return NextResponse.json({ error: 'A subject with this name already exists.' }, { status: 400 });
+        const res_err_2240 = { error: 'A subject with this name already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2240?.error || res_err_2240?.message || 'An error occurred',
+        error: res_err_2240?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
       if (match.code === code.trim().toUpperCase()) {
-        return NextResponse.json({ error: 'A subject with this code already exists.' }, { status: 400 });
+        const res_err_2640 = { error: 'A subject with this code already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2640?.error || res_err_2640?.message || 'An error occurred',
+        error: res_err_2640?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
       }
     }
 
@@ -56,15 +85,20 @@ export async function POST(request) {
       [name.trim(), code.trim().toUpperCase()]
     );
 
-    return NextResponse.json(
-      { message: 'Subject created successfully.', subject: newSubject.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2053 = { message: 'Subject created successfully.', subject: newSubject.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2053?.message || 'Successfully fecthed data',
+        paylod: res_data_2053
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating subject:', error);
-    return NextResponse.json(
-      { error: 'Failed to create subject. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3621 = { error: 'Failed to create subject. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3621?.error || res_err_3621?.message || 'An error occurred',
+        error: res_err_3621?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

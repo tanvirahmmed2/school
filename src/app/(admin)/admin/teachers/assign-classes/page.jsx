@@ -36,9 +36,9 @@ const AdminAssignClassesPage = () => {
       if (!teachersRes.ok) throw new Error(teachersData.error || 'Failed to fetch teachers.');
 
       setAssignments(assignData.assignments || []);
-      setClasses(classesData.classes || []);
-      setSubjects(subjectsData.subjects || []);
-      setTeachers(teachersData.teachers || []);
+      setClasses(classesData.paylod.classes || []);
+      setSubjects(subjectsData.paylod.subjects || []);
+      setTeachers(teachersData.paylod.teachers || []);
     } catch (error) {
       toast.error(error.message);
     } finally {

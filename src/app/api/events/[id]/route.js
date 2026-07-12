@@ -7,17 +7,26 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_289 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_289?.error || res_err_289?.message || 'An error occurred',
+        error: res_err_289?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { title, description, event_date, location } = await request.json();
 
     if (!title || !description || !event_date || !location) {
-      return NextResponse.json(
-        { error: 'All fields (title, description, event_date, location) are required.' },
-        { status: 400 }
-      );
+      const res_err_789 = { error: 'All fields (title, description, event_date, location) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_789?.error || res_err_789?.message || 'An error occurred',
+        error: res_err_789?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -29,19 +38,33 @@ export async function PUT(request, { params }) {
     );
 
     if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'Event not found.' }, { status: 404 });
+      const res_err_1474 = { error: 'Event not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1474?.error || res_err_1474?.message || 'An error occurred',
+        error: res_err_1474?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_1145 = {
       message: 'Event updated successfully.',
       event: result.rows[0],
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1145?.message || 'Successfully fecthed data',
+        paylod: res_data_1145
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating event:', error);
-    return NextResponse.json(
-      { error: 'Failed to update event. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2252 = { error: 'Failed to update event. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2252?.error || res_err_2252?.message || 'An error occurred',
+        error: res_err_2252?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -50,7 +73,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2759 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2759?.error || res_err_2759?.message || 'An error occurred',
+        error: res_err_2759?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -58,18 +87,32 @@ export async function DELETE(request, { params }) {
     const result = await query('DELETE FROM events WHERE id = $1 RETURNING id', [id]);
 
     if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'Event not found.' }, { status: 404 });
+      const res_err_3246 = { error: 'Event not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3246?.error || res_err_3246?.message || 'An error occurred',
+        error: res_err_3246?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_2221 = {
       message: 'Event deleted successfully.',
       id: result.rows[0].id,
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2221?.message || 'Successfully fecthed data',
+        paylod: res_data_2221
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting event:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete event. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4024 = { error: 'Failed to delete event. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4024?.error || res_err_4024?.message || 'An error occurred',
+        error: res_err_4024?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

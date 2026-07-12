@@ -22,7 +22,7 @@ const RecognitionDetailPage = () => {
         }
         if (res.ok) {
           const data = await res.json();
-          setRecognition(data.recognition);
+          setRecognition(data.paylod.recognition);
         }
       } catch (err) {
         console.error('Error fetching recognition:', err);

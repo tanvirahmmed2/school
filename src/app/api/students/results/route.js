@@ -17,7 +17,13 @@ export async function GET() {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_722 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_722?.error || res_err_722?.message || 'An error occurred',
+        error: res_err_722?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const result = await query(`
@@ -28,13 +34,21 @@ export async function GET() {
       ORDER BY e.start_date DESC
     `);
 
-    return NextResponse.json({ exams: result.rows });
+    const res_data_1170 = { exams: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1170?.message || 'Successfully fecthed data',
+        paylod: res_data_1170
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching exam publications:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve exam publications. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1769 = { error: 'Failed to retrieve exam publications. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1769?.error || res_err_1769?.message || 'An error occurred',
+        error: res_err_1769?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -43,16 +57,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2297 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2297?.error || res_err_2297?.message || 'An error occurred',
+        error: res_err_2297?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { exam_id, is_published } = await request.json();
 
     if (!exam_id || is_published === undefined) {
-      return NextResponse.json(
-        { error: 'Parameters exam_id and is_published are required.' },
-        { status: 400 }
-      );
+      const res_err_2737 = { error: 'Parameters exam_id and is_published are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2737?.error || res_err_2737?.message || 'An error occurred',
+        error: res_err_2737?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     if (is_published) {
@@ -134,16 +157,24 @@ export async function POST(request) {
       [exam_id, is_published, publishedAt]
     );
 
-    return NextResponse.json({
+    const res_data_5000 = {
       message: is_published 
         ? 'Results compiled, graded, and published successfully.' 
         : 'Results unpublished successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_5000?.message || 'Successfully fecthed data',
+        paylod: res_data_5000
+      }, { status: 200 });
   } catch (error) {
     console.error('Error handling exam results compilation/publication:', error);
-    return NextResponse.json(
-      { error: 'Failed to process compilation or publication toggles. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_6441 = { error: 'Failed to process compilation or publication toggles. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6441?.error || res_err_6441?.message || 'An error occurred',
+        error: res_err_6441?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

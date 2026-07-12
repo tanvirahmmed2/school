@@ -20,7 +20,7 @@ const SchedulePage = () => {
         const res = await fetch('/api/teacher/schedule');
         if (res.ok) {
           const data = await res.json();
-          setRoutine(data.routine || []);
+          setRoutine(data.paylod.routine || []);
         }
       } catch (error) {
         console.error('Error fetching routine:', error);

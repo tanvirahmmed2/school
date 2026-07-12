@@ -13,7 +13,7 @@ const ProfilePage = () => {
         const res = await fetch('/api/student/me');
         if (res.ok) {
           const data = await res.json();
-          setProfile(data.student);
+          setProfile(data.paylod.student);
         }
       } catch (error) {
         console.error('Error fetching profile:', error);

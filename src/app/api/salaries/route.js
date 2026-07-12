@@ -6,7 +6,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_244 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_244?.error || res_err_244?.message || 'An error occurred',
+        error: res_err_244?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -26,9 +32,20 @@ export async function GET(request) {
     sql += ` ORDER BY s.id DESC`;
 
     const result = await query(sql);
-    return NextResponse.json({ salaries: result.rows });
+    const res_data_784 = { salaries: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_784?.message || 'Successfully fecthed data',
+        paylod: res_data_784
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching salaries:', error);
-    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
+    const res_err_1371 = { error: 'Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1371?.error || res_err_1371?.message || 'An error occurred',
+        error: res_err_1371?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

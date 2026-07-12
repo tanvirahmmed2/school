@@ -18,7 +18,7 @@ const ClubsPage = () => {
         const res = await fetch('/api/student/clubs');
         if (res.ok) {
           const data = await res.json();
-          setClubs(data.clubs || []);
+          setClubs(data.paylod.clubs || []);
           setJoinedClubIds(data.joinedClubIds || []);
         }
       } catch (error) {

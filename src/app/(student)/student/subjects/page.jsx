@@ -13,7 +13,7 @@ const SubjectsPage = () => {
         const res = await fetch('/api/student/subjects');
         if (res.ok) {
           const data = await res.json();
-          setSubjects(data.subjects || []);
+          setSubjects(data.paylod.subjects || []);
         }
       } catch (error) {
         console.error('Error fetching subjects:', error);

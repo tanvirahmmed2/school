@@ -7,13 +7,21 @@ import { uploadImage } from '@/lib/cloudinary';
 export async function GET() {
   try {
     const result = await query('SELECT * FROM authorities ORDER BY id ASC');
-    return NextResponse.json({ authorities: result.rows });
+    const res_data_356 = { authorities: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_356?.message || 'Successfully fecthed data',
+        paylod: res_data_356
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching authorities:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve authorities. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_721 = { error: 'Failed to retrieve authorities. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_721?.error || res_err_721?.message || 'An error occurred',
+        error: res_err_721?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -22,16 +30,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1234 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1234?.error || res_err_1234?.message || 'An error occurred',
+        error: res_err_1234?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { name, bio, designation, email, contact, image } = await request.json();
 
     if (!name || !designation) {
-      return NextResponse.json(
-        { error: 'Name and designation are required.' },
-        { status: 400 }
-      );
+      const res_err_1681 = { error: 'Name and designation are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1681?.error || res_err_1681?.message || 'An error occurred',
+        error: res_err_1681?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     let imageUrl = null;
@@ -45,7 +62,13 @@ export async function POST(request) {
         imageId = uploadResult.publicId;
       } catch (uploadErr) {
         console.error('Cloudinary upload failure:', uploadErr);
-        return NextResponse.json({ error: 'Failed to upload profile photo.' }, { status: 500 });
+        const res_err_2438 = { error: 'Failed to upload profile photo.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2438?.error || res_err_2438?.message || 'An error occurred',
+        error: res_err_2438?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
       }
     } else if (image) {
       // If it's already an external URL
@@ -67,18 +90,29 @@ export async function POST(request) {
       ]
     );
 
-    return NextResponse.json(
-      { message: 'Authority member created successfully.', authority: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2390 = { message: 'Authority member created successfully.', authority: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2390?.message || 'Successfully fecthed data',
+        paylod: res_data_2390
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating authority member:', error);
     if (error.code === '23505') {
-      return NextResponse.json({ error: 'Email address already registered.' }, { status: 400 });
+      const res_err_3778 = { error: 'Email address already registered.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3778?.error || res_err_3778?.message || 'An error occurred',
+        error: res_err_3778?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: 'Failed to create authority member. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4111 = { error: 'Failed to create authority member. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4111?.error || res_err_4111?.message || 'An error occurred',
+        error: res_err_4111?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

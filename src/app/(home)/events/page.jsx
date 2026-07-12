@@ -13,7 +13,7 @@ const EventsPage = () => {
         const res = await fetch('/api/events');
         if (res.ok) {
           const data = await res.json();
-          setEvents(data.events || []);
+          setEvents(data.paylod.events || []);
         }
       } catch (err) {
         console.error('Failed to fetch events:', err);

@@ -20,7 +20,7 @@ const RoutinePage = () => {
         const res = await fetch('/api/student/routine');
         if (res.ok) {
           const data = await res.json();
-          setRoutine(data.routine || []);
+          setRoutine(data.paylod.routine || []);
         }
       } catch (error) {
         console.error('Error fetching routine:', error);

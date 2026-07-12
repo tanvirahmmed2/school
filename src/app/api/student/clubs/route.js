@@ -9,12 +9,24 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-student')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_367 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_367?.error || res_err_367?.message || 'An error occurred',
+        error: res_err_367?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_756 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_756?.error || res_err_756?.message || 'An error occurred',
+        error: res_err_756?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const studentId = decoded.id;
@@ -26,13 +38,24 @@ export async function GET() {
     const joinedClubsRes = await query('SELECT club_id FROM club_members WHERE student_id = $1', [studentId]);
     const joinedClubIds = joinedClubsRes.rows.map(row => String(row.club_id));
 
-    return NextResponse.json({
+    const res_data_1016 = {
       clubs: allClubsRes.rows,
       joinedClubIds
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1016?.message || 'Successfully fecthed data',
+        paylod: res_data_1016
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student clubs:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_1875 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1875?.error || res_err_1875?.message || 'An error occurred',
+        error: res_err_1875?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -42,19 +65,37 @@ export async function POST(request) {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-student')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_2390 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2390?.error || res_err_2390?.message || 'An error occurred',
+        error: res_err_2390?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_2783 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2783?.error || res_err_2783?.message || 'An error occurred',
+        error: res_err_2783?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const studentId = decoded.id;
     const { club_id, action } = await request.json();
 
     if (!club_id || !action || !['join', 'leave'].includes(action)) {
-      return NextResponse.json({ error: 'club_id and action (join/leave) are required.' }, { status: 400 });
+      const res_err_3258 = { error: 'club_id and action (join/leave) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3258?.error || res_err_3258?.message || 'An error occurred',
+        error: res_err_3258?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     if (action === 'join') {
@@ -62,16 +103,32 @@ export async function POST(request) {
         'INSERT INTO club_members (club_id, student_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
         [club_id, studentId]
       );
-      return NextResponse.json({ message: 'Successfully joined the club.' });
+      const res_data_2447 = { message: 'Successfully joined the club.' };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2447?.message || 'Successfully fecthed data',
+        paylod: res_data_2447
+      }, { status: 200 });
     } else {
       await query(
         'DELETE FROM club_members WHERE club_id = $1 AND student_id = $2',
         [club_id, studentId]
       );
-      return NextResponse.json({ message: 'Successfully left the club.' });
+      const res_data_2946 = { message: 'Successfully left the club.' };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2946?.message || 'Successfully fecthed data',
+        paylod: res_data_2946
+      }, { status: 200 });
     }
   } catch (error) {
     console.error('Error modifying club membership:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_4726 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4726?.error || res_err_4726?.message || 'An error occurred',
+        error: res_err_4726?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

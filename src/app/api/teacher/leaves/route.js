@@ -9,12 +9,24 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-teacher')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_387 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_387?.error || res_err_387?.message || 'An error occurred',
+        error: res_err_387?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_776 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_776?.error || res_err_776?.message || 'An error occurred',
+        error: res_err_776?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const teacherId = decoded.id;
@@ -26,10 +38,21 @@ export async function GET() {
       ORDER BY created_at DESC
     `, [teacherId]);
 
-    return NextResponse.json({ applications: result.rows });
+    const res_data_923 = { applications: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_923?.message || 'Successfully fecthed data',
+        paylod: res_data_923
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching teacher leave applications:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_1760 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1760?.error || res_err_1760?.message || 'An error occurred',
+        error: res_err_1760?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -39,19 +62,37 @@ export async function POST(request) {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-teacher')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_2285 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2285?.error || res_err_2285?.message || 'An error occurred',
+        error: res_err_2285?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_2678 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2678?.error || res_err_2678?.message || 'An error occurred',
+        error: res_err_2678?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const teacherId = decoded.id;
     const { type, start_date, end_date, reason } = await request.json();
 
     if (!type || !start_date || !end_date || !reason) {
-      return NextResponse.json({ error: 'All fields (type, start_date, end_date, reason) are required.' }, { status: 400 });
+      const res_err_3158 = { error: 'All fields (type, start_date, end_date, reason) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3158?.error || res_err_3158?.message || 'An error occurred',
+        error: res_err_3158?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(`
@@ -60,12 +101,23 @@ export async function POST(request) {
       RETURNING id, type, start_date, end_date, reason, status, created_at
     `, [teacherId, type.trim(), start_date, end_date, reason.trim()]);
 
-    return NextResponse.json({
+    const res_data_2478 = {
       message: 'Leave application submitted successfully.',
       application: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2478?.message || 'Successfully fecthed data',
+        paylod: res_data_2478
+      }, { status: 200 });
   } catch (error) {
     console.error('Error submitting teacher leave application:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_4322 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4322?.error || res_err_4322?.message || 'An error occurred',
+        error: res_err_4322?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -36,8 +36,8 @@ const MarksEntryPage = () => {
           const subjectsData = await subjectsRes.json();
 
           setExams(examsData.exams || []);
-          setClasses(classesData.classes || []);
-          setSubjects(subjectsData.subjects || []);
+          setClasses(classesData.paylod.classes || []);
+          setSubjects(subjectsData.paylod.subjects || []);
         }
       } catch (err) {
         console.error('Failed to load form dropdowns:', err);
@@ -63,7 +63,7 @@ const MarksEntryPage = () => {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         if (res.ok) {
           const data = await res.json();
-          setSections(data.sections || []);
+          setSections(data.paylod.sections || []);
         }
       } catch (err) {
         console.error('Failed to load sections:', err);
@@ -85,7 +85,7 @@ const MarksEntryPage = () => {
       const res = await fetch(`/api/students/marks?exam_id=${examId}&class_id=${classId}&section_id=${targetSec}&subject_id=${subjectId}`);
       if (res.ok) {
         const data = await res.json();
-        setStudents(data.students || []);
+        setStudents(data.paylod.students || []);
         toast.success('Student list loaded.');
       } else {
         toast.error('Failed to load student list.');

@@ -19,13 +19,21 @@ export async function GET(request) {
     sql += ' ORDER BY start_date DESC';
 
     const result = await query(sql, params);
-    return NextResponse.json({ exams: result.rows });
+    const res_data_602 = { exams: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_602?.message || 'Successfully fecthed data',
+        paylod: res_data_602
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching exams:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve exams. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_955 = { error: 'Failed to retrieve exams. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_955?.error || res_err_955?.message || 'An error occurred',
+        error: res_err_955?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -34,16 +42,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1488 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1488?.error || res_err_1488?.message || 'An error occurred',
+        error: res_err_1488?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { name, term, start_date, end_date, status, schedules } = await request.json();
 
     if (!name || !start_date || !end_date || !status) {
-      return NextResponse.json(
-        { error: 'Name, start date, end date, and status are required fields.' },
-        { status: 400 }
-      );
+      const res_err_1964 = { error: 'Name, start date, end date, and status are required fields.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1964?.error || res_err_1964?.message || 'An error occurred',
+        error: res_err_1964?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Insert exam
@@ -70,18 +87,29 @@ export async function POST(request) {
       }
     }
 
-    return NextResponse.json(
-      { message: 'Exam routine created successfully.', exam },
-      { status: 201 }
-    );
+    const res_data_2643 = { message: 'Exam routine created successfully.', exam };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2643?.message || 'Successfully fecthed data',
+        paylod: res_data_2643
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating exam:', error);
     if (error.code === '23505') {
-      return NextResponse.json({ error: 'An exam with this name already exists.' }, { status: 400 });
+      const res_err_3762 = { error: 'An exam with this name already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3762?.error || res_err_3762?.message || 'An error occurred',
+        error: res_err_3762?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: 'Failed to create exam routine. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4100 = { error: 'Failed to create exam routine. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4100?.error || res_err_4100?.message || 'An error occurred',
+        error: res_err_4100?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

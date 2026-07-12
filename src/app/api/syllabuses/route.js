@@ -40,13 +40,21 @@ export async function GET(request) {
     sql += ' ORDER BY c.numeric_name ASC, sub.name ASC, sy.title ASC';
 
     const result = await query(sql, params);
-    return NextResponse.json({ syllabuses: result.rows });
+    const res_data_1173 = { syllabuses: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1173?.message || 'Successfully fecthed data',
+        paylod: res_data_1173
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching syllabuses:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve syllabuses. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1542 = { error: 'Failed to retrieve syllabuses. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1542?.error || res_err_1542?.message || 'An error occurred',
+        error: res_err_1542?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -55,28 +63,49 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2052 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2052?.error || res_err_2052?.message || 'An error occurred',
+        error: res_err_2052?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { name, title, link, class_id, subject_id } = await request.json();
 
     if (!name || !title || !link || !class_id || !subject_id) {
-      return NextResponse.json(
-        { error: 'All fields (Name, Title, Document Link, Class, Subject) are required.' },
-        { status: 400 }
-      );
+      const res_err_2524 = { error: 'All fields (Name, Title, Document Link, Class, Subject) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2524?.error || res_err_2524?.message || 'An error occurred',
+        error: res_err_2524?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Verify class exists
     const classCheck = await query('SELECT id FROM classes WHERE id = $1', [class_id]);
     if (classCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Target class not found.' }, { status: 404 });
+      const res_err_3051 = { error: 'Target class not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3051?.error || res_err_3051?.message || 'An error occurred',
+        error: res_err_3051?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     // Verify subject exists
     const subjectCheck = await query('SELECT id FROM subjects WHERE id = $1', [subject_id]);
     if (subjectCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Target subject not found.' }, { status: 404 });
+      const res_err_3541 = { error: 'Target subject not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3541?.error || res_err_3541?.message || 'An error occurred',
+        error: res_err_3541?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const newSyllabus = await query(
@@ -86,15 +115,20 @@ export async function POST(request) {
       [name.trim(), title.trim(), link.trim(), class_id, subject_id]
     );
 
-    return NextResponse.json(
-      { message: 'Syllabus created successfully.', syllabus: newSyllabus.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2993 = { message: 'Syllabus created successfully.', syllabus: newSyllabus.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2993?.message || 'Successfully fecthed data',
+        paylod: res_data_2993
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating syllabus:', error);
-    return NextResponse.json(
-      { error: 'Failed to create syllabus. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4569 = { error: 'Failed to create syllabus. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4569?.error || res_err_4569?.message || 'An error occurred',
+        error: res_err_4569?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

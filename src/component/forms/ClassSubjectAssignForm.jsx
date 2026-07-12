@@ -22,7 +22,7 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
           return res.json();
         })
         .then((data) => {
-          setFilteredSections(data.sections || []);
+          setFilteredSections(data.paylod.sections || []);
         })
         .catch(() => {
           setFilteredSections([]);

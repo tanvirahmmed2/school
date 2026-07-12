@@ -11,10 +11,13 @@ export async function GET(request) {
     const date = searchParams.get('date');
 
     if (!classId || !sectionId || !date) {
-      return NextResponse.json(
-        { error: 'Class ID, Section ID, and Date (YYYY-MM-DD) are required.' },
-        { status: 400 }
-      );
+      const res_err_478 = { error: 'Class ID, Section ID, and Date (YYYY-MM-DD) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_478?.error || res_err_478?.message || 'An error occurred',
+        error: res_err_478?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const sql = `
@@ -35,13 +38,21 @@ export async function GET(request) {
     `;
 
     const result = await query(sql, [classId, sectionId, date]);
-    return NextResponse.json({ attendanceSheet: result.rows });
+    const res_data_1197 = { attendanceSheet: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1197?.message || 'Successfully fecthed data',
+        paylod: res_data_1197
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student attendance sheet:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve attendance logs. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1813 = { error: 'Failed to retrieve attendance logs. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1813?.error || res_err_1813?.message || 'An error occurred',
+        error: res_err_1813?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -50,16 +61,25 @@ export async function POST(request) {
   try {
     const authenticated = (await isAdmin()) || (await isTeacher());
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins/Teachers only.' }, { status: 403 });
+      const res_err_2372 = { error: 'Unauthorized. Admins/Teachers only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2372?.error || res_err_2372?.message || 'An error occurred',
+        error: res_err_2372?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { class_id, section_id, date, records } = await request.json();
 
     if (!class_id || !section_id || !date || !records || !Array.isArray(records)) {
-      return NextResponse.json(
-        { error: 'Class, Section, Date, and records array are required.' },
-        { status: 400 }
-      );
+      const res_err_2869 = { error: 'Class, Section, Date, and records array are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2869?.error || res_err_2869?.message || 'An error occurred',
+        error: res_err_2869?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Process each student record inside database transactions or sequential loops
@@ -79,14 +99,22 @@ export async function POST(request) {
       );
     }
 
-    return NextResponse.json({
+    const res_data_2937 = {
       message: 'Student attendance logs saved successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2937?.message || 'Successfully fecthed data',
+        paylod: res_data_2937
+      }, { status: 200 });
   } catch (error) {
     console.error('Error saving student attendance logs:', error);
-    return NextResponse.json(
-      { error: 'Failed to save attendance logs. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4282 = { error: 'Failed to save attendance logs. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4282?.error || res_err_4282?.message || 'An error occurred',
+        error: res_err_4282?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

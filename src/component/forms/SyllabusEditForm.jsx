@@ -28,8 +28,8 @@ const SyllabusEditForm = ({ syllabus, onSuccess, onCancel }) => {
         const classesData = await classesRes.json();
         const subjectsData = await subjectsRes.json();
 
-        setClasses(classesData.classes || []);
-        setSubjects(subjectsData.subjects || []);
+        setClasses(classesData.paylod.classes || []);
+        setSubjects(subjectsData.paylod.subjects || []);
       } catch (err) {
         toast.error('Failed to load classes or subjects.');
       } finally {

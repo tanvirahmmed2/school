@@ -18,7 +18,7 @@ const Navbar = () => {
         const response = await fetch('/api/student/me');
         if (response.ok) {
           const data = await response.json();
-          setStudent(data.student);
+          setStudent(data.paylod.student);
         }
       } catch (error) {
         console.error('Failed to fetch student profile:', error);

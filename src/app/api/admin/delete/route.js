@@ -46,10 +46,13 @@ export async function DELETE(request) {
 
     // If still unauthorized, return 401
     if (!loggedInAdminId) {
-      return NextResponse.json(
-        { error: 'Unauthorized. Please login or provide valid email and password.' },
-        { status: 401 }
-      );
+      const res_err_1390 = { error: 'Unauthorized. Please login or provide valid email and password.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1390?.error || res_err_1390?.message || 'An error occurred',
+        error: res_err_1390?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     // CASE 1: Delete another admin by ID
@@ -58,23 +61,34 @@ export async function DELETE(request) {
       const deleteResult = await query('DELETE FROM admins WHERE id = $1 RETURNING id', [targetId]);
       
       if (deleteResult.rowCount === 0) {
-        return NextResponse.json(
-          { error: 'Admin account to delete not found.' },
-          { status: 404 }
-        );
+        const res_err_2053 = { error: 'Admin account to delete not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2053?.error || res_err_2053?.message || 'An error occurred',
+        error: res_err_2053?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
       }
 
-      return NextResponse.json({
+      const res_data_1970 = {
         message: 'Admin account deleted successfully.'
-      });
+      };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1970?.message || 'Successfully fecthed data',
+        paylod: res_data_1970
+      }, { status: 200 });
     }
 
     // CASE 2: Self-deletion warning/prevent (if targetId matches loggedInAdminId)
     if (targetId && Number(targetId) === Number(loggedInAdminId)) {
-      return NextResponse.json(
-        { error: 'Self-deletion is not permitted from the Access Panel to avoid admin lockout.' },
-        { status: 400 }
-      );
+      const res_err_2924 = { error: 'Self-deletion is not permitted from the Access Panel to avoid admin lockout.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2924?.error || res_err_2924?.message || 'An error occurred',
+        error: res_err_2924?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Execute self-delete (for generic call to delete own account)
@@ -89,14 +103,22 @@ export async function DELETE(request) {
       sameSite: 'strict',
     });
 
-    return NextResponse.json({
+    const res_data_2999 = {
       message: 'Admin account deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2999?.message || 'Successfully fecthed data',
+        paylod: res_data_2999
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting admin account:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete admin account. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4100 = { error: 'Failed to delete admin account. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4100?.error || res_err_4100?.message || 'An error occurred',
+        error: res_err_4100?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -45,13 +45,21 @@ export async function GET(request) {
     sql += ' ORDER BY c.numeric_name ASC, sec.name ASC, s.registration_number ASC';
 
     const result = await query(sql, params);
-    return NextResponse.json({ students: result.rows });
+    const res_data_1368 = { students: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1368?.message || 'Successfully fecthed data',
+        paylod: res_data_1368
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching students:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve students. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1733 = { error: 'Failed to retrieve students. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1733?.error || res_err_1733?.message || 'An error occurred',
+        error: res_err_1733?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -60,39 +68,63 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2251 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2251?.error || res_err_2251?.message || 'An error occurred',
+        error: res_err_2251?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { registration_number, class_id, section_id } = await request.json();
 
     if (!registration_number || !class_id) {
-      return NextResponse.json(
-        { error: 'Registration number and Target class are required to pre-create account.' },
-        { status: 400 }
-      );
+      const res_err_2706 = { error: 'Registration number and Target class are required to pre-create account.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2706?.error || res_err_2706?.message || 'An error occurred',
+        error: res_err_2706?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Verify class exists
     const classCheck = await query('SELECT id FROM classes WHERE id = $1', [class_id]);
     if (classCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Target academic class not found.' }, { status: 404 });
+      const res_err_3236 = { error: 'Target academic class not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3236?.error || res_err_3236?.message || 'An error occurred',
+        error: res_err_3236?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     // Verify section exists if provided
     if (section_id) {
       const secCheck = await query('SELECT id FROM sections WHERE id = $1 AND class_id = $2', [section_id, class_id]);
       if (secCheck.rows.length === 0) {
-        return NextResponse.json({ error: 'Target section not found under this class.' }, { status: 404 });
+        const res_err_3795 = { error: 'Target section not found under this class.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3795?.error || res_err_3795?.message || 'An error occurred',
+        error: res_err_3795?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
       }
     }
 
     // Check duplicate registration number
     const dupCheck = await query('SELECT id FROM students WHERE LOWER(registration_number) = LOWER($1)', [registration_number.trim()]);
     if (dupCheck.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'A student account with this registration number already exists.' },
-        { status: 400 }
-      );
+      const res_err_4363 = { error: 'A student account with this registration number already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4363?.error || res_err_4363?.message || 'An error occurred',
+        error: res_err_4363?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -106,15 +138,20 @@ export async function POST(request) {
       ]
     );
 
-    return NextResponse.json(
-      { message: 'Student account pre-created successfully.', student: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_3702 = { message: 'Student account pre-created successfully.', student: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3702?.message || 'Successfully fecthed data',
+        paylod: res_data_3702
+      }, { status: 201 });
   } catch (error) {
     console.error('Error pre-creating student account:', error);
-    return NextResponse.json(
-      { error: 'Failed to pre-create student account. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5526 = { error: 'Failed to pre-create student account. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5526?.error || res_err_5526?.message || 'An error occurred',
+        error: res_err_5526?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

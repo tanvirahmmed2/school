@@ -6,7 +6,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_244 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_244?.error || res_err_244?.message || 'An error occurred',
+        error: res_err_244?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const result = await query(
@@ -16,9 +22,20 @@ export async function GET(request) {
        ORDER BY ta.date DESC, t.name ASC`
     );
 
-    return NextResponse.json({ attendances: result.rows });
+    const res_data_589 = { attendances: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_589?.message || 'Successfully fecthed data',
+        paylod: res_data_589
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching attendances:', error);
-    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
+    const res_err_1182 = { error: 'Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1182?.error || res_err_1182?.message || 'An error occurred',
+        error: res_err_1182?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

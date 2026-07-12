@@ -7,17 +7,26 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_305 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_305?.error || res_err_305?.message || 'An error occurred',
+        error: res_err_305?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { class_id, section_id, subject_id, teacher_id } = await request.json();
 
     if (!class_id || !subject_id) {
-      return NextResponse.json(
-        { error: 'Class ID and Subject ID are required.' },
-        { status: 400 }
-      );
+      const res_err_783 = { error: 'Class ID and Subject ID are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_783?.error || res_err_783?.message || 'An error occurred',
+        error: res_err_783?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const sectId = section_id ? parseInt(section_id, 10) : null;
@@ -38,10 +47,13 @@ export async function PUT(request, { params }) {
     }
 
     if (checkDup.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'This subject is already mapped to the selected class/section in another assignment.' },
-        { status: 400 }
-      );
+      const res_err_1798 = { error: 'This subject is already mapped to the selected class/section in another assignment.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1798?.error || res_err_1798?.message || 'An error occurred',
+        error: res_err_1798?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const updatedMapping = await query(
@@ -53,19 +65,33 @@ export async function PUT(request, { params }) {
     );
 
     if (updatedMapping.rowCount === 0) {
-      return NextResponse.json({ error: 'Assignment not found.' }, { status: 404 });
+      const res_err_2505 = { error: 'Assignment not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2505?.error || res_err_2505?.message || 'An error occurred',
+        error: res_err_2505?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_1949 = {
       message: 'Class subject assignment updated successfully.',
       assignment: updatedMapping.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1949?.message || 'Successfully fecthed data',
+        paylod: res_data_1949
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating class subject mapping:', error);
-    return NextResponse.json(
-      { error: 'Failed to update mapping. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3335 = { error: 'Failed to update mapping. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3335?.error || res_err_3335?.message || 'An error occurred',
+        error: res_err_3335?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -74,7 +100,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_3862 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3862?.error || res_err_3862?.message || 'An error occurred',
+        error: res_err_3862?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -82,17 +114,31 @@ export async function DELETE(request, { params }) {
     const deleteResult = await query('DELETE FROM class_subjects WHERE id = $1 RETURNING id', [id]);
 
     if (deleteResult.rowCount === 0) {
-      return NextResponse.json({ error: 'Assignment not found.' }, { status: 404 });
+      const res_err_4366 = { error: 'Assignment not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4366?.error || res_err_4366?.message || 'An error occurred',
+        error: res_err_4366?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_3114 = {
       message: 'Class subject assignment deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3114?.message || 'Successfully fecthed data',
+        paylod: res_data_3114
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting assignment:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete assignment. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5143 = { error: 'Failed to delete assignment. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5143?.error || res_err_5143?.message || 'An error occurred',
+        error: res_err_5143?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

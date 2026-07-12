@@ -8,10 +8,13 @@ export async function POST(request) {
     const { registration_number } = await request.json();
 
     if (!registration_number) {
-      return NextResponse.json(
-        { error: 'Registration number is required.' },
-        { status: 400 }
-      );
+      const res_err_344 = { error: 'Registration number is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_344?.error || res_err_344?.message || 'An error occurred',
+        error: res_err_344?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -23,35 +26,49 @@ export async function POST(request) {
     );
 
     if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Registration number not found in our registry. Please contact admin.' },
-        { status: 404 }
-      );
+      const res_err_990 = { error: 'Registration number not found in our registry. Please contact admin.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_990?.error || res_err_990?.message || 'An error occurred',
+        error: res_err_990?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const student = result.rows[0];
 
     if (student.is_registered) {
-      return NextResponse.json(
-        { error: 'This registration number is already registered. Please go to Login.' },
-        { status: 400 }
-      );
+      const res_err_1427 = { error: 'This registration number is already registered. Please go to Login.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1427?.error || res_err_1427?.message || 'An error occurred',
+        error: res_err_1427?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
-    return NextResponse.json({
+    const res_data_1149 = {
       message: 'Registration number verified successfully.',
       student: {
         id: student.id,
         registration_number: student.registration_number,
         class_name: student.class_name,
       }
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1149?.message || 'Successfully fecthed data',
+        paylod: res_data_1149
+      }, { status: 200 });
   } catch (error) {
     console.error('Error verifying student registration:', error);
-    return NextResponse.json(
-      { error: 'Failed to verify registration number. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2405 = { error: 'Failed to verify registration number. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2405?.error || res_err_2405?.message || 'An error occurred',
+        error: res_err_2405?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -71,10 +88,13 @@ export async function PUT(request) {
     } = await request.json();
 
     if (!registration_number || !name || !email || !phone || !date_of_birth || !address || !parents_info || !birth_certificate_number || !password) {
-      return NextResponse.json(
-        { error: 'All fields are required to complete registration setup.' },
-        { status: 400 }
-      );
+      const res_err_3205 = { error: 'All fields are required to complete registration setup.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3205?.error || res_err_3205?.message || 'An error occurred',
+        error: res_err_3205?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Verify student exists and is unregistered
@@ -84,35 +104,47 @@ export async function PUT(request) {
     );
 
     if (studentCheck.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Student registration record not found.' },
-        { status: 404 }
-      );
+      const res_err_3828 = { error: 'Student registration record not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3828?.error || res_err_3828?.message || 'An error occurred',
+        error: res_err_3828?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     if (studentCheck.rows[0].is_registered) {
-      return NextResponse.json(
-        { error: 'This student account has already completed setup.' },
-        { status: 400 }
-      );
+      const res_err_4215 = { error: 'This student account has already completed setup.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4215?.error || res_err_4215?.message || 'An error occurred',
+        error: res_err_4215?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check duplicate email
     const emailCheck = await query('SELECT id FROM students WHERE LOWER(email) = LOWER($1)', [email.trim()]);
     if (emailCheck.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'A student account with this email address already exists.' },
-        { status: 400 }
-      );
+      const res_err_4744 = { error: 'A student account with this email address already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4744?.error || res_err_4744?.message || 'An error occurred',
+        error: res_err_4744?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check duplicate birth certificate number
     const certCheck = await query('SELECT id FROM students WHERE LOWER(birth_certificate_number) = LOWER($1)', [birth_certificate_number.trim()]);
     if (certCheck.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'A student account with this birth certificate number already exists.' },
-        { status: 400 }
-      );
+      const res_err_5336 = { error: 'A student account with this birth certificate number already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5336?.error || res_err_5336?.message || 'An error occurred',
+        error: res_err_5336?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Hash password
@@ -147,15 +179,23 @@ export async function PUT(request) {
       ]
     );
 
-    return NextResponse.json({
+    const res_data_4585 = {
       message: 'Student account setup completed successfully. You can now login.',
       student: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4585?.message || 'Successfully fecthed data',
+        paylod: res_data_4585
+      }, { status: 200 });
   } catch (error) {
     console.error('Error completing student registration:', error);
-    return NextResponse.json(
-      { error: 'Failed to complete registration setup. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_7139 = { error: 'Failed to complete registration setup. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7139?.error || res_err_7139?.message || 'An error occurred',
+        error: res_err_7139?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

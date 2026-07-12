@@ -8,10 +8,13 @@ export async function POST(request) {
     const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email address is required.' },
-        { status: 400 }
-      );
+      const res_err_310 = { error: 'Email address is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_310?.error || res_err_310?.message || 'An error occurred',
+        error: res_err_310?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -22,22 +25,28 @@ export async function POST(request) {
     );
 
     if (result.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Teacher email not found in our registry. Please contact admin.' },
-        { status: 404 }
-      );
+      const res_err_861 = { error: 'Teacher email not found in our registry. Please contact admin.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_861?.error || res_err_861?.message || 'An error occurred',
+        error: res_err_861?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const teacher = result.rows[0];
 
     if (teacher.is_registered) {
-      return NextResponse.json(
-        { error: 'This teacher account is already registered. Please go to Login.' },
-        { status: 400 }
-      );
+      const res_err_1292 = { error: 'This teacher account is already registered. Please go to Login.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1292?.error || res_err_1292?.message || 'An error occurred',
+        error: res_err_1292?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
-    return NextResponse.json({
+    const res_data_1010 = {
       message: 'Teacher registry record verified successfully.',
       teacher: {
         id: teacher.id,
@@ -46,13 +55,21 @@ export async function POST(request) {
         number: teacher.number,
         designation: teacher.designation
       }
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1010?.message || 'Successfully fecthed data',
+        paylod: res_data_1010
+      }, { status: 200 });
   } catch (error) {
     console.error('Error verifying teacher email:', error);
-    return NextResponse.json(
-      { error: 'Failed to verify teacher account. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2296 = { error: 'Failed to verify teacher account. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2296?.error || res_err_2296?.message || 'An error occurred',
+        error: res_err_2296?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -62,10 +79,13 @@ export async function PUT(request) {
     const { email, address, password } = await request.json();
 
     if (!email || !address || !password) {
-      return NextResponse.json(
-        { error: 'All fields (email, address, password) are required to complete account setup.' },
-        { status: 400 }
-      );
+      const res_err_2846 = { error: 'All fields (email, address, password) are required to complete account setup.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2846?.error || res_err_2846?.message || 'An error occurred',
+        error: res_err_2846?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Verify teacher exists and is unregistered
@@ -75,17 +95,23 @@ export async function PUT(request) {
     );
 
     if (teacherCheck.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'Teacher record not found.' },
-        { status: 404 }
-      );
+      const res_err_3463 = { error: 'Teacher record not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3463?.error || res_err_3463?.message || 'An error occurred',
+        error: res_err_3463?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     if (teacherCheck.rows[0].is_registered) {
-      return NextResponse.json(
-        { error: 'This teacher account has already completed setup.' },
-        { status: 400 }
-      );
+      const res_err_3837 = { error: 'This teacher account has already completed setup.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3837?.error || res_err_3837?.message || 'An error occurred',
+        error: res_err_3837?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Hash password
@@ -104,15 +130,23 @@ export async function PUT(request) {
       [address.trim(), hashedPass, email.trim()]
     );
 
-    return NextResponse.json({
+    const res_data_3114 = {
       message: 'Teacher account setup completed successfully. You can now login.',
       teacher: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3114?.message || 'Successfully fecthed data',
+        paylod: res_data_3114
+      }, { status: 200 });
   } catch (error) {
     console.error('Error completing teacher registration:', error);
-    return NextResponse.json(
-      { error: 'Failed to complete registration setup. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5204 = { error: 'Failed to complete registration setup. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5204?.error || res_err_5204?.message || 'An error occurred',
+        error: res_err_5204?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

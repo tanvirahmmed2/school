@@ -6,7 +6,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_244 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_244?.error || res_err_244?.message || 'An error occurred',
+        error: res_err_244?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -26,9 +32,20 @@ export async function GET(request) {
     sql += ` ORDER BY la.id DESC`;
 
     const result = await query(sql);
-    return NextResponse.json({ applications: result.rows });
+    const res_data_799 = { applications: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_799?.message || 'Successfully fecthed data',
+        paylod: res_data_799
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching leave applications:', error);
-    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
+    const res_err_1400 = { error: 'Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1400?.error || res_err_1400?.message || 'An error occurred',
+        error: res_err_1400?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

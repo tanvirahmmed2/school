@@ -19,7 +19,7 @@ const ClassDetailsPage = () => {
         const res = await fetch('/api/classes');
         if (res.ok) {
           const data = await res.json();
-          const list = data.classes || [];
+          const list = data.paylod.classes || [];
           setClasses(list);
           
           // Find matching class by code or id

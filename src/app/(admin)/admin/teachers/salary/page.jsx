@@ -12,7 +12,7 @@ const AdminSalaryPage = () => {
   const fetchSalaries = async () => {
     try {
       const response = await axios.get('/api/salaries?type=teacher');
-      setSalaries(response.data.salaries || []);
+      setSalaries(response.data.paylod.salaries || []);
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     } finally {

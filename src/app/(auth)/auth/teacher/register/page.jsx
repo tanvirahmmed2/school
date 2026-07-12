@@ -43,9 +43,9 @@ const TeacherRegistration = () => {
       }
 
       toast.success(data.message || 'Email verified. Complete your profile details below.');
-      setName(data.teacher.name);
-      setPhone(data.teacher.number);
-      setDesignation(data.teacher.designation);
+      setName(data.paylod.teacher.name);
+      setPhone(data.paylod.teacher.number);
+      setDesignation(data.paylod.teacher.designation);
       setStep(2);
     } catch (err) {
       toast.error(err.message);

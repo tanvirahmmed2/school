@@ -19,7 +19,7 @@ const ClubDetailsPage = () => {
         const res = await fetch('/api/clubs');
         if (res.ok) {
           const data = await res.json();
-          const list = data.clubs || [];
+          const list = data.paylod.clubs || [];
           setClubs(list);
 
           // Find matching club by slug or id

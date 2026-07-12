@@ -41,7 +41,7 @@ export default function AuthoritiesListPage() {
     setLoading(true);
     try {
       const res = await axios.get('/api/authorities');
-      setMembers(res.data.authorities || []);
+      setMembers(res.data.paylod.authorities || []);
     } catch (err) {
       toast.error('Failed to load board members registry.');
     } finally {

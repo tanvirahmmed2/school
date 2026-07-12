@@ -25,12 +25,24 @@ export async function GET(request) {
     const teacherId = searchParams.get('teacher_id');
 
     if (!teacherId) {
-      return NextResponse.json({ error: 'teacher_id parameter is required.' }, { status: 400 });
+      const res_err_856 = { error: 'teacher_id parameter is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_856?.error || res_err_856?.message || 'An error occurred',
+        error: res_err_856?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const hasAccess = await verifyAccess(teacherId);
     if (!hasAccess) {
-      return NextResponse.json({ error: 'Unauthorized. Admins or the owner teacher only.' }, { status: 403 });
+      const res_err_1263 = { error: 'Unauthorized. Admins or the owner teacher only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1263?.error || res_err_1263?.message || 'An error occurred',
+        error: res_err_1263?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const result = await query(
@@ -38,13 +50,21 @@ export async function GET(request) {
       [teacherId]
     );
 
-    return NextResponse.json({ qualifications: result.rows });
+    const res_data_1346 = { qualifications: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1346?.message || 'Successfully fecthed data',
+        paylod: res_data_1346
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching teacher qualifications:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve qualifications. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2191 = { error: 'Failed to retrieve qualifications. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2191?.error || res_err_2191?.message || 'An error occurred',
+        error: res_err_2191?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -54,21 +74,36 @@ export async function POST(request) {
     const { teacher_id, degree, institution, passing_year, result: examResult } = await request.json();
 
     if (!teacher_id || !degree || !institution || !passing_year) {
-      return NextResponse.json(
-        { error: 'All fields (teacher_id, degree, institution, passing_year) are required.' },
-        { status: 400 }
-      );
+      const res_err_2810 = { error: 'All fields (teacher_id, degree, institution, passing_year) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2810?.error || res_err_2810?.message || 'An error occurred',
+        error: res_err_2810?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const hasAccess = await verifyAccess(teacher_id);
     if (!hasAccess) {
-      return NextResponse.json({ error: 'Unauthorized. Admins or the owner teacher only.' }, { status: 403 });
+      const res_err_3261 = { error: 'Unauthorized. Admins or the owner teacher only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3261?.error || res_err_3261?.message || 'An error occurred',
+        error: res_err_3261?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     // Verify teacher exists
     const teacherCheck = await query('SELECT id FROM teachers WHERE id = $1', [teacher_id]);
     if (teacherCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Teacher not found.' }, { status: 404 });
+      const res_err_3775 = { error: 'Teacher not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3775?.error || res_err_3775?.message || 'An error occurred',
+        error: res_err_3775?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const result = await query(
@@ -84,15 +119,20 @@ export async function POST(request) {
       ]
     );
 
-    return NextResponse.json(
-      { message: 'Qualification added successfully.', qualification: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_3113 = { message: 'Qualification added successfully.', qualification: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3113?.message || 'Successfully fecthed data',
+        paylod: res_data_3113
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating teacher qualification:', error);
-    return NextResponse.json(
-      { error: 'Failed to add qualification. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_4933 = { error: 'Failed to add qualification. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4933?.error || res_err_4933?.message || 'An error occurred',
+        error: res_err_4933?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

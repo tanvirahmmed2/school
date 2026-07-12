@@ -8,12 +8,24 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-teacher')?.value;
     if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const res_err_326 = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_326?.error || res_err_326?.message || 'An error occurred',
+        error: res_err_326?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const res_err_715 = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_715?.error || res_err_715?.message || 'An error occurred',
+        error: res_err_715?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
     }
 
     const teacherId = decoded.id;
@@ -42,9 +54,20 @@ export async function GET() {
         r.start_time ASC
     `, [teacherId]);
 
-    return NextResponse.json({ routine: routineRes.rows });
+    const res_data_1489 = { routine: routineRes.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1489?.message || 'Successfully fecthed data',
+        paylod: res_data_1489
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching teacher routine:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const res_err_2320 = { error: 'Internal server error' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2320?.error || res_err_2320?.message || 'An error occurred',
+        error: res_err_2320?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -8,13 +8,21 @@ export async function GET() {
     const result = await query(
       'SELECT id, name, slug, description, created_at FROM clubs ORDER BY name ASC'
     );
-    return NextResponse.json({ clubs: result.rows });
+    const res_data_348 = { clubs: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_348?.message || 'Successfully fecthed data',
+        paylod: res_data_348
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching clubs:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve clubs. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_701 = { error: 'Failed to retrieve clubs. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_701?.error || res_err_701?.message || 'An error occurred',
+        error: res_err_701?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -23,13 +31,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1189 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1189?.error || res_err_1189?.message || 'An error occurred',
+        error: res_err_1189?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { name, slug, description } = await request.json();
 
     if (!name) {
-      return NextResponse.json({ error: 'Club name is required.' }, { status: 400 });
+      const res_err_1598 = { error: 'Club name is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1598?.error || res_err_1598?.message || 'An error occurred',
+        error: res_err_1598?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Auto-generate slug if not provided
@@ -40,7 +60,13 @@ export async function POST(request) {
     // Check uniqueness of name/slug
     const check = await query('SELECT id FROM clubs WHERE name = $1 OR slug = $2', [name.trim(), finalSlug]);
     if (check.rows.length > 0) {
-      return NextResponse.json({ error: 'A club with this name or slug already exists.' }, { status: 400 });
+      const res_err_2300 = { error: 'A club with this name or slug already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2300?.error || res_err_2300?.message || 'An error occurred',
+        error: res_err_2300?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -50,15 +76,20 @@ export async function POST(request) {
       [name.trim(), finalSlug, description ? description.trim() : null]
     );
 
-    return NextResponse.json(
-      { message: 'Club created successfully.', club: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_2003 = { message: 'Club created successfully.', club: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_2003?.message || 'Successfully fecthed data',
+        paylod: res_data_2003
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating club:', error);
-    return NextResponse.json(
-      { error: 'Failed to create club. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3326 = { error: 'Failed to create club. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3326?.error || res_err_3326?.message || 'An error occurred',
+        error: res_err_3326?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -10,16 +10,30 @@ export async function GET(request, { params }) {
     const result = await query('SELECT * FROM authorities WHERE id = $1', [id]);
 
     if (result.rows.length === 0) {
-      return NextResponse.json({ error: 'Authority member not found.' }, { status: 404 });
+      const res_err_429 = { error: 'Authority member not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_429?.error || res_err_429?.message || 'An error occurred',
+        error: res_err_429?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({ authority: result.rows[0] });
+    const res_data_567 = { authority: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_567?.message || 'Successfully fecthed data',
+        paylod: res_data_567
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching authority member details:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve authority member. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1174 = { error: 'Failed to retrieve authority member. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1174?.error || res_err_1174?.message || 'An error occurred',
+        error: res_err_1174?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -28,23 +42,38 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1706 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1706?.error || res_err_1706?.message || 'An error occurred',
+        error: res_err_1706?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { name, bio, designation, email, contact, image } = await request.json();
 
     if (!name || !designation) {
-      return NextResponse.json(
-        { error: 'Name and designation are required.' },
-        { status: 400 }
-      );
+      const res_err_2186 = { error: 'Name and designation are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2186?.error || res_err_2186?.message || 'An error occurred',
+        error: res_err_2186?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Fetch existing member details to know the old image
     const existing = await query('SELECT image, image_id FROM authorities WHERE id = $1', [id]);
     if (existing.rows.length === 0) {
-      return NextResponse.json({ error: 'Authority member not found.' }, { status: 404 });
+      const res_err_2717 = { error: 'Authority member not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2717?.error || res_err_2717?.message || 'An error occurred',
+        error: res_err_2717?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const oldImage = existing.rows[0];
@@ -64,7 +93,13 @@ export async function PUT(request, { params }) {
         }
       } catch (uploadErr) {
         console.error('Cloudinary replace failure:', uploadErr);
-        return NextResponse.json({ error: 'Failed to upload new profile photo.' }, { status: 500 });
+        const res_err_3674 = { error: 'Failed to upload new profile photo.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3674?.error || res_err_3674?.message || 'An error occurred',
+        error: res_err_3674?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
       }
     } else if (image === null || image === '') {
       // Clear image
@@ -92,19 +127,33 @@ export async function PUT(request, { params }) {
       ]
     );
 
-    return NextResponse.json({
+    const res_data_3338 = {
       message: 'Authority member updated successfully.',
       authority: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3338?.message || 'Successfully fecthed data',
+        paylod: res_data_3338
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating authority member:', error);
     if (error.code === '23505') {
-      return NextResponse.json({ error: 'Email address already in use.' }, { status: 400 });
+      const res_err_5206 = { error: 'Email address already in use.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5206?.error || res_err_5206?.message || 'An error occurred',
+        error: res_err_5206?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: 'Failed to update authority member. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5535 = { error: 'Failed to update authority member. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5535?.error || res_err_5535?.message || 'An error occurred',
+        error: res_err_5535?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -113,7 +162,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_6064 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6064?.error || res_err_6064?.message || 'An error occurred',
+        error: res_err_6064?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -121,7 +176,13 @@ export async function DELETE(request, { params }) {
     // Fetch existing member details to know the old image
     const existing = await query('SELECT image_id FROM authorities WHERE id = $1', [id]);
     if (existing.rows.length === 0) {
-      return NextResponse.json({ error: 'Authority member not found.' }, { status: 404 });
+      const res_err_6614 = { error: 'Authority member not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6614?.error || res_err_6614?.message || 'An error occurred',
+        error: res_err_6614?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const oldImage = existing.rows[0];
@@ -134,15 +195,23 @@ export async function DELETE(request, { params }) {
       await deleteImage(oldImage.image_id);
     }
 
-    return NextResponse.json({
+    const res_data_4964 = {
       message: 'Authority member deleted successfully.',
       id: result.rows[0].id
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4964?.message || 'Successfully fecthed data',
+        paylod: res_data_4964
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting authority member:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete authority member. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_7720 = { error: 'Failed to delete authority member. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7720?.error || res_err_7720?.message || 'An error occurred',
+        error: res_err_7720?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -14,7 +14,7 @@ const RecognitionsPage = () => {
         const res = await fetch('/api/recognitions');
         if (res.ok) {
           const data = await res.json();
-          setRecognitions(data.recognitions || []);
+          setRecognitions(data.paylod.recognitions || []);
         }
       } catch (err) {
         console.error('Error fetching recognitions:', err);

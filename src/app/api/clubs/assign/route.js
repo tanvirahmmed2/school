@@ -7,7 +7,13 @@ export async function GET(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_286 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_286?.error || res_err_286?.message || 'An error occurred',
+        error: res_err_286?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -44,18 +50,26 @@ export async function GET(request) {
       assignedMembers = membersRes.rows.map(r => r.id);
     }
 
-    return NextResponse.json({
+    const res_data_1521 = {
       teachers: teachersRes.rows,
       students: studentsRes.rows,
       assignedAdmins,
       assignedMembers
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1521?.message || 'Successfully fecthed data',
+        paylod: res_data_1521
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching assignments details:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve assignment data. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2219 = { error: 'Failed to retrieve assignment data. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2219?.error || res_err_2219?.message || 'An error occurred',
+        error: res_err_2219?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -64,14 +78,26 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2722 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2722?.error || res_err_2722?.message || 'An error occurred',
+        error: res_err_2722?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const body = await request.json();
     const { club_id, teachers, teacher_ids, student_ids } = body;
 
     if (!club_id) {
-      return NextResponse.json({ error: 'Parameter club_id is required.' }, { status: 400 });
+      const res_err_3177 = { error: 'Parameter club_id is required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3177?.error || res_err_3177?.message || 'An error occurred',
+        error: res_err_3177?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // 1. Wipe old assignments
@@ -106,14 +132,22 @@ export async function POST(request) {
       }
     }
 
-    return NextResponse.json({
+    const res_data_3808 = {
       message: 'Club administrative and member roles updated successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3808?.message || 'Successfully fecthed data',
+        paylod: res_data_3808
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating club assignments:', error);
-    return NextResponse.json(
-      { error: 'Failed to process assignments. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5163 = { error: 'Failed to process assignments. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5163?.error || res_err_5163?.message || 'An error occurred',
+        error: res_err_5163?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

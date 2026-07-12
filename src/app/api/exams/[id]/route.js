@@ -9,7 +9,13 @@ export async function GET(request, { params }) {
 
     const examRes = await query('SELECT * FROM exams WHERE id = $1', [id]);
     if (examRes.rows.length === 0) {
-      return NextResponse.json({ error: 'Exam not found.' }, { status: 404 });
+      const res_err_385 = { error: 'Exam not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_385?.error || res_err_385?.message || 'An error occurred',
+        error: res_err_385?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const exam = examRes.rows[0];
@@ -24,13 +30,21 @@ export async function GET(request, { params }) {
       [id]
     );
 
-    return NextResponse.json({ exam, schedules: schedulesRes.rows });
+    const res_data_879 = { exam, schedules: schedulesRes.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_879?.message || 'Successfully fecthed data',
+        paylod: res_data_879
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching exam details:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve exam details. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_1483 = { error: 'Failed to retrieve exam details. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1483?.error || res_err_1483?.message || 'An error occurred',
+        error: res_err_1483?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -39,17 +53,26 @@ export async function PUT(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_2019 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2019?.error || res_err_2019?.message || 'An error occurred',
+        error: res_err_2019?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
     const { name, term, start_date, end_date, status, schedules } = await request.json();
 
     if (!name || !start_date || !end_date || !status) {
-      return NextResponse.json(
-        { error: 'Name, start date, end date, and status are required fields.' },
-        { status: 400 }
-      );
+      const res_err_2528 = { error: 'Name, start date, end date, and status are required fields.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2528?.error || res_err_2528?.message || 'An error occurred',
+        error: res_err_2528?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Update exam table
@@ -62,7 +85,13 @@ export async function PUT(request, { params }) {
     );
 
     if (updateExamRes.rowCount === 0) {
-      return NextResponse.json({ error: 'Exam not found.' }, { status: 404 });
+      const res_err_3257 = { error: 'Exam not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3257?.error || res_err_3257?.message || 'An error occurred',
+        error: res_err_3257?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const updatedExam = updateExamRes.rows[0];
@@ -85,19 +114,33 @@ export async function PUT(request, { params }) {
       }
     }
 
-    return NextResponse.json({
+    const res_data_3288 = {
       message: 'Exam routine updated successfully.',
       exam: updatedExam,
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3288?.message || 'Successfully fecthed data',
+        paylod: res_data_3288
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating exam:', error);
     if (error.code === '23505') {
-      return NextResponse.json({ error: 'An exam with this name already exists.' }, { status: 400 });
+      const res_err_4901 = { error: 'An exam with this name already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4901?.error || res_err_4901?.message || 'An error occurred',
+        error: res_err_4901?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: 'Failed to update exam routine. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5239 = { error: 'Failed to update exam routine. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5239?.error || res_err_5239?.message || 'An error occurred',
+        error: res_err_5239?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -106,7 +149,13 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_5773 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5773?.error || res_err_5773?.message || 'An error occurred',
+        error: res_err_5773?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { id } = await params;
@@ -114,17 +163,31 @@ export async function DELETE(request, { params }) {
     const result = await query('DELETE FROM exams WHERE id = $1 RETURNING id', [id]);
 
     if (result.rowCount === 0) {
-      return NextResponse.json({ error: 'Exam not found.' }, { status: 404 });
+      const res_err_6256 = { error: 'Exam not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_6256?.error || res_err_6256?.message || 'An error occurred',
+        error: res_err_6256?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const res_data_4530 = {
       message: 'Exam and all its routines deleted successfully.'
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_4530?.message || 'Successfully fecthed data',
+        paylod: res_data_4530
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting exam:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete exam routine. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_7022 = { error: 'Failed to delete exam routine. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_7022?.error || res_err_7022?.message || 'An error occurred',
+        error: res_err_7022?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -41,7 +41,7 @@ const AdminStudentFeesPage = () => {
     try {
       const classesRes = await fetch('/api/classes');
       const classesData = await classesRes.json();
-      setClasses(classesData.classes || []);
+      setClasses(classesData.paylod.classes || []);
 
       // Fetch all registered students
       const studentsRes = await fetch('/api/students');
@@ -96,7 +96,7 @@ const AdminStudentFeesPage = () => {
     const fetchClassStudents = async () => {
       const res = await fetch(`/api/students?class_id=${invClassId}`);
       const data = await res.json();
-      setInvStudentsList((data.students || []).filter((s) => s.is_registered));
+      setInvStudentsList((data.paylod.students || []).filter((s) => s.is_registered));
       setInvStudentId('');
     };
     fetchClassStudents();

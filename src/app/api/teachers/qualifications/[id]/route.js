@@ -25,22 +25,37 @@ export async function PUT(request, { params }) {
     const { degree, institution, passing_year, result: examResult } = await request.json();
 
     if (!degree || !institution || !passing_year) {
-      return NextResponse.json(
-        { error: 'Fields (degree, institution, passing_year) are required.' },
-        { status: 400 }
-      );
+      const res_err_918 = { error: 'Fields (degree, institution, passing_year) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_918?.error || res_err_918?.message || 'An error occurred',
+        error: res_err_918?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Fetch qualification to check ownership
     const qualCheck = await query('SELECT teacher_id FROM teacher_qualifications WHERE id = $1', [id]);
     if (qualCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Qualification not found.' }, { status: 404 });
+      const res_err_1462 = { error: 'Qualification not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1462?.error || res_err_1462?.message || 'An error occurred',
+        error: res_err_1462?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const teacherId = qualCheck.rows[0].teacher_id;
     const hasAccess = await verifyAccess(teacherId);
     if (!hasAccess) {
-      return NextResponse.json({ error: 'Unauthorized. Owner teacher or admin only.' }, { status: 403 });
+      const res_err_1916 = { error: 'Unauthorized. Owner teacher or admin only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1916?.error || res_err_1916?.message || 'An error occurred',
+        error: res_err_1916?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const result = await query(
@@ -57,16 +72,24 @@ export async function PUT(request, { params }) {
       ]
     );
 
-    return NextResponse.json({
+    const res_data_1996 = {
       message: 'Qualification updated successfully.',
       qualification: result.rows[0]
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1996?.message || 'Successfully fecthed data',
+        paylod: res_data_1996
+      }, { status: 200 });
   } catch (error) {
     console.error('Error updating teacher qualification:', error);
-    return NextResponse.json(
-      { error: 'Failed to update qualification. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_3138 = { error: 'Failed to update qualification. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3138?.error || res_err_3138?.message || 'An error occurred',
+        error: res_err_3138?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -78,26 +101,46 @@ export async function DELETE(request, { params }) {
     // Fetch qualification to check ownership
     const qualCheck = await query('SELECT teacher_id FROM teacher_qualifications WHERE id = $1', [id]);
     if (qualCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Qualification not found.' }, { status: 404 });
+      const res_err_3810 = { error: 'Qualification not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_3810?.error || res_err_3810?.message || 'An error occurred',
+        error: res_err_3810?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
     }
 
     const teacherId = qualCheck.rows[0].teacher_id;
     const hasAccess = await verifyAccess(teacherId);
     if (!hasAccess) {
-      return NextResponse.json({ error: 'Unauthorized. Owner teacher or admin only.' }, { status: 403 });
+      const res_err_4264 = { error: 'Unauthorized. Owner teacher or admin only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_4264?.error || res_err_4264?.message || 'An error occurred',
+        error: res_err_4264?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const result = await query('DELETE FROM teacher_qualifications WHERE id = $1 RETURNING id', [id]);
 
-    return NextResponse.json({
+    const res_data_3365 = {
       message: 'Qualification deleted successfully.',
       id: result.rows[0].id
-    });
+    };
+      return NextResponse.json({
+        success: true,
+        message: res_data_3365?.message || 'Successfully fecthed data',
+        paylod: res_data_3365
+      }, { status: 200 });
   } catch (error) {
     console.error('Error deleting teacher qualification:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete qualification. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_5195 = { error: 'Failed to delete qualification. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_5195?.error || res_err_5195?.message || 'An error occurred',
+        error: res_err_5195?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

@@ -6,13 +6,21 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query('SELECT * FROM events ORDER BY event_date ASC');
-    return NextResponse.json({ events: result.rows });
+    const res_data_306 = { events: result.rows };
+      return NextResponse.json({
+        success: true,
+        message: res_data_306?.message || 'Successfully fecthed data',
+        paylod: res_data_306
+      }, { status: 200 });
   } catch (error) {
     console.error('Error fetching events:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve events. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_661 = { error: 'Failed to retrieve events. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_661?.error || res_err_661?.message || 'An error occurred',
+        error: res_err_661?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
 
@@ -21,16 +29,25 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      return NextResponse.json({ error: 'Unauthorized. Admins only.' }, { status: 403 });
+      const res_err_1158 = { error: 'Unauthorized. Admins only.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1158?.error || res_err_1158?.message || 'An error occurred',
+        error: res_err_1158?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 403 });
     }
 
     const { title, description, event_date, location } = await request.json();
 
     if (!title || !description || !event_date || !location) {
-      return NextResponse.json(
-        { error: 'All fields (title, description, event_date, location) are required.' },
-        { status: 400 }
-      );
+      const res_err_1629 = { error: 'All fields (title, description, event_date, location) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_1629?.error || res_err_1629?.message || 'An error occurred',
+        error: res_err_1629?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     const result = await query(
@@ -40,15 +57,20 @@ export async function POST(request) {
       [title.trim(), description.trim(), event_date, location.trim()]
     );
 
-    return NextResponse.json(
-      { message: 'Event created successfully.', event: result.rows[0] },
-      { status: 201 }
-    );
+    const res_data_1580 = { message: 'Event created successfully.', event: result.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1580?.message || 'Successfully fecthed data',
+        paylod: res_data_1580
+      }, { status: 201 });
   } catch (error) {
     console.error('Error creating event:', error);
-    return NextResponse.json(
-      { error: 'Failed to create event. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2674 = { error: 'Failed to create event. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2674?.error || res_err_2674?.message || 'An error occurred',
+        error: res_err_2674?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }

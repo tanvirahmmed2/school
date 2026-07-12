@@ -8,19 +8,25 @@ export async function POST(request) {
 
     // Validation
     if (!name || !email || !number || !address || !password) {
-      return NextResponse.json(
-        { error: 'All fields (name, email, number, address, password) are required.' },
-        { status: 400 }
-      );
+      const res_err_340 = { error: 'All fields (name, email, number, address, password) are required.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_340?.error || res_err_340?.message || 'An error occurred',
+        error: res_err_340?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Check if admin already exists
     const existingAdmin = await query('SELECT id FROM admins WHERE email = $1', [email]);
     if (existingAdmin.rows.length > 0) {
-      return NextResponse.json(
-        { error: 'An admin account with this email already exists.' },
-        { status: 400 }
-      );
+      const res_err_872 = { error: 'An admin account with this email already exists.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_872?.error || res_err_872?.message || 'An error occurred',
+        error: res_err_872?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
     }
 
     // Hash password
@@ -34,15 +40,20 @@ export async function POST(request) {
       [name, email, number, address, passwordHash]
     );
 
-    return NextResponse.json(
-      { message: 'Admin account created successfully.', admin: newAdmin.rows[0] },
-      { status: 201 }
-    );
+    const res_data_1175 = { message: 'Admin account created successfully.', admin: newAdmin.rows[0] };
+      return NextResponse.json({
+        success: true,
+        message: res_data_1175?.message || 'Successfully fecthed data',
+        paylod: res_data_1175
+      }, { status: 201 });
   } catch (error) {
     console.error('Error registering admin:', error);
-    return NextResponse.json(
-      { error: 'Failed to create admin account. Internal server error.' },
-      { status: 500 }
-    );
+    const res_err_2046 = { error: 'Failed to create admin account. Internal server error.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2046?.error || res_err_2046?.message || 'An error occurred',
+        error: res_err_2046?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 500 });
   }
 }
