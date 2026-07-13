@@ -149,6 +149,9 @@ const AdminClassesPage = () => {
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Class Code
                   </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Description
+                  </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
                     Actions
                   </th>
@@ -159,8 +162,14 @@ const AdminClassesPage = () => {
                   <tr key={cls.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-bold text-sm">
-                          {cls.name.substring(0, 2).toUpperCase()}
+                        <div className="w-9 h-9 border border-slate-100 rounded-xl flex items-center justify-center overflow-hidden bg-slate-50 shrink-0">
+                          {cls.image ? (
+                            <img src={cls.image} alt={cls.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-blue-600 font-bold text-sm">
+                              {cls.name.substring(0, 2).toUpperCase()}
+                            </span>
+                          )}
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{cls.name}</p>
@@ -179,6 +188,9 @@ const AdminClassesPage = () => {
                       <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
                         {cls.code}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-xs text-slate-500 max-w-[200px] truncate">
+                      {cls.description || <span className="text-slate-300 italic">No description</span>}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button

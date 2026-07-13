@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
 // PUT update a club
 export async function PUT(request, { params }) {
@@ -17,7 +18,7 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, slug, description } = await request.json();
+    const { name, slug, description, image } = await request.json();
 
     if (!name) {
       const res_err_715 = { error: 'Club name is required.' };
@@ -49,12 +50,62 @@ export async function PUT(request, { params }) {
       }, { status: 400 });
     }
 
+    const existing = await query('SELECT image, image_id FROM clubs WHERE id = $1', [id]);
+    if (existing.rows.length === 0) {
+      const res_err_2115 = { error: 'Club profile not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2115?.error || res_err_2115?.message || 'An error occurred',
+        error: res_err_2115?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
+    }
+    const currentClub = existing.rows[0];
+
+    let imageUrl = currentClub.image;
+    let imageId = currentClub.image_id;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        const uploadResult = await uploadImage(image, 'clubs');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+
+        if (currentClub.image_id) {
+          try {
+            await deleteImage(currentClub.image_id);
+          } catch (delErr) {
+            console.error('Failed to delete old club image:', delErr);
+          }
+        }
+      } catch (uploadErr) {
+        console.error('Cloudinary upload failure:', uploadErr);
+        const res_err = { error: 'Failed to upload club image.' };
+        return NextResponse.json({
+          success: false,
+          message: res_err?.error || res_err?.message || 'An error occurred',
+          error: res_err?.error || 'Internal Server Error',
+          paylod: null
+        }, { status: 500 });
+      }
+    } else if (image === null) {
+      imageUrl = null;
+      imageId = null;
+      if (currentClub.image_id) {
+        try {
+          await deleteImage(currentClub.image_id);
+        } catch (delErr) {
+          console.error('Failed to delete old club image:', delErr);
+        }
+      }
+    }
+
     const result = await query(
       `UPDATE clubs 
-       SET name = $1, slug = $2, description = $3, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $4 
-       RETURNING id, name, slug, description`,
-      [name.trim(), finalSlug, description ? description.trim() : null, id]
+       SET name = $1, slug = $2, description = $3, image = $4, image_id = $5, updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $6 
+       RETURNING id, name, slug, description, image, image_id`,
+      [name.trim(), finalSlug, description ? description.trim() : null, imageUrl, imageId, id]
     );
 
     if (result.rowCount === 0) {
@@ -104,6 +155,7 @@ export async function DELETE(request, { params }) {
 
     const { id } = await params;
 
+    const existing = await query('SELECT image_id FROM clubs WHERE id = $1', [id]);
     const result = await query('DELETE FROM clubs WHERE id = $1 RETURNING id', [id]);
 
     if (result.rowCount === 0) {
@@ -114,6 +166,14 @@ export async function DELETE(request, { params }) {
         error: res_err_3881?.error || 'Internal Server Error',
         paylod: null
       }, { status: 404 });
+    }
+
+    if (existing.rows.length > 0 && existing.rows[0].image_id) {
+      try {
+        await deleteImage(existing.rows[0].image_id);
+      } catch (delErr) {
+        console.error('Failed to delete club image from Cloudinary:', delErr);
+      }
     }
 
     const res_data_2623 = {

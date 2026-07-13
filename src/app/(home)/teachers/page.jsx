@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiMail, FiPhone, FiUser } from 'react-icons/fi';
+import Link from 'next/link';
+import { FiMail, FiPhone, FiUser, FiArrowRight } from 'react-icons/fi';
 
 const TeachersPage = () => {
   const [teachers, setTeachers] = useState([]);
@@ -59,10 +60,16 @@ const TeachersPage = () => {
                 key={teacher.id}
                 className="bg-white rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md transition-all duration-200 p-6 flex flex-col items-center text-center group"
               >
-                {/* Profile Avatar Placeholder */}
-                <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-sky-100 to-sky-50 flex items-center justify-center text-sky-600 text-2xl font-bold mb-4 shadow-inner group-hover:scale-105 transition-transform duration-200">
-                  <FiUser />
-                </div>
+                {/* Profile Avatar / Photo */}
+                {teacher.image ? (
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 mb-4 shadow-inner group-hover:scale-105 transition-transform duration-200">
+                    <img src={teacher.image} alt={teacher.name} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-sky-100 to-sky-50 flex items-center justify-center text-sky-600 text-2xl font-bold mb-4 shadow-inner group-hover:scale-105 transition-transform duration-200">
+                    <FiUser />
+                  </div>
+                )}
 
                 {/* Info */}
                 <h3 className="font-extrabold text-slate-900 text-base group-hover:text-sky-600 transition-colors">
@@ -76,15 +83,22 @@ const TeachersPage = () => {
                 <div className="w-12 h-0.5 bg-sky-100/60 rounded my-4"></div>
 
                 {/* Contact items */}
-                <div className="flex flex-col gap-2 w-full text-xs text-slate-500 font-semibold mt-auto">
+                <div className="flex flex-col gap-2 w-full text-xs text-slate-500 font-semibold">
                   <span className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-100/50 hover:bg-slate-100/50 transition-colors">
                     <FiMail className="text-slate-400 text-sm shrink-0" />
                     <span className="truncate">{teacher.email}</span>
                   </span>
-                  <span className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-100/50 hover:bg-slate-100/50 transition-colors">
-                    <FiPhone className="text-slate-400 text-sm shrink-0" />
-                    <span>{teacher.number}</span>
-                  </span>
+                </div>
+
+                {/* View Details Link */}
+                <div className="mt-6 pt-4 border-t border-slate-50 w-full text-center">
+                  <Link
+                    href={`/teachers/${teacher.id}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-850 transition-colors"
+                  >
+                    <span>View Profile</span>
+                    <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
                 </div>
               </div>
             ))}

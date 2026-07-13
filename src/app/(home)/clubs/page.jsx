@@ -61,8 +61,12 @@ const ClubsPage = () => {
                 className="bg-white rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md transition-all duration-200 p-6 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 text-xl font-bold mb-4 group-hover:scale-105 transition-transform duration-200">
-                    <FiUsers />
+                  <div className="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 text-xl font-bold mb-4 group-hover:scale-105 transition-transform duration-200 overflow-hidden border border-slate-100">
+                    {club.image ? (
+                      <img src={club.image} alt={club.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <FiUsers />
+                    )}
                   </div>
                   <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-sky-600 transition-colors">
                     {club.name}

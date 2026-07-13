@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
 // PUT update a class (Admin only)
 export async function PUT(request, { params }) {
@@ -17,7 +18,7 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, numeric_name, code } = await request.json();
+    const { name, numeric_name, code, description, image } = await request.json();
 
     if (!name || numeric_name === undefined || !code) {
       const res_err_769 = { error: 'All fields (name, numeric_name, code) are required.' };
@@ -68,12 +69,62 @@ export async function PUT(request, { params }) {
       }
     }
 
+    const existing = await query('SELECT image, image_id FROM classes WHERE id = $1', [id]);
+    if (existing.rows.length === 0) {
+      const res_err_2875 = { error: 'Class not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_2875?.error || res_err_2875?.message || 'An error occurred',
+        error: res_err_2875?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
+    }
+    const currentClass = existing.rows[0];
+
+    let imageUrl = currentClass.image;
+    let imageId = currentClass.image_id;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        const uploadResult = await uploadImage(image, 'classes');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+
+        if (currentClass.image_id) {
+          try {
+            await deleteImage(currentClass.image_id);
+          } catch (delErr) {
+            console.error('Failed to delete old class image:', delErr);
+          }
+        }
+      } catch (uploadErr) {
+        console.error('Cloudinary upload failure:', uploadErr);
+        const res_err = { error: 'Failed to upload class image.' };
+        return NextResponse.json({
+          success: false,
+          message: res_err?.error || res_err?.message || 'An error occurred',
+          error: res_err?.error || 'Internal Server Error',
+          paylod: null
+        }, { status: 500 });
+      }
+    } else if (image === null) {
+      imageUrl = null;
+      imageId = null;
+      if (currentClass.image_id) {
+        try {
+          await deleteImage(currentClass.image_id);
+        } catch (delErr) {
+          console.error('Failed to delete old class image:', delErr);
+        }
+      }
+    }
+
     const updatedClass = await query(
       `UPDATE classes 
-       SET name = $1, numeric_name = $2, code = $3, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $4 
+       SET name = $1, numeric_name = $2, code = $3, description = $4, image = $5, image_id = $6, updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $7 
        RETURNING *`,
-      [name, numericVal, code, id]
+      [name, numericVal, code, description ? description.trim() : null, imageUrl, imageId, id]
     );
 
     if (updatedClass.rowCount === 0) {
@@ -123,6 +174,7 @@ export async function DELETE(request, { params }) {
 
     const { id } = await params;
 
+    const existing = await query('SELECT image_id FROM classes WHERE id = $1', [id]);
     const deleteResult = await query('DELETE FROM classes WHERE id = $1 RETURNING id', [id]);
 
     if (deleteResult.rowCount === 0) {
@@ -133,6 +185,14 @@ export async function DELETE(request, { params }) {
         error: res_err_4664?.error || 'Internal Server Error',
         paylod: null
       }, { status: 404 });
+    }
+
+    if (existing.rows.length > 0 && existing.rows[0].image_id) {
+      try {
+        await deleteImage(existing.rows[0].image_id);
+      } catch (delErr) {
+        console.error('Failed to delete class image from Cloudinary:', delErr);
+      }
     }
 
     const res_data_2943 = {

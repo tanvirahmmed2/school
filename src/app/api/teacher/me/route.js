@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT } from '@/lib/auth';
 import { query } from '@/lib/db';
+import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
 export async function GET() {
   try {
@@ -30,7 +31,7 @@ export async function GET() {
 
     // Direct database validation check
     const result = await query(`
-      SELECT id, name, email, number, designation, address, is_active, is_registered
+      SELECT id, name, email, number, designation, address, is_active, is_registered, is_permanent, image, image_id
       FROM teachers
       WHERE id = $1 AND is_active = TRUE AND is_registered = TRUE
     `, [decoded.id]);
@@ -62,5 +63,129 @@ export async function GET() {
         error: res_err_2095?.error || 'Internal Server Error',
         paylod: null
       }, { status: 500 });
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-teacher')?.value;
+    if (!token) {
+      const res_err = { error: 'Not authenticated' };
+      return NextResponse.json({
+        success: false,
+        message: res_err?.error || res_err?.message || 'An error occurred',
+        error: res_err?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
+    }
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) {
+      const res_err = { error: 'Invalid token' };
+      return NextResponse.json({
+        success: false,
+        message: res_err?.error || res_err?.message || 'An error occurred',
+        error: res_err?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 401 });
+    }
+
+    // Verify current record exists
+    const checkRes = await query(
+      'SELECT id, image, image_id FROM teachers WHERE id = $1 AND is_active = TRUE',
+      [decoded.id]
+    );
+    if (checkRes.rows.length === 0) {
+      const res_err = { error: 'Teacher account not found' };
+      return NextResponse.json({
+        success: false,
+        message: res_err?.error || res_err?.message || 'An error occurred',
+        error: res_err?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
+    }
+
+    const currentTeacher = checkRes.rows[0];
+    const { number, address, image } = await request.json();
+
+    let imageUrl = currentTeacher.image;
+    let imageId = currentTeacher.image_id;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        const uploadResult = await uploadImage(image, 'teachers');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+
+        // Clean up previous image on Cloudinary
+        if (currentTeacher.image_id) {
+          try {
+            await deleteImage(currentTeacher.image_id);
+          } catch (delErr) {
+            console.error('Failed to delete old teacher image:', delErr);
+          }
+        }
+      } catch (uploadErr) {
+        console.error('Cloudinary upload failure:', uploadErr);
+        const res_err = { error: 'Failed to upload profile photo.' };
+        return NextResponse.json({
+          success: false,
+          message: res_err?.error || res_err?.message || 'An error occurred',
+          error: res_err?.error || 'Internal Server Error',
+          paylod: null
+        }, { status: 500 });
+      }
+    } else if (image === null) {
+      // Clear image
+      imageUrl = null;
+      imageId = null;
+      if (currentTeacher.image_id) {
+        try {
+          await deleteImage(currentTeacher.image_id);
+        } catch (delErr) {
+          console.error('Failed to delete old teacher image:', delErr);
+        }
+      }
+    }
+
+    // Update teacher info
+    const updated = await query(
+      `UPDATE teachers
+       SET number = $1, 
+           address = $2, 
+           image = $3, 
+           image_id = $4,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $5
+       RETURNING id, name, email, number, designation, address, is_active, is_registered, is_permanent, image, image_id`,
+      [
+        number !== undefined ? number.trim() : null,
+        address !== undefined ? address.trim() : null,
+        imageUrl,
+        imageId,
+        decoded.id
+      ]
+    );
+
+    const res_data = {
+      message: 'Profile updated successfully.',
+      teacher: updated.rows[0]
+    };
+    return NextResponse.json({
+      success: true,
+      message: res_data?.message || 'Successfully fecthed data',
+      paylod: res_data
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error('Error updating teacher profile:', error);
+    const res_err = { error: 'Failed to update profile. Internal server error.' };
+    return NextResponse.json({
+      success: false,
+      message: res_err?.error || res_err?.message || 'An error occurred',
+      error: res_err?.error || 'Internal Server Error',
+      paylod: null
+    }, { status: 500 });
   }
 }

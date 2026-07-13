@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { uploadImage } from '@/lib/cloudinary';
 
 // GET all classes
 export async function GET() {
@@ -38,7 +39,7 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { name, numeric_name, code } = await request.json();
+    const { name, numeric_name, code, description, image } = await request.json();
 
     if (!name || numeric_name === undefined || !code) {
       const res_err_1630 = { error: 'All fields (name, numeric_name, code) are required.' };
@@ -89,11 +90,33 @@ export async function POST(request) {
       }
     }
 
+    let imageUrl = null;
+    let imageId = null;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        const uploadResult = await uploadImage(image, 'classes');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+      } catch (uploadErr) {
+        console.error('Cloudinary upload failure:', uploadErr);
+        const res_err = { error: 'Failed to upload class image.' };
+        return NextResponse.json({
+          success: false,
+          message: res_err?.error || res_err?.message || 'An error occurred',
+          error: res_err?.error || 'Internal Server Error',
+          paylod: null
+        }, { status: 500 });
+      }
+    } else if (image) {
+      imageUrl = image;
+    }
+
     const newClass = await query(
-      `INSERT INTO classes (name, numeric_name, code) 
-       VALUES ($1, $2, $3) 
+      `INSERT INTO classes (name, numeric_name, code, description, image, image_id) 
+       VALUES ($1, $2, $3, $4, $5, $6) 
        RETURNING *`,
-      [name, numericVal, code]
+      [name, numericVal, code, description ? description.trim() : null, imageUrl, imageId]
     );
 
     const res_data_2247 = { message: 'Class created successfully.', class: newClass.rows[0] };

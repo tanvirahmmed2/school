@@ -48,6 +48,9 @@ CREATE TABLE IF NOT EXISTS classes (
     name VARCHAR(100) UNIQUE NOT NULL,
     numeric_name INT NOT NULL,
     code VARCHAR(50) UNIQUE NOT NULL,
+    description TEXT,
+    image TEXT,
+    image_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -91,6 +94,9 @@ CREATE TABLE IF NOT EXISTS teachers (
     recovery_token_expires TIMESTAMPTZ,
     is_active BOOLEAN DEFAULT FALSE,
     is_registered BOOLEAN DEFAULT FALSE,
+    is_permanent BOOLEAN DEFAULT FALSE,
+    image TEXT,
+    image_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -143,6 +149,8 @@ CREATE TABLE IF NOT EXISTS clubs (
     name VARCHAR(255) UNIQUE NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
+    image TEXT,
+    image_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

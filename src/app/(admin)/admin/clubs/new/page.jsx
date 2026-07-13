@@ -15,7 +15,29 @@ const AdminClubsNewPage = () => {
   const [description, setDescription] = useState('');
   
   const [editId, setEditId] = useState(null);
+  const [image, setImage] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image size must be less than 2MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleClearImage = () => {
+    setImage(null);
+    setImagePreview('');
+  };
 
   useEffect(() => {
     fetchClubs();
@@ -43,17 +65,19 @@ const AdminClubsNewPage = () => {
     setSubmitting(true);
     try {
       if (editId) {
-        const response = await axios.put(`/api/clubs/${editId}`, { name, slug, description });
+        const response = await axios.put(`/api/clubs/${editId}`, { name, slug, description, image });
         toast.success(response.data.message || 'Club details updated successfully!');
         setEditId(null);
       } else {
-        const response = await axios.post('/api/clubs', { name, slug, description });
+        const response = await axios.post('/api/clubs', { name, slug, description, image });
         toast.success(response.data.message || 'Club registered successfully!');
       }
 
       setName('');
       setSlug('');
       setDescription('');
+      setImage('');
+      setImagePreview('');
       fetchClubs();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -67,6 +91,8 @@ const AdminClubsNewPage = () => {
     setName(club.name);
     setSlug(club.slug);
     setDescription(club.description || '');
+    setImage('');
+    setImagePreview(club.image || '');
   };
 
   const handleCancelEdit = () => {
@@ -74,6 +100,8 @@ const AdminClubsNewPage = () => {
     setName('');
     setSlug('');
     setDescription('');
+    setImage('');
+    setImagePreview('');
   };
 
   const handleDeleteClub = async (id, clubName) => {
@@ -159,6 +187,34 @@ const AdminClubsNewPage = () => {
               />
             </div>
 
+            {/* Image upload field */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                Club Logo / Image
+              </label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={submitting}
+                  onChange={handleImageChange}
+                  className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full"
+                />
+                {imagePreview && (
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={handleClearImage}
+                      className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-xs font-bold"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="flex items-center gap-3 mt-2">
               {editId && (
                 <button
@@ -223,7 +279,20 @@ const AdminClubsNewPage = () => {
                 <tbody className="divide-y divide-slate-100">
                   {clubs.map((club) => (
                     <tr key={club.id} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">{club.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 border border-slate-100 rounded-xl flex items-center justify-center overflow-hidden bg-slate-50 shrink-0">
+                            {club.image ? (
+                              <img src={club.image} alt={club.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-blue-600 font-bold text-xs">
+                                {club.name.substring(0, 2).toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          <span>{club.name}</span>
+                        </div>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-500">/{club.slug}</td>
                       <td className="px-6 py-4 text-xs text-slate-600 max-w-[240px] truncate">
                         {club.description || <span className="text-slate-300 italic">No description</span>}

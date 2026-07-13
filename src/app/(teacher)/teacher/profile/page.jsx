@@ -1,13 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiUser, FiMail, FiPhone, FiMapPin, FiAward, FiBookOpen, FiPlus, FiTrash2, FiEdit2, FiX } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiMapPin, FiAward, FiBookOpen, FiPlus, FiTrash2, FiEdit2, FiX, FiCamera } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Profile data states
+  const [profileData, setProfileData] = useState({
+    number: '',
+    address: ''
+  });
 
   // Qualifications states
   const [qualifications, setQualifications] = useState([]);
@@ -27,8 +34,13 @@ const ProfilePage = () => {
         const res = await fetch('/api/teacher/me');
         if (res.ok) {
           const data = await res.json();
-          setProfile(data.paylod.teacher);
-          fetchQualifications(data.paylod.teacher.id);
+          const teacher = data.paylod.teacher;
+          setProfile(teacher);
+          setProfileData({
+            number: teacher.number || '',
+            address: teacher.address || ''
+          });
+          fetchQualifications(teacher.id);
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -101,6 +113,52 @@ const ProfilePage = () => {
     }
   };
 
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image size must be less than 2MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const toastId = toast.loading('Uploading profile picture...');
+      try {
+        const res = await axios.put('/api/teacher/me', {
+          ...profileData,
+          image: reader.result
+        });
+        toast.dismiss(toastId);
+        toast.success('Profile picture updated successfully!');
+        setProfile(res.data.paylod.teacher);
+      } catch (err) {
+        toast.dismiss(toastId);
+        toast.error(err.response?.data?.error || 'Failed to upload photo.');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSaveDetails = async (e) => {
+    e.preventDefault();
+    const toastId = toast.loading('Saving profile changes...');
+    try {
+      const res = await axios.put('/api/teacher/me', {
+        ...profileData,
+        image: profile.image
+      });
+      toast.dismiss(toastId);
+      toast.success('Profile contact details saved.');
+      setProfile(res.data.paylod.teacher);
+      setIsEditing(false);
+    } catch (err) {
+      toast.dismiss(toastId);
+      toast.error(err.response?.data?.error || 'Failed to update details.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
@@ -119,58 +177,140 @@ const ProfilePage = () => {
 
       {/* Header Profile Card */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
-        <div className="w-24 h-24 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-4xl font-extrabold shadow-sm">
-          {profile?.name ? profile.name.charAt(0).toUpperCase() : 'T'}
+        <div className="relative group w-24 h-24 rounded-full overflow-hidden shrink-0 border border-slate-100/80 shadow-sm bg-slate-55">
+          {profile?.image ? (
+            <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-4xl font-extrabold">
+              {profile?.name ? profile.name.charAt(0).toUpperCase() : 'T'}
+            </div>
+          )}
+          <label className="absolute inset-0 bg-black/45 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-150 cursor-pointer">
+            <FiCamera className="text-xl" />
+            <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} />
+          </label>
         </div>
         <div className="text-center md:text-left flex-1">
           <h2 className="text-xl font-bold text-slate-800 mb-1">{profile?.name}</h2>
           <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Teacher ID: #{profile?.id}</p>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active Instructor
-          </span>
+          <div className="flex flex-wrap justify-center md:justify-start items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active Instructor
+            </span>
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+              profile?.is_permanent 
+                ? 'bg-blue-50 text-blue-600 border border-blue-100' 
+                : 'bg-amber-50 text-amber-600 border border-amber-100'
+            }`}>
+              {profile?.is_permanent ? 'Permanent Staff' : 'Temporary / Contract'}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Profile Details Grids */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Personal Details */}
-        <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
-          <h3 className="font-bold text-slate-800 text-base flex items-center gap-2 border-b border-slate-100 pb-3 mb-1">
-            <FiUser className="text-indigo-600" /> Contact Details
-          </h3>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-400">
-                <FiMail className="text-sm" />
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
-                <span className="text-sm font-semibold text-slate-700">{profile?.email || 'N/A'}</span>
-              </div>
+        {/* Contact Details */}
+        {isEditing ? (
+          <form onSubmit={handleSaveDetails} className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] animate-fade-down">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-1">
+              <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
+                <FiUser className="text-indigo-600" /> Edit Contact Details
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setProfileData({
+                    number: profile.number || '',
+                    address: profile.address || ''
+                  });
+                  setIsEditing(false);
+                }}
+                className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 cursor-pointer animate-fade-in"
+              >
+                <FiX />
+              </button>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-400">
-                <FiPhone className="text-sm" />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Phone Number</label>
+                <input
+                  type="text"
+                  value={profileData.number}
+                  onChange={(e) => setProfileData({ ...profileData, number: e.target.value })}
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
+                  placeholder="e.g. +880 180..."
+                />
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone Number</span>
-                <span className="text-sm font-semibold text-slate-700">{profile?.number || 'N/A'}</span>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Residential Address</label>
+                <textarea
+                  value={profileData.address}
+                  onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold min-h-[80px] resize-y"
+                  placeholder="e.g. Dhaka, Bangladesh"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+                >
+                  Save Details
+                </button>
               </div>
             </div>
+          </form>
+        ) : (
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-1">
+              <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
+                <FiUser className="text-indigo-600" /> Contact Details
+              </h3>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/50 rounded-xl text-xs font-bold text-slate-650 cursor-pointer flex items-center gap-1 transition-all"
+              >
+                <FiEdit2 className="text-xs" /> Edit Info
+              </button>
+            </div>
 
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-400">
-                <FiMapPin className="text-sm" />
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-400">
+                  <FiMail className="text-sm" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
+                  <span className="text-sm font-semibold text-slate-700">{profile?.email || 'N/A'}</span>
+                </div>
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Residential Address</span>
-                <span className="text-sm font-semibold text-slate-700">{profile?.address || 'N/A'}</span>
+
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-400">
+                  <FiPhone className="text-sm" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone Number</span>
+                  <span className="text-sm font-semibold text-slate-700">{profile?.number || 'N/A'}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-400">
+                  <FiMapPin className="text-sm" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Residential Address</span>
+                  <span className="text-sm font-semibold text-slate-700">{profile?.address || 'N/A'}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Academic Details */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
@@ -215,7 +355,7 @@ const ProfilePage = () => {
                 setFormData({ degree: '', institution: '', passing_year: '', result: '' });
                 setShowForm(true);
               }}
-              className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-105 hover:bg-indigo-100 text-indigo-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+              className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
             >
               <FiPlus /> Add Degree
             </button>
@@ -226,7 +366,7 @@ const ProfilePage = () => {
         {showForm && (
           <form onSubmit={handleFormSubmit} className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 md:p-5 flex flex-col gap-4 animate-fade-down duration-200">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-extrabold text-slate-750 text-slate-700 uppercase tracking-wider">
+              <h4 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                 {editId ? 'Edit Degree Record' : 'Add Degree / Certificate'}
               </h4>
               <button
@@ -250,7 +390,7 @@ const ProfilePage = () => {
                   value={formData.degree}
                   onChange={handleInputChange}
                   placeholder="e.g. Bachelor of Science in Electrical Engineering"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-805 outline-none focus:border-indigo-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
                   required
                 />
               </div>
@@ -263,7 +403,7 @@ const ProfilePage = () => {
                   value={formData.institution}
                   onChange={handleInputChange}
                   placeholder="e.g. Massachusetts Institute of Technology"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-805 outline-none focus:border-indigo-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
                   required
                 />
               </div>
@@ -276,7 +416,7 @@ const ProfilePage = () => {
                   value={formData.passing_year}
                   onChange={handleInputChange}
                   placeholder="e.g. 2016"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-805 outline-none focus:border-indigo-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
                   required
                 />
               </div>
@@ -289,7 +429,7 @@ const ProfilePage = () => {
                   value={formData.result}
                   onChange={handleInputChange}
                   placeholder="e.g. CGPA 3.84"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-850 outline-none focus:border-indigo-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
                 />
               </div>
             </div>
@@ -298,7 +438,7 @@ const ProfilePage = () => {
               <button
                 type="submit"
                 disabled={formLoading}
-                className="px-4 py-2 bg-indigo-650 hover:bg-indigo-700 bg-indigo-600 disabled:bg-indigo-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1 shadow-sm"
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1 shadow-sm"
               >
                 {formLoading ? 'Saving...' : editId ? 'Save Changes' : 'Save Degree'}
               </button>
@@ -343,7 +483,7 @@ const ProfilePage = () => {
                   </button>
                   <button
                     onClick={() => handleDelete(q.id)}
-                    className="p-2 hover:bg-red-50 hover:text-red-650 rounded-lg text-slate-400 cursor-pointer animate-fade-in"
+                    className="p-2 hover:bg-red-50 hover:text-red-600 rounded-lg text-slate-400 cursor-pointer animate-fade-in"
                   >
                     <FiTrash2 className="text-sm" />
                   </button>

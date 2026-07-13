@@ -34,6 +34,7 @@ const AdminTeachersListPage = () => {
         designation: teacher.designation,
         address: teacher.address,
         is_active: nextStatus,
+        is_permanent: teacher.is_permanent,
       });
 
       toast.success(
@@ -42,6 +43,31 @@ const AdminTeachersListPage = () => {
       
       setTeachers(
         teachers.map((t) => (t.id === teacher.id ? { ...t, is_active: nextStatus } : t))
+      );
+    } catch (err) {
+      toast.error(err.response?.data?.error || err.message);
+    }
+  };
+
+  const handleTogglePermanent = async (teacher) => {
+    const nextPermanent = !teacher.is_permanent;
+    try {
+      await axios.put(`/api/teachers/${teacher.id}`, {
+        name: teacher.name,
+        email: teacher.email,
+        number: teacher.number,
+        designation: teacher.designation,
+        address: teacher.address,
+        is_active: teacher.is_active,
+        is_permanent: nextPermanent,
+      });
+
+      toast.success(
+        `Teacher ${teacher.name} set to ${nextPermanent ? 'Permanent' : 'Temporary/Contract'}.`
+      );
+      
+      setTeachers(
+        teachers.map((t) => (t.id === teacher.id ? { ...t, is_permanent: nextPermanent } : t))
       );
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -114,6 +140,9 @@ const AdminTeachersListPage = () => {
                     Account Setup
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Employment
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
@@ -159,6 +188,27 @@ const AdminTeachersListPage = () => {
                         : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
                         {teacher.is_registered ? 'Setup Completed' : 'Pending Register'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleTogglePermanent(teacher)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
+                          teacher.is_permanent
+                            ? 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
+                        }`}
+                        title="Click to toggle employment status"
+                      >
+                        {teacher.is_permanent ? (
+                          <>
+                            <FiCheckCircle className="text-sm" /> Permanent
+                          </>
+                        ) : (
+                          <>
+                            <FiXCircle className="text-sm" /> Temporary
+                          </>
+                        )}
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button

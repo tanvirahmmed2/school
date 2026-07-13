@@ -34,17 +34,6 @@ export async function GET(request) {
       }, { status: 400 });
     }
 
-    const hasAccess = await verifyAccess(teacherId);
-    if (!hasAccess) {
-      const res_err_1263 = { error: 'Unauthorized. Admins or the owner teacher only.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_1263?.error || res_err_1263?.message || 'An error occurred',
-        error: res_err_1263?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 403 });
-    }
-
     const result = await query(
       'SELECT * FROM teacher_qualifications WHERE teacher_id = $1 ORDER BY passing_year DESC',
       [teacherId]

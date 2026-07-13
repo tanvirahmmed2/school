@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { uploadImage } from '@/lib/cloudinary';
 
 // GET all clubs
 export async function GET() {
   try {
     const result = await query(
-      'SELECT id, name, slug, description, created_at FROM clubs ORDER BY name ASC'
+      'SELECT id, name, slug, description, image, image_id, created_at FROM clubs ORDER BY name ASC'
     );
     const res_data_348 = { clubs: result.rows };
       return NextResponse.json({
@@ -40,7 +41,7 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { name, slug, description } = await request.json();
+    const { name, slug, description, image } = await request.json();
 
     if (!name) {
       const res_err_1598 = { error: 'Club name is required.' };
@@ -69,11 +70,33 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
+    let imageUrl = null;
+    let imageId = null;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        const uploadResult = await uploadImage(image, 'clubs');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+      } catch (uploadErr) {
+        console.error('Cloudinary upload failure:', uploadErr);
+        const res_err = { error: 'Failed to upload club image.' };
+        return NextResponse.json({
+          success: false,
+          message: res_err?.error || res_err?.message || 'An error occurred',
+          error: res_err?.error || 'Internal Server Error',
+          paylod: null
+        }, { status: 500 });
+      }
+    } else if (image) {
+      imageUrl = image;
+    }
+
     const result = await query(
-      `INSERT INTO clubs (name, slug, description) 
-       VALUES ($1, $2, $3) 
-       RETURNING id, name, slug, description`,
-      [name.trim(), finalSlug, description ? description.trim() : null]
+      `INSERT INTO clubs (name, slug, description, image, image_id) 
+       VALUES ($1, $2, $3, $4, $5) 
+       RETURNING id, name, slug, description, image, image_id`,
+      [name.trim(), finalSlug, description ? description.trim() : null, imageUrl, imageId]
     );
 
     const res_data_2003 = { message: 'Club created successfully.', club: result.rows[0] };

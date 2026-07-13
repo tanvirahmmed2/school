@@ -2,6 +2,44 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin, hashPassword } from '@/lib/auth';
 
+// GET a specific teacher (Public)
+export async function GET(request, { params }) {
+  try {
+    const { id } = await params;
+
+    const result = await query(
+      'SELECT id, name, email, designation, address, image, is_permanent FROM teachers WHERE id = $1 AND is_active = TRUE',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      const res_err_404 = { error: 'Teacher record not found.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err_404?.error || res_err_404?.message || 'An error occurred',
+        error: res_err_404?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 404 });
+    }
+
+    const res_data_200 = { teacher: result.rows[0] };
+    return NextResponse.json({
+      success: true,
+      message: res_data_200?.message || 'Successfully fecthed data',
+      paylod: res_data_200
+    }, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching teacher:', error);
+    const res_err_500 = { error: 'Failed to retrieve teacher details. Internal server error.' };
+    return NextResponse.json({
+      success: false,
+      message: res_err_500?.error || res_err_500?.message || 'An error occurred',
+      error: res_err_500?.error || 'Internal Server Error',
+      paylod: null
+    }, { status: 500 });
+  }
+}
+
 // PUT update a teacher (Admin only)
 export async function PUT(request, { params }) {
   try {
@@ -17,10 +55,10 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, email, number, designation, address, is_active, password } = await request.json();
+    const { name, email, number, designation, address, is_active, is_permanent, password } = await request.json();
 
-    if (!name || !email || !number || !designation || is_active === undefined) {
-      const res_err_848 = { error: 'Name, email, phone number, designation, and is_active parameters are required.' };
+    if (!name || !email || !number || !designation || is_active === undefined || is_permanent === undefined) {
+      const res_err_848 = { error: 'Name, email, phone number, designation, is_active, and is_permanent parameters are required.' };
       return NextResponse.json({
         success: false,
         message: res_err_848?.error || res_err_848?.message || 'An error occurred',
@@ -51,18 +89,18 @@ export async function PUT(request, { params }) {
       const passwordHash = await hashPassword(password);
       updatedTeacher = await query(
         `UPDATE teachers 
-         SET name = $1, email = $2, number = $3, designation = $4, address = $5, is_active = $6, password_hash = $7, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = $8 
-         RETURNING id, name, email, number, designation, address, is_active, is_registered`,
-        [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), address ? address.trim() : null, is_active, passwordHash, id]
+         SET name = $1, email = $2, number = $3, designation = $4, address = $5, is_active = $6, is_permanent = $7, password_hash = $8, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $9 
+         RETURNING id, name, email, number, designation, address, is_active, is_registered, is_permanent`,
+        [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), address ? address.trim() : null, is_active, !!is_permanent, passwordHash, id]
       );
     } else {
       updatedTeacher = await query(
         `UPDATE teachers 
-         SET name = $1, email = $2, number = $3, designation = $4, address = $5, is_active = $6, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = $7 
-         RETURNING id, name, email, number, designation, address, is_active, is_registered`,
-        [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), address ? address.trim() : null, is_active, id]
+         SET name = $1, email = $2, number = $3, designation = $4, address = $5, is_active = $6, is_permanent = $7, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $8 
+         RETURNING id, name, email, number, designation, address, is_active, is_registered, is_permanent`,
+        [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), address ? address.trim() : null, is_active, !!is_permanent, id]
       );
     }
 

@@ -9,6 +9,7 @@ import {
   FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
+import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -97,7 +98,7 @@ const Sidebar = () => {
     { label: 'Previous Exams', href: '/admin/exams/previous', icon: FiFileText },
   ];
 
-  const groupHeaderStyle = "text-[10px] font-black text-slate-400 uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-80 mt-2";
+  const groupHeaderStyle = "text-[10px] font-semibold text-slate-400 uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-80 mt-2";
 
   return (
     <>
@@ -114,9 +115,9 @@ const Sidebar = () => {
           adminSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <Back/>
 
-          {/* Group 1: Overview & Controls */}
           <div className="flex flex-col gap-1">
             <span className={groupHeaderStyle}>
               <FiCpu className="text-xs" /> System Gateway
@@ -192,7 +193,6 @@ const Sidebar = () => {
             </div>
           </div>
 
-          {/* Group 2: Academics */}
           <div className="flex flex-col gap-3">
             <span className={groupHeaderStyle}>
               <FiLayers className="text-xs" /> Academics Setup
@@ -434,13 +434,11 @@ const Sidebar = () => {
             </div>
           </div>
 
-          {/* Group 3: Directory Registry */}
           <div className="flex flex-col gap-3">
             <span className={groupHeaderStyle}>
               <FiUsers className="text-xs" /> Directory Registry
             </span>
 
-            {/* Collapsible: Students */}
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => setStudentsOpen(!studentsOpen)}
@@ -631,7 +629,6 @@ const Sidebar = () => {
 
         </div>
 
-        {/* Info label at the bottom */}
         <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-2xl text-center mt-8">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
             System Status

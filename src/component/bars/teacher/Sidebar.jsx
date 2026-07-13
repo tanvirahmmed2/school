@@ -8,6 +8,7 @@ import {
   FiAward, FiDollarSign, FiUsers, FiUser
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
+import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -26,7 +27,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Sidebar backdrop */}
       {TeacherSidebar && (
         <div
           className="fixed inset-0 top-16 bg-slate-900/20 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
@@ -34,15 +34,13 @@ const Sidebar = () => {
         />
       )}
 
-      {/* Sidebar container */}
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-100 z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
-          TeacherSidebar ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-100 z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${TeacherSidebar ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         <div className="flex flex-col gap-6">
-          {/* Sidebar Navigation */}
           <div className="flex flex-col gap-2">
+            <Back/>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2">
               Teacher Navigation
             </span>
@@ -56,11 +54,10 @@ const Sidebar = () => {
                     key={link.href}
                     href={link.href}
                     onClick={() => setTeacherSidebar(false)}
-                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                      isActive
+                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                    }`}
+                      }`}
                   >
                     <Icon className={`text-base ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
                     <span>{link.label}</span>
@@ -71,7 +68,6 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Info label at the bottom */}
         <div className="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center mt-6">
           <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
             Portal Status

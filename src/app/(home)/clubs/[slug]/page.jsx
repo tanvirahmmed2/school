@@ -57,8 +57,12 @@ const ClubDetailsPage = () => {
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col gap-6">
             {/* Header */}
             <div className="flex gap-4 items-start">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
-                <FiUsers />
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 overflow-hidden border border-slate-100">
+                {selectedClub.image ? (
+                  <img src={selectedClub.image} alt={selectedClub.name} className="w-full h-full object-cover" />
+                ) : (
+                  <FiUsers />
+                )}
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded w-fit uppercase tracking-wider">

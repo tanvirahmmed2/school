@@ -6,7 +6,7 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query(
-      'SELECT id, name, email, number, designation, address, is_active, is_registered, created_at FROM teachers ORDER BY name ASC'
+      'SELECT id, name, email, number, designation, address, is_active, is_registered, is_permanent, image, created_at FROM teachers ORDER BY name ASC'
     );
     const res_data_398 = { teachers: result.rows };
       return NextResponse.json({
@@ -40,7 +40,7 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { name, email, number, designation } = await request.json();
+    const { name, email, number, designation, is_permanent } = await request.json();
 
     if (!name || !email || !number || !designation) {
       const res_err_1740 = { error: 'All fields (name, email, number, designation) are required.' };
@@ -77,10 +77,10 @@ export async function POST(request) {
     }
 
     const newTeacher = await query(
-      `INSERT INTO teachers (name, email, number, designation, is_active, is_registered) 
-       VALUES ($1, $2, $3, $4, FALSE, FALSE) 
-       RETURNING id, name, email, number, designation, is_active, is_registered`,
-      [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim()]
+      `INSERT INTO teachers (name, email, number, designation, is_active, is_registered, is_permanent) 
+       VALUES ($1, $2, $3, $4, FALSE, FALSE, $5) 
+       RETURNING id, name, email, number, designation, is_active, is_registered, is_permanent`,
+      [name.trim(), email.trim().toLowerCase(), number.trim(), designation.trim(), !!is_permanent]
     );
 
     const res_data_2418 = { message: 'Teacher profile pre-created successfully.', teacher: newTeacher.rows[0] };

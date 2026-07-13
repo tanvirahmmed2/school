@@ -1,10 +1,12 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import React, { createContext, useState, useEffect } from "react";
 
 export const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
+  const router=useRouter()
   const [sidebar, setSidebar] = useState(false);
   const [adminSidebar, setAdminSidebar] = useState(false);
   const [TeacherSidebar, setTeacherSidebar] = useState(false);
@@ -12,6 +14,11 @@ export const ContextProvider = ({ children }) => {
 
   const [classes, setClasses]=useState([])
   const [clubs, setClubs]=useState([])
+
+
+  const goBack=()=>{
+    router.back()
+  }
 
   useEffect(() => {
     const fetchClassesAndClubs = async () => {
@@ -40,6 +47,7 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   const values = {
+    goBack,
     sidebar,
     setSidebar,
     adminSidebar,

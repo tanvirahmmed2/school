@@ -10,6 +10,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [designation, setDesignation] = useState('');
+  const [isPermanent, setIsPermanent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -25,7 +26,8 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
         name: name.trim(), 
         email: email.trim(), 
         number: number.trim(), 
-        designation: designation.trim() 
+        designation: designation.trim(),
+        is_permanent: isPermanent
       });
 
       toast.success(response.data.message || 'Teacher account placeholder created successfully!');
@@ -33,6 +35,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
       setEmail('');
       setNumber('');
       setDesignation('');
+      setIsPermanent(false);
       if (onSuccess) onSuccess();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -106,6 +109,21 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             disabled={submitting}
             className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
           />
+        </div>
+
+        {/* Employment Type Checkbox */}
+        <div className="flex items-center gap-3 md:col-span-2 py-2">
+          <input
+            type="checkbox"
+            id="isPermanent"
+            checked={isPermanent}
+            onChange={(e) => setIsPermanent(e.target.checked)}
+            disabled={submitting}
+            className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer"
+          />
+          <label htmlFor="isPermanent" className="text-sm font-semibold text-slate-700 cursor-pointer">
+            Permanent Position (Indicates if this teacher is a permanent staff member)
+          </label>
         </div>
 
         <div className="flex justify-end gap-3 md:col-span-2 mt-4 pt-3 border-t border-slate-100">
