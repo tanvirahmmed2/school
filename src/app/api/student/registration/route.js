@@ -84,6 +84,7 @@ export async function PUT(request) {
       address,
       parents_info,
       birth_certificate_number,
+      gender,
       password
     } = await request.json();
 
@@ -93,6 +94,15 @@ export async function PUT(request) {
         success: false,
         message: res_err_3205?.error || res_err_3205?.message || 'An error occurred',
         error: res_err_3205?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    if (gender && !['Male', 'Female'].includes(gender)) {
+      return NextResponse.json({
+        success: false,
+        message: "Gender must be either 'Male' or 'Female'.",
+        error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
@@ -161,10 +171,11 @@ export async function PUT(request) {
            parents_info = $6, 
            birth_certificate_number = $7, 
            password_hash = $8,
+           gender = $9,
            is_registered = TRUE,
            is_active = TRUE,
            updated_at = CURRENT_TIMESTAMP
-       WHERE LOWER(registration_number) = LOWER($9)
+       WHERE LOWER(registration_number) = LOWER($10)
        RETURNING id, name, email, registration_number, is_active, is_registered`,
       [
         name.trim(),
@@ -175,6 +186,7 @@ export async function PUT(request) {
         parents_info.trim(),
         birth_certificate_number.trim(),
         hashedPass,
+        gender || null,
         registration_number.trim()
       ]
     );

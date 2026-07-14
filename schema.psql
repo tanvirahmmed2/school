@@ -355,6 +355,7 @@ CREATE TABLE IF NOT EXISTS students (
     address TEXT,
     parents_info TEXT,
     birth_certificate_number VARCHAR(100) UNIQUE,
+    gender VARCHAR(20),
     password_hash VARCHAR(255),
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,
@@ -703,6 +704,146 @@ CREATE TABLE IF NOT EXISTS recognitions (
 CREATE TRIGGER update_recognitions_updated_at
     BEFORE UPDATE ON recognitions
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- ANNOUNCEMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS announcements (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    total_room INT,
+    location VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_announcements_updated_at
+    BEFORE UPDATE ON announcements
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- HOSTELS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS hostels (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    total_room INT NOT NULL DEFAULT 0,
+    location VARCHAR(255) NOT NULL,
+    gender VARCHAR(20),
+    image TEXT,
+    image_id VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_hostels_updated_at
+    BEFORE UPDATE ON hostels
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- HOSTEL ROOMS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS hostel_rooms (
+    id BIGSERIAL PRIMARY KEY,
+    hostel_id BIGINT NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+    room_number VARCHAR(100) NOT NULL,
+    room_type VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL DEFAULT 1,
+    availability_status VARCHAR(50) NOT NULL DEFAULT 'Available',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_hostel_room UNIQUE(hostel_id, room_number)
+);
+
+CREATE TRIGGER update_hostel_rooms_updated_at
+    BEFORE UPDATE ON hostel_rooms
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- HOSTEL PROVOST TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS hostel_provost (
+    id BIGSERIAL PRIMARY KEY,
+    hostel_id BIGINT NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_hostel_provost UNIQUE(hostel_id, teacher_id)
+);
+
+CREATE TRIGGER update_hostel_provost_updated_at
+    BEFORE UPDATE ON hostel_provost
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- HOSTEL ALLOCATIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS hostel_allocations (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    room_id BIGINT NOT NULL REFERENCES hostel_rooms(id) ON DELETE CASCADE,
+    allocated_at DATE NOT NULL DEFAULT CURRENT_DATE,
+    vacated_at DATE,
+    status VARCHAR(50) NOT NULL DEFAULT 'Active',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS unique_active_student_allocation ON hostel_allocations(student_id) WHERE status = 'Active';
+
+CREATE TRIGGER update_hostel_allocations_updated_at
+    BEFORE UPDATE ON hostel_allocations
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- HOSTEL FEES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS hostel_fees (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    due_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid', 'Partially Paid')),
+    paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_date TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_hostel_fees_updated_at
+    BEFORE UPDATE ON hostel_fees
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- MARK GRADES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS mark_grades (
+    grade_id SERIAL PRIMARY KEY,
+    letter_grade VARCHAR(5) NOT NULL,
+    min_mark NUMERIC(5,2) NOT NULL,
+    max_mark NUMERIC(5,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 
 
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { FiMedal, FiList } from 'react-icons/fi';
+import { FiAward, FiList } from 'react-icons/fi';
 import Link from 'next/link';
 import AdminForm from '@/component/forms/AdminForm';
 
@@ -71,7 +71,7 @@ const CreateRecognitionPage = () => {
         title="Recognition Entry Details"
         fields={recognitionFields}
         apiEndpoint="/api/recognitions"
-        icon={FiMedal}
+        icon={FiAward}
         onSuccess={() => {
           router.push('/admin/recognition/list');
         }}

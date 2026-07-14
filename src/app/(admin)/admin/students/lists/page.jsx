@@ -28,6 +28,7 @@ const AdminStudentListsPage = () => {
   const [editClassId, setEditClassId] = useState('');
   const [editSectionId, setEditSectionId] = useState('');
   const [editBirthCert, setEditBirthCert] = useState('');
+  const [editGender, setEditGender] = useState('');
   const [editActive, setEditActive] = useState(true);
   const [editSectionsList, setEditSectionsList] = useState([]);
 
@@ -155,6 +156,7 @@ const AdminStudentListsPage = () => {
     setEditClassId(student.class_id ? student.class_id.toString() : '');
     setEditSectionId(student.section_id ? student.section_id.toString() : '');
     setEditBirthCert(student.birth_certificate_number || '');
+    setEditGender(student.gender || '');
     setEditActive(student.is_active);
     setShowPreCreate(false);
   };
@@ -180,6 +182,7 @@ const AdminStudentListsPage = () => {
           class_id: editClassId,
           section_id: editSectionId || null,
           birth_certificate_number: editBirthCert || null,
+          gender: editGender || null,
           is_active: editActive
         })
       });
@@ -418,7 +421,7 @@ const AdminStudentListsPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Phone
@@ -481,6 +484,22 @@ const AdminStudentListsPage = () => {
                   disabled={submitting}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
                 />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Gender
+                </label>
+                <select
+                  value={editGender}
+                  onChange={(e) => setEditGender(e.target.value)}
+                  disabled={submitting}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500 cursor-pointer"
+                >
+                  <option value="">-- Select --</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
               </div>
             </div>
 
@@ -580,7 +599,20 @@ const AdminStudentListsPage = () => {
                           {(std.name || 'Unset').substring(0, 2).toUpperCase()}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-800">{std.name || 'Pre-created (No profile)'}</p>
+                          <div className="flex items-center gap-1.5">
+                            <p className="text-sm font-bold text-slate-800">{std.name || 'Pre-created (No profile)'}</p>
+                            {std.gender && (
+                              <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded-md ${
+                                std.gender === 'Male'
+                                  ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                  : std.gender === 'Female'
+                                  ? 'bg-pink-50 text-pink-600 border border-pink-100'
+                                  : 'bg-slate-100 text-slate-600'
+                              }`}>
+                                {std.gender}
+                              </span>
+                            )}
+                          </div>
                           <span className="text-[10px] text-slate-400 font-semibold flex flex-col gap-0.5">
                             {std.email && <span>📧 {std.email}</span>}
                             {std.phone && <span>📞 {std.phone}</span>}

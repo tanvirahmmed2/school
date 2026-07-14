@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FiMail, FiPhone } from 'react-icons/fi';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const RegistrarPage = () => {
   const [member, setMember] = useState(null);
@@ -91,15 +92,13 @@ const RegistrarPage = () => {
               <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
                 Admissions & Verification Protocols
               </h2>
-              <div className="text-slate-600 text-xs md:text-sm leading-relaxed flex flex-col gap-4">
+              <div>
                 {displayMember.bio ? (
-                  displayMember.bio.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))
+                  <RichTextDisplay html={displayMember.bio} className="text-slate-600 text-xs md:text-sm leading-relaxed" />
                 ) : (
-                  <p>Registry administrative protocols.</p>
+                  <p className="text-slate-600 text-xs md:text-sm">Registry administrative protocols.</p>
                 )}
-                <p className="font-semibold text-slate-800">
+                <p className="font-semibold text-slate-800 mt-4">
                   {displayMember.name} <br />
                   <span className="text-xs font-bold text-slate-400">Registrar, FIT</span>
                 </p>

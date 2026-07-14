@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   FiHome, FiShield, FiLayers, FiGrid, FiBook,
   FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText,
-  FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu
+  FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu, FiBell
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -26,10 +26,12 @@ const Sidebar = () => {
   const [newsOpen, setNewsOpen] = useState(pathname.startsWith('/admin/news'));
   const [achievementsOpen, setAchievementsOpen] = useState(pathname.startsWith('/admin/acheivement'));
   const [recognitionsOpen, setRecognitionsOpen] = useState(pathname.startsWith('/admin/recognition'));
+  const [hostelsOpen, setHostelsOpen] = useState(pathname.startsWith('/admin/hostels'));
 
   const systemLinks = [
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
     { label: 'Access Control', href: '/admin/access', icon: FiShield },
+    { label: 'Website Announcement', href: '/admin/announcements', icon: FiBell },
   ];
 
   const classLinks = [
@@ -96,6 +98,14 @@ const Sidebar = () => {
     { label: 'Current Exams', href: '/admin/exams/current', icon: FiCalendar },
     { label: 'Upcoming Exams', href: '/admin/exams/upcoming', icon: FiCalendar },
     { label: 'Previous Exams', href: '/admin/exams/previous', icon: FiFileText },
+    { label: 'Grade Scale Setup', href: '/admin/exams/grades', icon: FiAward },
+  ];
+
+  const hostelLinks = [
+    { label: 'Hostels & Provosts', href: '/admin/hostels', icon: FiHome },
+    { label: 'Room Directory', href: '/admin/hostels/rooms', icon: FiGrid },
+    { label: 'Student Allocations', href: '/admin/hostels/allocations', icon: FiUsers },
+    { label: 'Hostel Fees', href: '/admin/hostels/fees', icon: FiDollarSign },
   ];
 
   const groupHeaderStyle = "text-[10px] font-semibold text-slate-400 uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-80 mt-2";
@@ -603,6 +613,53 @@ const Sidebar = () => {
               {clubsOpen && (
                 <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
                   {clubLinks.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setAdminSidebar(false)}
+                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'text-sky-600 font-bold bg-sky-50/50'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/60'
+                        }`}
+                      >
+                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                        <span>{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Collapsible: Hostels */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setHostelsOpen(!hostelsOpen)}
+                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  pathname.startsWith('/admin/hostels')
+                    ? 'bg-slate-50/80 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiHome className={`text-base ${pathname.startsWith('/admin/hostels') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Hostels</span>
+                </div>
+                {hostelsOpen ? (
+                  <FiChevronDown className="text-slate-400 text-sm" />
+                ) : (
+                  <FiChevronRight className="text-slate-400 text-sm" />
+                )}
+              </button>
+
+              {hostelsOpen && (
+                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
+                  {hostelLinks.map((link) => {
                     const Icon = link.icon;
                     const isActive = pathname === link.href;
 

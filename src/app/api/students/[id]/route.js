@@ -29,8 +29,18 @@ export async function PUT(request, { params }) {
       address,
       parents_info,
       birth_certificate_number,
+      gender,
       is_active
     } = body;
+
+    if (gender && !['Male', 'Female'].includes(gender)) {
+      return NextResponse.json({
+        success: false,
+        message: "Gender must be either 'Male' or 'Female'.",
+        error: 'Bad Request',
+        paylod: null
+      }, { status: 400 });
+    }
 
     if (!registration_number || !class_id) {
       const res_err_971 = { error: 'Registration number and Class are required.' };
@@ -106,9 +116,10 @@ export async function PUT(request, { params }) {
            address = $8,
            parents_info = $9,
            birth_certificate_number = $10,
-           is_active = $11,
+           gender = $11,
+           is_active = $12,
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $12
+       WHERE id = $13
        RETURNING *`,
       [
         name ? name.trim() : null,
@@ -121,6 +132,7 @@ export async function PUT(request, { params }) {
         address ? address.trim() : null,
         parents_info ? parents_info.trim() : null,
         birth_certificate_number ? birth_certificate_number.trim() : null,
+        gender || null,
         is_active === undefined ? true : is_active,
         id
       ]

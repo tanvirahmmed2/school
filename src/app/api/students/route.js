@@ -77,7 +77,7 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { registration_number, class_id, section_id } = await request.json();
+    const { registration_number, class_id, section_id, gender } = await request.json();
 
     if (!registration_number || !class_id) {
       const res_err_2706 = { error: 'Registration number and Target class are required to pre-create account.' };
@@ -85,6 +85,15 @@ export async function POST(request) {
         success: false,
         message: res_err_2706?.error || res_err_2706?.message || 'An error occurred',
         error: res_err_2706?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    if (gender && !['Male', 'Female'].includes(gender)) {
+      return NextResponse.json({
+        success: false,
+        message: "Gender must be either 'Male' or 'Female'.",
+        error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
@@ -128,13 +137,14 @@ export async function POST(request) {
     }
 
     const result = await query(
-      `INSERT INTO students (registration_number, class_id, section_id, is_active, is_registered) 
-       VALUES ($1, $2, $3, FALSE, FALSE) 
+      `INSERT INTO students (registration_number, class_id, section_id, gender, is_active, is_registered) 
+       VALUES ($1, $2, $3, $4, FALSE, FALSE) 
        RETURNING *`,
       [
         registration_number.trim(),
         class_id,
-        section_id ? parseInt(section_id, 10) : null
+        section_id ? parseInt(section_id, 10) : null,
+        gender || null
       ]
     );
 

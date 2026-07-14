@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiAward, FiCalendar, FiUser, FiArrowLeft } from 'react-icons/fi';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const RecognitionDetailPage = () => {
   const { slug } = useParams();
@@ -120,9 +121,7 @@ const RecognitionDetailPage = () => {
 
             {/* Description */}
             {recognition.description && (
-              <div className="prose prose-sm max-w-none text-slate-600 leading-relaxed whitespace-pre-wrap">
-                {recognition.description}
-              </div>
+              <RichTextDisplay html={recognition.description} className="text-sm text-slate-600" />
             )}
           </div>
         </div>

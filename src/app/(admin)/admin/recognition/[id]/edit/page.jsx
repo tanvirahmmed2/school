@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { FiMedal, FiList, FiLoader } from 'react-icons/fi';
+import { FiAward, FiList, FiLoader } from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const EditRecognitionPage = () => {
   const router = useRouter();
@@ -126,7 +127,7 @@ const EditRecognitionPage = () => {
       {/* Form */}
       <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
         <h2 className="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
-          <FiMedal className="text-sky-600 text-xl" /> Recognition Entry Details
+          <FiAward className="text-sky-600 text-xl" /> Recognition Entry Details
         </h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -198,13 +199,10 @@ const EditRecognitionPage = () => {
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-1">
                 Description
               </label>
-              <textarea
-                name="description"
+              <TiptapEditor
                 value={formData.description}
-                onChange={handleChange}
-                rows={4}
+                onChange={(val) => setFormData(prev => ({ ...prev, description: val }))}
                 placeholder="Brief description about this recognition or award..."
-                className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
           </div>

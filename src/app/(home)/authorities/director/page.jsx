@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FiMail, FiPhone } from 'react-icons/fi';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const DirectorPage = () => {
   const [member, setMember] = useState(null);
@@ -91,15 +92,13 @@ const DirectorPage = () => {
               <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
                 Executing Institutional Standards
               </h2>
-              <div className="text-slate-600 text-xs md:text-sm leading-relaxed flex flex-col gap-4">
+              <div>
                 {displayMember.bio ? (
-                  displayMember.bio.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))
+                  <RichTextDisplay html={displayMember.bio} className="text-slate-600 text-xs md:text-sm leading-relaxed" />
                 ) : (
-                  <p>Executive management operational strategies.</p>
+                  <p className="text-slate-600 text-xs md:text-sm">Executive management operational strategies.</p>
                 )}
-                <p className="font-semibold text-slate-800">
+                <p className="font-semibold text-slate-800 mt-4">
                   {displayMember.name} <br />
                   <span className="text-xs font-bold text-slate-400">Managing Director, FIT</span>
                 </p>

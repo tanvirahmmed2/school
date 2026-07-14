@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FiPlus, FiMedal, FiCalendar, FiImage, FiTrash2, FiUser, FiEdit2 } from 'react-icons/fi';
+import { FiPlus, FiAward, FiCalendar, FiImage, FiTrash2, FiUser, FiEdit2 } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 
 const RecognitionListPage = () => {
@@ -109,7 +109,7 @@ const RecognitionListPage = () => {
                     {/* Name + description */}
                     <td className="p-4 max-w-xs">
                       <div className="flex items-center gap-2">
-                        <FiMedal className="text-amber-500 flex-shrink-0" />
+                        <FiAward className="text-amber-500 flex-shrink-0" />
                         <div>
                           <span className="font-extrabold text-slate-900">{item.name}</span>
                           {item.description && (
@@ -178,7 +178,7 @@ const RecognitionListPage = () => {
         ) : (
           <div className="p-12 text-center">
             <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
-              <FiMedal />
+              <FiAward />
             </div>
             <h3 className="font-bold text-slate-800 text-base">No recognitions recorded</h3>
             <p className="text-slate-500 text-xs mt-1">

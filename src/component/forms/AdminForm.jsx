@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { FiPlusCircle, FiArrowRight } from 'react-icons/fi';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 /**
  * Generic reusable admin form.
@@ -115,13 +116,10 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
                 </label>
 
                 {field.type === 'textarea' ? (
-                  <textarea
-                    name={field.name}
+                  <TiptapEditor
                     value={formData[field.name] || ''}
-                    onChange={handleChange}
-                    rows={field.rows || 5}
+                    onChange={(val) => setFormData(prev => ({ ...prev, [field.name]: val }))}
                     placeholder={field.placeholder}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 ) : field.type === 'select' ? (
                   <select
