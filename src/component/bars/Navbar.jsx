@@ -24,7 +24,7 @@ const Navbar = () => {
     }`;
 
   return (
-    <nav className="relative w-full bg-amber-600 text-white flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
+    <nav className="relative w-full bg-sky-900 text-white flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
 
       <section className="w-full max-w-7xl flex flex-row items-center justify-between h-14 md:h-16">
         <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white  transition-colors tracking-tight">
@@ -100,9 +100,9 @@ const Navbar = () => {
         </div>
 
         <div className="relative group py-1 w-full">
-          <button className={dropdownTriggerStyle(isDropdownActive('/clubs'))}>
+          <Link href={'/clubs'} className={dropdownTriggerStyle(isDropdownActive('/clubs'))}>
             Clubs
-          </button>
+          </Link>
           <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col shadow-xl  min-w-60 z-50 text-slate-700 bg-white">
             {clubs && clubs.length > 0 ? (
               clubs.map((c) => (
