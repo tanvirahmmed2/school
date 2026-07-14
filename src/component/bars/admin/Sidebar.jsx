@@ -32,12 +32,15 @@ const Sidebar = () => {
 
   const systemLinks = [
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
-    { label: 'Access Control', href: '/admin/access', icon: FiShield },
-    { label: 'Website Announcement', href: '/admin/announcements', icon: FiBell },
     { label: 'Website Settings', href: '/admin/settings', icon: FiSettings },
+    { label: 'Access Control', href: '/admin/access', icon: FiShield },
+    { label: 'Security Audit', href: '/admin/security', icon: FiShield },
+    { label: 'Website Announcement', href: '/admin/announcements', icon: FiBell },
+  ];
+
+  const financeLogisticsLinks = [
     { label: 'General Finance', href: '/admin/finance', icon: FiDollarSign },
     { label: 'Inventory Assets', href: '/admin/inventory', icon: FiShoppingBag },
-    { label: 'Security Audit', href: '/admin/security', icon: FiShield },
   ];
 
   const classLinks = [
@@ -140,81 +143,7 @@ const Sidebar = () => {
         <div className="flex flex-col gap-4">
           <Back/>
 
-          <div className="flex flex-col gap-1">
-            <span className={groupHeaderStyle}>
-              <FiCpu className="text-xs" /> System Gateway
-            </span>
-            <nav className="flex flex-col gap-1 mb-2">
-              {systemLinks.map((link) => {
-                const Icon = link.icon;
-                const isActive = pathname === link.href;
-
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setAdminSidebar(false)}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 relative ${
-                      isActive
-                        ? 'bg-sky-50/80 text-sky-650 shadow-xs border-l-2 border-sky-600 pl-2.5'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                    }`}
-                  >
-                    <Icon className={`text-base ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
-                    <span>{link.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
-
-            {/* Collapsible: News */}
-            <div className="flex flex-col gap-1">
-              <button
-                onClick={() => setNewsOpen(!newsOpen)}
-                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  pathname.startsWith('/admin/news')
-                    ? 'bg-slate-50/80 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <FiFileText className={`text-base ${pathname.startsWith('/admin/news') ? 'text-sky-600' : 'text-slate-400'}`} />
-                  <span>Campus News</span>
-                </div>
-                {newsOpen ? (
-                  <FiChevronDown className="text-slate-400 text-sm" />
-                ) : (
-                  <FiChevronRight className="text-slate-400 text-sm" />
-                )}
-              </button>
-
-              {newsOpen && (
-                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
-                  {newsLinks.map((link) => {
-                    const Icon = link.icon;
-                    const isActive = pathname === link.href;
-
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setAdminSidebar(false)}
-                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
-                          isActive
-                            ? 'text-sky-600 font-bold bg-sky-50/50'
-                            : 'text-slate-500 hover:text-slate-800 hover:bg-sky-50/60'
-                        }`}
-                      >
-                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
-                        <span>{link.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
+          {/* Group 1: Academics Setup */}
           <div className="flex flex-col gap-3">
             <span className={groupHeaderStyle}>
               <FiLayers className="text-xs" /> Academics Setup
@@ -360,154 +289,15 @@ const Sidebar = () => {
                 </div>
               )}
             </div>
-
-            {/* Collapsible: Achievements */}
-            <div className="flex flex-col gap-1">
-              <button
-                onClick={() => setAchievementsOpen(!achievementsOpen)}
-                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  pathname.startsWith('/admin/acheivement')
-                    ? 'bg-slate-50/80 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <FiAward className={`text-base ${pathname.startsWith('/admin/acheivement') ? 'text-sky-600' : 'text-slate-400'}`} />
-                  <span>Achievements</span>
-                </div>
-                {achievementsOpen ? (
-                  <FiChevronDown className="text-slate-400 text-sm" />
-                ) : (
-                  <FiChevronRight className="text-slate-400 text-sm" />
-                )}
-              </button>
-
-              {achievementsOpen && (
-                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
-                  {achievementLinks.map((link) => {
-                    const Icon = link.icon;
-                    const isActive = pathname === link.href;
-
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setAdminSidebar(false)}
-                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
-                          isActive
-                            ? 'text-sky-600 font-bold bg-sky-50/50'
-                            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/60'
-                        }`}
-                      >
-                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
-                        <span>{link.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Collapsible: Recognitions */}
-            <div className="flex flex-col gap-1">
-              <button
-                onClick={() => setRecognitionsOpen(!recognitionsOpen)}
-                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  pathname.startsWith('/admin/recognition')
-                    ? 'bg-slate-50/80 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <FiAward className={`text-base ${pathname.startsWith('/admin/recognition') ? 'text-sky-600' : 'text-slate-400'}`} />
-                  <span>Recognitions</span>
-                </div>
-                {recognitionsOpen ? (
-                  <FiChevronDown className="text-slate-400 text-sm" />
-                ) : (
-                  <FiChevronRight className="text-slate-400 text-sm" />
-                )}
-              </button>
-
-              {recognitionsOpen && (
-                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
-                  {recognitionLinks.map((link) => {
-                    const Icon = link.icon;
-                    const isActive = pathname === link.href;
-
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setAdminSidebar(false)}
-                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
-                          isActive
-                            ? 'text-sky-600 font-bold bg-sky-50/50'
-                            : 'text-slate-500 hover:text-slate-800 hover:bg-sky-50/60'
-                        }`}
-                      >
-                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
-                        <span>{link.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Collapsible: Collaborations */}
-            <div className="flex flex-col gap-1">
-              <button
-                onClick={() => setCollaborationsOpen(!collaborationsOpen)}
-                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  pathname.startsWith('/admin/collaborations')
-                    ? 'bg-slate-50/80 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <FiUsers className={`text-base ${pathname.startsWith('/admin/collaborations') ? 'text-sky-600' : 'text-slate-400'}`} />
-                  <span>Collaborations</span>
-                </div>
-                {collaborationsOpen ? (
-                  <FiChevronDown className="text-slate-400 text-sm" />
-                ) : (
-                  <FiChevronRight className="text-slate-400 text-sm" />
-                )}
-              </button>
-
-              {collaborationsOpen && (
-                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
-                  {collaborationLinks.map((link) => {
-                    const Icon = link.icon;
-                    const isActive = pathname === link.href;
-
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setAdminSidebar(false)}
-                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
-                          isActive
-                            ? 'text-sky-600 font-bold bg-sky-50/50'
-                            : 'text-slate-500 hover:text-slate-800 hover:bg-sky-50/60'
-                        }`}
-                      >
-                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
-                        <span>{link.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
           </div>
 
+          {/* Group 2: Directory Registry */}
           <div className="flex flex-col gap-3">
             <span className={groupHeaderStyle}>
               <FiUsers className="text-xs" /> Directory Registry
             </span>
 
+            {/* Collapsible: Students */}
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => setStudentsOpen(!studentsOpen)}
@@ -647,6 +437,89 @@ const Sidebar = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Group 3: Finance & Logistics */}
+          <div className="flex flex-col gap-3">
+            <span className={groupHeaderStyle}>
+              <FiDollarSign className="text-xs" /> Finance & Logistics
+            </span>
+            <nav className="flex flex-col gap-1 mb-1">
+              {financeLogisticsLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href;
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setAdminSidebar(false)}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 relative ${
+                      isActive
+                        ? 'bg-sky-50/80 text-sky-650 shadow-xs border-l-2 border-sky-600 pl-2.5'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                    }`}
+                  >
+                    <Icon className={`text-base ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Collapsible: Hostels */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setHostelsOpen(!hostelsOpen)}
+                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  pathname.startsWith('/admin/hostels')
+                    ? 'bg-slate-50/80 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiHome className={`text-base ${pathname.startsWith('/admin/hostels') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Hostels</span>
+                </div>
+                {hostelsOpen ? (
+                  <FiChevronDown className="text-slate-400 text-sm" />
+                ) : (
+                  <FiChevronRight className="text-slate-400 text-sm" />
+                )}
+              </button>
+
+              {hostelsOpen && (
+                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
+                  {hostelLinks.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setAdminSidebar(false)}
+                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'text-sky-600 font-bold bg-sky-50/50'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/60'
+                        }`}
+                      >
+                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                        <span>{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Group 4: Campus & Co-curricular */}
+          <div className="flex flex-col gap-3">
+            <span className={groupHeaderStyle}>
+              <FiUsers className="text-xs" /> Campus & Co-curricular
+            </span>
 
             {/* Collapsible: Clubs */}
             <div className="flex flex-col gap-1">
@@ -695,30 +568,77 @@ const Sidebar = () => {
               )}
             </div>
 
-            {/* Collapsible: Hostels */}
+            {/* Collapsible: News */}
             <div className="flex flex-col gap-1">
               <button
-                onClick={() => setHostelsOpen(!hostelsOpen)}
+                onClick={() => setNewsOpen(!newsOpen)}
                 className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  pathname.startsWith('/admin/hostels')
+                  pathname.startsWith('/admin/news')
                     ? 'bg-slate-50/80 text-slate-800'
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <FiHome className={`text-base ${pathname.startsWith('/admin/hostels') ? 'text-sky-600' : 'text-slate-400'}`} />
-                  <span>Hostels</span>
+                  <FiFileText className={`text-base ${pathname.startsWith('/admin/news') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Campus News</span>
                 </div>
-                {hostelsOpen ? (
+                {newsOpen ? (
                   <FiChevronDown className="text-slate-400 text-sm" />
                 ) : (
                   <FiChevronRight className="text-slate-400 text-sm" />
                 )}
               </button>
 
-              {hostelsOpen && (
+              {newsOpen && (
                 <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
-                  {hostelLinks.map((link) => {
+                  {newsLinks.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setAdminSidebar(false)}
+                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'text-sky-600 font-bold bg-sky-50/50'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-sky-50/60'
+                        }`}
+                      >
+                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                        <span>{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Collapsible: Achievements */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setAchievementsOpen(!achievementsOpen)}
+                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  pathname.startsWith('/admin/acheivement')
+                    ? 'bg-slate-50/80 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiAward className={`text-base ${pathname.startsWith('/admin/acheivement') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Achievements</span>
+                </div>
+                {achievementsOpen ? (
+                  <FiChevronDown className="text-slate-400 text-sm" />
+                ) : (
+                  <FiChevronRight className="text-slate-400 text-sm" />
+                )}
+              </button>
+
+              {achievementsOpen && (
+                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
+                  {achievementLinks.map((link) => {
                     const Icon = link.icon;
                     const isActive = pathname === link.href;
 
@@ -741,6 +661,129 @@ const Sidebar = () => {
                 </div>
               )}
             </div>
+
+            {/* Collapsible: Recognitions */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setRecognitionsOpen(!recognitionsOpen)}
+                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  pathname.startsWith('/admin/recognition')
+                    ? 'bg-slate-50/80 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiAward className={`text-base ${pathname.startsWith('/admin/recognition') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Recognitions</span>
+                </div>
+                {recognitionsOpen ? (
+                  <FiChevronDown className="text-slate-400 text-sm" />
+                ) : (
+                  <FiChevronRight className="text-slate-400 text-sm" />
+                )}
+              </button>
+
+              {recognitionsOpen && (
+                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
+                  {recognitionLinks.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setAdminSidebar(false)}
+                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'text-sky-600 font-bold bg-sky-50/50'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/60'
+                        }`}
+                      >
+                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                        <span>{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Collapsible: Collaborations */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setCollaborationsOpen(!collaborationsOpen)}
+                className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  pathname.startsWith('/admin/collaborations')
+                    ? 'bg-slate-50/80 text-slate-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiUsers className={`text-base ${pathname.startsWith('/admin/collaborations') ? 'text-sky-600' : 'text-slate-400'}`} />
+                  <span>Collaborations</span>
+                </div>
+                {collaborationsOpen ? (
+                  <FiChevronDown className="text-slate-400 text-sm" />
+                ) : (
+                  <FiChevronRight className="text-slate-400 text-sm" />
+                )}
+              </button>
+
+              {collaborationsOpen && (
+                <div className="flex flex-col gap-1 pl-4 border-l border-slate-100 ml-5 transition-all duration-300">
+                  {collaborationLinks.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setAdminSidebar(false)}
+                        className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'text-sky-600 font-bold bg-sky-50/50'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-sky-50/60'
+                        }`}
+                      >
+                        <Icon className={`text-sm ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                        <span>{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Group 5: System Gateway (placed at the bottom!) */}
+          <div className="flex flex-col gap-3">
+            <span className={groupHeaderStyle}>
+              <FiCpu className="text-xs" /> System Gateway
+            </span>
+            <nav className="flex flex-col gap-1 mb-2">
+              {systemLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href;
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setAdminSidebar(false)}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 relative ${
+                      isActive
+                        ? 'bg-sky-50/80 text-sky-650 shadow-xs border-l-2 border-sky-600 pl-2.5'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                    }`}
+                  >
+                    <Icon className={`text-base ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
 
         </div>
