@@ -64,17 +64,33 @@ const SubjectsPage = () => {
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block mb-4">Code: {sub.subject_code}</span>
               </div>
 
-              <div className="border-t border-slate-100 pt-4 flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                  <FiLayers className="text-slate-400 text-sm" />
-                  <span>Class: {sub.class_name}</span>
-                </div>
-                {sub.section_name && (
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                    <FiLayers className="text-slate-400 text-sm" />
-                    <span>Section: {sub.section_name}</span>
+              <div className="border-t border-slate-100 pt-4 flex flex-col gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
+                    <span className="flex items-center gap-1.5"><FiLayers className="text-slate-400" /> Class: {sub.class_name}</span>
+                    {sub.section_name && <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md text-[10px]">Sec: {sub.section_name}</span>}
                   </div>
-                )}
+                </div>
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  <a
+                    href={`/teacher/lessons?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                    className="flex flex-col items-center justify-center p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors text-center text-[10px] font-bold"
+                  >
+                    Lessons
+                  </a>
+                  <a
+                    href={`/teacher/materials?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                    className="flex flex-col items-center justify-center p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-colors text-center text-[10px] font-bold"
+                  >
+                    Materials
+                  </a>
+                  <a
+                    href={`/teacher/assignments?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                    className="flex flex-col items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors text-center text-[10px] font-bold"
+                  >
+                    Assignments
+                  </a>
+                </div>
               </div>
             </div>
           ))}

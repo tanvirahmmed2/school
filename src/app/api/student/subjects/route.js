@@ -49,7 +49,7 @@ export async function GET() {
 
     // Fetch subjects mapping to the class/section and left join their syllabus details
     const subjectsRes = await query(`
-      SELECT sub.id as subject_id, sub.name as subject_name, sub.code as subject_code,
+      SELECT cs.id as class_subject_id, sub.id as subject_id, sub.name as subject_name, sub.code as subject_code,
              t.name as teacher_name, t.email as teacher_email,
              syl.title as syllabus_title, syl.link as syllabus_link
       FROM class_subjects cs

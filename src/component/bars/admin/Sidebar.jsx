@@ -6,7 +6,8 @@ import { usePathname } from 'next/navigation';
 import {
   FiHome, FiShield, FiLayers, FiGrid, FiBook,
   FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText,
-  FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu, FiBell
+  FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu, FiBell,
+  FiSettings, FiShoppingBag
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -33,6 +34,10 @@ const Sidebar = () => {
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
     { label: 'Access Control', href: '/admin/access', icon: FiShield },
     { label: 'Website Announcement', href: '/admin/announcements', icon: FiBell },
+    { label: 'Website Settings', href: '/admin/settings', icon: FiSettings },
+    { label: 'General Finance', href: '/admin/finance', icon: FiDollarSign },
+    { label: 'Inventory Assets', href: '/admin/inventory', icon: FiShoppingBag },
+    { label: 'Security Audit', href: '/admin/security', icon: FiShield },
   ];
 
   const classLinks = [
@@ -49,6 +54,7 @@ const Sidebar = () => {
 
   const studentLinks = [
     { label: 'Students List', href: '/admin/students/lists', icon: FiUsers },
+    { label: 'Admissions & Leaves', href: '/admin/students/admissions', icon: FiUserPlus },
     { label: 'Attendance Registry', href: '/admin/students/attendance', icon: FiCalendar },
     { label: 'Fees & Ledgers', href: '/admin/students/fees', icon: FiDollarSign },
     { label: 'Enter Marks', href: '/admin/students/marks', icon: FiBook },

@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS admins (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_admins_updated_at ON admins;
 CREATE TRIGGER update_admins_updated_at
     BEFORE UPDATE ON admins
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -55,6 +56,7 @@ CREATE TABLE IF NOT EXISTS classes (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_classes_updated_at ON classes;
 CREATE TRIGGER update_classes_updated_at
     BEFORE UPDATE ON classes
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -74,6 +76,7 @@ CREATE TABLE IF NOT EXISTS sections (
     UNIQUE(class_id, name)
 );
 
+DROP TRIGGER IF EXISTS update_sections_updated_at ON sections;
 CREATE TRIGGER update_sections_updated_at
     BEFORE UPDATE ON sections
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -101,6 +104,7 @@ CREATE TABLE IF NOT EXISTS teachers (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_teachers_updated_at ON teachers;
 CREATE TRIGGER update_teachers_updated_at
     BEFORE UPDATE ON teachers
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -117,6 +121,7 @@ CREATE TABLE IF NOT EXISTS subjects (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_subjects_updated_at ON subjects;
 CREATE TRIGGER update_subjects_updated_at
     BEFORE UPDATE ON subjects
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -136,6 +141,7 @@ CREATE TABLE IF NOT EXISTS class_subjects (
     UNIQUE(class_id, section_id, subject_id)
 );
 
+DROP TRIGGER IF EXISTS update_class_subjects_updated_at ON class_subjects;
 CREATE TRIGGER update_class_subjects_updated_at
     BEFORE UPDATE ON class_subjects
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -155,6 +161,7 @@ CREATE TABLE IF NOT EXISTS clubs (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_clubs_updated_at ON clubs;
 CREATE TRIGGER update_clubs_updated_at
     BEFORE UPDATE ON clubs
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -173,6 +180,7 @@ CREATE TABLE IF NOT EXISTS clubs_admins (
     UNIQUE(club_id, teacher_id)
 );
 
+DROP TRIGGER IF EXISTS update_clubs_admins_updated_at ON clubs_admins;
 CREATE TRIGGER update_clubs_admins_updated_at
     BEFORE UPDATE ON clubs_admins
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -192,6 +200,7 @@ CREATE TABLE IF NOT EXISTS club_news (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_club_news_updated_at ON club_news;
 CREATE TRIGGER update_club_news_updated_at
     BEFORE UPDATE ON club_news
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -212,6 +221,7 @@ CREATE TABLE IF NOT EXISTS salaries (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_salaries_updated_at ON salaries;
 CREATE TRIGGER update_salaries_updated_at
     BEFORE UPDATE ON salaries
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -232,6 +242,7 @@ CREATE TABLE IF NOT EXISTS leave_applications (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_leave_applications_updated_at ON leave_applications;
 CREATE TRIGGER update_leave_applications_updated_at
     BEFORE UPDATE ON leave_applications
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -252,6 +263,7 @@ CREATE TABLE IF NOT EXISTS teacher_attendances (
     UNIQUE(teacher_id, date)
 );
 
+DROP TRIGGER IF EXISTS update_teacher_attendances_updated_at ON teacher_attendances;
 CREATE TRIGGER update_teacher_attendances_updated_at
     BEFORE UPDATE ON teacher_attendances
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -271,6 +283,7 @@ CREATE TABLE IF NOT EXISTS exams (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_exams_updated_at ON exams;
 CREATE TRIGGER update_exams_updated_at
     BEFORE UPDATE ON exams
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -293,6 +306,7 @@ CREATE TABLE IF NOT EXISTS exam_schedules (
     UNIQUE(exam_id, class_id, subject_id)
 );
 
+DROP TRIGGER IF EXISTS update_exam_schedules_updated_at ON exam_schedules;
 CREATE TRIGGER update_exam_schedules_updated_at
     BEFORE UPDATE ON exam_schedules
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -316,6 +330,7 @@ CREATE TABLE IF NOT EXISTS class_routines (
     CONSTRAINT unique_section_day_time UNIQUE(section_id, day_of_week, start_time)
 );
 
+DROP TRIGGER IF EXISTS update_class_routines_updated_at ON class_routines;
 CREATE TRIGGER update_class_routines_updated_at
     BEFORE UPDATE ON class_routines
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -335,6 +350,7 @@ CREATE TABLE IF NOT EXISTS syllabuses (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_syllabuses_updated_at ON syllabuses;
 CREATE TRIGGER update_syllabuses_updated_at
     BEFORE UPDATE ON syllabuses
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -365,6 +381,7 @@ CREATE TABLE IF NOT EXISTS students (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_students_updated_at ON students;
 CREATE TRIGGER update_students_updated_at
     BEFORE UPDATE ON students
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -384,6 +401,7 @@ CREATE TABLE IF NOT EXISTS student_attendances (
     UNIQUE(student_id, date)
 );
 
+DROP TRIGGER IF EXISTS update_student_attendances_updated_at ON student_attendances;
 CREATE TRIGGER update_student_attendances_updated_at
     BEFORE UPDATE ON student_attendances
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -405,6 +423,7 @@ CREATE TABLE IF NOT EXISTS student_fees (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_student_fees_updated_at ON student_fees;
 CREATE TRIGGER update_student_fees_updated_at
     BEFORE UPDATE ON student_fees
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -424,6 +443,7 @@ CREATE TABLE IF NOT EXISTS student_fines (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_student_fines_updated_at ON student_fines;
 CREATE TRIGGER update_student_fines_updated_at
     BEFORE UPDATE ON student_fines
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -445,6 +465,7 @@ CREATE TABLE IF NOT EXISTS marks (
     CONSTRAINT unique_student_exam_subject UNIQUE(student_id, exam_id, subject_id)
 );
 
+DROP TRIGGER IF EXISTS update_marks_updated_at ON marks;
 CREATE TRIGGER update_marks_updated_at
     BEFORE UPDATE ON marks
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -466,6 +487,7 @@ CREATE TABLE IF NOT EXISTS results (
     CONSTRAINT unique_student_exam UNIQUE(student_id, exam_id)
 );
 
+DROP TRIGGER IF EXISTS update_results_updated_at ON results;
 CREATE TRIGGER update_results_updated_at
     BEFORE UPDATE ON results
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -483,6 +505,7 @@ CREATE TABLE IF NOT EXISTS result_publish (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_result_publish_updated_at ON result_publish;
 CREATE TRIGGER update_result_publish_updated_at
     BEFORE UPDATE ON result_publish
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -514,6 +537,7 @@ CREATE TABLE IF NOT EXISTS club_members (
     CONSTRAINT unique_club_student UNIQUE(club_id, student_id)
 );
 
+DROP TRIGGER IF EXISTS update_club_members_updated_at ON club_members;
 CREATE TRIGGER update_club_members_updated_at
     BEFORE UPDATE ON club_members
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -533,6 +557,7 @@ CREATE TABLE IF NOT EXISTS news (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_news_updated_at ON news;
 CREATE TRIGGER update_news_updated_at
     BEFORE UPDATE ON news
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -552,6 +577,7 @@ CREATE TABLE IF NOT EXISTS events (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_events_updated_at ON events;
 CREATE TRIGGER update_events_updated_at
     BEFORE UPDATE ON events
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -580,6 +606,7 @@ CREATE TABLE IF NOT EXISTS notices (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_notices_updated_at ON notices;
 CREATE TRIGGER update_notices_updated_at
     BEFORE UPDATE ON notices
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -600,6 +627,7 @@ CREATE TABLE IF NOT EXISTS student_fee_payments (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_student_fee_payments_updated_at ON student_fee_payments;
 CREATE TRIGGER update_student_fee_payments_updated_at
     BEFORE UPDATE ON student_fee_payments
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -622,6 +650,7 @@ CREATE TABLE IF NOT EXISTS authorities (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_authorities_updated_at ON authorities;
 CREATE TRIGGER update_authorities_updated_at
     BEFORE UPDATE ON authorities
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -641,6 +670,7 @@ CREATE TABLE IF NOT EXISTS authority_qualifications (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_authority_qualifications_updated_at ON authority_qualifications;
 CREATE TRIGGER update_authority_qualifications_updated_at
     BEFORE UPDATE ON authority_qualifications
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -660,6 +690,7 @@ CREATE TABLE IF NOT EXISTS teacher_qualifications (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_teacher_qualifications_updated_at ON teacher_qualifications;
 CREATE TRIGGER update_teacher_qualifications_updated_at
     BEFORE UPDATE ON teacher_qualifications
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -679,6 +710,7 @@ CREATE TABLE IF NOT EXISTS achievements (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_achievements_updated_at ON achievements;
 CREATE TRIGGER update_achievements_updated_at
     BEFORE UPDATE ON achievements
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -701,6 +733,7 @@ CREATE TABLE IF NOT EXISTS recognitions (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_recognitions_updated_at ON recognitions;
 CREATE TRIGGER update_recognitions_updated_at
     BEFORE UPDATE ON recognitions
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -721,6 +754,7 @@ CREATE TABLE IF NOT EXISTS announcements (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_announcements_updated_at ON announcements;
 CREATE TRIGGER update_announcements_updated_at
     BEFORE UPDATE ON announcements
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -744,6 +778,7 @@ CREATE TABLE IF NOT EXISTS hostels (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_hostels_updated_at ON hostels;
 CREATE TRIGGER update_hostels_updated_at
     BEFORE UPDATE ON hostels
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -765,6 +800,7 @@ CREATE TABLE IF NOT EXISTS hostel_rooms (
     CONSTRAINT unique_hostel_room UNIQUE(hostel_id, room_number)
 );
 
+DROP TRIGGER IF EXISTS update_hostel_rooms_updated_at ON hostel_rooms;
 CREATE TRIGGER update_hostel_rooms_updated_at
     BEFORE UPDATE ON hostel_rooms
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -783,6 +819,7 @@ CREATE TABLE IF NOT EXISTS hostel_provost (
     CONSTRAINT unique_hostel_provost UNIQUE(hostel_id, teacher_id)
 );
 
+DROP TRIGGER IF EXISTS update_hostel_provost_updated_at ON hostel_provost;
 CREATE TRIGGER update_hostel_provost_updated_at
     BEFORE UPDATE ON hostel_provost
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -805,6 +842,7 @@ CREATE TABLE IF NOT EXISTS hostel_allocations (
 
 CREATE UNIQUE INDEX IF NOT EXISTS unique_active_student_allocation ON hostel_allocations(student_id) WHERE status = 'Active';
 
+DROP TRIGGER IF EXISTS update_hostel_allocations_updated_at ON hostel_allocations;
 CREATE TRIGGER update_hostel_allocations_updated_at
     BEFORE UPDATE ON hostel_allocations
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -826,6 +864,7 @@ CREATE TABLE IF NOT EXISTS hostel_fees (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_hostel_fees_updated_at ON hostel_fees;
 CREATE TRIGGER update_hostel_fees_updated_at
     BEFORE UPDATE ON hostel_fees
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -836,12 +875,18 @@ CREATE TRIGGER update_hostel_fees_updated_at
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS mark_grades (
-    grade_id SERIAL PRIMARY KEY,
+    grade_id BIGSERIAL PRIMARY KEY,
     letter_grade VARCHAR(5) NOT NULL,
-    min_mark NUMERIC(5,2) NOT NULL,
-    max_mark NUMERIC(5,2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    min_mark DECIMAL(5,2) NOT NULL,
+    max_mark DECIMAL(5,2) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TRIGGER IF EXISTS update_mark_grades_updated_at ON mark_grades;
+CREATE TRIGGER update_mark_grades_updated_at
+    BEFORE UPDATE ON mark_grades
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
 -- ============================================================================
@@ -858,9 +903,678 @@ CREATE TABLE IF NOT EXISTS collaborations (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TRIGGER IF EXISTS update_collaborations_updated_at ON collaborations;
 CREATE TRIGGER update_collaborations_updated_at
     BEFORE UPDATE ON collaborations
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- PERIODS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS periods (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    start_time VARCHAR(50) NOT NULL,
+    end_time VARCHAR(50) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_periods_updated_at ON periods;
+CREATE TRIGGER update_periods_updated_at
+    BEFORE UPDATE ON periods
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- LESSON PLANS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS lesson_plans (
+    id BIGSERIAL PRIMARY KEY,
+    class_subject_id BIGINT NOT NULL REFERENCES class_subjects(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Draft',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_lesson_plans_updated_at ON lesson_plans;
+CREATE TRIGGER update_lesson_plans_updated_at
+    BEFORE UPDATE ON lesson_plans
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDY MATERIALS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS study_materials (
+    id BIGSERIAL PRIMARY KEY,
+    class_subject_id BIGINT NOT NULL REFERENCES class_subjects(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    file_url TEXT NOT NULL,
+    file_id VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_study_materials_updated_at ON study_materials;
+CREATE TRIGGER update_study_materials_updated_at
+    BEFORE UPDATE ON study_materials
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- ASSIGNMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS assignments (
+    id BIGSERIAL PRIMARY KEY,
+    class_subject_id BIGINT NOT NULL REFERENCES class_subjects(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    file_url TEXT,
+    file_id VARCHAR(255),
+    due_date TIMESTAMPTZ NOT NULL,
+    max_marks DECIMAL(5, 2) NOT NULL DEFAULT 100.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_assignments_updated_at ON assignments;
+CREATE TRIGGER update_assignments_updated_at
+    BEFORE UPDATE ON assignments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- ASSIGNMENT SUBMISSIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS assignment_submissions (
+    id BIGSERIAL PRIMARY KEY,
+    assignment_id BIGINT NOT NULL REFERENCES assignments(id) ON DELETE CASCADE,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    file_url TEXT,
+    file_id VARCHAR(255),
+    submission_text TEXT,
+    submitted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    marks_obtained DECIMAL(5, 2),
+    remarks TEXT,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending' CHECK (status IN ('Pending', 'Graded', 'Late', 'Resubmitted')),
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(assignment_id, student_id)
+);
+
+DROP TRIGGER IF EXISTS update_assignment_submissions_updated_at ON assignment_submissions;
+CREATE TRIGGER update_assignment_submissions_updated_at
+    BEFORE UPDATE ON assignment_submissions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- WEBSITE SETTINGS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS website_settings (
+    id BIGSERIAL PRIMARY KEY,
+    school_name VARCHAR(255) NOT NULL,
+    site_title VARCHAR(255),
+    logo_url TEXT,
+    logo_id VARCHAR(255),
+    contact_phone VARCHAR(50),
+    contact_email VARCHAR(255),
+    address TEXT,
+    facebook_url TEXT,
+    twitter_url TEXT,
+    instagram_url TEXT,
+    youtube_url TEXT,
+    meta_title VARCHAR(255),
+    meta_description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_website_settings_updated_at ON website_settings;
+CREATE TRIGGER update_website_settings_updated_at
+    BEFORE UPDATE ON website_settings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- TEACHER SUBJECTS TABLE (QUALIFICATION & GENERAL ASSIGNMENT)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teacher_subjects (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(teacher_id, subject_id)
+);
+
+DROP TRIGGER IF EXISTS update_teacher_subjects_updated_at ON teacher_subjects;
+CREATE TRIGGER update_teacher_subjects_updated_at
+    BEFORE UPDATE ON teacher_subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT GUARDIANS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_guardians (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    relationship VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(50) NOT NULL,
+    occupation VARCHAR(255),
+    address TEXT,
+    password_hash VARCHAR(255),
+    recovery_token VARCHAR(255),
+    recovery_token_expires TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_student_guardians_updated_at ON student_guardians;
+CREATE TRIGGER update_student_guardians_updated_at
+    BEFORE UPDATE ON student_guardians
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT ADMISSIONS TABLE (APPLICATIONS)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_admissions (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
+    applicant_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    address TEXT NOT NULL,
+    applied_class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    previous_school TEXT,
+    guardian_name VARCHAR(255) NOT NULL,
+    guardian_phone VARCHAR(50) NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Rejected')),
+    applied_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_student_admissions_updated_at ON student_admissions;
+CREATE TRIGGER update_student_admissions_updated_at
+    BEFORE UPDATE ON student_admissions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT DOCUMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_documents (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    document_name VARCHAR(255) NOT NULL,
+    document_type VARCHAR(100) NOT NULL,
+    file_url TEXT NOT NULL,
+    file_id VARCHAR(255),
+    uploaded_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_student_documents_updated_at ON student_documents;
+CREATE TRIGGER update_student_documents_updated_at
+    BEFORE UPDATE ON student_documents
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT ENROLLMENTS TABLE (ACADEMIC YEAR HISTORY)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_enrollments (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
+    session_year VARCHAR(50) NOT NULL,
+    roll_number INT,
+    enrollment_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    status VARCHAR(50) DEFAULT 'Active' CHECK (status IN ('Active', 'Completed', 'Dropped', 'Transferred')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(student_id, session_year)
+);
+
+DROP TRIGGER IF EXISTS update_student_enrollments_updated_at ON student_enrollments;
+CREATE TRIGGER update_student_enrollments_updated_at
+    BEFORE UPDATE ON student_enrollments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT TRANSFERS TABLE (TC SYSTEM)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_transfers (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    transfer_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    transfer_reason TEXT NOT NULL,
+    target_school VARCHAR(255) NOT NULL,
+    tc_number VARCHAR(100) UNIQUE NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Cancelled')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_student_transfers_updated_at ON student_transfers;
+CREATE TRIGGER update_student_transfers_updated_at
+    BEFORE UPDATE ON student_transfers
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT LEAVES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_leaves (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    type VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Rejected')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_student_leaves_updated_at ON student_leaves;
+CREATE TRIGGER update_student_leaves_updated_at
+    BEFORE UPDATE ON student_leaves
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STUDENT ATTENDANCE LOGS TABLE (RFID/BIOMETRIC)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_attendance_logs (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    scan_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    device_id VARCHAR(100),
+    direction VARCHAR(50) CHECK (direction IN ('IN', 'OUT')),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- ============================================================================
+-- TEACHER CLASSES TABLE (CLASS TEACHER ASSIGNMENTS)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teacher_classes (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE CASCADE,
+    academic_year VARCHAR(50) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, section_id, academic_year)
+);
+
+DROP TRIGGER IF EXISTS update_teacher_classes_updated_at ON teacher_classes;
+CREATE TRIGGER update_teacher_classes_updated_at
+    BEFORE UPDATE ON teacher_classes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- EXAM SUBJECTS TABLE (CONFIG RULES)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS exam_subjects (
+    id BIGSERIAL PRIMARY KEY,
+    exam_id BIGINT NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    full_marks DECIMAL(5, 2) NOT NULL DEFAULT 100.00,
+    pass_marks DECIMAL(5, 2) NOT NULL DEFAULT 33.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(exam_id, class_id, subject_id)
+);
+
+DROP TRIGGER IF EXISTS update_exam_subjects_updated_at ON exam_subjects;
+CREATE TRIGGER update_exam_subjects_updated_at
+    BEFORE UPDATE ON exam_subjects
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- ATTENDANCE REPORTS TABLE (CUMULATIVE STATS)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS attendance_reports (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT REFERENCES students(id) ON DELETE CASCADE,
+    class_id BIGINT REFERENCES classes(id) ON DELETE CASCADE,
+    section_id BIGINT REFERENCES sections(id) ON DELETE CASCADE,
+    report_month DATE NOT NULL,
+    total_working_days INT NOT NULL,
+    total_present INT NOT NULL,
+    total_absent INT NOT NULL,
+    total_late INT NOT NULL,
+    total_half_day INT NOT NULL,
+    attendance_percentage DECIMAL(5, 2) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- ============================================================================
+-- PAYMENT TRANSACTIONS TABLE (UNIFIED LEDGER)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS payment_transactions (
+    id BIGSERIAL PRIMARY KEY,
+    transaction_number VARCHAR(100) UNIQUE NOT NULL,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'Cash',
+    amount DECIMAL(12, 2) NOT NULL,
+    transaction_type VARCHAR(50) NOT NULL CHECK (transaction_type IN ('Credit', 'Debit')),
+    category VARCHAR(100) NOT NULL,
+    reference_id BIGINT,
+    payment_gateway VARCHAR(100),
+    gateway_transaction_id VARCHAR(100),
+    status VARCHAR(50) NOT NULL DEFAULT 'Success' CHECK (status IN ('Pending', 'Success', 'Failed')),
+    remarks TEXT,
+    payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_payment_transactions_updated_at ON payment_transactions;
+CREATE TRIGGER update_payment_transactions_updated_at
+    BEFORE UPDATE ON payment_transactions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- EXPENSE CATEGORIES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS expense_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_expense_categories_updated_at ON expense_categories;
+CREATE TRIGGER update_expense_categories_updated_at
+    BEFORE UPDATE ON expense_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- EXPENSES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS expenses (
+    id BIGSERIAL PRIMARY KEY,
+    category_id BIGINT NOT NULL REFERENCES expense_categories(id) ON DELETE RESTRICT,
+    title VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    expense_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    paid_by VARCHAR(255),
+    receipt_image TEXT,
+    receipt_image_id VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_expenses_updated_at ON expenses;
+CREATE TRIGGER update_expenses_updated_at
+    BEFORE UPDATE ON expenses
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- INCOME CATEGORIES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS income_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_income_categories_updated_at ON income_categories;
+CREATE TRIGGER update_income_categories_updated_at
+    BEFORE UPDATE ON income_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- INCOMES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS incomes (
+    id BIGSERIAL PRIMARY KEY,
+    category_id BIGINT NOT NULL REFERENCES income_categories(id) ON DELETE RESTRICT,
+    title VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    income_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    received_by VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_incomes_updated_at ON incomes;
+CREATE TRIGGER update_incomes_updated_at
+    BEFORE UPDATE ON incomes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- CERTIFICATE ISSUES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS certificate_issues (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    certificate_type VARCHAR(100) NOT NULL,
+    certificate_number VARCHAR(100) UNIQUE NOT NULL,
+    issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    issued_by BIGINT REFERENCES admins(id) ON DELETE SET NULL,
+    content TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_certificate_issues_updated_at ON certificate_issues;
+CREATE TRIGGER update_certificate_issues_updated_at
+    BEFORE UPDATE ON certificate_issues
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- TESTIMONIALS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS testimonials (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    issued_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    signatory_name VARCHAR(255) NOT NULL,
+    signatory_designation VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_testimonials_updated_at ON testimonials;
+CREATE TRIGGER update_testimonials_updated_at
+    BEFORE UPDATE ON testimonials
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- INVENTORY CATEGORIES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS inventory_categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_inventory_categories_updated_at ON inventory_categories;
+CREATE TRIGGER update_inventory_categories_updated_at
+    BEFORE UPDATE ON inventory_categories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- SUPPLIERS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS suppliers (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    contact_name VARCHAR(255),
+    phone VARCHAR(50) NOT NULL,
+    email VARCHAR(255),
+    address TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_suppliers_updated_at ON suppliers;
+CREATE TRIGGER update_suppliers_updated_at
+    BEFORE UPDATE ON suppliers
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- INVENTORY ITEMS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS inventory_items (
+    id BIGSERIAL PRIMARY KEY,
+    category_id BIGINT NOT NULL REFERENCES inventory_categories(id) ON DELETE RESTRICT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    total_quantity INT NOT NULL DEFAULT 0,
+    available_quantity INT NOT NULL DEFAULT 0,
+    unit VARCHAR(50) DEFAULT 'Pcs',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_inventory_items_updated_at ON inventory_items;
+CREATE TRIGGER update_inventory_items_updated_at
+    BEFORE UPDATE ON inventory_items
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- PURCHASES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS purchases (
+    id BIGSERIAL PRIMARY KEY,
+    supplier_id BIGINT NOT NULL REFERENCES suppliers(id) ON DELETE RESTRICT,
+    purchase_number VARCHAR(100) UNIQUE NOT NULL,
+    purchase_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_status VARCHAR(50) DEFAULT 'Unpaid' CHECK (payment_status IN ('Paid', 'Unpaid', 'Partially Paid')),
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_purchases_updated_at ON purchases;
+CREATE TRIGGER update_purchases_updated_at
+    BEFORE UPDATE ON purchases
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- PURCHASE ITEMS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS purchase_items (
+    id BIGSERIAL PRIMARY KEY,
+    purchase_id BIGINT NOT NULL REFERENCES purchases(id) ON DELETE CASCADE,
+    inventory_item_id BIGINT NOT NULL REFERENCES inventory_items(id) ON DELETE RESTRICT,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    unit_price DECIMAL(10, 2) NOT NULL CHECK (unit_price >= 0),
+    total_price DECIMAL(10, 2) NOT NULL CHECK (total_price >= 0),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- ============================================================================
+-- STOCK MOVEMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS stock_movements (
+    id BIGSERIAL PRIMARY KEY,
+    inventory_item_id BIGINT NOT NULL REFERENCES inventory_items(id) ON DELETE CASCADE,
+    quantity INT NOT NULL,
+    movement_type VARCHAR(50) NOT NULL CHECK (movement_type IN ('Purchase', 'Issue', 'Return', 'Adjustment', 'Loss')),
+    reference_id BIGINT,
+    movement_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    handled_by VARCHAR(255),
+    remarks TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- ============================================================================
+-- LOGIN LOGS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS login_logs (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    user_role VARCHAR(50) NOT NULL CHECK (user_role IN ('admin', 'teacher', 'student', 'guardian', 'staff')),
+    login_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    status VARCHAR(50) NOT NULL DEFAULT 'Success' CHECK (status IN ('Success', 'Failed')),
+    failure_reason VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
 
 
 

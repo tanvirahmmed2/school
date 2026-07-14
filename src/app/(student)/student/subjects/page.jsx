@@ -78,16 +78,31 @@ const SubjectsPage = () => {
                     href={sub.syllabus_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 w-full py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                    className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-50 hover:bg-slate-100 text-slate-650 text-slate-600 border border-slate-100 rounded-xl text-xs font-bold transition-colors cursor-pointer"
                   >
                     <FiDownload className="text-sm" />
-                    <span>Download Syllabus: {sub.syllabus_title}</span>
+                    <span>Syllabus: {sub.syllabus_title}</span>
                   </a>
                 ) : (
                   <div className="py-2 bg-slate-50 border border-slate-100/50 text-slate-400 rounded-xl text-xs font-semibold text-center">
                     No syllabus uploaded yet
                   </div>
                 )}
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={`/student/materials?class_subject_id=${sub.class_subject_id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                    className="flex items-center justify-center py-2 bg-blue-50 hover:bg-blue-100 text-blue-650 text-blue-600 rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
+                  >
+                    Study Materials
+                  </a>
+                  <a
+                    href={`/student/assignments?class_subject_id=${sub.class_subject_id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                    className="flex items-center justify-center py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-650 text-emerald-600 rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
+                  >
+                    Assignments
+                  </a>
+                </div>
               </div>
             </div>
           ))}
