@@ -48,17 +48,8 @@ salary_scales
 allowances
 deductions
 payroll
-vehicles
-transport_routes
-transport_stops
-transport_assignments
-transport_fees
-certificate_templates
 certificate_issues
 testimonials
-notifications
-messages
-collaborations
 club_admins
 inventory_categories
 inventory_items

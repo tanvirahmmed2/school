@@ -1,46 +1,34 @@
 'use client';
 
-import React from 'react';
-import { FiUsers, FiAward, FiGlobe, FiBriefcase, FiBookOpen } from 'react-icons/fi';
+import React, { useEffect, useState } from 'react';
+import { FiUsers, FiBriefcase } from 'react-icons/fi';
 
 const CollaborationsPage = () => {
-  const partners = [
-    {
-      name: 'MIT Media Lab',
-      type: 'Research Alliance',
-      description: 'Collaborating on next-generation edge intelligence and embedded systems designs.',
-      location: 'Cambridge, USA',
-      icon: FiGlobe,
-      color: 'from-purple-500 to-indigo-600',
-      bgLight: 'bg-purple-50 text-purple-650'
-    },
-    {
-      name: 'Samsung R&D Institute',
-      type: 'Industrial Partner',
-      description: 'Funding research programs in IoT protocols and providing internships for senior students.',
-      location: 'Dhaka, Bangladesh',
-      icon: FiBriefcase,
-      color: 'from-blue-500 to-sky-650',
-      bgLight: 'bg-blue-50 text-blue-650'
-    },
-    {
-      name: 'National University of Singapore',
-      type: 'Academic Exchange',
-      description: 'Student exchange initiative allowing credit transfers for Computer Engineering courses.',
-      location: 'Singapore',
-      icon: FiAward,
-      color: 'from-orange-500 to-amber-600',
-      bgLight: 'bg-orange-50 text-orange-650'
-    },
-    {
-      name: 'Cisco Networking Academy',
-      type: 'Technical Program',
-      description: 'Authorized local laboratory providing networking certifications and industry curriculum.',
-      location: 'Global Partnership',
-      icon: FiBookOpen,
-      color: 'from-emerald-500 to-teal-650',
-      bgLight: 'bg-emerald-50 text-emerald-650'
-    }
+  const [partners, setPartners] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCollaborations = async () => {
+      try {
+        const res = await fetch('/api/collaborations');
+        if (res.ok) {
+          const data = await res.json();
+          setPartners(data.paylod.collaborations || []);
+        }
+      } catch (err) {
+        console.error('Error fetching collaborations:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCollaborations();
+  }, []);
+
+  const gradients = [
+    'from-purple-500 to-indigo-600',
+    'from-blue-500 to-sky-650',
+    'from-orange-500 to-amber-600',
+    'from-emerald-500 to-teal-650',
   ];
 
   return (
@@ -60,40 +48,62 @@ const CollaborationsPage = () => {
         </div>
 
         {/* Dynamic Partner Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {partners.map((partner, idx) => {
-            const Icon = partner.icon;
-            return (
-              <div
-                key={idx}
-                className="bg-white rounded-3xl border border-slate-100 hover:border-sky-100 hover:shadow-lg transition-all duration-300 p-8 flex flex-col justify-between group relative overflow-hidden"
-              >
-                {/* Visual gradient accent on hover */}
-                <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${partner.color} opacity-80`}></div>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-24 gap-3">
+            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-semibold text-slate-400">Loading collaborations...</span>
+          </div>
+        ) : partners.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 animate-fade-up">
+            {partners.map((partner, idx) => {
+              const color = gradients[idx % gradients.length];
+              return (
+                <div
+                  key={partner.id}
+                  className="bg-white rounded-3xl border border-slate-100 hover:border-sky-100 hover:shadow-lg transition-all duration-300 p-8 flex flex-col justify-between group relative overflow-hidden"
+                >
+                  {/* Visual gradient accent on hover */}
+                  <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${color} opacity-80`}></div>
 
-                <div className="flex gap-5 items-start pl-2">
-                  <div className={`w-14 h-14 rounded-2xl ${partner.bgLight} flex items-center justify-center text-2xl shrink-0 shadow-inner group-hover:scale-105 transition-transform`}>
-                    <Icon />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      {partner.type}
-                    </span>
-                    <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-sky-600 transition-colors">
-                      {partner.name}
-                    </h3>
-                    <p className="text-slate-400 text-xs font-bold flex items-center gap-1">
-                      <FiGlobe className="text-slate-350" /> {partner.location}
-                    </p>
-                    <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-2.5">
-                      {partner.description}
-                    </p>
+                  <div className="flex gap-5 items-start pl-2">
+                    {partner.logo ? (
+                      <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 p-2 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                        <img src={partner.logo} alt={partner.institution_name} className="max-w-full max-h-full object-contain" />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                        <FiBriefcase />
+                      </div>
+                    )}
+                    <div className="flex flex-col gap-1.5 w-full">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Academic Partner
+                      </span>
+                      <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-sky-600 transition-colors">
+                        {partner.institution_name}
+                      </h3>
+                      
+                      <div
+                        className="text-slate-500 text-xs md:text-sm leading-relaxed mt-2.5 tiptap-content"
+                        dangerouslySetInnerHTML={{ __html: partner.description || '' }}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-white border border-slate-100 rounded-3xl p-8 mb-12 shadow-xs">
+            <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-2xl mb-4">
+              <FiBriefcase />
+            </div>
+            <h3 className="font-extrabold text-slate-800 text-lg">No collaborations to display</h3>
+            <p className="text-slate-500 text-sm mt-1 max-w-sm mx-auto">
+              We are currently finalizing our network partnerships. Please check back later.
+            </p>
+          </div>
+        )}
 
         {/* Global Network Section */}
         <div className="bg-gradient-to-tr from-slate-900 to-sky-950 text-white rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 relative overflow-hidden shadow-xl">
