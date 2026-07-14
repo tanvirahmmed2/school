@@ -1,9 +1,3 @@
-import React from 'react'
+import ResultsPortalPage from '../results/page';
 
-const Result = () => {
-  return (
-    <div>Result</div>
-  )
-}
-
-export default Result
+export default ResultsPortalPage;
