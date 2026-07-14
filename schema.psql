@@ -746,9 +746,8 @@ CREATE TRIGGER update_recognitions_updated_at
 CREATE TABLE IF NOT EXISTS announcements (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
-    total_room INT,
+    expires_at TIMESTAMPTZ,
     location VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP

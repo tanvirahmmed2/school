@@ -6,7 +6,7 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query(
-      'SELECT id, name, slug, description, total_room, location, created_at, updated_at FROM announcements LIMIT 1'
+      'SELECT id, name, description, expires_at, location, created_at, updated_at FROM announcements WHERE expires_at IS NULL OR expires_at > NOW() LIMIT 1'
     );
     const res_data = { announcement: result.rows[0] || null };
     return NextResponse.json({
@@ -25,7 +25,7 @@ export async function GET() {
   }
 }
 
-// POST create/overwrite the single announcement
+// POST create the single announcement (fails if one already exists)
 export async function POST(request) {
   try {
     const authenticated = await isAdmin();
@@ -38,34 +38,109 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { name, slug, description, total_room, location } = await request.json();
+    const { name, description, expires_at, location } = await request.json();
 
-    if (!name) {
+    if (!name || !description || !expires_at) {
       return NextResponse.json({
         success: false,
-        message: 'Announcement title/name is required.',
+        message: 'Announcement name, description, and expires_at are required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
 
-    const finalSlug = slug 
-      ? slug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') 
-      : name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
-
-    // Remove any existing announcements to enforce the single-announcement policy
-    await query('DELETE FROM announcements');
+    // Check if any announcement already exists
+    const checkExist = await query('SELECT COUNT(*) FROM announcements');
+    if (parseInt(checkExist.rows[0].count, 10) > 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'An active announcement already exists. Please update or delete it instead.',
+        error: 'Conflict',
+        paylod: null
+      }, { status: 400 });
+    }
 
     const result = await query(
-      `INSERT INTO announcements (name, slug, description, total_room, location)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, name, slug, description, total_room, location, created_at, updated_at`,
+      `INSERT INTO announcements (name, description, expires_at, location)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, name, description, expires_at, location, created_at, updated_at`,
       [
         name.trim(),
-        finalSlug,
-        description ? description.trim() : null,
-        total_room ? parseInt(total_room, 10) : null,
+        description.trim(),
+        expires_at,
         location ? location.trim() : null
+      ]
+    );
+
+    const res_data = {
+      message: 'Announcement published successfully.',
+      announcement: result.rows[0]
+    };
+
+    return NextResponse.json({
+      success: true,
+      message: res_data.message,
+      paylod: res_data
+    }, { status: 201 });
+  } catch (error) {
+    console.error('Error creating announcement:', error);
+    return NextResponse.json({
+      success: false,
+      message: 'Failed to publish announcement. Internal server error.',
+      error: 'Internal Server Error',
+      paylod: null
+    }, { status: 500 });
+  }
+}
+
+// PUT update the single active announcement
+export async function PUT(request) {
+  try {
+    const authenticated = await isAdmin();
+    if (!authenticated) {
+      return NextResponse.json({
+        success: false,
+        message: 'Unauthorized. Admins only.',
+        error: 'Unauthorized',
+        paylod: null
+      }, { status: 403 });
+    }
+
+    const { name, description, expires_at, location } = await request.json();
+
+    if (!name || !description || !expires_at) {
+      return NextResponse.json({
+        success: false,
+        message: 'Announcement name, description, and expires_at are required.',
+        error: 'Bad Request',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    // Check if there is an announcement to update
+    const checkExist = await query('SELECT id FROM announcements LIMIT 1');
+    if (checkExist.rows.length === 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'No announcement found to update. Please create one first.',
+        error: 'Not Found',
+        paylod: null
+      }, { status: 404 });
+    }
+
+    const announcementId = checkExist.rows[0].id;
+
+    const result = await query(
+      `UPDATE announcements
+       SET name = $1, description = $2, expires_at = $3, location = $4, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $5
+       RETURNING id, name, description, expires_at, location, created_at, updated_at`,
+      [
+        name.trim(),
+        description.trim(),
+        expires_at,
+        location ? location.trim() : null,
+        announcementId
       ]
     );
 
@@ -78,9 +153,9 @@ export async function POST(request) {
       success: true,
       message: res_data.message,
       paylod: res_data
-    }, { status: 201 });
+    }, { status: 200 });
   } catch (error) {
-    console.error('Error creating announcement:', error);
+    console.error('Error updating announcement:', error);
     return NextResponse.json({
       success: false,
       message: 'Failed to update announcement. Internal server error.',
