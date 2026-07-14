@@ -57,7 +57,9 @@ const Sidebar = () => {
 
   const studentLinks = [
     { label: 'Students List', href: '/admin/students/lists', icon: FiUsers },
-    { label: 'Admissions & Leaves', href: '/admin/students/admissions', icon: FiUserPlus },
+    { label: 'Intake Applications', href: '/admin/students/admissions', icon: FiUserPlus },
+    { label: 'Admission Circulars', href: '/admin/students/admissions/circulars', icon: FiLayers },
+    { label: 'Student Leaves', href: '/admin/students/leaves', icon: FiCalendar },
     { label: 'Attendance Registry', href: '/admin/students/attendance', icon: FiCalendar },
     { label: 'Fees & Ledgers', href: '/admin/students/fees', icon: FiDollarSign },
     { label: 'Enter Marks', href: '/admin/students/marks', icon: FiBook },

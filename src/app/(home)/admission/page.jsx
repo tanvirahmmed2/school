@@ -1,29 +1,49 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FiCheckCircle, FiFileText, FiClock, FiDollarSign, FiArrowRight } from 'react-icons/fi';
+import { FiCheckCircle, FiFileText, FiClock, FiDollarSign, FiArrowRight, FiLayers, FiCalendar } from 'react-icons/fi';
 
 const AdmissionPage = () => {
+  const [circulars, setCirculars] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchActiveCirculars = async () => {
+      try {
+        const res = await fetch('/api/admin/admissions');
+        const data = await res.json();
+        if (data.success && data.paylod?.circulars) {
+          // Filter to only show active circulars where finish_date >= today
+          const todayStr = new Date().toISOString().split('T')[0];
+          const active = data.paylod.circulars.filter(
+            (c) => new Date(c.finish_date).toISOString().split('T')[0] >= todayStr
+          );
+          setCirculars(active);
+        }
+      } catch (err) {
+        console.error('Failed to load active circulars:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActiveCirculars();
+  }, []);
+
   const criteria = [
     {
       title: 'Academic Standing',
-      detail: 'Minimum GPA of 3.50 in secondary and higher secondary school certificates or equivalent international diploma courses.',
+      detail: 'Minimum GPA of 3.50 in secondary and higher school certificates or equivalent international courses.',
     },
     {
       title: 'Entrance Evaluation',
-      detail: 'Successful completion of the FIT online capability test covering fundamental mathematics, logical reasoning, and basic coding constructs.',
+      detail: 'Successful completion of capability tests covering fundamental mathematics, logical reasoning, and basic coding.',
     },
     {
-      title: 'Documentation',
-      detail: 'Submission of certified high school certificates, passport-size photographs, letters of recommendation, and identity papers.',
+      title: 'Documentation & Age limits',
+      detail: 'Birth registration certificate matching selected circular target age bracket limits, passport-size photographs, and school transcripts.',
     }
-  ];
-
-  const timeline = [
-    { date: 'June 01, 2026', title: 'Admissions Open', desc: 'Online portal starts accepting fresh profiles.' },
-    { date: 'August 15, 2026', title: 'Entrance Exams', desc: 'Evaluation assessments held online in waves.' },
-    { date: 'September 01, 2026', title: 'Registry Approval', desc: 'Registry announces first selection list.' }
   ];
 
   return (
@@ -35,14 +55,66 @@ const AdmissionPage = () => {
             Admissions Desk
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
-            Admission & Enrollment Info
+            Admission & Enrollment circulars
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
-            Explore entry requirements, admission deadlines, and start your application to join Fontana Institute of Technology.
+            Explore active entry circular drives, registration requirements, and file your student admission application.
           </p>
         </div>
 
-        {/* Content Section */}
+        {/* Dynamic circular drives listings */}
+        <div className="mb-12">
+          <h2 className="text-base font-bold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Active Circular Intakes
+          </h2>
+
+          {loading ? (
+            <div className="w-full py-12 flex justify-center">
+              <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : circulars.length === 0 ? (
+            <div className="bg-white border border-slate-100 rounded-3xl p-8 text-center shadow-xs">
+              <span className="text-3xl">📭</span>
+              <p className="text-xs font-bold text-slate-500 mt-2">No Active Intakes Right Now</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">Please check back later or contact the admin desk.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {circulars.map((c) => (
+                <div key={c.id} className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-sky-100 transition-all flex flex-col justify-between gap-4">
+                  <div className="flex flex-col gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded-full w-max">
+                      <FiLayers /> Class: {c.class_name}
+                    </span>
+                    <h3 className="text-base font-bold text-slate-900 leading-snug mt-1">{c.title}</h3>
+                    <div className="flex flex-col gap-1.5 text-xs text-slate-500 font-semibold mt-2">
+                      <div className="flex items-center gap-1.5">
+                        <FiClock className="text-slate-400" />
+                        <span>Deadline: <strong className="text-slate-700">{new Date(c.finish_date).toLocaleDateString()}</strong></span>
+                      </div>
+                      {c.min_age !== null || c.max_age !== null ? (
+                        <div className="flex items-center gap-1.5">
+                          <FiCalendar className="text-slate-400" />
+                          <span>Age limits: <strong className="text-slate-700">{c.min_age || 0} to {c.max_age || '∞'} years</strong></span>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/admission/apply?admission_id=${c.id}`}
+                    className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold tracking-wide transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <span>Apply Online</span>
+                    <FiArrowRight />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Content Section: Requirements & Timeline */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12">
           {/* Column 1: Entry Requirements */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 hover:shadow-xs transition-shadow md:col-span-2 flex flex-col justify-between">
@@ -56,7 +128,7 @@ const AdmissionPage = () => {
               <div className="flex flex-col gap-5">
                 {criteria.map((item, idx) => (
                   <div key={idx} className="flex gap-4 items-start">
-                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-650 shrink-0 mt-0.5">
+                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-655 text-slate-600 shrink-0 mt-0.5">
                       {idx + 1}
                     </div>
                     <div className="flex flex-col">
@@ -69,64 +141,34 @@ const AdmissionPage = () => {
             </div>
             <div className="mt-8 pt-4 border-t border-slate-50">
               <Link
-                href="/apply"
+                href="/admission/apply"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-850 transition-colors"
               >
-                <span>View Full Checklist</span>
+                <span>View Generic Form</span>
                 <FiArrowRight />
               </Link>
             </div>
           </div>
 
-          {/* Column 2: Timeline */}
+          {/* Column 2: Tuition Fees overview */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 hover:shadow-xs transition-shadow flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-650 flex items-center justify-center text-lg">
-                  <FiClock />
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-650 flex items-center justify-center text-lg">
+                  <FiDollarSign />
                 </div>
-                <h3 className="font-extrabold text-slate-900 text-lg">Admission Timeline</h3>
+                <h3 className="font-extrabold text-slate-900 text-lg">Tuition Costs</h3>
               </div>
-              <div className="flex flex-col gap-6 relative border-l border-slate-100 pl-4 ml-2">
-                {timeline.map((step, idx) => (
-                  <div key={idx} className="relative flex flex-col gap-1">
-                    <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-white ring-2 ring-amber-100"></div>
-                    <span className="text-[10px] font-black text-amber-650 tracking-wider">
-                      {step.date}
-                    </span>
-                    <span className="font-bold text-slate-800 text-xs">
-                      {step.title}
-                    </span>
-                    <p className="text-slate-500 text-[11px] leading-normal">
-                      {step.desc}
-                    </p>
-                  </div>
-                ))}
+              <div className="flex flex-col gap-4 text-xs leading-relaxed">
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-slate-800">Enrollment Security</span>
+                  <p className="text-slate-500 text-[11px]">A one-time deposit of $150 covers administrative setup registration fees.</p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-slate-800">Term Costs</span>
+                  <p className="text-slate-500 text-[11px]">Tuition fee covers courses, labs, and lms resources per billing semester.</p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tuition Fees overview */}
-        <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 hover:shadow-xs transition-shadow mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-650 flex items-center justify-center text-lg">
-              <FiDollarSign />
-            </div>
-            <h3 className="font-extrabold text-slate-900 text-lg">Tuition Costs & Aid</h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs md:text-sm text-slate-650 leading-relaxed">
-            <div className="flex flex-col gap-1.5 p-4 rounded-2xl bg-slate-50/50 border border-slate-100/60">
-              <span className="font-bold text-slate-800">Enrollment Security</span>
-              <p className="text-slate-500 text-xs">A one-time deposit of $150 covers administrative fees and registrar credentials.</p>
-            </div>
-            <div className="flex flex-col gap-1.5 p-4 rounded-2xl bg-slate-50/50 border border-slate-100/60">
-              <span className="font-bold text-slate-800">Term Costs</span>
-              <p className="text-slate-500 text-xs">Course tuition fees are calculated per credit and billed prior to midterm cycles.</p>
-            </div>
-            <div className="flex flex-col gap-1.5 p-4 rounded-2xl bg-slate-50/50 border border-slate-100/60">
-              <span className="font-bold text-slate-800">Scholarship Programs</span>
-              <p className="text-slate-500 text-xs">Financial waivers up to 75% are allocated automatically based on academic test grades.</p>
             </div>
           </div>
         </div>
@@ -139,15 +181,15 @@ const AdmissionPage = () => {
               Ready to submit your application?
             </h2>
             <p className="text-sky-200 text-xs md:text-sm max-w-md mx-auto leading-relaxed">
-              Enroll today in the Fontana Institute of Technology digital portal. Application processing takes less than 3 business days.
+              Enroll today in Fontana. Processing admissions candidates registry updates takes less than 3 business days.
             </p>
           </div>
           <Link
-            href="/auth/student/registration"
+            href="/admission/apply"
             className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-sky-950 font-extrabold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
           >
             <FiFileText />
-            <span>Open Application Form</span>
+            <span>Open Candidate Application</span>
             <FiArrowRight />
           </Link>
         </div>
