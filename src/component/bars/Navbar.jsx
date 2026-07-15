@@ -55,7 +55,7 @@ const Navbar = () => {
         <Link href={'/'} className={linkStyle('/')}>Home</Link>
         <Link href={'/events'} className={linkStyle('/events')}>Events</Link>
 
-        <div className="relative group py-1 w-full">
+        <div className="relative group w-full">
           <Link href={'/authorities'} className={dropdownTriggerStyle(isDropdownActive('/authorities'))}>
             Authorities
           </Link>
@@ -70,7 +70,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="relative group py-1 w-full">
+        <div className="relative group w-full">
           <Link href={'/about'} className={dropdownTriggerStyle(isAboutActive())}>
             About
           </Link>
@@ -82,7 +82,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="relative group py-1 w-full">
+        <div className="relative group w-full">
           <Link href={'/classes'} className={dropdownTriggerStyle(isDropdownActive('/classes'))}>
             Classes
           </Link>
@@ -99,7 +99,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="relative group py-1 w-full">
+        <div className="relative group w-full">
           <Link href={'/clubs'} className={dropdownTriggerStyle(isDropdownActive('/clubs'))}>
             Clubs
           </Link>

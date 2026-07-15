@@ -1,91 +1,56 @@
 'use client';
 
 import React from 'react';
-import { FiMail, FiPhone, FiEdit, FiTrash2 } from 'react-icons/fi';
+import Link from 'next/link';
+import { FiUser, FiArrowRight, FiBriefcase } from 'react-icons/fi';
 
-const TeacherCard = ({ teacher, onEdit, onDelete, className = '' }) => {
-  const getInitials = (name) => {
-    return name ? name.substring(0, 2).toUpperCase() : '👤';
-  };
-
+const TeacherCard = ({ teacher, className = '' }) => {
   return (
-    <div className={`bg-white border border-slate-100 hover:border-slate-200 rounded-3xl p-5 hover:shadow-md hover:scale-[1.01] transition-all duration-200 flex flex-col justify-between h-full ${className}`}>
-      <div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Avatar/Thumbnail */}
-            {teacher.image ? (
-              <img 
-                src={teacher.image} 
-                alt={teacher.name} 
-                className="w-12 h-12 rounded-2xl object-cover border border-slate-100 shrink-0"
-              />
-            ) : (
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-100 to-slate-50 border border-slate-150 flex items-center justify-center text-sm font-black text-slate-550 text-slate-500 shrink-0">
-                {getInitials(teacher.name)}
-              </div>
-            )}
-
-            <div className="min-w-0">
-              <h4 className="text-sm font-bold text-slate-800 truncate">
-                {teacher.name}
-              </h4>
-              <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-[9px] font-black text-blue-600 bg-blue-50 border border-blue-100 uppercase tracking-widest">
-                {teacher.designation || 'Faculty Member'}
-              </span>
+    <div
+      className={`group bg-white rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-[0_8px_30px_rgba(14,165,233,0.1)] transition-all duration-250 overflow-hidden flex ${className}`}
+    >
+      {/* ── Left: Image Panel ──────────────────────── */}
+      <div className="w-[150px] shrink-0 relative bg-gradient-to-br from-sky-50 to-slate-100 overflow-hidden">
+        {teacher.image ? (
+          <img
+            src={teacher.image}
+            alt={teacher.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-sky-100 border-2 border-sky-200 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <FiUser className="text-sky-500 text-3xl" />
             </div>
           </div>
-
-          {/* Admin actions if callbacks are provided */}
-          {(onEdit || onDelete) && (
-            <div className="flex items-center gap-1.5 shrink-0 self-start">
-              {onEdit && (
-                <button
-                  onClick={() => onEdit(teacher)}
-                  className="p-1.5 bg-slate-50 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
-                  title="Edit Profile"
-                >
-                  <FiEdit className="text-xs" />
-                </button>
-              )}
-              {onDelete && (
-                <button
-                  onClick={() => onDelete(teacher.id)}
-                  className="p-1.5 bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-lg transition-colors cursor-pointer"
-                  title="Delete Record"
-                >
-                  <FiTrash2 className="text-xs" />
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-
-        <div className="w-full h-px bg-slate-50 my-4"></div>
+        )}
+        <div className="absolute inset-0 bg-sky-600/0 group-hover:bg-sky-600/8 transition-all duration-300 pointer-events-none"></div>
       </div>
 
-      {/* Contact Details */}
-      <div className="flex flex-col gap-2 text-xs font-semibold text-slate-500 mt-auto">
-        <a 
-          href={`mailto:${teacher.email}`}
-          className="flex items-center gap-2 hover:text-blue-600 transition-colors truncate"
+      {/* ── Right: Info Panel ──────────────────────── */}
+      <div className="flex-1 min-w-0 p-5 flex flex-col justify-center gap-2">
+        {/* Name */}
+        <h4 className="text-base font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors leading-tight truncate">
+          {teacher.name}
+        </h4>
+
+        {/* Designation */}
+        <span className="flex items-center gap-1 text-xs font-bold text-slate-400 uppercase tracking-wider leading-tight">
+          <FiBriefcase className="text-slate-300 shrink-0" />
+          <span className="truncate">{teacher.designation || 'Faculty Member'}</span>
+        </span>
+
+        {/* Divider */}
+        <div className="w-10 h-0.5 bg-sky-200 rounded my-2"></div>
+
+        {/* View Profile Link */}
+        <Link
+          href={`/teachers/${teacher.id}`}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-700 transition-colors w-fit px-3 py-2 rounded-lg bg-sky-50 hover:bg-sky-100 border border-sky-100 hover:border-sky-200 group/link"
         >
-          <span className="w-6 h-6 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-400">
-            <FiMail className="text-xs" />
-          </span>
-          <span className="truncate">{teacher.email}</span>
-        </a>
-        {teacher.number && (
-          <a 
-            href={`tel:${teacher.number}`}
-            className="flex items-center gap-2 hover:text-blue-600 transition-colors"
-          >
-            <span className="w-6 h-6 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-400">
-              <FiPhone className="text-xs" />
-            </span>
-            <span>{teacher.number}</span>
-          </a>
-        )}
+          View Profile
+          <FiArrowRight className="group-hover/link:translate-x-0.5 transition-transform" />
+        </Link>
       </div>
     </div>
   );

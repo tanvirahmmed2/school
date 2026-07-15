@@ -62,8 +62,8 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !classSubjectId || !sectionId || !teacherId || !academicYear) {
-      toast.error('All fields marked with * are required.');
+    if (!classId || !classSubjectId || !teacherId || !academicYear) {
+      toast.error('Class, Subject, Teacher and Academic Year are required.');
       return;
     }
 
@@ -74,7 +74,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           class_subject_id: classSubjectId,
-          section_id: sectionId,
+          section_id: sectionId || null,
           teacher_id: teacherId,
           academic_year: academicYear,
         }),
@@ -102,7 +102,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiFolderPlus className="text-blue-600" /> Assign Subject Teacher & Section
+        <FiFolderPlus className="text-blue-600" /> Assign Subject Teacher
       </h2>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5">
@@ -148,16 +148,16 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
 
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiGrid className="text-slate-400" /> Section *
+            <FiGrid className="text-slate-400" /> Section
+            <span className="text-[10px] font-bold text-slate-400 normal-case ml-0.5">(optional)</span>
           </label>
           <select
-            required
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
             disabled={submitting || !classId}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
           >
-            <option value="">Select a section...</option>
+            <option value="">All Sections (class-wide)</option>
             {filteredSections.map((sec) => (
               <option key={sec.id} value={sec.id}>
                 {sec.name}

@@ -27,7 +27,7 @@ export async function GET(request) {
       FROM class_subject_teachers cst
       JOIN class_subjects cs ON cst.class_subject_id = cs.id
       JOIN classes c ON cs.class_id = c.id
-      JOIN sections s ON cst.section_id = s.id
+      LEFT JOIN sections s ON cst.section_id = s.id
       JOIN subjects sub ON cs.subject_id = sub.id
       JOIN teachers t ON cst.teacher_id = t.id
     `;
@@ -48,7 +48,7 @@ export async function GET(request) {
       sql += ' WHERE ' + conditions.join(' AND ');
     }
 
-    sql += ' ORDER BY c.numeric_name ASC, s.name ASC, sub.name ASC';
+    sql += ' ORDER BY c.numeric_name ASC, s.name ASC NULLS FIRST, sub.name ASC';
 
     const result = await query(sql, params);
     const res_data = { assignments: result.rows };
@@ -83,25 +83,32 @@ export async function POST(request) {
 
     const { class_subject_id, section_id, teacher_id, academic_year } = await request.json();
 
-    if (!class_subject_id || !section_id || !teacher_id || !academic_year) {
+    // section_id is now optional — only class_subject_id, teacher_id, and academic_year are required
+    if (!class_subject_id || !teacher_id || !academic_year) {
       return NextResponse.json({
         success: false,
-        message: 'Class Subject, Section, Teacher, and Academic Year are required.',
+        message: 'Class Subject, Teacher, and Academic Year are required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
 
-    // Check duplicate mapping
+    const resolvedSectionId = section_id ? parseInt(section_id, 10) : null;
+
+    // Duplicate check using COALESCE so NULL section_id is treated as -1
     const checkDup = await query(
-      'SELECT id FROM class_subject_teachers WHERE class_subject_id = $1 AND section_id = $2 AND academic_year = $3',
-      [class_subject_id, section_id, academic_year]
+      `SELECT id FROM class_subject_teachers 
+       WHERE class_subject_id = $1 
+         AND academic_year = $2 
+         AND COALESCE(section_id, -1) = COALESCE($3, -1)`,
+      [class_subject_id, academic_year, resolvedSectionId]
     );
 
     if (checkDup.rows.length > 0) {
+      const scopeLabel = resolvedSectionId ? 'this section' : 'this class (all sections)';
       return NextResponse.json({
         success: false,
-        message: 'This subject is already mapped to this section for the selected academic year.',
+        message: `This subject is already mapped to a teacher for ${scopeLabel} in the selected academic year.`,
         error: 'Conflict',
         paylod: null
       }, { status: 400 });
@@ -111,7 +118,7 @@ export async function POST(request) {
       `INSERT INTO class_subject_teachers (class_subject_id, section_id, teacher_id, academic_year) 
        VALUES ($1, $2, $3, $4) 
        RETURNING *`,
-      [class_subject_id, section_id, teacher_id, academic_year]
+      [class_subject_id, resolvedSectionId, teacher_id, academic_year]
     );
 
     const res_data = { message: 'Teacher assigned to subject successfully.', assignment: newMapping.rows[0] };
