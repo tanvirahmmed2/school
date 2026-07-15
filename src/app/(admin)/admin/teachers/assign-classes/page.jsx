@@ -23,32 +23,32 @@ const AdminAssignClassesPage = () => {
       // Fetch classes
       const classesRes = await fetch('/api/classes');
       const classesData = await classesRes.json();
-      if (!classesRes.ok) throw new Error(classesData.error || 'Failed to fetch classes.');
+      if (!classesRes.ok) throw new Error(classesData.message || 'Failed to fetch classes.');
 
       // Fetch subjects
       const subjectsRes = await fetch('/api/subjects');
       const subjectsData = await subjectsRes.json();
-      if (!subjectsRes.ok) throw new Error(subjectsData.error || 'Failed to fetch subjects.');
+      if (!subjectsRes.ok) throw new Error(subjectsData.message || 'Failed to fetch subjects.');
 
       // Fetch teachers
       const teachersRes = await fetch('/api/teachers');
       const teachersData = await teachersRes.json();
-      if (!teachersRes.ok) throw new Error(teachersData.error || 'Failed to fetch teachers.');
+      if (!teachersRes.ok) throw new Error(teachersData.message || 'Failed to fetch teachers.');
 
       setClasses(classesData.paylod?.classes || []);
       setSubjects(subjectsData.paylod?.subjects || []);
       setTeachers(teachersData.paylod?.teachers || []);
 
       // Fetch Subject Assignments
-      const assignRes = await fetch('/api/class-subjects');
+      const assignRes = await fetch('/api/class-subject-teachers');
       const assignData = await assignRes.json();
-      if (!assignRes.ok) throw new Error(assignData.error || 'Failed to fetch subject mappings.');
-      setAssignments(assignData.assignments || []);
+      if (!assignRes.ok) throw new Error(assignData.message || 'Failed to fetch subject assignments.');
+      setAssignments(assignData.paylod?.assignments || []);
 
       // Fetch Class Teacher Assignments
       const classTeacherRes = await fetch('/api/teacher-classes');
       const classTeacherData = await classTeacherRes.json();
-      if (!classTeacherRes.ok) throw new Error(classTeacherData.error || 'Failed to fetch class teachers.');
+      if (!classTeacherRes.ok) throw new Error(classTeacherData.message || 'Failed to fetch class teachers.');
       setClassTeacherAssignments(classTeacherData.paylod?.assignments || []);
 
     } catch (error) {
@@ -69,13 +69,13 @@ const AdminAssignClassesPage = () => {
     if (!confirm) return;
 
     try {
-      const response = await fetch(`/api/class-subjects/${id}`, {
+      const response = await fetch(`/api/class-subject-teachers/${id}`, {
         method: 'DELETE',
       });
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to delete assignment.');
+        throw new Error(data.message || 'Failed to delete assignment.');
       }
 
       toast.success(data.message || 'Assignment deleted successfully!');
@@ -99,7 +99,7 @@ const AdminAssignClassesPage = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to delete class teacher assignment.');
+        throw new Error(data.message || 'Failed to delete class teacher assignment.');
       }
 
       toast.success(data.message || 'Class teacher assignment removed successfully!');
@@ -158,7 +158,7 @@ const AdminAssignClassesPage = () => {
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
-          Homeroom Class Teachers (`teacher_classes`)
+          Homeroom Class Teachers
         </button>
       </div>
 
@@ -166,7 +166,6 @@ const AdminAssignClassesPage = () => {
       {showAddForm && activeTab === 'subjects' && (
         <ClassSubjectAssignForm
           classes={classes}
-          subjects={subjects}
           teachers={teachers}
           onSuccess={() => {
             fetchData();
@@ -220,6 +219,7 @@ const AdminAssignClassesPage = () => {
                       <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Section</th>
                       <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Subject</th>
                       <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Teacher</th>
+                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Academic Year</th>
                       <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                     </tr>
                   </thead>
@@ -235,7 +235,7 @@ const AdminAssignClassesPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
                             <FiGrid className="text-slate-400" />
-                            {assign.section_name || 'All Sections'}
+                            {assign.section_name}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -250,23 +250,22 @@ const AdminAssignClassesPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {assign.teacher_name ? (
-                            <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                              <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
-                                <FiUser className="text-xs" />
-                              </span>
-                              {assign.teacher_name}
+                          <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                            <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
+                              <FiUser className="text-xs" />
                             </span>
-                          ) : (
-                            <span className="text-xs font-semibold text-rose-500 bg-rose-50 border border-rose-100 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                              Unassigned
-                            </span>
-                          )}
+                            {assign.teacher_name}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-655 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
+                            <FiCalendar className="text-xs text-slate-400" /> {assign.academic_year}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <button
                             onClick={() => handleDeleteAssignment(assign.id, assign.subject_name, assign.class_name)}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-655 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                             title="Remove Mapping"
                           >
                             <FiTrash2 className="text-sm" />

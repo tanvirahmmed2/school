@@ -13,6 +13,7 @@ export async function GET(request) {
     let sql = `
       SELECT 
         cr.*, 
+        cs.class_id AS class_id,
         c.name AS class_name, 
         c.code AS class_code,
         s.name AS section_name, 
@@ -23,9 +24,10 @@ export async function GET(request) {
         p.start_time AS start_time,
         p.end_time AS end_time
       FROM class_routines cr
-      JOIN classes c ON cr.class_id = c.id
+      JOIN class_subjects cs ON cr.class_subject_id = cs.id
+      JOIN classes c ON cs.class_id = c.id
       JOIN sections s ON cr.section_id = s.id
-      JOIN subjects sub ON cr.subject_id = sub.id
+      JOIN subjects sub ON cs.subject_id = sub.id
       LEFT JOIN teachers t ON cr.teacher_id = t.id
       JOIN periods p ON cr.period_id = p.id
     `;
@@ -34,7 +36,7 @@ export async function GET(request) {
 
     if (classId) {
       params.push(classId);
-      conditions.push(`cr.class_id = $${params.length}`);
+      conditions.push(`cs.class_id = $${params.length}`);
     }
 
     if (sectionId) {
@@ -66,19 +68,18 @@ export async function GET(request) {
     `;
 
     const result = await query(sql, params);
-    const res_data_1785 = { routines: result.rows };
+    const res_data = { routines: result.rows };
     return NextResponse.json({
       success: true,
       message: 'Successfully fetched routine schedules',
-      paylod: res_data_1785
+      paylod: res_data
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching class routines:', error);
-    const res_err_2156 = { error: 'Failed to retrieve class routines. Internal server error.' };
     return NextResponse.json({
       success: false,
-      message: res_err_2156.error,
-      error: res_err_2156.error,
+      message: 'Failed to retrieve class routines.',
+      error: 'Internal Server Error',
       paylod: null
     }, { status: 500 });
   }
@@ -89,23 +90,32 @@ export async function POST(request) {
   try {
     const authenticated = await isAdmin();
     if (!authenticated) {
-      const res_err_2673 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({
         success: false,
-        message: res_err_2673.error,
-        error: res_err_2673.error,
+        message: 'Unauthorized. Admins only.',
+        error: 'Unauthorized',
         paylod: null
       }, { status: 403 });
     }
 
-    const { class_id, section_id, subject_id, teacher_id, day_of_week, period_id, room_number } = await request.json();
+    const { class_subject_id, section_id, teacher_id, day_of_week, period_id, room_number } = await request.json();
 
-    if (!class_id || !section_id || !subject_id || !day_of_week || !period_id) {
-      const res_err_3229 = { error: 'Class, Section, Subject, Day, and Period are required.' };
+    if (!class_subject_id || !section_id || !day_of_week || !period_id) {
       return NextResponse.json({
         success: false,
-        message: res_err_3229.error,
-        error: res_err_3229.error,
+        message: 'Class Subject, Section, Day, and Period are required.',
+        error: 'Bad Request',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    // Verify Class Subject exists
+    const csCheck = await query('SELECT * FROM class_subjects WHERE id = $1', [class_subject_id]);
+    if (csCheck.rows.length === 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'Selected class subject not found.',
+        error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
@@ -113,11 +123,10 @@ export async function POST(request) {
     // Verify Period exists
     const periodCheck = await query('SELECT * FROM periods WHERE id = $1', [period_id]);
     if (periodCheck.rows.length === 0) {
-      const res_err = { error: 'Selected routine period not found.' };
       return NextResponse.json({
         success: false,
-        message: res_err.error,
-        error: res_err.error,
+        message: 'Selected routine period not found.',
+        error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
@@ -127,7 +136,8 @@ export async function POST(request) {
     const sectionOverlap = await query(
       `SELECT cr.id, sub.name as subject_name, p.name as period_name
        FROM class_routines cr
-       JOIN subjects sub ON cr.subject_id = sub.id
+       JOIN class_subjects cs ON cr.class_subject_id = cs.id
+       JOIN subjects sub ON cs.subject_id = sub.id
        JOIN periods p ON cr.period_id = p.id
        WHERE cr.section_id = $1 
          AND cr.day_of_week = $2 
@@ -137,11 +147,10 @@ export async function POST(request) {
 
     if (sectionOverlap.rows.length > 0) {
       const existing = sectionOverlap.rows[0];
-      const res_err_4537 = { error: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled during period "${existing.period_name}" on ${day_of_week}.` };
       return NextResponse.json({
         success: false,
-        message: res_err_4537.error,
-        error: res_err_4537.error,
+        message: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled during period "${existing.period_name}" on ${day_of_week}.`,
+        error: 'Conflict',
         paylod: null
       }, { status: 400 });
     }
@@ -151,7 +160,8 @@ export async function POST(request) {
       const teacherOverlap = await query(
         `SELECT cr.id, c.name as class_name, s.name as section_name, p.name as period_name
          FROM class_routines cr
-         JOIN classes c ON cr.class_id = c.id
+         JOIN class_subjects cs ON cr.class_subject_id = cs.id
+         JOIN classes c ON cs.class_id = c.id
          JOIN sections s ON cr.section_id = s.id
          JOIN periods p ON cr.period_id = p.id
          WHERE cr.teacher_id = $1 
@@ -162,24 +172,22 @@ export async function POST(request) {
 
       if (teacherOverlap.rows.length > 0) {
         const existing = teacherOverlap.rows[0];
-        const res_err_5645 = { error: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} during period "${existing.period_name}" on ${day_of_week}.` };
         return NextResponse.json({
           success: false,
-          message: res_err_5645.error,
-          error: res_err_5645.error,
+          message: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} during period "${existing.period_name}" on ${day_of_week}.`,
+          error: 'Conflict',
           paylod: null
         }, { status: 400 });
       }
     }
 
     const newRoutine = await query(
-      `INSERT INTO class_routines (class_id, section_id, subject_id, teacher_id, period_id, day_of_week, room_number)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO class_routines (class_subject_id, section_id, teacher_id, period_id, day_of_week, room_number)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
       [
-        class_id,
+        class_subject_id,
         section_id,
-        subject_id,
         teacher_id ? parseInt(teacher_id, 10) : null,
         parseInt(period_id, 10),
         day_of_week,
@@ -187,19 +195,18 @@ export async function POST(request) {
       ]
     );
 
-    const res_data_5271 = { message: 'Class routine entry created successfully.', routine: newRoutine.rows[0] };
+    const res_data = { message: 'Class routine entry created successfully.', routine: newRoutine.rows[0] };
     return NextResponse.json({
       success: true,
-      message: res_data_5271.message,
-      paylod: res_data_5271
+      message: res_data.message,
+      paylod: res_data
     }, { status: 201 });
   } catch (error) {
     console.error('Error creating class routine:', error);
-    const res_err_7093 = { error: 'Failed to create class routine. Internal server error.' };
     return NextResponse.json({
       success: false,
-      message: res_err_7093.error,
-      error: res_err_7093.error,
+      message: 'Failed to create class routine.',
+      error: 'Internal Server Error',
       paylod: null
     }, { status: 500 });
   }

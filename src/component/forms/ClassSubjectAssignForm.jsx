@@ -2,20 +2,43 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiFolderPlus, FiLayers, FiGrid, FiBook, FiUserCheck } from 'react-icons/fi';
+import { FiFolderPlus, FiLayers, FiGrid, FiBook, FiUserCheck, FiCalendar } from 'react-icons/fi';
 
-const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCancel }) => {
+const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
   const [classId, setClassId] = useState('');
+  const [classSubjectId, setClassSubjectId] = useState('');
   const [sectionId, setSectionId] = useState('');
-  const [subjectId, setSubjectId] = useState('');
   const [teacherId, setTeacherId] = useState('');
+  const [academicYear, setAcademicYear] = useState('2026');
   const [submitting, setSubmitting] = useState(false);
 
+  const [allClassSubjects, setAllClassSubjects] = useState([]);
+  const [filteredClassSubjects, setFilteredClassSubjects] = useState([]);
   const [filteredSections, setFilteredSections] = useState([]);
 
-  // Fetch sections dynamically based on selected class
+  // Fetch all class subjects mappings
+  useEffect(() => {
+    const fetchClassSubjects = async () => {
+      try {
+        const res = await fetch('/api/class-subjects');
+        const data = await res.json();
+        setAllClassSubjects(data.paylod?.assignments || []);
+      } catch (err) {
+        console.error('Failed to load class subjects lookup', err);
+      }
+    };
+    fetchClassSubjects();
+  }, []);
+
+  // Fetch sections and filter class-subjects based on selected class
   useEffect(() => {
     if (classId) {
+      // Filter class subjects
+      const filtered = allClassSubjects.filter(cs => String(cs.class_id) === String(classId));
+      setFilteredClassSubjects(filtered);
+      setClassSubjectId('');
+
+      // Fetch sections
       fetch(`/api/sections?class_id=${classId}`)
         .then((res) => {
           if (!res.ok) throw new Error();
@@ -23,46 +46,50 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
         })
         .then((data) => {
           setFilteredSections(data.paylod.sections || []);
+          setSectionId('');
         })
         .catch(() => {
           setFilteredSections([]);
+          setSectionId('');
         });
     } else {
+      setFilteredClassSubjects([]);
+      setClassSubjectId('');
       setFilteredSections([]);
       setSectionId('');
     }
-  }, [classId]);
+  }, [classId, allClassSubjects]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !subjectId) {
-      toast.error('Class and Subject are required.');
+    if (!classId || !classSubjectId || !sectionId || !teacherId || !academicYear) {
+      toast.error('All fields marked with * are required.');
       return;
     }
 
     setSubmitting(true);
     try {
-      const response = await fetch('/api/class-subjects', {
+      const response = await fetch('/api/class-subject-teachers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          class_id: classId,
-          section_id: sectionId || null,
-          subject_id: subjectId,
-          teacher_id: teacherId || null,
+          class_subject_id: classSubjectId,
+          section_id: sectionId,
+          teacher_id: teacherId,
+          academic_year: academicYear,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to assign class subject.');
+        throw new Error(data.message || 'Failed to assign teacher.');
       }
 
-      toast.success(data.message || 'Subject mapped successfully!');
+      toast.success(data.message || 'Subject teacher assigned successfully!');
       setClassId('');
+      setClassSubjectId('');
       setSectionId('');
-      setSubjectId('');
       setTeacherId('');
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -75,10 +102,10 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiFolderPlus className="text-blue-600" /> Assign Class Subject & Teacher
+        <FiFolderPlus className="text-blue-600" /> Assign Subject Teacher & Section
       </h2>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
             <FiLayers className="text-slate-400" /> Class *
@@ -88,7 +115,7 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
             value={classId}
             onChange={(e) => setClassId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
           >
             <option value="">Select a class...</option>
             {classes.map((cls) => (
@@ -101,13 +128,34 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
 
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiGrid className="text-slate-400" /> Section (Optional)
+            <FiBook className="text-slate-400" /> Subject *
           </label>
           <select
+            required
+            value={classSubjectId}
+            onChange={(e) => setClassSubjectId(e.target.value)}
+            disabled={submitting || !classId}
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+          >
+            <option value="">Select a subject...</option>
+            {filteredClassSubjects.map((cs) => (
+              <option key={cs.id} value={cs.id}>
+                {cs.subject_name} ({cs.subject_code})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <FiGrid className="text-slate-400" /> Section *
+          </label>
+          <select
+            required
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
             disabled={submitting || !classId}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 disabled:opacity-60"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
           >
             <option value="">Select a section...</option>
             {filteredSections.map((sec) => (
@@ -120,33 +168,14 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
 
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiBook className="text-slate-400" /> Subject *
+            <FiUserCheck className="text-slate-400" /> Assigned Teacher *
           </label>
           <select
             required
-            value={subjectId}
-            onChange={(e) => setSubjectId(e.target.value)}
-            disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
-          >
-            <option value="">Select a subject...</option>
-            {subjects.map((sub) => (
-              <option key={sub.id} value={sub.id}>
-                {sub.name} ({sub.code})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiUserCheck className="text-slate-400" /> Assigned Teacher
-          </label>
-          <select
             value={teacherId}
             onChange={(e) => setTeacherId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
           >
             <option value="">Assign a teacher...</option>
             {teachers.map((teach) => (
@@ -157,7 +186,22 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
           </select>
         </div>
 
-        <div className="flex justify-end gap-3 md:col-span-4 mt-2">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <FiCalendar className="text-slate-400" /> Academic Year *
+          </label>
+          <input
+            type="text"
+            required
+            placeholder="e.g. 2026"
+            value={academicYear}
+            onChange={(e) => setAcademicYear(e.target.value)}
+            disabled={submitting}
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+          />
+        </div>
+
+        <div className="flex justify-end gap-3 md:col-span-5 mt-2">
           <button
             type="button"
             onClick={onCancel}
@@ -173,7 +217,7 @@ const ClassSubjectAssignForm = ({ classes, subjects, teachers, onSuccess, onCanc
             {submitting ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
-              'Assign Subject'
+              'Assign Teacher'
             )}
           </button>
         </div>

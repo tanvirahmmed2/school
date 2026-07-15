@@ -32,7 +32,7 @@ export async function GET() {
 
     // 1. Total assigned subjects
     const subjectsCountRes = await query(`
-      SELECT COUNT(*) as count FROM class_subjects WHERE teacher_id = $1
+      SELECT COUNT(*) as count FROM class_subject_teachers WHERE teacher_id = $1
     `, [teacherId]);
     const subjectsCount = parseInt(subjectsCountRes.rows[0]?.count || 0, 10);
 
@@ -40,8 +40,8 @@ export async function GET() {
     const studentsCountRes = await query(`
       SELECT COUNT(DISTINCT s.id) as count 
       FROM students s
-      JOIN class_subjects cs ON s.class_id = cs.class_id 
-      WHERE cs.teacher_id = $1 AND s.is_registered = TRUE AND s.is_active = TRUE
+      JOIN class_subject_teachers cst ON s.section_id = cst.section_id 
+      WHERE cst.teacher_id = $1 AND s.is_registered = TRUE AND s.is_active = TRUE
     `, [teacherId]);
     const studentsCount = parseInt(studentsCountRes.rows[0]?.count || 0, 10);
 

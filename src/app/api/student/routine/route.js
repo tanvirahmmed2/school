@@ -8,22 +8,20 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-student')?.value;
     if (!token) {
-      const res_err_326 = { error: 'Not authenticated' };
       return NextResponse.json({
         success: false,
-        message: res_err_326.error,
-        error: res_err_326.error,
+        message: 'Not authenticated',
+        error: 'Unauthorized',
         paylod: null
       }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      const res_err_715 = { error: 'Invalid token' };
       return NextResponse.json({
         success: false,
-        message: res_err_715.error,
-        error: res_err_715.error,
+        message: 'Invalid token',
+        error: 'Unauthorized',
         paylod: null
       }, { status: 401 });
     }
@@ -36,11 +34,10 @@ export async function GET() {
     `, [studentId]);
 
     if (studentRes.rows.length === 0) {
-      const res_err_1258 = { error: 'Student not found' };
       return NextResponse.json({
         success: false,
-        message: res_err_1258.error,
-        error: res_err_1258.error,
+        message: 'Student not found',
+        error: 'Not Found',
         paylod: null
       }, { status: 404 });
     }
@@ -49,14 +46,22 @@ export async function GET() {
 
     // Fetch routine joining periods table
     const routineRes = await query(`
-      SELECT r.id, r.day_of_week, p.start_time, p.end_time, p.name as period_name, r.room_number,
-             sub.name as subject_name, sub.code as subject_code,
-             t.name as teacher_name
+      SELECT 
+        r.id, 
+        r.day_of_week, 
+        p.start_time, 
+        p.end_time, 
+        p.name as period_name, 
+        r.room_number,
+        sub.name as subject_name, 
+        sub.code as subject_code,
+        t.name as teacher_name
       FROM class_routines r
-      JOIN subjects sub ON r.subject_id = sub.id
+      JOIN class_subjects cs ON r.class_subject_id = cs.id
+      JOIN subjects sub ON cs.subject_id = sub.id
       JOIN periods p ON r.period_id = p.id
       LEFT JOIN teachers t ON r.teacher_id = t.id
-      WHERE r.class_id = $1 AND r.section_id = $2
+      WHERE cs.class_id = $1 AND r.section_id = $2
       ORDER BY 
         CASE r.day_of_week
           WHEN 'Sunday' THEN 1
@@ -71,19 +76,18 @@ export async function GET() {
         p.start_time ASC
     `, [class_id, section_id]);
 
-    const res_data_1755 = { routine: routineRes.rows };
+    const res_data = { routine: routineRes.rows };
     return NextResponse.json({
       success: true,
       message: 'Successfully fetched routine schedule',
-      paylod: res_data_1755
+      paylod: res_data
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching student class routine:', error);
-    const res_err_2824 = { error: 'Internal server error' };
     return NextResponse.json({
       success: false,
-      message: res_err_2824.error,
-      error: res_err_2824.error,
+      message: 'Internal server error',
+      error: 'Internal Server Error',
       paylod: null
     }, { status: 500 });
   }

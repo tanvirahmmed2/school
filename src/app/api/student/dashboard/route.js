@@ -50,8 +50,8 @@ export async function GET() {
     // 2. Count subjects in class_subjects
     const subjectsCountRes = await query(`
       SELECT COUNT(DISTINCT subject_id) as count FROM class_subjects 
-      WHERE class_id = $1 AND (section_id = $2 OR section_id IS NULL)
-    `, [class_id, section_id]);
+      WHERE class_id = $1
+    `, [class_id]);
     const subjectsCount = parseInt(subjectsCountRes.rows[0]?.count || 0, 10);
 
     // 3. Calculate attendance stats

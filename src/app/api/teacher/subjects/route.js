@@ -8,22 +8,20 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get('fit-teacher')?.value;
     if (!token) {
-      const res_err_326 = { error: 'Not authenticated' };
       return NextResponse.json({
         success: false,
-        message: res_err_326?.error || res_err_326?.message || 'An error occurred',
-        error: res_err_326?.error || 'Internal Server Error',
+        message: 'Not authenticated',
+        error: 'Unauthorized',
         paylod: null
       }, { status: 401 });
     }
 
     const decoded = verifyJWT(token);
     if (!decoded || !decoded.id) {
-      const res_err_715 = { error: 'Invalid token' };
       return NextResponse.json({
         success: false,
-        message: res_err_715?.error || res_err_715?.message || 'An error occurred',
-        error: res_err_715?.error || 'Internal Server Error',
+        message: 'Invalid token',
+        error: 'Unauthorized',
         paylod: null
       }, { status: 401 });
     }
@@ -32,32 +30,37 @@ export async function GET() {
 
     // Fetch subjects assigned to this teacher
     const subjectsRes = await query(`
-      SELECT cs.id, cs.class_id, cs.section_id, cs.subject_id,
-             c.name as class_name, 
-             sec.name as section_name,
-             sub.name as subject_name, sub.code as subject_code
-      FROM class_subjects cs
+      SELECT 
+        cs.id, 
+        cs.class_id, 
+        cst.section_id, 
+        cs.subject_id,
+        c.name as class_name, 
+        sec.name as section_name,
+        sub.name as subject_name, 
+        sub.code as subject_code
+      FROM class_subject_teachers cst
+      JOIN class_subjects cs ON cst.class_subject_id = cs.id
       JOIN classes c ON cs.class_id = c.id
-      LEFT JOIN sections sec ON cs.section_id = sec.id
+      JOIN sections sec ON cst.section_id = sec.id
       JOIN subjects sub ON cs.subject_id = sub.id
-      WHERE cs.teacher_id = $1
+      WHERE cst.teacher_id = $1
       ORDER BY c.numeric_name ASC, sec.name ASC, sub.name ASC
     `, [teacherId]);
 
-    const res_data_1225 = { subjects: subjectsRes.rows };
-      return NextResponse.json({
-        success: true,
-        message: res_data_1225?.message || 'Successfully fecthed data',
-        paylod: res_data_1225
-      }, { status: 200 });
+    const res_data = { subjects: subjectsRes.rows };
+    return NextResponse.json({
+      success: true,
+      message: 'Teacher subjects retrieved successfully',
+      paylod: res_data
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching teacher subjects:', error);
-    const res_err_2059 = { error: 'Internal server error' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_2059?.error || res_err_2059?.message || 'An error occurred',
-        error: res_err_2059?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      message: 'Internal server error',
+      error: 'Internal Server Error',
+      paylod: null
+    }, { status: 500 });
   }
 }

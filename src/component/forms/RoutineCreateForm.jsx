@@ -17,13 +17,14 @@ const DAYS_OF_WEEK = [
 const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSuccess, onCancel }) => {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [classSubjects, setClassSubjects] = useState([]);
+  const [filteredClassSubjects, setFilteredClassSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [periods, setPeriods] = useState([]);
 
   const [classId, setClassId] = useState(initialClassId);
   const [sectionId, setSectionId] = useState(initialSectionId);
-  const [subjectId, setSubjectId] = useState('');
+  const [classSubjectId, setClassSubjectId] = useState('');
   const [teacherId, setTeacherId] = useState('');
   const [dayOfWeek, setDayOfWeek] = useState('Sunday');
   const [periodId, setPeriodId] = useState('');
@@ -32,26 +33,33 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
   const [loadingLists, setLoadingLists] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load initial dropdown data (classes, subjects, teachers, periods)
+  // Load initial dropdown data (classes, class-subjects, teachers, periods)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, subjectsRes, teachersRes, periodsRes] = await Promise.all([
-          fetch('/api/classes'),
-          fetch('/api/subjects'),
-          fetch('/api/teachers'),
-          fetch('/api/periods'),
+        const [classesRes, classSubjectsRes, teachersRes, periodsRes] = await Promise.all([
+          fetch('/api/classes').catch(() => null),
+          fetch('/api/class-subjects').catch(() => null),
+          fetch('/api/teachers').catch(() => null),
+          fetch('/api/periods').catch(() => null),
         ]);
 
-        const classesData = await classesRes.json();
-        const subjectsData = await subjectsRes.json();
-        const teachersData = await teachersRes.json();
-        const periodsData = await periodsRes.json();
-
-        setClasses(classesData.paylod?.classes || []);
-        setSubjects(subjectsData.paylod?.subjects || []);
-        setTeachers(teachersData.paylod?.teachers || []);
-        setPeriods(periodsData.paylod?.periods || []);
+        if (classesRes && classesRes.ok) {
+          const classesData = await classesRes.json();
+          setClasses(classesData.paylod?.classes || []);
+        }
+        if (classSubjectsRes && classSubjectsRes.ok) {
+          const classSubjectsData = await classSubjectsRes.json();
+          setClassSubjects(classSubjectsData.paylod?.assignments || []);
+        }
+        if (teachersRes && teachersRes.ok) {
+          const teachersData = await teachersRes.json();
+          setTeachers(teachersData.paylod?.teachers || []);
+        }
+        if (periodsRes && periodsRes.ok) {
+          const periodsData = await periodsRes.json();
+          setPeriods(periodsData.paylod?.periods || []);
+        }
       } catch (err) {
         toast.error('Failed to load form lookup data.');
       } finally {
@@ -61,11 +69,13 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
     fetchData();
   }, []);
 
-  // Fetch sections when classId changes
+  // Fetch sections and filter class-subjects when classId changes
   useEffect(() => {
     if (!classId) {
       setSections([]);
       setSectionId('');
+      setFilteredClassSubjects([]);
+      setClassSubjectId('');
       return;
     }
 
@@ -87,12 +97,18 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
         toast.error('Failed to load sections for class.');
       }
     };
+
     fetchSections();
-  }, [classId, initialClassId, initialSectionId]);
+
+    // Filter class-subjects
+    const filtered = classSubjects.filter(cs => String(cs.class_id) === String(classId));
+    setFilteredClassSubjects(filtered);
+    setClassSubjectId('');
+  }, [classId, classSubjects, initialClassId, initialSectionId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !sectionId || !subjectId || !dayOfWeek || !periodId) {
+    if (!classId || !sectionId || !classSubjectId || !dayOfWeek || !periodId) {
       toast.error('All fields except teacher and room number are required.');
       return;
     }
@@ -103,9 +119,8 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          class_id: classId,
+          class_subject_id: classSubjectId,
           section_id: sectionId,
-          subject_id: subjectId,
           teacher_id: teacherId || null,
           day_of_week: dayOfWeek,
           period_id: periodId,
@@ -116,13 +131,12 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create routine entry.');
+        throw new Error(data.message || 'Failed to create routine entry.');
       }
 
       toast.success(data.message || 'Routine entry added successfully!');
-      // Reset non-structural fields
       setRoomNumber('');
-      setSubjectId('');
+      setClassSubjectId('');
       setTeacherId('');
       setPeriodId('');
 
@@ -161,7 +175,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={dayOfWeek}
               onChange={(e) => setDayOfWeek(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               {DAYS_OF_WEEK.map((day) => (
                 <option key={day} value={day}>
@@ -181,7 +195,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={classId}
               onChange={(e) => setClassId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               <option value="">Select Class...</option>
               {classes.map((c) => (
@@ -202,7 +216,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={sectionId}
               onChange={(e) => setSectionId(e.target.value)}
               disabled={submitting || !classId}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 disabled:opacity-60"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
             >
               <option value="">Select Section...</option>
               {sections.map((s) => (
@@ -220,15 +234,15 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
             </label>
             <select
               required
-              value={subjectId}
-              onChange={(e) => setSubjectId(e.target.value)}
-              disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              value={classSubjectId}
+              onChange={(e) => setClassSubjectId(e.target.value)}
+              disabled={submitting || !classId}
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
             >
               <option value="">Select Subject...</option>
-              {subjects.map((sub) => (
-                <option key={sub.id} value={sub.id}>
-                  {sub.name} ({sub.code})
+              {filteredClassSubjects.map((cs) => (
+                <option key={cs.id} value={cs.id}>
+                  {cs.subject_name} ({cs.subject_code})
                 </option>
               ))}
             </select>
@@ -245,7 +259,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={teacherId}
               onChange={(e) => setTeacherId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               <option value="">Unassigned (None)...</option>
               {teachers.map((t) => (
@@ -266,7 +280,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={periodId}
               onChange={(e) => setPeriodId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               <option value="">Select Period Slot...</option>
               {periods.map((p) => (
@@ -288,7 +302,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={roomNumber}
               onChange={(e) => setRoomNumber(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
             />
           </div>
         </div>
@@ -298,7 +312,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-4 py-2 border border-slate-200 hover:bg-slate-55 text-slate-655 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60 text-slate-600 bg-white"
+            className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60 bg-white"
           >
             Cancel
           </button>

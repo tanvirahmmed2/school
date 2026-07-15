@@ -17,13 +17,14 @@ const DAYS_OF_WEEK = [
 const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [classSubjects, setClassSubjects] = useState([]);
+  const [filteredClassSubjects, setFilteredClassSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [periods, setPeriods] = useState([]);
 
   const [classId, setClassId] = useState(routine.class_id ? routine.class_id.toString() : '');
   const [sectionId, setSectionId] = useState(routine.section_id ? routine.section_id.toString() : '');
-  const [subjectId, setSubjectId] = useState(routine.subject_id ? routine.subject_id.toString() : '');
+  const [classSubjectId, setClassSubjectId] = useState(routine.class_subject_id ? routine.class_subject_id.toString() : '');
   const [teacherId, setTeacherId] = useState(routine.teacher_id ? routine.teacher_id.toString() : '');
   const [dayOfWeek, setDayOfWeek] = useState(routine.day_of_week || 'Sunday');
   const [periodId, setPeriodId] = useState(routine.period_id ? routine.period_id.toString() : '');
@@ -32,26 +33,41 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
   const [loadingLists, setLoadingLists] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load classes, subjects, teachers, periods
+  // Load initial dropdown data (classes, class-subjects, teachers, periods)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, subjectsRes, teachersRes, periodsRes] = await Promise.all([
-          fetch('/api/classes'),
-          fetch('/api/subjects'),
-          fetch('/api/teachers'),
-          fetch('/api/periods'),
+        const [classesRes, classSubjectsRes, teachersRes, periodsRes] = await Promise.all([
+          fetch('/api/classes').catch(() => null),
+          fetch('/api/class-subjects').catch(() => null),
+          fetch('/api/teachers').catch(() => null),
+          fetch('/api/periods').catch(() => null),
         ]);
 
-        const classesData = await classesRes.json();
-        const subjectsData = await subjectsRes.json();
-        const teachersData = await teachersRes.json();
-        const periodsData = await periodsRes.json();
-
-        setClasses(classesData.paylod?.classes || []);
-        setSubjects(subjectsData.paylod?.subjects || []);
-        setTeachers(teachersData.paylod?.teachers || []);
-        setPeriods(periodsData.paylod?.periods || []);
+        if (classesRes && classesRes.ok) {
+          const classesData = await classesRes.json();
+          setClasses(classesData.paylod?.classes || []);
+        }
+        if (classSubjectsRes && classSubjectsRes.ok) {
+          const classSubjectsData = await classSubjectsRes.json();
+          const list = classSubjectsData.paylod?.assignments || [];
+          setClassSubjects(list);
+          
+          // Filter initial list for the selected classId
+          const currentClassId = routine.class_id ? routine.class_id.toString() : '';
+          if (currentClassId) {
+            const filtered = list.filter(cs => String(cs.class_id) === String(currentClassId));
+            setFilteredClassSubjects(filtered);
+          }
+        }
+        if (teachersRes && teachersRes.ok) {
+          const teachersData = await teachersRes.json();
+          setTeachers(teachersData.paylod?.teachers || []);
+        }
+        if (periodsRes && periodsRes.ok) {
+          const periodsData = await periodsRes.json();
+          setPeriods(periodsData.paylod?.periods || []);
+        }
       } catch (err) {
         toast.error('Failed to load lookup data.');
       } finally {
@@ -59,12 +75,13 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [routine]);
 
-  // Fetch sections based on class selection
+  // Fetch sections and filter class-subjects when classId changes
   useEffect(() => {
     if (!classId) {
       setSections([]);
+      setFilteredClassSubjects([]);
       return;
     }
 
@@ -78,11 +95,20 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
       }
     };
     fetchSections();
-  }, [classId]);
+
+    // Filter class-subjects
+    const filtered = classSubjects.filter(cs => String(cs.class_id) === String(classId));
+    setFilteredClassSubjects(filtered);
+
+    // If changing the class, reset the selected subject mapping
+    if (String(routine.class_id) !== String(classId)) {
+      setClassSubjectId('');
+    }
+  }, [classId, classSubjects, routine]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !sectionId || !subjectId || !dayOfWeek || !periodId) {
+    if (!classId || !sectionId || !classSubjectId || !dayOfWeek || !periodId) {
       toast.error('Required fields are missing.');
       return;
     }
@@ -93,9 +119,8 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          class_id: classId,
+          class_subject_id: classSubjectId,
           section_id: sectionId,
-          subject_id: subjectId,
           teacher_id: teacherId || null,
           day_of_week: dayOfWeek,
           period_id: periodId,
@@ -106,7 +131,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to update routine entry.');
+        throw new Error(data.message || 'Failed to update routine entry.');
       }
 
       toast.success(data.message || 'Routine entry updated successfully!');
@@ -145,7 +170,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={dayOfWeek}
               onChange={(e) => setDayOfWeek(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               {DAYS_OF_WEEK.map((day) => (
                 <option key={day} value={day}>
@@ -165,7 +190,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={classId}
               onChange={(e) => setClassId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               <option value="">Select Class...</option>
               {classes.map((c) => (
@@ -186,7 +211,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={sectionId}
               onChange={(e) => setSectionId(e.target.value)}
               disabled={submitting || !classId}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 disabled:opacity-60"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
             >
               <option value="">Select Section...</option>
               {sections.map((s) => (
@@ -204,15 +229,15 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
             </label>
             <select
               required
-              value={subjectId}
-              onChange={(e) => setSubjectId(e.target.value)}
-              disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              value={classSubjectId}
+              onChange={(e) => setClassSubjectId(e.target.value)}
+              disabled={submitting || !classId}
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
             >
               <option value="">Select Subject...</option>
-              {subjects.map((sub) => (
-                <option key={sub.id} value={sub.id}>
-                  {sub.name} ({sub.code})
+              {filteredClassSubjects.map((cs) => (
+                <option key={cs.id} value={cs.id}>
+                  {cs.subject_name} ({cs.subject_code})
                 </option>
               ))}
             </select>
@@ -229,7 +254,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={teacherId}
               onChange={(e) => setTeacherId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               <option value="">Unassigned (None)...</option>
               {teachers.map((t) => (
@@ -250,7 +275,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={periodId}
               onChange={(e) => setPeriodId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
               <option value="">Select Period Slot...</option>
               {periods.map((p) => (
@@ -272,7 +297,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={roomNumber}
               onChange={(e) => setRoomNumber(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
             />
           </div>
         </div>
@@ -282,7 +307,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-4 py-2 border border-slate-200 hover:bg-slate-55 text-slate-655 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60 text-slate-600 bg-white"
+            className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60 bg-white"
           >
             Cancel
           </button>
@@ -291,7 +316,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
             disabled={submitting}
             className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer flex items-center gap-2 disabled:opacity-60"
           >
-            {submitting ? 'Updating...' : 'Update Routine'}
+            {submitting ? 'Saving...' : 'Save Routine'}
           </button>
         </div>
       </form>
