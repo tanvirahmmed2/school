@@ -25,7 +25,7 @@ const AdminSectionsPage = () => {
       const classesData = await classesRes.json();
       if (!classesRes.ok) throw new Error(classesData.error || 'Failed to fetch classes.');
 
-      setSections(sectionsData.sections || []);
+      setSections(sectionsData.paylod.sections || []);
       setClasses(classesData.paylod.classes || []);
     } catch (error) {
       toast.error(error.message);

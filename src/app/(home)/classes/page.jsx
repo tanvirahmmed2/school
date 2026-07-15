@@ -28,7 +28,6 @@ const ClassesPage = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
             Academic Programs
@@ -41,7 +40,6 @@ const ClassesPage = () => {
           </p>
         </div>
 
-        {/* Loading / Cards Grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
@@ -65,13 +63,11 @@ const ClassesPage = () => {
                     <FiLayers />
                   </div>
                   <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-sky-600 transition-colors">
-                    Class: {cls.name}
+                    {cls.name}
                   </h3>
-                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
-                    Code: {cls.code} | Label: {cls.numeric_name}
-                  </p>
+                  
                   <p className="text-slate-500 text-xs mt-3 leading-relaxed">
-                    Access syllabus plans, subject schedules, and grading standards for Class {cls.name}.
+                    Access syllabus plans, subject schedules, and grading standards for {cls.name}.
                   </p>
                 </div>
                 <div className="mt-6 pt-4 border-t border-slate-50">

@@ -46,6 +46,7 @@ const Sidebar = () => {
   const classLinks = [
     { label: 'Classes List', href: '/admin/classes/class', icon: FiLayers },
     { label: 'Sections List', href: '/admin/classes/sections', icon: FiGrid },
+    { label: 'Routine Periods', href: '/admin/classes/periods', icon: FiClock },
     { label: 'Class Routine', href: '/admin/classes/routine', icon: FiClock },
     { label: 'Syllabus', href: '/admin/classes/syllabus', icon: FiFileText },
   ];

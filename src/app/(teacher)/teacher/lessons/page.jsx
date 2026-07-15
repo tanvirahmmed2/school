@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FiCalendar, FiBookOpen, FiPlus, FiCheck, FiInfo } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const LessonsPageContent = () => {
   const searchParams = useSearchParams();
@@ -119,12 +120,10 @@ const LessonsPageContent = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-slate-500">Details / Description</label>
-              <textarea
-                rows={4}
+              <TiptapEditor
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(val) => setFormData({ ...formData, description: val })}
                 placeholder="Describe key learning outcomes, resources needed, and activities..."
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600 resize-none"
               />
             </div>
 

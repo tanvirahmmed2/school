@@ -18,12 +18,16 @@ export async function GET(request) {
         s.name AS section_name, 
         sub.name AS subject_name, 
         sub.code AS subject_code,
-        t.name AS teacher_name
+        t.name AS teacher_name,
+        p.name AS period_name,
+        p.start_time AS start_time,
+        p.end_time AS end_time
       FROM class_routines cr
       JOIN classes c ON cr.class_id = c.id
       JOIN sections s ON cr.section_id = s.id
       JOIN subjects sub ON cr.subject_id = sub.id
       LEFT JOIN teachers t ON cr.teacher_id = t.id
+      JOIN periods p ON cr.period_id = p.id
     `;
     let params = [];
     let conditions = [];
@@ -58,25 +62,25 @@ export async function GET(request) {
           WHEN 'Friday' THEN 6 
           WHEN 'Saturday' THEN 7 
         END ASC, 
-        cr.start_time ASC
+        p.start_time ASC
     `;
 
     const result = await query(sql, params);
     const res_data_1785 = { routines: result.rows };
-      return NextResponse.json({
-        success: true,
-        message: res_data_1785?.message || 'Successfully fecthed data',
-        paylod: res_data_1785
-      }, { status: 200 });
+    return NextResponse.json({
+      success: true,
+      message: 'Successfully fetched routine schedules',
+      paylod: res_data_1785
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching class routines:', error);
     const res_err_2156 = { error: 'Failed to retrieve class routines. Internal server error.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_2156?.error || res_err_2156?.message || 'An error occurred',
-        error: res_err_2156?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      message: res_err_2156.error,
+      error: res_err_2156.error,
+      paylod: null
+    }, { status: 500 });
   }
 }
 
@@ -88,54 +92,56 @@ export async function POST(request) {
       const res_err_2673 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({
         success: false,
-        message: res_err_2673?.error || res_err_2673?.message || 'An error occurred',
-        error: res_err_2673?.error || 'Internal Server Error',
+        message: res_err_2673.error,
+        error: res_err_2673.error,
         paylod: null
       }, { status: 403 });
     }
 
-    const { class_id, section_id, subject_id, teacher_id, day_of_week, start_time, end_time, room_number } = await request.json();
+    const { class_id, section_id, subject_id, teacher_id, day_of_week, period_id, room_number } = await request.json();
 
-    if (!class_id || !section_id || !subject_id || !day_of_week || !start_time || !end_time) {
-      const res_err_3229 = { error: 'Class, Section, Subject, Day, Start Time, and End Time are required.' };
+    if (!class_id || !section_id || !subject_id || !day_of_week || !period_id) {
+      const res_err_3229 = { error: 'Class, Section, Subject, Day, and Period are required.' };
       return NextResponse.json({
         success: false,
-        message: res_err_3229?.error || res_err_3229?.message || 'An error occurred',
-        error: res_err_3229?.error || 'Internal Server Error',
+        message: res_err_3229.error,
+        error: res_err_3229.error,
         paylod: null
       }, { status: 400 });
     }
 
-    // Verify times format HH:mm and start < end
-    if (start_time >= end_time) {
-      const res_err_3683 = { error: 'Start time must be strictly before end time.' };
+    // Verify Period exists
+    const periodCheck = await query('SELECT * FROM periods WHERE id = $1', [period_id]);
+    if (periodCheck.rows.length === 0) {
+      const res_err = { error: 'Selected routine period not found.' };
       return NextResponse.json({
         success: false,
-        message: res_err_3683?.error || res_err_3683?.message || 'An error occurred',
-        error: res_err_3683?.error || 'Internal Server Error',
+        message: res_err.error,
+        error: res_err.error,
         paylod: null
       }, { status: 400 });
     }
+    const currentPeriod = periodCheck.rows[0];
 
-    // Check Section Overlap
+    // Check Section Overlap (Same Period, Same Day)
     const sectionOverlap = await query(
-      `SELECT cr.id, cr.start_time, cr.end_time, sub.name as subject_name
+      `SELECT cr.id, sub.name as subject_name, p.name as period_name
        FROM class_routines cr
        JOIN subjects sub ON cr.subject_id = sub.id
+       JOIN periods p ON cr.period_id = p.id
        WHERE cr.section_id = $1 
          AND cr.day_of_week = $2 
-         AND cr.start_time < $3 
-         AND cr.end_time > $4`,
-      [section_id, day_of_week, end_time, start_time]
+         AND cr.period_id = $3`,
+      [section_id, day_of_week, period_id]
     );
 
     if (sectionOverlap.rows.length > 0) {
       const existing = sectionOverlap.rows[0];
-      const res_err_4537 = { error: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled from ${existing.start_time} to ${existing.end_time} on ${day_of_week}.` };
+      const res_err_4537 = { error: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled during period "${existing.period_name}" on ${day_of_week}.` };
       return NextResponse.json({
         success: false,
-        message: res_err_4537?.error || res_err_4537?.message || 'An error occurred',
-        error: res_err_4537?.error || 'Internal Server Error',
+        message: res_err_4537.error,
+        error: res_err_4537.error,
         paylod: null
       }, { status: 400 });
     }
@@ -143,59 +149,58 @@ export async function POST(request) {
     // Check Teacher Overlap (if teacher is selected)
     if (teacher_id) {
       const teacherOverlap = await query(
-        `SELECT cr.id, cr.start_time, cr.end_time, c.name as class_name, s.name as section_name
+        `SELECT cr.id, c.name as class_name, s.name as section_name, p.name as period_name
          FROM class_routines cr
          JOIN classes c ON cr.class_id = c.id
          JOIN sections s ON cr.section_id = s.id
+         JOIN periods p ON cr.period_id = p.id
          WHERE cr.teacher_id = $1 
            AND cr.day_of_week = $2 
-           AND cr.start_time < $3 
-           AND cr.end_time > $4`,
-        [teacher_id, day_of_week, end_time, start_time]
+           AND cr.period_id = $3`,
+        [teacher_id, day_of_week, period_id]
       );
 
       if (teacherOverlap.rows.length > 0) {
         const existing = teacherOverlap.rows[0];
-        const res_err_5645 = { error: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} from ${existing.start_time} to ${existing.end_time} on ${day_of_week}.` };
-      return NextResponse.json({
-        success: false,
-        message: res_err_5645?.error || res_err_5645?.message || 'An error occurred',
-        error: res_err_5645?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 400 });
+        const res_err_5645 = { error: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} during period "${existing.period_name}" on ${day_of_week}.` };
+        return NextResponse.json({
+          success: false,
+          message: res_err_5645.error,
+          error: res_err_5645.error,
+          paylod: null
+        }, { status: 400 });
       }
     }
 
     const newRoutine = await query(
-      `INSERT INTO class_routines (class_id, section_id, subject_id, teacher_id, day_of_week, start_time, end_time, room_number)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO class_routines (class_id, section_id, subject_id, teacher_id, period_id, day_of_week, room_number)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
       [
         class_id,
         section_id,
         subject_id,
         teacher_id ? parseInt(teacher_id, 10) : null,
+        parseInt(period_id, 10),
         day_of_week,
-        start_time,
-        end_time,
         room_number ? room_number.trim() : null
       ]
     );
 
     const res_data_5271 = { message: 'Class routine entry created successfully.', routine: newRoutine.rows[0] };
-      return NextResponse.json({
-        success: true,
-        message: res_data_5271?.message || 'Successfully fecthed data',
-        paylod: res_data_5271
-      }, { status: 201 });
+    return NextResponse.json({
+      success: true,
+      message: res_data_5271.message,
+      paylod: res_data_5271
+    }, { status: 201 });
   } catch (error) {
     console.error('Error creating class routine:', error);
     const res_err_7093 = { error: 'Failed to create class routine. Internal server error.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_7093?.error || res_err_7093?.message || 'An error occurred',
-        error: res_err_7093?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      message: res_err_7093.error,
+      error: res_err_7093.error,
+      paylod: null
+    }, { status: 500 });
   }
 }

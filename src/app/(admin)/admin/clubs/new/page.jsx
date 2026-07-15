@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiPlus, FiEdit, FiTrash2, FiActivity, FiTag, FiBookOpen } from 'react-icons/fi';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const AdminClubsNewPage = () => {
   const [clubs, setClubs] = useState([]);
@@ -177,13 +178,10 @@ const AdminClubsNewPage = () => {
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
                 <FiBookOpen /> Description
               </label>
-              <textarea
-                rows={3}
-                placeholder="Brief description of the club's objectives..."
+              <TiptapEditor
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 resize-none"
+                onChange={setDescription}
+                placeholder="Brief description of the club's objectives..."
               />
             </div>
 

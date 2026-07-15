@@ -19,36 +19,39 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
   const [sections, setSections] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  const [periods, setPeriods] = useState([]);
 
   const [classId, setClassId] = useState(routine.class_id ? routine.class_id.toString() : '');
   const [sectionId, setSectionId] = useState(routine.section_id ? routine.section_id.toString() : '');
   const [subjectId, setSubjectId] = useState(routine.subject_id ? routine.subject_id.toString() : '');
   const [teacherId, setTeacherId] = useState(routine.teacher_id ? routine.teacher_id.toString() : '');
   const [dayOfWeek, setDayOfWeek] = useState(routine.day_of_week || 'Sunday');
-  const [startTime, setStartTime] = useState(routine.start_time || '09:00');
-  const [endTime, setEndTime] = useState(routine.end_time || '10:00');
+  const [periodId, setPeriodId] = useState(routine.period_id ? routine.period_id.toString() : '');
   const [roomNumber, setRoomNumber] = useState(routine.room_number || '');
 
   const [loadingLists, setLoadingLists] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load classes, subjects, teachers
+  // Load classes, subjects, teachers, periods
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, subjectsRes, teachersRes] = await Promise.all([
+        const [classesRes, subjectsRes, teachersRes, periodsRes] = await Promise.all([
           fetch('/api/classes'),
           fetch('/api/subjects'),
           fetch('/api/teachers'),
+          fetch('/api/periods'),
         ]);
 
         const classesData = await classesRes.json();
         const subjectsData = await subjectsRes.json();
         const teachersData = await teachersRes.json();
+        const periodsData = await periodsRes.json();
 
-        setClasses(classesData.paylod.classes || []);
-        setSubjects(subjectsData.paylod.subjects || []);
-        setTeachers(teachersData.paylod.teachers || []);
+        setClasses(classesData.paylod?.classes || []);
+        setSubjects(subjectsData.paylod?.subjects || []);
+        setTeachers(teachersData.paylod?.teachers || []);
+        setPeriods(periodsData.paylod?.periods || []);
       } catch (err) {
         toast.error('Failed to load lookup data.');
       } finally {
@@ -69,7 +72,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
       try {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         const data = await res.json();
-        setSections(data.paylod.sections || []);
+        setSections(data.paylod?.sections || []);
       } catch (err) {
         toast.error('Failed to fetch sections.');
       }
@@ -79,13 +82,8 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !sectionId || !subjectId || !dayOfWeek || !startTime || !endTime) {
+    if (!classId || !sectionId || !subjectId || !dayOfWeek || !periodId) {
       toast.error('Required fields are missing.');
-      return;
-    }
-
-    if (startTime >= endTime) {
-      toast.error('Start time must be strictly before end time.');
       return;
     }
 
@@ -100,8 +98,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
           subject_id: subjectId,
           teacher_id: teacherId || null,
           day_of_week: dayOfWeek,
-          start_time: startTime,
-          end_time: endTime,
+          period_id: periodId,
           room_number: roomNumber || null,
         }),
       });
@@ -243,34 +240,25 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
             </select>
           </div>
 
-          {/* Start Time */}
-          <div className="flex flex-col gap-1.5">
+          {/* Period Selection */}
+          <div className="flex flex-col gap-1.5 sm:col-span-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiClock className="text-slate-400" /> Start Time (24h)
+              <FiClock className="text-slate-400" /> Routine Period *
             </label>
-            <input
-              type="time"
+            <select
               required
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              value={periodId}
+              onChange={(e) => setPeriodId(e.target.value)}
               disabled={submitting}
               className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
-            />
-          </div>
-
-          {/* End Time */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiClock className="text-slate-400" /> End Time (24h)
-            </label>
-            <input
-              type="time"
-              required
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
-            />
+            >
+              <option value="">Select Period Slot...</option>
+              {periods.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} ({p.start_time} - {p.end_time})
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Room Number */}
@@ -284,7 +272,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
               value={roomNumber}
               onChange={(e) => setRoomNumber(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             />
           </div>
         </div>
@@ -294,7 +282,7 @@ const RoutineEditForm = ({ routine, onSuccess, onCancel }) => {
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60"
+            className="px-4 py-2 border border-slate-200 hover:bg-slate-55 text-slate-655 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60 text-slate-600 bg-white"
           >
             Cancel
           </button>

@@ -303,7 +303,7 @@ const AdminClassRoutinePage = () => {
 
                           {/* Time Slots */}
                           <p className="text-xs font-semibold text-slate-500 mt-1.5 flex items-center gap-1">
-                            <FiClock className="text-slate-400" /> {slot.start_time} — {slot.end_time}
+                            <FiClock className="text-slate-400" /> {slot.period_name ? `${slot.period_name}: ` : ''}{slot.start_time} — {slot.end_time}
                           </p>
                         </div>
 

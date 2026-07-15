@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FiFile, FiPlus, FiLink, FiDownload, FiInfo, FiTrash } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const MaterialsPageContent = () => {
   const searchParams = useSearchParams();
@@ -128,12 +129,10 @@ const MaterialsPageContent = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-slate-500">Description (Optional)</label>
-              <textarea
-                rows={3}
+              <TiptapEditor
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(val) => setFormData({ ...formData, description: val })}
                 placeholder="Short description of this material..."
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600 resize-none"
               />
             </div>
 

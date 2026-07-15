@@ -19,36 +19,39 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
   const [sections, setSections] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  const [periods, setPeriods] = useState([]);
 
   const [classId, setClassId] = useState(initialClassId);
   const [sectionId, setSectionId] = useState(initialSectionId);
   const [subjectId, setSubjectId] = useState('');
   const [teacherId, setTeacherId] = useState('');
   const [dayOfWeek, setDayOfWeek] = useState('Sunday');
-  const [startTime, setStartTime] = useState('09:00');
-  const [endTime, setEndTime] = useState('10:00');
+  const [periodId, setPeriodId] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
 
   const [loadingLists, setLoadingLists] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load initial dropdown data (classes, subjects, teachers)
+  // Load initial dropdown data (classes, subjects, teachers, periods)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, subjectsRes, teachersRes] = await Promise.all([
+        const [classesRes, subjectsRes, teachersRes, periodsRes] = await Promise.all([
           fetch('/api/classes'),
           fetch('/api/subjects'),
           fetch('/api/teachers'),
+          fetch('/api/periods'),
         ]);
 
         const classesData = await classesRes.json();
         const subjectsData = await subjectsRes.json();
         const teachersData = await teachersRes.json();
+        const periodsData = await periodsRes.json();
 
-        setClasses(classesData.paylod.classes || []);
-        setSubjects(subjectsData.paylod.subjects || []);
-        setTeachers(teachersData.paylod.teachers || []);
+        setClasses(classesData.paylod?.classes || []);
+        setSubjects(subjectsData.paylod?.subjects || []);
+        setTeachers(teachersData.paylod?.teachers || []);
+        setPeriods(periodsData.paylod?.periods || []);
       } catch (err) {
         toast.error('Failed to load form lookup data.');
       } finally {
@@ -70,9 +73,8 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
       try {
         const res = await fetch(`/api/sections?class_id=${classId}`);
         const data = await res.json();
-        setSections(data.paylod.sections || []);
-        // Auto-select first section if none selected or if not in initial setup
-        if (data.paylod.sections?.length > 0) {
+        setSections(data.paylod?.sections || []);
+        if (data.paylod?.sections?.length > 0) {
           if (initialClassId === classId && initialSectionId) {
             setSectionId(initialSectionId);
           } else {
@@ -90,13 +92,8 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !sectionId || !subjectId || !dayOfWeek || !startTime || !endTime) {
+    if (!classId || !sectionId || !subjectId || !dayOfWeek || !periodId) {
       toast.error('All fields except teacher and room number are required.');
-      return;
-    }
-
-    if (startTime >= endTime) {
-      toast.error('Start time must be earlier than end time.');
       return;
     }
 
@@ -111,8 +108,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
           subject_id: subjectId,
           teacher_id: teacherId || null,
           day_of_week: dayOfWeek,
-          start_time: startTime,
-          end_time: endTime,
+          period_id: periodId,
           room_number: roomNumber || null,
         }),
       });
@@ -125,11 +121,10 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
 
       toast.success(data.message || 'Routine entry added successfully!');
       // Reset non-structural fields
-      setStartTime('09:00');
-      setEndTime('10:00');
       setRoomNumber('');
       setSubjectId('');
       setTeacherId('');
+      setPeriodId('');
 
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -166,7 +161,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={dayOfWeek}
               onChange={(e) => setDayOfWeek(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
             >
               {DAYS_OF_WEEK.map((day) => (
                 <option key={day} value={day}>
@@ -186,7 +181,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={classId}
               onChange={(e) => setClassId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
             >
               <option value="">Select Class...</option>
               {classes.map((c) => (
@@ -207,7 +202,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={sectionId}
               onChange={(e) => setSectionId(e.target.value)}
               disabled={submitting || !classId}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 disabled:opacity-60"
             >
               <option value="">Select Section...</option>
               {sections.map((s) => (
@@ -228,7 +223,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={subjectId}
               onChange={(e) => setSubjectId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
             >
               <option value="">Select Subject...</option>
               {subjects.map((sub) => (
@@ -250,7 +245,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={teacherId}
               onChange={(e) => setTeacherId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
             >
               <option value="">Unassigned (None)...</option>
               {teachers.map((t) => (
@@ -261,34 +256,25 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
             </select>
           </div>
 
-          {/* Start Time */}
-          <div className="flex flex-col gap-1.5">
+          {/* Period Selection */}
+          <div className="flex flex-col gap-1.5 sm:col-span-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiClock className="text-slate-400" /> Start Time (24h)
+              <FiClock className="text-slate-400" /> Routine Period *
             </label>
-            <input
-              type="time"
+            <select
               required
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              value={periodId}
+              onChange={(e) => setPeriodId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
-            />
-          </div>
-
-          {/* End Time */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiClock className="text-slate-400" /> End Time (24h)
-            </label>
-            <input
-              type="time"
-              required
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
-            />
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-905 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            >
+              <option value="">Select Period Slot...</option>
+              {periods.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} ({p.start_time} - {p.end_time})
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Room Number */}
@@ -312,7 +298,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
             type="button"
             onClick={onCancel}
             disabled={submitting}
-            className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-655 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60"
+            className="px-4 py-2 border border-slate-200 hover:bg-slate-55 text-slate-655 text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer disabled:opacity-60 text-slate-600 bg-white"
           >
             Cancel
           </button>

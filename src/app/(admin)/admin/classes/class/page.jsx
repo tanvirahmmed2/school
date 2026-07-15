@@ -91,7 +91,6 @@ const AdminClassesPage = () => {
         </button>
       </div>
 
-      {/* Class Creation Form component */}
       {showAddForm && !editingClass && (
         <ClassCreateForm
           onSuccess={() => {
@@ -102,7 +101,6 @@ const AdminClassesPage = () => {
         />
       )}
 
-      {/* Class Editing Form component */}
       {editingClass && (
         <ClassEditForm
           cls={editingClass}
@@ -131,7 +129,7 @@ const AdminClassesPage = () => {
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
             <span className="text-slate-355 text-5xl mb-3">🎓</span>
             <h3 className="text-sm font-bold text-slate-600">No Classes Found</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
+            <p className="text-xs text-slate-400 mt-1 max-w-60">
               Create academic classes to structure your sections.
             </p>
           </div>
@@ -162,15 +160,7 @@ const AdminClassesPage = () => {
                   <tr key={cls.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 border border-slate-100 rounded-xl flex items-center justify-center overflow-hidden bg-slate-50 shrink-0">
-                          {cls.image ? (
-                            <img src={cls.image} alt={cls.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-blue-600 font-bold text-sm">
-                              {cls.name.substring(0, 2).toUpperCase()}
-                            </span>
-                          )}
-                        </div>
+                        
                         <div>
                           <p className="text-sm font-bold text-slate-800">{cls.name}</p>
                           <span className="text-[10px] text-slate-400 font-semibold">
