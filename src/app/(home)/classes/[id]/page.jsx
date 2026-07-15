@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { 
-  FiBook, 
-  FiArrowLeft, 
-  FiUser, 
+import {
+  FiBook,
+  FiArrowLeft,
+  FiUser,
   FiInfo,
   FiBookOpen
 } from 'react-icons/fi';
@@ -51,7 +51,7 @@ const ClassDetailsPage = () => {
         if (classSubjectsRes && classSubjectsRes.ok && resolvedClass) {
           const assignmentsData = await classSubjectsRes.json();
           const list = assignmentsData.assignments || [];
-          
+
           // Filter unique subjects mapped to this class
           const uniqueSubjects = [];
           const seenSubjectIds = new Set();
@@ -79,7 +79,7 @@ const ClassDetailsPage = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
-        
+
         {/* Navigation Action Area */}
         <div className="flex items-center justify-between">
           <button
@@ -106,18 +106,13 @@ const ClassDetailsPage = () => {
           </div>
         ) : selectedClass ? (
           <div className="flex flex-col gap-10">
-            {/* 1. Pure CSS Premium Banner */}
-            <div className="relative w-full rounded-3xl overflow-hidden bg-linear-to-r from-blue-600 via-indigo-600 to-indigo-800 shadow-md p-8 md:p-12 text-white flex flex-col justify-end gap-3 min-h-[220px]">
-              {/* Glassmorphic decorative circles */}
-              <div className="absolute right-0 top-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -translate-y-12 translate-x-12"></div>
-              <div className="absolute left-1/3 bottom-0 w-60 h-60 bg-blue-400/10 rounded-full blur-2xl translate-y-1/2"></div>
+            <div className="w-full h-50 bg-linear-to-br from-sky-500 to-emerald-600 flex items-center justify-center text-white rounded-xl">
+
               
-              <div className="relative z-10 flex flex-col items-center justify-center gap-2">
-                
-                <h1 className="text-3xl md:text-5xl font-black tracking-tight">
-                  {selectedClass.name}
-                </h1>
-              </div>
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight">
+                {selectedClass.name}
+              </h1>
+
             </div>
 
             <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.01)] flex flex-col gap-5">
@@ -126,7 +121,7 @@ const ClassDetailsPage = () => {
               </h2>
               <div className="text-sm text-slate-655 text-slate-600 leading-relaxed font-semibold">
                 {selectedClass.description ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none text-slate-650"
                     dangerouslySetInnerHTML={{ __html: selectedClass.description }}
                   />
@@ -151,7 +146,7 @@ const ClassDetailsPage = () => {
                 </h3>
                 <span className="text-[10px] font-bold text-slate-400">Configured subjects for this class</span>
               </div>
-              
+
               {classSubjects.length === 0 ? (
                 <div className="w-full bg-white border border-slate-100 rounded-3xl p-12 text-center text-slate-400 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs">
                   <FiInfo /> No subjects mapped to this class yet.
@@ -159,9 +154,9 @@ const ClassDetailsPage = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {classSubjects.map((sub) => (
-                    <SubjectCard 
-                      key={sub.id} 
-                      subject={sub} 
+                    <SubjectCard
+                      key={sub.id}
+                      subject={sub}
                     />
                   ))}
                 </div>
@@ -176,7 +171,7 @@ const ClassDetailsPage = () => {
                 </h3>
                 <span className="text-[10px] font-bold text-slate-400">Assigned professors & lecturers</span>
               </div>
-              
+
               {teachers.length === 0 ? (
                 <div className="w-full bg-white border border-slate-100 rounded-3xl p-12 text-center text-slate-400 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs">
                   <FiInfo /> No registered academic faculty members found in the records.
