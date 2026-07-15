@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiBriefcase, FiUser, FiDollarSign } from 'react-icons/fi';
+import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiBriefcase, FiUser, FiDollarSign, FiRefreshCw, FiSend } from 'react-icons/fi';
 
 const AdminTeachersListPage = () => {
   const [teachers, setTeachers] = useState([]);
   const [payScales, setPayScales] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [resendingId, setResendingId] = useState(null);
 
   const fetchTeachers = async () => {
     try {
@@ -129,6 +130,20 @@ const AdminTeachersListPage = () => {
       setTeachers(teachers.filter((t) => t.id !== id));
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
+    }
+  };
+
+  const handleResendVerification = async (teacher) => {
+    setResendingId(teacher.id);
+    try {
+      const response = await axios.post('/api/teachers/resend-verification', {
+        teacher_id: teacher.id
+      });
+      toast.success(response.data.message || `Verification link resent to ${teacher.email}`);
+    } catch (err) {
+      toast.error(err.response?.data?.error || err.message);
+    } finally {
+      setResendingId(null);
     }
   };
 
@@ -292,6 +307,21 @@ const AdminTeachersListPage = () => {
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
+                      {/* Resend verification for pending accounts */}
+                      {!teacher.is_registered && (
+                        <button
+                          onClick={() => handleResendVerification(teacher)}
+                          disabled={resendingId === teacher.id}
+                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer disabled:opacity-50"
+                          title={`Resend verification link to ${teacher.email}`}
+                        >
+                          {resendingId === teacher.id ? (
+                            <FiRefreshCw className="text-sm animate-spin" />
+                          ) : (
+                            <FiSend className="text-sm" />
+                          )}
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
                         className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"

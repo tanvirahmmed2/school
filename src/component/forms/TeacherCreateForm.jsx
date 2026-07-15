@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiUserPlus, FiDollarSign } from 'react-icons/fi';
+import { FiUserPlus, FiDollarSign, FiMail } from 'react-icons/fi';
 
 const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   const [name, setName] = useState('');
@@ -14,6 +14,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   const [gradeId, setGradeId] = useState('');
   const [payScales, setPayScales] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [verificationSentTo, setVerificationSentTo] = useState('');
 
   // Load pay scales on mount
   useEffect(() => {
@@ -47,13 +48,14 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
       });
 
       toast.success(response.data.message || 'Teacher account placeholder created successfully!');
+      const createdEmail = email.trim();
       setName('');
       setEmail('');
       setNumber('');
       setDesignation('');
       setGradeId('');
       setIsPermanent(false);
-      if (onSuccess) onSuccess();
+      setVerificationSentTo(createdEmail);
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     } finally {
@@ -66,6 +68,27 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
         <FiUserPlus className="text-blue-600" /> Pre-create Teacher Profile
       </h2>
+
+      {/* Verification link sent notice */}
+      {verificationSentTo && (
+        <div className="mb-5 flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
+          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
+            <FiMail className="text-emerald-600 text-sm" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-emerald-700">Verification Link Sent!</p>
+            <p className="text-xs text-emerald-600 mt-0.5 leading-relaxed">
+              A secure verification link has been emailed to <strong>{verificationSentTo}</strong>. The teacher must click this link within 72 hours to complete profile setup.
+            </p>
+            <button
+              onClick={() => { setVerificationSentTo(''); if (onSuccess) onSuccess(); }}
+              className="mt-2 text-[11px] font-bold text-emerald-600 hover:text-emerald-700 underline cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="flex flex-col gap-1.5">
@@ -142,7 +165,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             <option value="">Unassigned (No Pay Scale Grade)</option>
             {payScales.map((scale) => (
               <option key={scale.id} value={scale.id}>
-                {scale.name} (Basic: ${parseFloat(scale.basic_salary).toLocaleString()} + Allow: ${parseFloat(scale.allowance).toLocaleString()})
+                {scale.name} (Basic: ৳{parseFloat(scale.basic_salary).toLocaleString()} + Allow: ৳{parseFloat(scale.allowance).toLocaleString()})
               </option>
             ))}
           </select>

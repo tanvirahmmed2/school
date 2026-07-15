@@ -101,7 +101,7 @@ const TeacherRegistration = () => {
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Teacher Account Setup</h1>
           <p className="text-sm text-slate-500 max-w-100">
             {step === 1 
-              ? 'Complete your profile registration using the email address pre-registered by administration.' 
+              ? 'Use the secure verification link emailed to you by administration to set up your account.' 
               : `Verification successful. Welcome, ${name}. Complete your credentials details below.`}
           </p>
         </div>
@@ -109,6 +109,19 @@ const TeacherRegistration = () => {
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
           {step === 1 ? (
             <form onSubmit={handleVerifyEmail} className="w-full max-w-110 mx-auto flex flex-col gap-5">
+              {/* Primary flow notice */}
+              <div className="flex items-start gap-3 p-3.5 bg-indigo-50 border border-indigo-100 rounded-2xl">
+                <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <FiMail className="text-indigo-600 text-xs" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-indigo-700">Check Your Email First</p>
+                  <p className="text-[11px] text-indigo-600 mt-0.5 leading-relaxed">
+                    The administration sent a verification link to your email. Use that link to set up your profile securely. This form is a manual fallback.
+                  </p>
+                </div>
+              </div>
+
               {/* Email Address Input */}
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">

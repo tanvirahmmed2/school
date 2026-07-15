@@ -99,6 +99,8 @@ CREATE TABLE IF NOT EXISTS teachers (
     image TEXT,
     image_id VARCHAR(255),
     grade_id BIGINT REFERENCES teacher_pay_scale(id) ON DELETE SET NULL,
+    verification_token VARCHAR(255),
+    verification_token_expires TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
