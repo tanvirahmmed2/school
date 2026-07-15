@@ -25,10 +25,16 @@ const ClassDetailsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, teachersRes, classSubjectsRes] = await Promise.all([
+        const [
+          classesRes,
+          teachersRes,
+          classSubjectsRes,
+          classSubjectTeachersRes
+        ] = await Promise.all([
           fetch('/api/classes').catch(() => null),
           fetch('/api/teachers').catch(() => null),
-          fetch('/api/class-subjects').catch(() => null)
+          fetch('/api/class-subjects').catch(() => null),
+          fetch('/api/class-subject-teachers').catch(() => null)
         ]);
 
         let resolvedClass = null;
@@ -43,29 +49,46 @@ const ClassDetailsPage = () => {
           resolvedClass = found;
         }
 
-        if (teachersRes && teachersRes.ok) {
-          const teachersData = await teachersRes.json();
-          setTeachers(teachersData.paylod?.teachers || []);
-        }
-
-        if (classSubjectsRes && classSubjectsRes.ok && resolvedClass) {
-          const assignmentsData = await classSubjectsRes.json();
-          const list = assignmentsData.assignments || [];
-
+        if (resolvedClass) {
           // Filter unique subjects mapped to this class
-          const uniqueSubjects = [];
-          const seenSubjectIds = new Set();
-          list.forEach(a => {
-            if (String(a.class_id) === String(resolvedClass.id) && !seenSubjectIds.has(a.subject_id)) {
-              seenSubjectIds.add(a.subject_id);
-              uniqueSubjects.push({
-                id: a.subject_id,
-                name: a.subject_name,
-                code: a.subject_code
-              });
-            }
-          });
-          setClassSubjects(uniqueSubjects);
+          if (classSubjectsRes && classSubjectsRes.ok) {
+            const assignmentsData = await classSubjectsRes.json();
+            const list = assignmentsData.paylod?.assignments || [];
+            const uniqueSubjects = [];
+            const seenSubjectIds = new Set();
+            list.forEach(a => {
+              if (String(a.class_id) === String(resolvedClass.id) && !seenSubjectIds.has(a.subject_id)) {
+                seenSubjectIds.add(a.subject_id);
+                uniqueSubjects.push({
+                  id: a.subject_id,
+                  name: a.subject_name,
+                  code: a.subject_code
+                });
+              }
+            });
+            setClassSubjects(uniqueSubjects);
+          }
+
+          // Gather all teacher IDs assigned to this class from class-subject-teachers
+          const assignedTeacherIds = new Set();
+
+          if (classSubjectTeachersRes && classSubjectTeachersRes.ok) {
+            const cstData = await classSubjectTeachersRes.json();
+            const cstList = cstData.paylod?.assignments || [];
+            cstList.forEach(a => {
+              if (String(a.class_id) === String(resolvedClass.id)) {
+                assignedTeacherIds.add(String(a.teacher_id));
+              }
+            });
+          }
+
+          // Filter full teacher details
+          if (teachersRes && teachersRes.ok) {
+            const teachersData = await teachersRes.json();
+            const allTeachers = teachersData.paylod?.teachers || [];
+            const filteredTeachers = allTeachers.filter(t => assignedTeacherIds.has(String(t.id)));
+            setTeachers(filteredTeachers);
+          }
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -119,7 +142,7 @@ const ClassDetailsPage = () => {
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 border-b border-slate-50 pb-4">
                 <FiBookOpen className="text-blue-600 text-xl" /> Course Objectives & Information
               </h2>
-              <div className="text-sm text-slate-655 text-slate-600 leading-relaxed font-semibold">
+              <div className="text-sm text-slate-600 leading-relaxed font-semibold">
                 {selectedClass.description ? (
                   <div
                     className="prose prose-sm max-w-none text-slate-650"
@@ -163,7 +186,6 @@ const ClassDetailsPage = () => {
               )}
             </div>
 
-            {/* 4. Teachers section */}
             <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 className="text-base font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">

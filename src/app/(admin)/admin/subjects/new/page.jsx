@@ -156,14 +156,10 @@ const AdminSubjectsPage = () => {
                   <tr key={sub.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-bold text-sm">
-                          {sub.name.substring(0, 2).toUpperCase()}
-                        </div>
+                        
                         <div>
                           <p className="text-sm font-bold text-slate-800">{sub.name}</p>
-                          <span className="text-[10px] text-slate-400 font-semibold">
-                            DB Key: {sub.id}
-                          </span>
+                          
                         </div>
                       </div>
                     </td>

@@ -170,7 +170,6 @@ const AdminClassSubjectsPage = () => {
         </button>
       </div>
 
-      {/* Forms Section */}
       {showAddForm && (
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
           <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
@@ -334,9 +333,6 @@ const AdminClassSubjectsPage = () => {
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{item.subject_name}</p>
-                          <span className="text-[10px] text-slate-400 font-bold uppercase">
-                            Code: {item.subject_code} &nbsp;|&nbsp; Key: {item.id}
-                          </span>
                         </div>
                       </div>
                     </td>

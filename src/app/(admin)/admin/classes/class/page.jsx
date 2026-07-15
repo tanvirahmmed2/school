@@ -163,9 +163,7 @@ const AdminClassesPage = () => {
                         
                         <div>
                           <p className="text-sm font-bold text-slate-800">{cls.name}</p>
-                          <span className="text-[10px] text-slate-400 font-semibold">
-                            DB Key: {cls.id}
-                          </span>
+                          
                         </div>
                       </div>
                     </td>
