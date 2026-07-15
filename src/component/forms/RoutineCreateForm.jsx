@@ -2,46 +2,33 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiPlusCircle, FiClock, FiMapPin, FiBook, FiUser, FiLayers } from 'react-icons/fi';
-
-const DAYS_OF_WEEK = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday'
-];
+import { FiClock, FiBook, FiLayers } from 'react-icons/fi';
 
 const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSuccess, onCancel }) => {
   const [classes, setClasses] = useState([]);
   const [sections, setSections] = useState([]);
   const [classSubjects, setClassSubjects] = useState([]);
   const [filteredClassSubjects, setFilteredClassSubjects] = useState([]);
-  const [teachers, setTeachers] = useState([]);
-  const [periods, setPeriods] = useState([]);
+  const [days, setDays] = useState([]);
 
   const [classId, setClassId] = useState(initialClassId);
   const [sectionId, setSectionId] = useState(initialSectionId);
   const [classSubjectId, setClassSubjectId] = useState('');
-  const [teacherId, setTeacherId] = useState('');
-  const [dayOfWeek, setDayOfWeek] = useState('Sunday');
-  const [periodId, setPeriodId] = useState('');
-  const [roomNumber, setRoomNumber] = useState('');
+  const [dayId, setDayId] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   const [loadingLists, setLoadingLists] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load initial dropdown data (classes, class-subjects, teachers, periods)
+  // Load initial dropdown data (classes, class-subjects, days)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, classSubjectsRes, teachersRes, periodsRes] = await Promise.all([
+        const [classesRes, classSubjectsRes, daysRes] = await Promise.all([
           fetch('/api/classes').catch(() => null),
           fetch('/api/class-subjects').catch(() => null),
-          fetch('/api/teachers').catch(() => null),
-          fetch('/api/periods').catch(() => null),
+          fetch('/api/days').catch(() => null),
         ]);
 
         if (classesRes && classesRes.ok) {
@@ -52,13 +39,15 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
           const classSubjectsData = await classSubjectsRes.json();
           setClassSubjects(classSubjectsData.paylod?.assignments || []);
         }
-        if (teachersRes && teachersRes.ok) {
-          const teachersData = await teachersRes.json();
-          setTeachers(teachersData.paylod?.teachers || []);
-        }
-        if (periodsRes && periodsRes.ok) {
-          const periodsData = await periodsRes.json();
-          setPeriods(periodsData.paylod?.periods || []);
+        if (daysRes && daysRes.ok) {
+          const daysData = await daysRes.json();
+          const allDays = daysData.paylod?.days || [];
+          setDays(allDays);
+          
+          const activeDays = allDays.filter(d => d.status === 'on');
+          if (activeDays.length > 0) {
+            setDayId(activeDays[0].id.toString());
+          }
         }
       } catch (err) {
         toast.error('Failed to load form lookup data.');
@@ -73,9 +62,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
   useEffect(() => {
     if (!classId) {
       setSections([]);
-      setSectionId('');
       setFilteredClassSubjects([]);
-      setClassSubjectId('');
       return;
     }
 
@@ -84,32 +71,28 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
         const res = await fetch(`/api/sections?class_id=${classId}`);
         const data = await res.json();
         setSections(data.paylod?.sections || []);
-        if (data.paylod?.sections?.length > 0) {
-          if (initialClassId === classId && initialSectionId) {
-            setSectionId(initialSectionId);
-          } else {
-            setSectionId(data.paylod.sections[0].id.toString());
-          }
-        } else {
-          setSectionId('');
-        }
       } catch (err) {
-        toast.error('Failed to load sections for class.');
+        toast.error('Failed to fetch sections.');
       }
     };
-
     fetchSections();
 
     // Filter class-subjects
     const filtered = classSubjects.filter(cs => String(cs.class_id) === String(classId));
     setFilteredClassSubjects(filtered);
     setClassSubjectId('');
-  }, [classId, classSubjects, initialClassId, initialSectionId]);
+  }, [classId, classSubjects]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !sectionId || !classSubjectId || !dayOfWeek || !periodId) {
-      toast.error('All fields except teacher and room number are required.');
+    if (!classId || !classSubjectId || !dayId || !startTime || !endTime) {
+      toast.error('Class, Subject, Day, Start Time, and Finish Time are required.');
+      return;
+    }
+
+    const selectedAssignment = classSubjects.find(cs => String(cs.id) === String(classSubjectId));
+    if (!selectedAssignment) {
+      toast.error('Invalid subject selection.');
       return;
     }
 
@@ -119,12 +102,12 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          class_subject_id: classSubjectId,
-          section_id: sectionId,
-          teacher_id: teacherId || null,
-          day_of_week: dayOfWeek,
-          period_id: periodId,
-          room_number: roomNumber || null,
+          class_id: classId,
+          subject_id: selectedAssignment.subject_id,
+          day_id: dayId,
+          start_time: startTime,
+          end_time: endTime,
+          section_id: sectionId ? parseInt(sectionId, 10) : null,
         }),
       });
 
@@ -135,10 +118,9 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
       }
 
       toast.success(data.message || 'Routine entry added successfully!');
-      setRoomNumber('');
       setClassSubjectId('');
-      setTeacherId('');
-      setPeriodId('');
+      setStartTime('');
+      setEndTime('');
 
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -160,7 +142,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
-        <FiPlusCircle className="text-blue-600" /> Create Class Routine Entry
+        📅 Add Class Routine Entry
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -172,14 +154,15 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
             </label>
             <select
               required
-              value={dayOfWeek}
-              onChange={(e) => setDayOfWeek(e.target.value)}
+              value={dayId}
+              onChange={(e) => setDayId(e.target.value)}
               disabled={submitting}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             >
-              {DAYS_OF_WEEK.map((day) => (
-                <option key={day} value={day}>
-                  {day}
+              <option value="">Select Day...</option>
+              {days.map((day) => (
+                <option key={day.id} value={day.id} disabled={day.status === 'off'}>
+                  {day.name} {day.status === 'off' ? '(Off)' : ''}
                 </option>
               ))}
             </select>
@@ -209,16 +192,15 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
           {/* Section selection */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiLayers className="text-slate-400" /> Section
+              <FiLayers className="text-slate-400" /> Section (Optional)
             </label>
             <select
-              required
               value={sectionId}
               onChange={(e) => setSectionId(e.target.value)}
               disabled={submitting || !classId}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
             >
-              <option value="">Select Section...</option>
+              <option value="">All Sections (Class-Wide)</option>
               {sections.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -249,60 +231,34 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-          {/* Teacher selection */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Start Time */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiUser className="text-slate-400" /> Teacher
-            </label>
-            <select
-              value={teacherId}
-              onChange={(e) => setTeacherId(e.target.value)}
-              disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
-            >
-              <option value="">Unassigned (None)...</option>
-              {teachers.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Period Selection */}
-          <div className="flex flex-col gap-1.5 sm:col-span-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiClock className="text-slate-400" /> Routine Period *
-            </label>
-            <select
-              required
-              value={periodId}
-              onChange={(e) => setPeriodId(e.target.value)}
-              disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
-            >
-              <option value="">Select Period Slot...</option>
-              {periods.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name} ({p.start_time} - {p.end_time})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Room Number */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <FiMapPin className="text-slate-400" /> Room Number
+              <FiClock className="text-slate-400" /> Start Time *
             </label>
             <input
-              type="text"
-              placeholder="e.g. Room 102"
-              value={roomNumber}
-              onChange={(e) => setRoomNumber(e.target.value)}
+              type="time"
+              required
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            />
+          </div>
+
+          {/* Finish Time */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+              <FiClock className="text-slate-400" /> Finish Time *
+            </label>
+            <input
+              type="time"
+              required
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              disabled={submitting}
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
             />
           </div>
         </div>
@@ -321,7 +277,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
             disabled={submitting}
             className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer flex items-center gap-2 disabled:opacity-60"
           >
-            {submitting ? 'Creating...' : 'Save Routine'}
+            {submitting ? 'Adding...' : 'Add Routine Slot'}
           </button>
         </div>
       </form>

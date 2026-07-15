@@ -44,36 +44,29 @@ export async function GET() {
 
     const { class_id, section_id } = studentRes.rows[0];
 
-    // Fetch routine joining periods table
+    // Fetch routine mapping dynamically supporting class-wide routines (where section_id IS NULL)
     const routineRes = await query(`
       SELECT 
         r.id, 
-        r.day_of_week, 
-        p.start_time, 
-        p.end_time, 
-        p.name as period_name, 
-        r.room_number,
+        d.name as day_of_week, 
+        TO_CHAR(r.start_time, 'HH24:MI') as start_time,
+        TO_CHAR(r.end_time, 'HH24:MI') as end_time,
+        (TO_CHAR(r.start_time, 'HH12:MI AM') || ' - ' || TO_CHAR(r.end_time, 'HH12:MI AM')) AS times,
+        sec.room_number as room_number,
         sub.name as subject_name, 
         sub.code as subject_code,
         t.name as teacher_name
       FROM class_routines r
-      JOIN class_subjects cs ON r.class_subject_id = cs.id
-      JOIN subjects sub ON cs.subject_id = sub.id
-      JOIN periods p ON r.period_id = p.id
-      LEFT JOIN teachers t ON r.teacher_id = t.id
-      WHERE cs.class_id = $1 AND r.section_id = $2
+      LEFT JOIN sections sec ON r.section_id = sec.id
+      JOIN subjects sub ON r.subject_id = sub.id
+      JOIN days d ON r.day_id = d.id
+      LEFT JOIN class_subjects cs ON cs.class_id = r.class_id AND cs.subject_id = r.subject_id
+      LEFT JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = r.section_id OR r.section_id IS NULL)
+      LEFT JOIN teachers t ON cst.teacher_id = t.id
+      WHERE r.class_id = $1 AND (r.section_id = $2 OR r.section_id IS NULL)
       ORDER BY 
-        CASE r.day_of_week
-          WHEN 'Sunday' THEN 1
-          WHEN 'Monday' THEN 2
-          WHEN 'Tuesday' THEN 3
-          WHEN 'Wednesday' THEN 4
-          WHEN 'Thursday' THEN 5
-          WHEN 'Friday' THEN 6
-          WHEN 'Saturday' THEN 7
-          ELSE 8
-        END,
-        p.start_time ASC
+        r.day_id ASC,
+        r.start_time ASC
     `, [class_id, section_id]);
 
     const res_data = { routine: routineRes.rows };

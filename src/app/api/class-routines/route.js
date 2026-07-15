@@ -12,60 +12,58 @@ export async function GET(request) {
 
     let sql = `
       SELECT 
-        cr.*, 
-        cs.class_id AS class_id,
+        cr.id,
+        cr.class_id,
+        cr.subject_id,
+        cr.day_id,
+        TO_CHAR(cr.start_time, 'HH24:MI') AS start_time,
+        TO_CHAR(cr.end_time, 'HH24:MI') AS end_time,
+        (TO_CHAR(cr.start_time, 'HH12:MI AM') || ' - ' || TO_CHAR(cr.end_time, 'HH12:MI AM')) AS times,
+        cr.section_id,
+        cr.created_at,
+        cr.updated_at,
         c.name AS class_name, 
         c.code AS class_code,
         s.name AS section_name, 
+        s.room_number AS room_number,
         sub.name AS subject_name, 
         sub.code AS subject_code,
-        t.name AS teacher_name,
-        p.name AS period_name,
-        p.start_time AS start_time,
-        p.end_time AS end_time
+        d.name AS day_of_week,
+        d.status AS day_status,
+        t.name AS teacher_name
       FROM class_routines cr
-      JOIN class_subjects cs ON cr.class_subject_id = cs.id
-      JOIN classes c ON cs.class_id = c.id
-      JOIN sections s ON cr.section_id = s.id
-      JOIN subjects sub ON cs.subject_id = sub.id
-      LEFT JOIN teachers t ON cr.teacher_id = t.id
-      JOIN periods p ON cr.period_id = p.id
+      JOIN classes c ON cr.class_id = c.id
+      JOIN subjects sub ON cr.subject_id = sub.id
+      JOIN days d ON cr.day_id = d.id
+      LEFT JOIN sections s ON cr.section_id = s.id
+      LEFT JOIN class_subjects cs ON cs.class_id = cr.class_id AND cs.subject_id = cr.subject_id
+      LEFT JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = cr.section_id OR cr.section_id IS NULL)
+      LEFT JOIN teachers t ON cst.teacher_id = t.id
     `;
     let params = [];
     let conditions = [];
 
     if (classId) {
       params.push(classId);
-      conditions.push(`cs.class_id = $${params.length}`);
+      conditions.push(`cr.class_id = $${params.length}`);
     }
 
     if (sectionId) {
       params.push(sectionId);
-      conditions.push(`cr.section_id = $${params.length}`);
+      // For a specific section query, we should also return class-wide routines (where section_id IS NULL)
+      conditions.push(`(cr.section_id = $${params.length} OR cr.section_id IS NULL)`);
     }
 
     if (teacherId) {
       params.push(teacherId);
-      conditions.push(`cr.teacher_id = $${params.length}`);
+      conditions.push(`cst.teacher_id = $${params.length}`);
     }
 
     if (conditions.length > 0) {
       sql += ' WHERE ' + conditions.join(' AND ');
     }
 
-    sql += `
-      ORDER BY 
-        CASE cr.day_of_week 
-          WHEN 'Sunday' THEN 1 
-          WHEN 'Monday' THEN 2 
-          WHEN 'Tuesday' THEN 3 
-          WHEN 'Wednesday' THEN 4 
-          WHEN 'Thursday' THEN 5 
-          WHEN 'Friday' THEN 6 
-          WHEN 'Saturday' THEN 7 
-        END ASC, 
-        p.start_time ASC
-    `;
+    sql += ' ORDER BY cr.day_id ASC, cr.start_time ASC';
 
     const result = await query(sql, params);
     const res_data = { routines: result.rows };
@@ -98,83 +96,113 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { class_subject_id, section_id, teacher_id, day_of_week, period_id, room_number } = await request.json();
+    const { class_id, subject_id, day_id, start_time, end_time, section_id } = await request.json();
 
-    if (!class_subject_id || !section_id || !day_of_week || !period_id) {
+    if (!class_id || !subject_id || !day_id || !start_time || !end_time) {
       return NextResponse.json({
         success: false,
-        message: 'Class Subject, Section, Day, and Period are required.',
+        message: 'Class, Subject, Day, Start Time, and Finish Time are required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
 
-    // Verify Class Subject exists
-    const csCheck = await query('SELECT * FROM class_subjects WHERE id = $1', [class_subject_id]);
-    if (csCheck.rows.length === 0) {
+    // Verify Day exists and is not off
+    const dayCheck = await query('SELECT * FROM days WHERE id = $1', [day_id]);
+    if (dayCheck.rows.length === 0) {
       return NextResponse.json({
         success: false,
-        message: 'Selected class subject not found.',
+        message: 'Selected day not found.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
-
-    // Verify Period exists
-    const periodCheck = await query('SELECT * FROM periods WHERE id = $1', [period_id]);
-    if (periodCheck.rows.length === 0) {
+    if (dayCheck.rows[0].status === 'off') {
       return NextResponse.json({
         success: false,
-        message: 'Selected routine period not found.',
-        error: 'Bad Request',
-        paylod: null
-      }, { status: 400 });
-    }
-    const currentPeriod = periodCheck.rows[0];
-
-    // Check Section Overlap (Same Period, Same Day)
-    const sectionOverlap = await query(
-      `SELECT cr.id, sub.name as subject_name, p.name as period_name
-       FROM class_routines cr
-       JOIN class_subjects cs ON cr.class_subject_id = cs.id
-       JOIN subjects sub ON cs.subject_id = sub.id
-       JOIN periods p ON cr.period_id = p.id
-       WHERE cr.section_id = $1 
-         AND cr.day_of_week = $2 
-         AND cr.period_id = $3`,
-      [section_id, day_of_week, period_id]
-    );
-
-    if (sectionOverlap.rows.length > 0) {
-      const existing = sectionOverlap.rows[0];
-      return NextResponse.json({
-        success: false,
-        message: `Section overlap detected. The section already has class "${existing.subject_name}" scheduled during period "${existing.period_name}" on ${day_of_week}.`,
+        message: 'Routine cannot be created on a holiday/off day.',
         error: 'Conflict',
         paylod: null
       }, { status: 400 });
     }
 
-    // Check Teacher Overlap (if teacher is selected)
-    if (teacher_id) {
-      const teacherOverlap = await query(
-        `SELECT cr.id, c.name as class_name, s.name as section_name, p.name as period_name
+    // Check Section/Class Overlap (Same Times, Same Day)
+    let sectionOverlap;
+    if (section_id) {
+      // Section-specific class: conflicts with the same section OR a class-wide class
+      sectionOverlap = await query(
+        `SELECT cr.id, sub.name as subject_name, s.name as section_name
          FROM class_routines cr
-         JOIN class_subjects cs ON cr.class_subject_id = cs.id
-         JOIN classes c ON cs.class_id = c.id
-         JOIN sections s ON cr.section_id = s.id
-         JOIN periods p ON cr.period_id = p.id
-         WHERE cr.teacher_id = $1 
-           AND cr.day_of_week = $2 
-           AND cr.period_id = $3`,
-        [teacher_id, day_of_week, period_id]
+         JOIN subjects sub ON cr.subject_id = sub.id
+         LEFT JOIN sections s ON cr.section_id = s.id
+         WHERE cr.class_id = $1 
+           AND cr.day_id = $2 
+           AND cr.start_time = $3
+           AND cr.end_time = $4
+           AND (cr.section_id = $5 OR cr.section_id IS NULL)`,
+        [parseInt(class_id, 10), day_id, start_time, end_time, parseInt(section_id, 10)]
+      );
+    } else {
+      // Class-wide class: conflicts with ANY routine entry for this class at this time
+      sectionOverlap = await query(
+        `SELECT cr.id, sub.name as subject_name, s.name as section_name
+         FROM class_routines cr
+         JOIN subjects sub ON cr.subject_id = sub.id
+         LEFT JOIN sections s ON cr.section_id = s.id
+         WHERE cr.class_id = $1 
+           AND cr.day_id = $2 
+           AND cr.start_time = $3
+           AND cr.end_time = $4`,
+        [parseInt(class_id, 10), day_id, start_time, end_time]
+      );
+    }
+
+    if (sectionOverlap.rows.length > 0) {
+      const existing = sectionOverlap.rows[0];
+      const targetLabel = existing.section_name ? `Section ${existing.section_name}` : 'All Sections';
+      return NextResponse.json({
+        success: false,
+        message: `Overlap detected. The class already has routine "${existing.subject_name}" scheduled for ${targetLabel} on this day at this time.`,
+        error: 'Conflict',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    // Check Teacher Overlap dynamically via class_subject_teachers mapping
+    const csCheck = await query('SELECT id FROM class_subjects WHERE class_id = $1 AND subject_id = $2', [class_id, subject_id]);
+    const classSubjectId = csCheck.rows.length > 0 ? csCheck.rows[0].id : null;
+    
+    let assignedTeacherId = null;
+    if (classSubjectId) {
+      const teacherRes = await query(
+        `SELECT teacher_id FROM class_subject_teachers 
+         WHERE class_subject_id = $1 AND (section_id = $2 OR section_id IS NULL)`,
+        [classSubjectId, section_id ? parseInt(section_id, 10) : null]
+      );
+      assignedTeacherId = teacherRes.rows.length > 0 ? teacherRes.rows[0].teacher_id : null;
+    }
+
+    if (assignedTeacherId) {
+      const teacherOverlap = await query(
+        `SELECT cr.id, c.name as class_name, s.name as section_name
+         FROM class_routines cr
+         JOIN classes c ON cr.class_id = c.id
+         LEFT JOIN sections s ON cr.section_id = s.id
+         JOIN class_subjects cs ON cs.class_id = cr.class_id AND cs.subject_id = cr.subject_id
+         JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = cr.section_id OR cr.section_id IS NULL OR cst.section_id IS NULL)
+         WHERE cst.teacher_id = $1 
+           AND cr.day_id = $2 
+           AND cr.start_time = $3
+           AND cr.end_time = $4`,
+        [assignedTeacherId, day_id, start_time, end_time]
       );
 
       if (teacherOverlap.rows.length > 0) {
         const existing = teacherOverlap.rows[0];
+        const targetLabel = existing.section_name ? `Section ${existing.section_name}` : 'All Sections';
         return NextResponse.json({
           success: false,
-          message: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} Section ${existing.section_name} during period "${existing.period_name}" on ${day_of_week}.`,
+          message: `Teacher overlap detected. This teacher is already teaching Class ${existing.class_name} (${targetLabel}) during this period on this day.`,
           error: 'Conflict',
           paylod: null
         }, { status: 400 });
@@ -182,16 +210,16 @@ export async function POST(request) {
     }
 
     const newRoutine = await query(
-      `INSERT INTO class_routines (class_subject_id, section_id, teacher_id, period_id, day_of_week, room_number)
+      `INSERT INTO class_routines (class_id, subject_id, day_id, start_time, end_time, section_id)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
       [
-        class_subject_id,
-        section_id,
-        teacher_id ? parseInt(teacher_id, 10) : null,
-        parseInt(period_id, 10),
-        day_of_week,
-        room_number ? room_number.trim() : null
+        parseInt(class_id, 10),
+        parseInt(subject_id, 10),
+        parseInt(day_id, 10),
+        start_time.trim(),
+        end_time.trim(),
+        section_id ? parseInt(section_id, 10) : null
       ]
     );
 

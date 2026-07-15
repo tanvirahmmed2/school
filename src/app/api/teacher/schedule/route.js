@@ -28,38 +28,30 @@ export async function GET() {
 
     const teacherId = decoded.id;
 
-    // Fetch schedules/routines where this teacher is assigned, joining periods and class_subjects
+    // Fetch schedules/routines where this teacher is assigned via class_subject_teachers mapping
     const routineRes = await query(`
       SELECT 
         r.id, 
-        r.day_of_week, 
-        p.start_time, 
-        p.end_time, 
-        p.name as period_name, 
-        r.room_number,
+        d.name as day_of_week, 
+        TO_CHAR(r.start_time, 'HH24:MI') as start_time,
+        TO_CHAR(r.end_time, 'HH24:MI') as end_time,
+        (TO_CHAR(r.start_time, 'HH12:MI AM') || ' - ' || TO_CHAR(r.end_time, 'HH12:MI AM')) AS times,
+        sec.room_number as room_number,
         c.name as class_name, 
-        sec.name as section_name,
+        COALESCE(sec.name, 'All Sections') as section_name,
         sub.name as subject_name, 
         sub.code as subject_code
       FROM class_routines r
-      JOIN class_subjects cs ON r.class_subject_id = cs.id
-      JOIN classes c ON cs.class_id = c.id
-      JOIN sections sec ON r.section_id = sec.id
-      JOIN subjects sub ON cs.subject_id = sub.id
-      JOIN periods p ON r.period_id = p.id
-      WHERE r.teacher_id = $1
+      JOIN classes c ON r.class_id = c.id
+      LEFT JOIN sections sec ON r.section_id = sec.id
+      JOIN subjects sub ON r.subject_id = sub.id
+      JOIN days d ON r.day_id = d.id
+      JOIN class_subjects cs ON cs.class_id = r.class_id AND cs.subject_id = r.subject_id
+      JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = r.section_id OR r.section_id IS NULL)
+      WHERE cst.teacher_id = $1
       ORDER BY 
-        CASE r.day_of_week
-          WHEN 'Sunday' THEN 1
-          WHEN 'Monday' THEN 2
-          WHEN 'Tuesday' THEN 3
-          WHEN 'Wednesday' THEN 4
-          WHEN 'Thursday' THEN 5
-          WHEN 'Friday' THEN 6
-          WHEN 'Saturday' THEN 7
-          ELSE 8
-        END,
-        p.start_time ASC
+        r.day_id ASC,
+        r.start_time ASC
     `, [teacherId]);
 
     const res_data = { routine: routineRes.rows };
