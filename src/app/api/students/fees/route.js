@@ -258,7 +258,7 @@ export async function PUT(request) {
       await client.query('ROLLBACK');
       client.release();
       client = null;
-      const res_err_10035 = { error: `Paid amount exceeds the remaining balance. Total due: $${(totalAmount - prevPaid).toFixed(2)}` };
+      const res_err_10035 = { error: `Paid amount exceeds the remaining balance. Total due: ৳${(totalAmount - prevPaid).toFixed(2)}` };
       return NextResponse.json({
         success: false,
         message: res_err_10035?.error || res_err_10035?.message || 'An error occurred',

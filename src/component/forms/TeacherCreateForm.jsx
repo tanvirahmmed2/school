@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiUserPlus } from 'react-icons/fi';
+import { FiUserPlus, FiDollarSign } from 'react-icons/fi';
 
 const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   const [name, setName] = useState('');
@@ -11,7 +11,22 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   const [number, setNumber] = useState('');
   const [designation, setDesignation] = useState('');
   const [isPermanent, setIsPermanent] = useState(false);
+  const [gradeId, setGradeId] = useState('');
+  const [payScales, setPayScales] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+
+  // Load pay scales on mount
+  useEffect(() => {
+    const fetchPayScales = async () => {
+      try {
+        const response = await axios.get('/api/teacher-pay-scales');
+        setPayScales(response.data.paylod?.payScales || []);
+      } catch (err) {
+        console.error('Failed to fetch pay grades:', err);
+      }
+    };
+    fetchPayScales();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +42,8 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
         email: email.trim(), 
         number: number.trim(), 
         designation: designation.trim(),
-        is_permanent: isPermanent
+        is_permanent: isPermanent,
+        grade_id: gradeId ? parseInt(gradeId, 10) : null
       });
 
       toast.success(response.data.message || 'Teacher account placeholder created successfully!');
@@ -35,6 +51,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
       setEmail('');
       setNumber('');
       setDesignation('');
+      setGradeId('');
       setIsPermanent(false);
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -62,7 +79,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
           />
         </div>
 
@@ -77,7 +94,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
           />
         </div>
 
@@ -92,7 +109,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
           />
         </div>
 
@@ -107,8 +124,28 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={designation}
             onChange={(e) => setDesignation(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
           />
+        </div>
+
+        {/* Pay Grade Dropdown Selector */}
+        <div className="flex flex-col gap-1.5 md:col-span-2">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <FiDollarSign className="text-slate-450" /> Assigned Pay Grade Scale (Optional)
+          </label>
+          <select
+            value={gradeId}
+            onChange={(e) => setGradeId(e.target.value)}
+            disabled={submitting}
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer"
+          >
+            <option value="">Unassigned (No Pay Scale Grade)</option>
+            {payScales.map((scale) => (
+              <option key={scale.id} value={scale.id}>
+                {scale.name} (Basic: ${parseFloat(scale.basic_salary).toLocaleString()} + Allow: ${parseFloat(scale.allowance).toLocaleString()})
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Employment Type Checkbox */}

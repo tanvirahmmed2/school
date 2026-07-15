@@ -245,7 +245,7 @@ const FinancePage = () => {
           </div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Income Inflow</p>
-            <h3 className="text-xl font-bold text-slate-800 mt-0.5">${totalInflow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+            <h3 className="text-xl font-bold text-slate-800 mt-0.5">৳{totalInflow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
           </div>
         </div>
 
@@ -255,7 +255,7 @@ const FinancePage = () => {
           </div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Expense Outflow</p>
-            <h3 className="text-xl font-bold text-slate-800 mt-0.5">${totalOutflow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+            <h3 className="text-xl font-bold text-slate-800 mt-0.5">৳{totalOutflow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
           </div>
         </div>
 
@@ -266,7 +266,7 @@ const FinancePage = () => {
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Net Treasury Balance</p>
             <h3 className={`text-xl font-bold mt-0.5 ${netBalance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
-              ${netBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              ৳{netBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </h3>
           </div>
         </div>
@@ -370,7 +370,7 @@ const FinancePage = () => {
                       <td className={`px-6 py-4 text-right font-bold text-sm ${
                         txn.transaction_type === 'Credit' ? 'text-emerald-600' : 'text-rose-600'
                       }`}>
-                        ${parseFloat(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ৳{parseFloat(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))}
@@ -431,7 +431,7 @@ const FinancePage = () => {
                         {inc.received_by || 'Unknown'}
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-bold text-emerald-600">
-                        +${parseFloat(inc.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        +৳{parseFloat(inc.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))}
@@ -492,7 +492,7 @@ const FinancePage = () => {
                         {exp.paid_by || 'Unknown'}
                       </td>
                       <td className="px-6 py-4 text-right text-sm font-bold text-rose-600">
-                        -${parseFloat(exp.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        -৳{parseFloat(exp.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))}

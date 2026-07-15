@@ -464,8 +464,8 @@ const InventoryPage = () => {
                               ))}
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-xs text-slate-800 font-bold">${parseFloat(p.total_amount).toFixed(2)}</td>
-                          <td className="px-6 py-4 text-right text-xs text-emerald-600 font-bold">${parseFloat(p.paid_amount).toFixed(2)}</td>
+                          <td className="px-6 py-4 text-xs text-slate-800 font-bold">৳{parseFloat(p.total_amount).toFixed(2)}</td>
+                          <td className="px-6 py-4 text-right text-xs text-emerald-600 font-bold">৳{parseFloat(p.paid_amount).toFixed(2)}</td>
                           <td className="px-6 py-4">
                             <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                               p.payment_status === 'Paid'

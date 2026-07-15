@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiBriefcase, FiUser } from 'react-icons/fi';
+import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiBriefcase, FiUser, FiDollarSign } from 'react-icons/fi';
 
 const AdminTeachersListPage = () => {
   const [teachers, setTeachers] = useState([]);
+  const [payScales, setPayScales] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchTeachers = async () => {
@@ -15,13 +16,25 @@ const AdminTeachersListPage = () => {
       setTeachers(response.data.paylod.teachers || []);
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const fetchPayScales = async () => {
+    try {
+      const response = await axios.get('/api/teacher-pay-scales');
+      setPayScales(response.data.paylod?.payScales || []);
+    } catch (error) {
+      toast.error('Failed to load pay scale grades.');
     }
   };
 
   useEffect(() => {
-    fetchTeachers();
+    const init = async () => {
+      setLoading(true);
+      await Promise.all([fetchTeachers(), fetchPayScales()]);
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleToggleStatus = async (teacher) => {
@@ -35,6 +48,7 @@ const AdminTeachersListPage = () => {
         address: teacher.address,
         is_active: nextStatus,
         is_permanent: teacher.is_permanent,
+        grade_id: teacher.grade_id
       });
 
       toast.success(
@@ -60,6 +74,7 @@ const AdminTeachersListPage = () => {
         address: teacher.address,
         is_active: teacher.is_active,
         is_permanent: nextPermanent,
+        grade_id: teacher.grade_id
       });
 
       toast.success(
@@ -68,6 +83,34 @@ const AdminTeachersListPage = () => {
       
       setTeachers(
         teachers.map((t) => (t.id === teacher.id ? { ...t, is_permanent: nextPermanent } : t))
+      );
+    } catch (err) {
+      toast.error(err.response?.data?.error || err.message);
+    }
+  };
+
+  const handleUpdateGrade = async (teacher, newGradeId) => {
+    const nextGradeId = newGradeId ? parseInt(newGradeId, 10) : null;
+    try {
+      await axios.put(`/api/teachers/${teacher.id}`, {
+        name: teacher.name,
+        email: teacher.email,
+        number: teacher.number,
+        designation: teacher.designation,
+        address: teacher.address,
+        is_active: teacher.is_active,
+        is_permanent: teacher.is_permanent,
+        grade_id: nextGradeId
+      });
+
+      toast.success(`Updated pay scale grade for ${teacher.name}`);
+      
+      setTeachers(
+        teachers.map((t) => (t.id === teacher.id ? { 
+          ...t, 
+          grade_id: nextGradeId, 
+          grade_name: payScales.find(g => g.id === nextGradeId)?.name || null 
+        } : t))
       );
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -143,6 +186,9 @@ const AdminTeachersListPage = () => {
                     Employment
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Assigned Grade
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
@@ -211,6 +257,20 @@ const AdminTeachersListPage = () => {
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
+                      <select
+                        value={teacher.grade_id || ''}
+                        onChange={(e) => handleUpdateGrade(teacher, e.target.value)}
+                        className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 cursor-pointer"
+                      >
+                        <option value="">Unassigned</option>
+                        {payScales.map((scale) => (
+                          <option key={scale.id} value={scale.id}>
+                            {scale.name}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleToggleStatus(teacher)}
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
@@ -234,7 +294,7 @@ const AdminTeachersListPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
-                        className="p-2 bg-red-50 hover:bg-red-100 text-red-655 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Remove Teacher"
                       >
                         <FiTrash2 className="text-sm" />

@@ -334,7 +334,7 @@ const AdminStudentFeesPage = () => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500">Amount ($)</label>
+              <label className="text-xs font-semibold text-slate-500">Amount (BDT)</label>
               <input
                 type="number"
                 step="0.01"
@@ -418,11 +418,11 @@ const AdminStudentFeesPage = () => {
           </h2>
           <p className="text-xs text-slate-400 mb-4">
             Invoice: "{recordingPaymentFee.title}" for {recordingPaymentFee.student_name}. 
-            Total Due: ${recordingPaymentFee.amount} (Paid so far: ${recordingPaymentFee.paid_amount})
+            Total Due: ৳{recordingPaymentFee.amount} (Paid so far: ৳{recordingPaymentFee.paid_amount})
           </p>
           <form onSubmit={handleRecordPayment} className="flex flex-col sm:flex-row items-end gap-4 max-w-160">
             <div className="flex flex-col gap-1.5 flex-1">
-              <label className="text-xs font-semibold text-slate-500">Record Paid Amount ($)</label>
+              <label className="text-xs font-semibold text-slate-500">Record Paid Amount (BDT)</label>
               <input
                 type="number"
                 step="0.01"
@@ -476,7 +476,7 @@ const AdminStudentFeesPage = () => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500">Fine Amount ($)</label>
+              <label className="text-xs font-semibold text-slate-500">Fine Amount (BDT)</label>
               <input
                 type="number"
                 step="0.01"
@@ -500,7 +500,7 @@ const AdminStudentFeesPage = () => {
                   .filter((f) => f.student_id === applyingFineStudent.student_id)
                   .map((f) => (
                     <option key={f.id} value={f.id}>
-                      {f.title} (${f.amount})
+                      {f.title} (৳{f.amount})
                     </option>
                   ))}
               </select>
@@ -590,8 +590,8 @@ const AdminStudentFeesPage = () => {
 
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-xs font-semibold text-slate-600">
-                          <p>Due: <span className="font-bold text-slate-800">${fee.amount}</span></p>
-                          <p>Paid: <span className="text-green-600">${fee.paid_amount}</span></p>
+                          <p>Due: <span className="font-bold text-slate-800">৳{fee.amount}</span></p>
+                          <p>Paid: <span className="text-green-600">৳{fee.paid_amount}</span></p>
                         </div>
                       </td>
 
@@ -675,7 +675,7 @@ const AdminStudentFeesPage = () => {
                   </div>
 
                   <div className="flex items-center justify-between mt-1 text-xs">
-                    <span className="font-bold text-red-500">${fine.amount}</span>
+                    <span className="font-bold text-red-500">৳{fine.amount}</span>
                     <button
                       onClick={() => handleToggleFineStatus(fine.id, fine.status)}
                       className="text-[10px] font-bold text-blue-500 hover:text-blue-600 transition-colors underline cursor-pointer"

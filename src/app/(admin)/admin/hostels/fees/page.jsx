@@ -130,7 +130,7 @@ const AdminHostelFeesPage = () => {
   };
 
   const handleMarkAsPaid = async (fee) => {
-    const confirm = window.confirm(`Mark invoice of ${fee.student_name} for $${fee.amount} as Paid?`);
+    const confirm = window.confirm(`Mark invoice of ${fee.student_name} for ৳${fee.amount} as Paid?`);
     if (!confirm) return;
 
     try {
@@ -241,7 +241,7 @@ const AdminHostelFeesPage = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-0.5">
-                <FiDollarSign /> Amount Due ($)
+                <FiDollarSign /> Amount Due (BDT)
               </label>
               <input
                 type="number"
@@ -258,7 +258,7 @@ const AdminHostelFeesPage = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-0.5">
-                <FiDollarSign /> Amount Paid ($)
+                <FiDollarSign /> Amount Paid (BDT)
               </label>
               <input
                 type="number"
@@ -377,10 +377,10 @@ const AdminHostelFeesPage = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-xs font-bold text-slate-800">
-                        ${parseFloat(fee.amount).toFixed(2)}
+                        ৳{parseFloat(fee.amount).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-600">
-                        ${parseFloat(fee.paid_amount || 0).toFixed(2)}
+                        ৳{parseFloat(fee.paid_amount || 0).toFixed(2)}
                         {fee.payment_date && (
                           <span className="block text-[9px] text-slate-400 font-semibold">
                             Paid: {new Date(fee.payment_date).toLocaleDateString()}

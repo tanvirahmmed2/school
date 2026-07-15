@@ -50,8 +50,8 @@ const FeesPage = () => {
     .reduce((sum, f) => sum + parseFloat(f.paid_amount), 0);
 
   const stats = [
-    { label: 'Outstanding Balance', value: `$${totalOutstanding.toFixed(2)}`, color: totalOutstanding > 0 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-slate-50 text-slate-500 border-slate-100', icon: FiClock },
-    { label: 'Total Paid Fees', value: `$${totalPaid.toFixed(2)}`, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', icon: FiCheck }
+    { label: 'Outstanding Balance', value: `৳${totalOutstanding.toFixed(2)}`, color: totalOutstanding > 0 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-slate-50 text-slate-500 border-slate-100', icon: FiClock },
+    { label: 'Total Paid Fees', value: `৳${totalPaid.toFixed(2)}`, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', icon: FiCheck }
   ];
 
   const getStatusBadge = (status) => {
@@ -125,10 +125,10 @@ const FeesPage = () => {
                       {getStatusBadge(fee.status)}
                     </td>
                     <td className="py-4 text-sm font-bold text-slate-700 text-right">
-                      ${parseFloat(fee.amount).toFixed(2)}
+                      ৳{parseFloat(fee.amount).toFixed(2)}
                     </td>
                     <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                      ${parseFloat(fee.paid_amount).toFixed(2)}
+                      ৳{parseFloat(fee.paid_amount).toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -170,7 +170,7 @@ const FeesPage = () => {
                       {getStatusBadge(fine.status)}
                     </td>
                     <td className="py-4 text-sm font-bold text-slate-700 text-right">
-                      ${parseFloat(fine.amount).toFixed(2)}
+                      ৳{parseFloat(fine.amount).toFixed(2)}
                     </td>
                   </tr>
                 ))}

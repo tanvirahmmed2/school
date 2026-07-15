@@ -78,7 +78,7 @@ const TeacherHomePage = () => {
     },
     {
       title: 'Salary Received',
-      value: `$${(stats?.salaryReceived || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      value: `৳${(stats?.salaryReceived || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subText: 'Total credited amount',
       icon: FiDollarSign,
       color: 'bg-emerald-50 text-emerald-600 border-emerald-100',

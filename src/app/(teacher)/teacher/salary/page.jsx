@@ -38,7 +38,7 @@ const SalaryHistoryPage = () => {
   const totalPending = salaries.filter((s) => s.status !== 'Paid').length;
 
   const stats = [
-    { label: 'Total Earnings Credited', value: `$${totalEarned.toFixed(2)}`, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', icon: FiCheck },
+    { label: 'Total Earnings Credited', value: `৳${totalEarned.toFixed(2)}`, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', icon: FiCheck },
     { label: 'Pending Credits', value: totalPending, color: totalPending > 0 ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-slate-50 text-slate-500 border-slate-100', icon: FiClock }
   ];
 
@@ -105,16 +105,16 @@ const SalaryHistoryPage = () => {
                         )}
                       </td>
                       <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                        ${parseFloat(salary.basic).toFixed(2)}
+                        ৳{parseFloat(salary.basic).toFixed(2)}
                       </td>
                       <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                        +${parseFloat(salary.allowance).toFixed(2)}
+                        +৳{parseFloat(salary.allowance).toFixed(2)}
                       </td>
                       <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                        -${parseFloat(salary.deductions).toFixed(2)}
+                        -৳{parseFloat(salary.deductions).toFixed(2)}
                       </td>
                       <td className="py-4 text-sm font-extrabold text-slate-800 text-right">
-                        ${net.toFixed(2)}
+                        ৳{net.toFixed(2)}
                       </td>
                     </tr>
                   );
