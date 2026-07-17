@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { FiUser, FiMail, FiPhone, FiMapPin, FiAward, FiBookOpen, FiPlus, FiTrash2, FiEdit2, FiX, FiCamera } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import TiptapEditor from '@/component/helper/TiptapEditor';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -246,10 +248,9 @@ const ProfilePage = () => {
 
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Residential Address</label>
-                <textarea
+                <TiptapEditor
                   value={profileData.address}
-                  onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold min-h-[80px] resize-y"
+                  onChange={(val) => setProfileData({ ...profileData, address: val })}
                   placeholder="e.g. Dhaka, Bangladesh"
                 />
               </div>
@@ -305,7 +306,7 @@ const ProfilePage = () => {
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Residential Address</span>
-                  <span className="text-sm font-semibold text-slate-700">{profile?.address || 'N/A'}</span>
+                  <RichTextDisplay html={profile?.address || 'N/A'} className="text-sm font-semibold text-slate-700 mt-1" />
                 </div>
               </div>
             </div>

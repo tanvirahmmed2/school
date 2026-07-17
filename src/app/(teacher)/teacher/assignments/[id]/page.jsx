@@ -4,6 +4,8 @@ import React, { useEffect, useState, use, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FiCheck, FiInfo, FiFileText, FiLink, FiArrowLeft, FiEdit3 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import TiptapEditor from '@/component/helper/TiptapEditor';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const SubmissionGradingPageContent = ({ params }) => {
   const unwrappedParams = use(params);
@@ -165,7 +167,11 @@ const SubmissionGradingPageContent = ({ params }) => {
                           <span className="text-xs font-bold text-slate-800">Grade details</span>
                           <span className="text-xs font-extrabold text-emerald-600">Obtained: {sub.marks_obtained}</span>
                         </div>
-                        {sub.remarks && <p className="text-slate-500 text-[11px] font-medium italic">"{sub.remarks}"</p>}
+                        {sub.remarks && (
+                          <div className="text-slate-500 text-[11px] font-medium italic mt-1">
+                            <RichTextDisplay html={sub.remarks} />
+                          </div>
+                        )}
                       </div>
                     )}
 
@@ -212,12 +218,10 @@ const SubmissionGradingPageContent = ({ params }) => {
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-slate-500">Teacher Remarks (Optional)</label>
-                  <textarea
-                    rows={4}
+                  <TiptapEditor
                     value={gradeForm.remarks}
-                    onChange={(e) => setGradeForm({ ...gradeForm, remarks: e.target.value })}
+                    onChange={(val) => setGradeForm({ ...gradeForm, remarks: val })}
                     placeholder="Provide constructive feedback..."
-                    className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600 resize-none"
                   />
                 </div>
 
