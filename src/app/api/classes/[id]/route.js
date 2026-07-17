@@ -17,7 +17,7 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, numeric_name, code, description } = await request.json();
+    const { name, numeric_name, code, max_seats, description } = await request.json();
 
     if (!name || numeric_name === undefined || !code) {
       const res_err_769 = { error: 'All fields (name, numeric_name, code) are required.' };
@@ -36,6 +36,17 @@ export async function PUT(request, { params }) {
         success: false,
         message: res_err_1199.error,
         error: res_err_1199.error,
+        paylod: null
+      }, { status: 400 });
+    }
+
+    const maxSeatsVal = max_seats !== undefined && max_seats !== '' ? parseInt(max_seats, 10) : 40;
+    if (isNaN(maxSeatsVal) || maxSeatsVal < 0) {
+      const res_err = { error: 'Max seats must be a valid non-negative number.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err.error,
+        error: res_err.error,
         paylod: null
       }, { status: 400 });
     }
@@ -70,10 +81,10 @@ export async function PUT(request, { params }) {
 
     const updatedClass = await query(
       `UPDATE classes 
-       SET name = $1, numeric_name = $2, code = $3, description = $4, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $5 
+       SET name = $1, numeric_name = $2, code = $3, max_seats = $4, description = $5, updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $6 
        RETURNING *`,
-      [name, numericVal, code, description ? description.trim() : null, id]
+      [name, numericVal, code, maxSeatsVal, description ? description.trim() : null, id]
     );
 
     if (updatedClass.rowCount === 0) {

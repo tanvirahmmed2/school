@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { FiPlus, FiTrash2, FiEdit2, FiX, FiLayers } from 'react-icons/fi';
 import ClassCreateForm from '@/component/forms/ClassCreateForm';
 import ClassEditForm from '@/component/forms/ClassEditForm';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const AdminClassesPage = () => {
   const [classes, setClasses] = useState([]);
@@ -148,6 +149,9 @@ const AdminClassesPage = () => {
                     Class Code
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Max Seats
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Description
                   </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
@@ -177,8 +181,17 @@ const AdminClassesPage = () => {
                         {cls.code}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500 max-w-[200px] truncate">
-                      {cls.description || <span className="text-slate-300 italic">No description</span>}
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-650 bg-slate-50 border border-slate-150 px-2 py-0.5 rounded-full">
+                        {cls.max_seats || 40}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-xs text-slate-500 max-w-[200px]">
+                      {cls.description ? (
+                        <RichTextDisplay html={cls.description} className="line-clamp-1 text-xs" />
+                      ) : (
+                        <span className="text-slate-300 italic">No description</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button

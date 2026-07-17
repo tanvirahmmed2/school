@@ -39,7 +39,7 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { name, numeric_name, code, description } = await request.json();
+    const { name, numeric_name, code, max_seats, description } = await request.json();
 
     if (!name || numeric_name === undefined || !code) {
       const res_err_1630 = { error: 'All fields (name, numeric_name, code) are required.' };
@@ -58,6 +58,17 @@ export async function POST(request) {
         success: false,
         message: res_err_2064?.error || res_err_2064?.message || 'An error occurred',
         error: res_err_2064?.error || 'Internal Server Error',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    const maxSeatsVal = max_seats !== undefined && max_seats !== '' ? parseInt(max_seats, 10) : 40;
+    if (isNaN(maxSeatsVal) || maxSeatsVal < 0) {
+      const res_err = { error: 'Max seats must be a valid non-negative number.' };
+      return NextResponse.json({
+        success: false,
+        message: res_err.error,
+        error: res_err.error,
         paylod: null
       }, { status: 400 });
     }
@@ -91,10 +102,10 @@ export async function POST(request) {
     }
 
     const newClass = await query(
-      `INSERT INTO classes (name, numeric_name, code, description) 
-       VALUES ($1, $2, $3, $4) 
+      `INSERT INTO classes (name, numeric_name, code, max_seats, description) 
+       VALUES ($1, $2, $3, $4, $5) 
        RETURNING *`,
-      [name, numericVal, code, description ? description.trim() : null]
+      [name, numericVal, code, maxSeatsVal, description ? description.trim() : null]
     );
 
     const res_data_2247 = { message: 'Class created successfully.', class: newClass.rows[0] };

@@ -9,6 +9,7 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
   const [name, setName] = useState('');
   const [numericName, setNumericName] = useState('');
   const [code, setCode] = useState('');
+  const [maxSeats, setMaxSeats] = useState('40');
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -24,7 +25,7 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
       const response = await fetch('/api/classes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, numeric_name: numericName, code, description }),
+        body: JSON.stringify({ name, numeric_name: numericName, code, max_seats: maxSeats, description }),
       });
 
       const data = await response.json();
@@ -37,6 +38,7 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
       setName('');
       setNumericName('');
       setCode('');
+      setMaxSeats('40');
       setDescription('');
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -52,7 +54,7 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
         <FiFolderPlus className="text-blue-600" /> Add New Class
       </h2>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-5">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
             <FiFolderPlus className="text-slate-400" /> Class Name
@@ -98,8 +100,23 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           />
         </div>
 
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <FiHash className="text-slate-400" /> Max Seats
+          </label>
+          <input
+            type="number"
+            required
+            placeholder="e.g. 40"
+            value={maxSeats}
+            onChange={(e) => setMaxSeats(e.target.value)}
+            disabled={submitting}
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+          />
+        </div>
+
         {/* Description */}
-        <div className="flex flex-col gap-1.5 md:col-span-3">
+        <div className="flex flex-col gap-1.5 md:col-span-4">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
             Description
           </label>
@@ -110,7 +127,7 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           />
         </div>
 
-        <div className="flex justify-end gap-3 md:col-span-3 mt-2">
+        <div className="flex justify-end gap-3 md:col-span-4 mt-2">
           <button
             type="button"
             onClick={onCancel}

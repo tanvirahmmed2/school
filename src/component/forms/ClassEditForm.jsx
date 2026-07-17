@@ -9,6 +9,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
   const [name, setName] = useState(cls.name);
   const [numericName, setNumericName] = useState(cls.numeric_name);
   const [code, setCode] = useState(cls.code);
+  const [maxSeats, setMaxSeats] = useState(cls.max_seats || '40');
   const [description, setDescription] = useState(cls.description || '');
   const [updating, setUpdating] = useState(false);
 
@@ -24,7 +25,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
       const response = await fetch(`/api/classes/${cls.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, numeric_name: numericName, code, description }),
+        body: JSON.stringify({ name, numeric_name: numericName, code, max_seats: maxSeats, description }),
       });
 
       const data = await response.json();
@@ -48,7 +49,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
         <FiEdit2 className="text-blue-600" /> Edit Class: {cls.name}
       </h2>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-5">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
             Class Name
@@ -91,8 +92,22 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
           />
         </div>
 
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Max Seats
+          </label>
+          <input
+            type="number"
+            required
+            value={maxSeats}
+            onChange={(e) => setMaxSeats(e.target.value)}
+            disabled={updating}
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+          />
+        </div>
+
         {/* Description */}
-        <div className="flex flex-col gap-1.5 md:col-span-3">
+        <div className="flex flex-col gap-1.5 md:col-span-4">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
             Description
           </label>
@@ -103,7 +118,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
           />
         </div>
 
-        <div className="flex justify-end gap-3 md:col-span-3 mt-2">
+        <div className="flex justify-end gap-3 md:col-span-4 mt-2">
           <button
             type="button"
             onClick={onCancel}
