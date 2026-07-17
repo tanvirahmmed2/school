@@ -35,7 +35,7 @@ const MarksEntryPage = () => {
           const classesData = await classesRes.json();
           const subjectsData = await subjectsRes.json();
 
-          setExams(examsData.exams || []);
+          setExams(examsData.paylod?.exams || []);
           setClasses(classesData.paylod.classes || []);
           setSubjects(subjectsData.paylod.subjects || []);
         }

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
+import React, { useEffect, useState, use, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FiCheck, FiInfo, FiFileText, FiLink, FiArrowLeft, FiEdit3 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
-const SubmissionGradingPage = ({ params }) => {
+const SubmissionGradingPageContent = ({ params }) => {
   const unwrappedParams = use(params);
   const assignmentId = unwrappedParams.id;
   const router = useRouter();
@@ -246,6 +246,18 @@ const SubmissionGradingPage = ({ params }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SubmissionGradingPage = (props) => {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[70vh]">
+        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+      </div>
+    }>
+      <SubmissionGradingPageContent {...props} />
+    </Suspense>
   );
 };
 

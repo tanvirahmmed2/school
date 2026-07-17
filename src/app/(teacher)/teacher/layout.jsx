@@ -4,6 +4,11 @@ import { isTeacher } from '@/lib/auth';
 import Navbar from '@/component/bars/teacher/Navbar'
 import Sidebar from '@/component/bars/teacher/Sidebar'
 
+export const metadata = {
+  title: 'Teacher Portal Dashboard - School Management Portal',
+  description: 'Manage assigned class routines, track student attendance, evaluate exams, and view your schedule.'
+};
+
 const TeacherLayout = async ({children}) => {
   const authenticated = await isTeacher();
 

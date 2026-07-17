@@ -23,8 +23,8 @@ const TeacherHomePage = () => {
         if (profileRes.ok && statsRes.ok) {
           const profileData = await profileRes.json();
           const statsData = await statsRes.json();
-          setProfile(profileData.teacher);
-          setStats(statsData.stats);
+          setProfile(profileData.paylod?.teacher);
+          setStats(statsData.paylod?.stats);
         }
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -88,8 +88,8 @@ const TeacherHomePage = () => {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-indigo-600 to-violet-750 bg-indigo-750 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-indigo-500/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      
+      <div className="bg-linear-to-r from-indigo-600 to-violet-700 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-indigo-500/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
             {welcomeMessage()}, {profile?.name || 'Teacher'}!
@@ -98,7 +98,7 @@ const TeacherHomePage = () => {
             Welcome to your portal. Check schedules, track student attendance, and evaluate marks with ease.
           </p>
         </div>
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-[200px] border border-white/15">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-50 border border-white/15">
           <span className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest block mb-1">
             Teacher Credentials
           </span>

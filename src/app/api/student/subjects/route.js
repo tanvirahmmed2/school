@@ -57,7 +57,7 @@ export async function GET() {
         syl.link as syllabus_link
       FROM class_subjects cs
       JOIN subjects sub ON cs.subject_id = sub.id
-      LEFT JOIN class_subject_teachers cst ON cs.id = cst.class_subject_id AND cst.section_id = $2
+      LEFT JOIN class_subject_teachers cst ON cs.id = cst.class_subject_id AND (cst.section_id = $2 OR cst.section_id IS NULL)
       LEFT JOIN teachers t ON cst.teacher_id = t.id
       LEFT JOIN syllabuses syl ON cs.class_id = syl.class_id AND cs.subject_id = syl.subject_id
       WHERE cs.class_id = $1

@@ -40,7 +40,8 @@ export async function GET() {
     const studentsCountRes = await query(`
       SELECT COUNT(DISTINCT s.id) as count 
       FROM students s
-      JOIN class_subject_teachers cst ON s.section_id = cst.section_id 
+      JOIN class_subjects cs ON s.class_id = cs.class_id
+      JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (s.section_id = cst.section_id OR cst.section_id IS NULL)
       WHERE cst.teacher_id = $1 AND s.is_registered = TRUE AND s.is_active = TRUE
     `, [teacherId]);
     const studentsCount = parseInt(studentsCountRes.rows[0]?.count || 0, 10);

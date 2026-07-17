@@ -47,7 +47,7 @@ export async function GET() {
       JOIN subjects sub ON r.subject_id = sub.id
       JOIN days d ON r.day_id = d.id
       JOIN class_subjects cs ON cs.class_id = r.class_id AND cs.subject_id = r.subject_id
-      JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = r.section_id OR r.section_id IS NULL)
+      JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = r.section_id OR cst.section_id IS NULL OR r.section_id IS NULL)
       WHERE cst.teacher_id = $1
       ORDER BY 
         r.day_id ASC,

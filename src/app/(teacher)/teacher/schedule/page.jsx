@@ -40,7 +40,7 @@ const SchedulePage = () => {
     );
   }
 
-  const dailyClasses = routine.filter((r) => r.day_of_week === activeTab);
+  const dailyClasses = routine.filter((r) => r.day_of_week?.toLowerCase() === activeTab.toLowerCase());
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">

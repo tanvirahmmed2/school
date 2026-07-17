@@ -71,7 +71,7 @@ const AttendanceRegistryPage = () => {
       const res = await fetch(`/api/students/attendance?class_id=${classId}&section_id=${sectionId}&date=${date}`);
       if (res.ok) {
         const data = await res.json();
-        setStudents(data.attendanceSheet || []);
+        setStudents(data.paylod?.attendanceSheet || []);
         toast.success('Attendance sheet loaded.');
       } else {
         toast.error('Failed to load sheet.');

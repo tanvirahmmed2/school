@@ -42,7 +42,7 @@ export async function GET() {
       FROM class_subject_teachers cst
       JOIN class_subjects cs ON cst.class_subject_id = cs.id
       JOIN classes c ON cs.class_id = c.id
-      JOIN sections sec ON cst.section_id = sec.id
+      LEFT JOIN sections sec ON cst.section_id = sec.id
       JOIN subjects sub ON cs.subject_id = sub.id
       WHERE cst.teacher_id = $1
       ORDER BY c.numeric_name ASC, sec.name ASC, sub.name ASC

@@ -129,7 +129,7 @@ const ClassDetailsPage = () => {
           </div>
         ) : selectedClass ? (
           <div className="flex flex-col gap-10">
-            <div className="w-full h-50 bg-linear-to-br from-sky-500 to-emerald-600 flex items-center justify-center text-white rounded-xl">
+            <div className="w-full h-50 bg-linear-to-br from-sky-300 to-blue-500   flex items-center justify-center text-white rounded-xl">
 
               
               <h1 className="text-3xl md:text-5xl font-black tracking-tight">

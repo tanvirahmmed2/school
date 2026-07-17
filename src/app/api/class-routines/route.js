@@ -37,7 +37,7 @@ export async function GET(request) {
       JOIN days d ON cr.day_id = d.id
       LEFT JOIN sections s ON cr.section_id = s.id
       LEFT JOIN class_subjects cs ON cs.class_id = cr.class_id AND cs.subject_id = cr.subject_id
-      LEFT JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = cr.section_id OR cr.section_id IS NULL)
+      LEFT JOIN class_subject_teachers cst ON cst.class_subject_id = cs.id AND (cst.section_id = cr.section_id OR cst.section_id IS NULL OR cr.section_id IS NULL)
       LEFT JOIN teachers t ON cst.teacher_id = t.id
     `;
     let params = [];

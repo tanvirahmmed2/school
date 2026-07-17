@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FiCalendar, FiPlus, FiCheck, FiX, FiClock, FiFileText } from 'react-icons/fi';
+import TiptapEditor from '@/component/helper/TiptapEditor';
+import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
 const LeavesPage = () => {
   const [applications, setApplications] = useState([]);
@@ -36,7 +38,8 @@ const LeavesPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!type || !startDate || !endDate || !reason) {
+    const cleanReason = reason.replace(/<[^>]*>/g, '').trim();
+    if (!type || !startDate || !endDate || !reason || !cleanReason) {
       toast.error('Please fill in all fields.');
       return;
     }
@@ -168,13 +171,10 @@ const LeavesPage = () => {
 
               <div className="flex flex-col gap-2">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Reason for Leave</label>
-                <textarea
+                <TiptapEditor
                   value={reason}
-                  onChange={(e) => setReason(e.target.value)}
+                  onChange={(val) => setReason(val)}
                   placeholder="Describe details/reasons..."
-                  rows="4"
-                  className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors resize-none"
-                  required
                 />
               </div>
 
@@ -223,8 +223,8 @@ const LeavesPage = () => {
                     <td className="py-4">
                       {getStatusBadge(app.status)}
                     </td>
-                    <td className="py-4 text-xs font-semibold text-slate-500 max-w-xs truncate">
-                      {app.reason}
+                    <td className="py-4 text-xs font-semibold text-slate-500 max-w-xs">
+                      <RichTextDisplay html={app.reason} className="line-clamp-2 text-xs" />
                     </td>
                   </tr>
                 ))}
