@@ -2,23 +2,21 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 
-// POST: Verify if registration number exists and is not yet registered
+// POST: Verify if registration number and verification code exists and is valid
 export async function POST(request) {
   try {
-    const { registration_number } = await request.json();
+    const { registration_number, verification_code } = await request.json();
 
-    if (!registration_number) {
-      const res_err_344 = { error: 'Registration number is required.' };
+    if (!registration_number || !verification_code) {
       return NextResponse.json({
         success: false,
-        message: res_err_344?.error || res_err_344?.message || 'An error occurred',
-        error: res_err_344?.error || 'Internal Server Error',
+        error: 'Registration number and verification code are required.',
         paylod: null
       }, { status: 400 });
     }
 
     const result = await query(
-      `SELECT s.id, s.registration_number, s.is_registered, c.name as class_name 
+      `SELECT s.*, c.name as class_name 
        FROM students s
        JOIN classes c ON s.class_id = c.id
        WHERE LOWER(s.registration_number) = LOWER($1)`,
@@ -26,11 +24,9 @@ export async function POST(request) {
     );
 
     if (result.rows.length === 0) {
-      const res_err_990 = { error: 'Registration number not found in our registry. Please contact admin.' };
       return NextResponse.json({
         success: false,
-        message: res_err_990?.error || res_err_990?.message || 'An error occurred',
-        error: res_err_990?.error || 'Internal Server Error',
+        error: 'Registration number not found in our registry. Please contact admin.',
         paylod: null
       }, { status: 404 });
     }
@@ -38,28 +34,65 @@ export async function POST(request) {
     const student = result.rows[0];
 
     if (student.is_registered) {
-      const res_err_1427 = { error: 'This registration number is already registered. Please go to Login.' };
       return NextResponse.json({
         success: false,
-        message: res_err_1427?.error || res_err_1427?.message || 'An error occurred',
-        error: res_err_1427?.error || 'Internal Server Error',
+        error: 'This registration number is already registered. Please go to Login.',
         paylod: null
       }, { status: 400 });
     }
 
-    const res_data_1149 = {
-      message: 'Registration number verified successfully.',
+    // Verify verification code
+    if (!student.verification_code || student.verification_code !== verification_code.trim()) {
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid verification code. Please check your email.',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    // Check expiration
+    if (student.verification_code_expires && new Date(student.verification_code_expires) < new Date()) {
+      return NextResponse.json({
+        success: false,
+        error: 'The verification code has expired. Please contact admin.',
+        paylod: null
+      }, { status: 400 });
+    }
+
+    // Parse parents/guardian info
+    let parentName = '';
+    let parentContact = '';
+    if (student.parents_info) {
+      const parts = student.parents_info.split(', ');
+      parts.forEach(p => {
+        if (p.startsWith('Parent Name:')) parentName = p.replace('Parent Name:', '').trim();
+        if (p.startsWith('Contact:')) parentContact = p.replace('Contact:', '').trim();
+      });
+    }
+
+    const res_data = {
+      message: 'Registration credentials verified successfully.',
       student: {
         id: student.id,
         registration_number: student.registration_number,
         class_name: student.class_name,
+        name: student.name || '',
+        email: student.email || '',
+        phone: student.phone || '',
+        date_of_birth: student.date_of_birth ? new Date(student.date_of_birth).toISOString().split('T')[0] : '',
+        address: student.address || '',
+        gender: student.gender || '',
+        birth_certificate_number: student.birth_certificate_number || '',
+        parent_name: parentName,
+        parent_contact: parentContact
       }
     };
-      return NextResponse.json({
-        success: true,
-        message: res_data_1149?.message || 'Successfully fecthed data',
-        paylod: res_data_1149
-      }, { status: 200 });
+
+    return NextResponse.json({
+      success: true,
+      message: res_data.message,
+      paylod: res_data
+    }, { status: 200 });
   } catch (error) {
     console.error('Error verifying student registration:', error);
     const res_err_2405 = { error: 'Failed to verify registration number. Internal server error.' };
@@ -133,8 +166,10 @@ export async function PUT(request) {
       }, { status: 400 });
     }
 
-    // Check duplicate email
-    const emailCheck = await query('SELECT id FROM students WHERE LOWER(email) = LOWER($1)', [email.trim()]);
+    const studentId = studentCheck.rows[0].id;
+
+    // Check duplicate email (excluding current student)
+    const emailCheck = await query('SELECT id FROM students WHERE LOWER(email) = LOWER($1) AND id <> $2', [email.trim(), studentId]);
     if (emailCheck.rows.length > 0) {
       const res_err_4744 = { error: 'A student account with this email address already exists.' };
       return NextResponse.json({
@@ -145,8 +180,8 @@ export async function PUT(request) {
       }, { status: 400 });
     }
 
-    // Check duplicate birth certificate number
-    const certCheck = await query('SELECT id FROM students WHERE LOWER(birth_certificate_number) = LOWER($1)', [birth_certificate_number.trim()]);
+    // Check duplicate birth certificate number (excluding current student)
+    const certCheck = await query('SELECT id FROM students WHERE LOWER(birth_certificate_number) = LOWER($1) AND id <> $2', [birth_certificate_number.trim(), studentId]);
     if (certCheck.rows.length > 0) {
       const res_err_5336 = { error: 'A student account with this birth certificate number already exists.' };
       return NextResponse.json({
@@ -160,7 +195,7 @@ export async function PUT(request) {
     // Hash password
     const hashedPass = await hashPassword(password);
 
-    // Save and activate student account
+    // Save and activate student account (clearing temporary registration codes)
     const result = await query(
       `UPDATE students
        SET name = $1, 
@@ -174,6 +209,8 @@ export async function PUT(request) {
            gender = $9,
            is_registered = TRUE,
            is_active = TRUE,
+           verification_code = NULL,
+           verification_code_expires = NULL,
            updated_at = CURRENT_TIMESTAMP
        WHERE LOWER(registration_number) = LOWER($10)
        RETURNING id, name, email, registration_number, is_active, is_registered`,

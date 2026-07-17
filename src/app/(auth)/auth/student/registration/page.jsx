@@ -9,6 +9,7 @@ import { FiUserCheck, FiUserPlus, FiLock, FiMail, FiPhone, FiCalendar, FiMapPin,
 const StudentRegistration = () => {
   const router = useRouter();
   const [regNo, setRegNo] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
   
   // Setup fields
   const [name, setName] = useState('');
@@ -25,11 +26,11 @@ const StudentRegistration = () => {
   const [verifiedClass, setVerifiedClass] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Step 1: Verify Registration Number
+  // Step 1: Verify Registration Credentials
   const handleVerifyRegistration = async (e) => {
     e.preventDefault();
-    if (!regNo) {
-      toast.error('Registration number is required.');
+    if (!regNo || !verificationCode) {
+      toast.error('Registration number and verification code are required.');
       return;
     }
 
@@ -38,17 +39,32 @@ const StudentRegistration = () => {
       const response = await fetch('/api/student/registration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ registration_number: regNo }),
+        body: JSON.stringify({ 
+          registration_number: regNo, 
+          verification_code: verificationCode 
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to verify registration number.');
+        throw new Error(data.error || 'Failed to verify registration credentials.');
       }
 
-      toast.success(data.message || 'Registration number verified. Complete your details below.');
-      setVerifiedClass(data.paylod.student.class_name);
+      toast.success(data.message || 'Credentials verified. Confirm your details below.');
+      
+      // Autofill values from the student profile created on publish
+      const s = data.paylod.student;
+      setName(s.name || '');
+      setEmail(s.email || '');
+      setPhone(s.phone || '');
+      setDob(s.date_of_birth || '');
+      setAddress(s.address || '');
+      setParentName(s.parent_name || '');
+      setParentContact(s.parent_contact || '');
+      setBirthCert(s.birth_certificate_number || '');
+      setVerifiedClass(s.class_name);
+      
       setStep(2);
     } catch (err) {
       toast.error(err.message);
@@ -128,9 +144,25 @@ const StudentRegistration = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. REG12345"
+                  placeholder="e.g. REG-2026-123456"
                   value={regNo}
                   onChange={(e) => setRegNo(e.target.value)}
+                  disabled={loading}
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                />
+              </div>
+
+              {/* Verification Code Input */}
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <FiLock className="text-sm" /> Enter Verification Code
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. 123456"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
                   disabled={loading}
                   className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                 />

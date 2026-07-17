@@ -146,52 +146,38 @@ export async function PUT(request) {
       return NextResponse.json({ success: false, error: 'This application has already been processed.' }, { status: 400 });
     }
 
-    let studentRecord = null;
-
     if (status === 'Approved') {
-      // 1. Generate unique registration number
-      const academicYear = new Date().getFullYear();
-      const randomDigits = Math.floor(100000 + Math.random() * 900000);
-      const regNo = `REG-${academicYear}-${randomDigits}`;
-
-      // 2. Insert into students table (Create permanent student profile)
-      const studentRes = await query(`
-        INSERT INTO students (
-          name, email, phone, registration_number, class_id, date_of_birth, address,
-          gender, birth_certificate_number, is_active, is_registered
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, TRUE, FALSE)
-        RETURNING *
+      // 1. Save accepted application in accepted_admissions table
+      await query(`
+        INSERT INTO accepted_admissions (
+          student_admission_id, admission_id, class_id, applicant_name, email, phone
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (student_admission_id) DO NOTHING
       `, [
+        id,
+        admission.admission_id,
+        admission.applied_class_id,
         admission.applicant_name,
         admission.email,
-        admission.phone,
-        regNo,
-        admission.applied_class_id,
-        admission.date_of_birth,
-        admission.address,
-        admission.gender,
-        admission.birth_regi_number // Map candidate birth registration to student profile
+        admission.phone
       ]);
 
-      studentRecord = studentRes.rows[0];
-
-      // 3. Create guardian record in student_guardians table
-      await query(`
-        INSERT INTO student_guardians (
-          student_id, name, relationship, phone
-        ) VALUES ($1, $2, 'Guardian', $3)
-      `, [studentRecord.id, admission.guardian_name, admission.guardian_phone]);
-
-      // 4. Update student_id in temporary applications table
+      // 2. Update status in student_admissions table
       await query(`
         UPDATE student_admissions SET
           status = 'Approved',
-          student_id = $1,
           updated_at = CURRENT_TIMESTAMP
-        WHERE id = $2
-      `, [studentRecord.id, id]);
+        WHERE id = $1
+      `, [id]);
     } else {
       // Reject application
+      // 1. Remove from accepted_admissions if present
+      await query(`
+        DELETE FROM accepted_admissions 
+        WHERE student_admission_id = $1
+      `, [id]);
+
+      // 2. Update status to Rejected
       await query(`
         UPDATE student_admissions SET
           status = 'Rejected',
@@ -202,8 +188,7 @@ export async function PUT(request) {
 
     return NextResponse.json({
       success: true,
-      message: `Admission candidate application has been ${status.toLowerCase()} and student record created.`,
-      paylod: { student: studentRecord }
+      message: `Admission candidate application has been ${status.toLowerCase()} successfully.`
     });
   } catch (error) {
     console.error('Error processing admission application:', error);

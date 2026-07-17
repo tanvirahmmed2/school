@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
-import { FiLayers, FiPlus, FiTrash2, FiEdit2, FiCalendar, FiClock } from 'react-icons/fi';
+import { FiLayers, FiPlus, FiTrash2, FiEdit2, FiCalendar, FiClock, FiCheckCircle } from 'react-icons/fi';
 
 import AdmissionCircularForm from '@/component/forms/AdmissionCircularForm';
 
@@ -12,6 +12,7 @@ const CircularsPage = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [publishingId, setPublishingId] = useState(null);
 
   // Circular Form states
   const [showModal, setShowModal] = useState(false);
@@ -104,6 +105,34 @@ const CircularsPage = () => {
     }
   };
 
+  const handlePublishResults = async (id) => {
+    const confirm = window.confirm(
+      'Are you sure you want to publish results for this circular? This will automatically register all approved candidates, generate their registration credentials, send verification setup codes via email, and post a public notice.'
+    );
+    if (!confirm) return;
+
+    setPublishingId(id);
+    try {
+      const res = await fetch('/api/admin/admissions/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admission_id: id })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success(data.message || 'Results published successfully!');
+        fetchCirculars();
+      } else {
+        throw new Error(data.error || 'Failed to publish results.');
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setPublishingId(null);
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       {/* Header */}
@@ -151,6 +180,7 @@ const CircularsPage = () => {
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Target Class</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Age Limits</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Timeline Dates</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Status</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
@@ -180,8 +210,28 @@ const CircularsPage = () => {
                         {c.result_date && <div className="text-blue-650 font-bold">Result: {new Date(c.result_date).toLocaleDateString()}</div>}
                       </div>
                     </td>
+                    <td className="px-6 py-4 text-center">
+                      <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                        c.is_result_published
+                          ? 'bg-green-50 text-green-600 border border-green-100'
+                          : 'bg-amber-50 text-amber-600 border border-amber-100'
+                      }`}>
+                        {c.is_result_published ? 'Results Published' : 'Intake Open'}
+                      </span>
+                    </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
+                        {!c.is_result_published && (
+                          <button
+                            disabled={publishingId !== null}
+                            onClick={() => handlePublishResults(c.id)}
+                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold"
+                            title="Publish Results"
+                          >
+                            <FiCheckCircle />
+                            <span>Publish Results</span>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleEdit(c)}
                           className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded transition-colors cursor-pointer"

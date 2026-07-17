@@ -415,6 +415,8 @@ CREATE TABLE IF NOT EXISTS students (
     password_hash VARCHAR(255),
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,
+    verification_code VARCHAR(255),
+    verification_code_expires TIMESTAMPTZ,
     is_active BOOLEAN DEFAULT FALSE,
     is_registered BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -1164,8 +1166,24 @@ CREATE TABLE IF NOT EXISTS admissions (
     admission_start_date DATE NOT NULL,
     finish_date DATE NOT NULL,
     result_date DATE,
+    is_result_published BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================================
+-- ACCEPTED ADMISSIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS accepted_admissions (
+    id BIGSERIAL PRIMARY KEY,
+    student_admission_id BIGINT UNIQUE NOT NULL REFERENCES student_admissions(id) ON DELETE CASCADE,
+    admission_id BIGINT NOT NULL REFERENCES admissions(id) ON DELETE CASCADE,
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    applicant_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TRIGGER IF EXISTS update_admissions_updated_at ON admissions;

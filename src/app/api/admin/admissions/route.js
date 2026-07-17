@@ -62,6 +62,18 @@ export async function POST(request) {
       result_date || null
     ]);
 
+    // Create a public notice board entry
+    try {
+      await query(`
+        INSERT INTO notices (title, link, is_pinned)
+        VALUES ($1, '/admission', FALSE)
+      `, [
+        `New Admission Circular: ${title.trim()}`
+      ]);
+    } catch (noticeErr) {
+      console.error('Failed to auto-create notice for circular:', noticeErr);
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Admission circular created successfully.',
