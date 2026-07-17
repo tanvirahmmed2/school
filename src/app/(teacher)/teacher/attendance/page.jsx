@@ -1,275 +1,350 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiCalendar, FiCheck, FiSave, FiLayers, FiInfo } from 'react-icons/fi';
+import { FiCalendar, FiSearch, FiLayers, FiChevronDown, FiRefreshCw } from 'react-icons/fi';
 
-const AttendanceRegistryPage = () => {
-  const [classes, setClasses] = useState([]);
-  const [sections, setSections] = useState([]);
-  const [students, setStudents] = useState([]);
-  
-  const [classId, setClassId] = useState('');
-  const [sectionId, setSectionId] = useState('');
-  const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
-  
-  const [loadingDropdowns, setLoadingDropdowns] = useState(true);
-  const [loadingStudents, setLoadingStudents] = useState(false);
-  const [saving, setSaving] = useState(false);
+const statusBadge = (status) => {
+  if (status === 'Present')
+    return (
+      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+        Present
+      </span>
+    );
+  if (status === 'Absent')
+    return (
+      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
+        Absent
+      </span>
+    );
+  if (status === 'Late')
+    return (
+      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100">
+        Late
+      </span>
+    );
+  return (
+    <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-50 text-slate-500">
+      {status}
+    </span>
+  );
+};
 
-  // Fetch classes initially
+const AttendanceViewPage = () => {
+  // Filters
+  const [filterDate, setFilterDate] = useState('');
+  const [filterClassId, setFilterClassId] = useState('');
+  const [filterSubjectId, setFilterSubjectId] = useState('');
+  const [filterPeriodId, setFilterPeriodId] = useState('');
+
+  // Data
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fetched, setFetched] = useState(false);
+
+  // Dropdown options for filtering
+  const [classOptions, setClassOptions] = useState([]);
+  const [subjectOptions, setSubjectOptions] = useState([]);
+  const [periodOptions, setPeriodOptions] = useState([]);
+
+  // Load filter metadata on mount
   useEffect(() => {
-    const fetchClasses = async () => {
+    const fetchMetadata = async () => {
       try {
-        const res = await fetch('/api/classes');
-        if (res.ok) {
-          const data = await res.json();
-          setClasses(data.paylod.classes || []);
+        const res = await fetch('/api/teacher/attendance-dropdowns');
+        const data = await res.json();
+        if (res.ok && data.success) {
+          const { assignments, periods } = data.paylod;
+
+          // Unique class options
+          const classesMap = new Map();
+          for (const a of assignments || []) {
+            const label = `Class ${a.class_name}${a.section_name ? ` · Sec ${a.section_name}` : ''}`;
+            classesMap.set(a.class_id, label);
+          }
+          setClassOptions([...classesMap.entries()].map(([id, name]) => ({ id, name })));
+
+          // Unique subject options
+          const subjectsMap = new Map();
+          for (const a of assignments || []) {
+            subjectsMap.set(a.subject_id, `${a.subject_name} (${a.subject_code})`);
+          }
+          setSubjectOptions([...subjectsMap.entries()].map(([id, name]) => ({ id, name })));
+
+          // Period options
+          setPeriodOptions((periods || []).map(p => ({
+            id: p.id,
+            name: `${p.name} (${p.start_time} – ${p.end_time})`
+          })));
         }
       } catch (err) {
-        console.error('Failed to load classes:', err);
-      } finally {
-        setLoadingDropdowns(false);
+        console.error('Failed to load filters metadata:', err);
       }
     };
-    fetchClasses();
+    fetchMetadata();
   }, []);
 
-  // Fetch sections when class changes
+  const fetchRecords = useCallback(async () => {
+    setLoading(true);
+    setFetched(false);
+    try {
+      const params = new URLSearchParams({ mode: 'records' });
+      if (filterDate) params.append('date', filterDate);
+      if (filterClassId) params.append('class_id', filterClassId);
+      if (filterSubjectId) params.append('subject_id', filterSubjectId);
+      if (filterPeriodId) params.append('period_id', filterPeriodId);
+
+      const res = await fetch(`/api/teacher/attendence?${params.toString()}`);
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        const rows = data.paylod.records || [];
+        setRecords(rows);
+      } else {
+        toast.error(data.message || 'Failed to load records.');
+      }
+    } catch {
+      toast.error('Error loading attendance records.');
+    } finally {
+      setLoading(false);
+      setFetched(true);
+    }
+  }, [filterDate, filterClassId, filterSubjectId, filterPeriodId]);
+
+  // Fetch records whenever filters change or on mount
   useEffect(() => {
-    if (!classId) {
-      const timer = setTimeout(() => {
-        setSections([]);
-        setSectionId('');
-      }, 0);
-      return () => clearTimeout(timer);
-    }
+    fetchRecords();
+  }, [fetchRecords]);
 
-    const fetchSections = async () => {
-      try {
-        const res = await fetch(`/api/sections?class_id=${classId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setSections(data.paylod.sections || []);
-        }
-      } catch (err) {
-        console.error('Failed to load sections:', err);
-      }
-    };
-    fetchSections();
-  }, [classId]);
+  // Group records by date for display
+  const groupedByDate = records.reduce((acc, r) => {
+    const d = r.date ? String(r.date).split('T')[0] : 'Unknown';
+    if (!acc[d]) acc[d] = [];
+    acc[d].push(r);
+    return acc;
+  }, {});
+  const sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
 
-  // Fetch student roll list
-  const handleLoadSheet = async () => {
-    if (!classId || !sectionId || !date) {
-      toast.error('Please select class, section, and date.');
-      return;
-    }
-
-    setLoadingStudents(true);
-    try {
-      const res = await fetch(`/api/students/attendance?class_id=${classId}&section_id=${sectionId}&date=${date}`);
-      if (res.ok) {
-        const data = await res.json();
-        setStudents(data.paylod?.attendanceSheet || []);
-        toast.success('Attendance sheet loaded.');
-      } else {
-        toast.error('Failed to load sheet.');
-      }
-    } catch (err) {
-      toast.error('An error occurred loading the sheet.');
-    } finally {
-      setLoadingStudents(false);
-    }
-  };
-
-  const handleStatusChange = (studentId, status) => {
-    setStudents((prev) =>
-      prev.map((s) => (s.student_id === studentId ? { ...s, status } : s))
-    );
-  };
-
-  const handleRemarksChange = (studentId, remarks) => {
-    setStudents((prev) =>
-      prev.map((s) => (s.student_id === studentId ? { ...s, remarks } : s))
-    );
-  };
-
-  const handleSaveAttendance = async () => {
-    if (students.length === 0) return;
-
-    setSaving(true);
-    try {
-      const records = students.map((s) => ({
-        student_id: s.student_id,
-        status: s.status,
-        remarks: s.remarks
-      }));
-
-      const res = await fetch('/api/students/attendance', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          class_id: classId,
-          section_id: sectionId,
-          date,
-          records
-        })
-      });
-
-      if (res.ok) {
-        toast.success('Attendance sheet saved successfully!');
-      } else {
-        const err = await res.json();
-        toast.error(err.error || 'Failed to save attendance.');
-      }
-    } catch (err) {
-      toast.error('An error occurred while saving.');
-    } finally {
-      setSaving(false);
-    }
-  };
+  const presentCount = records.filter((r) => r.status === 'Present').length;
+  const absentCount  = records.filter((r) => r.status === 'Absent').length;
+  const lateCount    = records.filter((r) => r.status === 'Late').length;
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto pb-12">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Student Attendance Registry</h1>
-        <p className="text-slate-500 text-sm font-medium">Record student attendance sheets by class level and date.</p>
+        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Attendance Records</h1>
+        <p className="text-slate-500 text-sm font-medium">
+          View all attendance you have recorded across your classes. Use the filters to narrow results.
+        </p>
       </div>
 
-      {/* Selectors Panel */}
-      <div className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col md:flex-row items-end gap-4">
-        <div className="flex-1 w-full flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Class</label>
-          <select
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
-            disabled={loadingDropdowns}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+      {/* Filters */}
+      <div className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col gap-4">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Filter Records</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-end">
+          {/* Date */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <FiCalendar className="text-xs" /> Date
+            </label>
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            />
+          </div>
+
+          {/* Class */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Class</label>
+            <select
+              value={filterClassId}
+              onChange={(e) => setFilterClassId(e.target.value)}
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            >
+              <option value="">— All Classes —</option>
+              {classOptions.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Subject */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subject</label>
+            <select
+              value={filterSubjectId}
+              onChange={(e) => setFilterSubjectId(e.target.value)}
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            >
+              <option value="">— All Subjects —</option>
+              {subjectOptions.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Period */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Period</label>
+            <select
+              value={filterPeriodId}
+              onChange={(e) => setFilterPeriodId(e.target.value)}
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            >
+              <option value="">— All Periods —</option>
+              {periodOptions.map((p) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          <button
+            onClick={fetchRecords}
+            disabled={loading}
+            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 disabled:text-slate-400 text-white rounded-2xl text-xs font-bold shadow-md shadow-indigo-500/10 transition-all cursor-pointer"
           >
-            <option value="">-- Choose Class --</option>
-            {classes.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
+            <FiSearch className={`text-sm ${loading ? 'animate-spin' : ''}`} />
+            <span>{loading ? 'Searching...' : 'Search Records'}</span>
+          </button>
+          {(filterDate || filterClassId || filterSubjectId || filterPeriodId) && (
+            <button
+              onClick={() => {
+                setFilterDate('');
+                setFilterClassId('');
+                setFilterSubjectId('');
+                setFilterPeriodId('');
+              }}
+              className="flex items-center gap-1.5 px-4 py-2.5 text-slate-500 hover:text-slate-700 rounded-2xl text-xs font-bold border border-slate-100 hover:bg-slate-50 transition-all cursor-pointer"
+            >
+              <FiRefreshCw className="text-xs" /> Clear Filters
+            </button>
+          )}
         </div>
-
-        <div className="flex-1 w-full flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Section</label>
-          <select
-            value={sectionId}
-            onChange={(e) => setSectionId(e.target.value)}
-            disabled={!classId}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
-          >
-            <option value="">-- Choose Section --</option>
-            {sections.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex-1 w-full flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Date</label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
-          />
-        </div>
-
-        <button
-          onClick={handleLoadSheet}
-          disabled={!classId || !sectionId || loadingStudents}
-          className="w-full md:w-auto px-6 py-3 bg-indigo-650 hover:bg-indigo-700 bg-indigo-600 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer"
-        >
-          {loadingStudents ? 'Loading...' : 'Load Sheet'}
-        </button>
       </div>
 
-      {/* Attendance Registry List */}
-      {students.length === 0 ? (
-        <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center justify-center">
+      {/* Stats */}
+      {fetched && records.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 -mt-4">
+          <div className="bg-white border border-slate-100 rounded-2xl p-4 text-center">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total</p>
+            <p className="text-2xl font-black text-slate-800">{records.length}</p>
+          </div>
+          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-center">
+            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">Present</p>
+            <p className="text-2xl font-black text-emerald-700">{presentCount}</p>
+          </div>
+          <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-center">
+            <p className="text-[10px] font-bold text-rose-500 uppercase tracking-wider mb-1">Absent</p>
+            <p className="text-2xl font-black text-rose-600">{absentCount}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Records list */}
+      {loading ? (
+        <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center">
+          <div className="inline-flex flex-col items-center gap-3">
+            <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm font-semibold text-slate-500">Loading records...</p>
+          </div>
+        </div>
+      ) : fetched && records.length === 0 ? (
+        <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center">
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-4">
             <FiLayers className="text-3xl" />
           </div>
-          <h3 className="font-bold text-slate-800 text-base mb-1">Load Attendance Sheet</h3>
-          <p className="text-slate-400 text-xs font-medium max-w-xs">Select class details and load the list of students to register attendance.</p>
+          <h3 className="font-bold text-slate-800 text-base mb-1">No Records Found</h3>
+          <p className="text-slate-400 text-xs font-medium max-w-xs">
+            No attendance records match your filters. Try adjusting or clearing them, or go to{' '}
+            <a href="/teacher/attendance/record" className="text-indigo-600 font-bold hover:underline">
+              Record Attendance
+            </a>{' '}
+            to add some.
+          </p>
         </div>
       ) : (
-        <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-base font-bold text-slate-800">Roll Call Registry</h2>
-            <button
-              onClick={handleSaveAttendance}
-              disabled={saving}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
-            >
-              <FiSave className="text-sm" />
-              <span>{saving ? 'Saving...' : 'Save Attendance'}</span>
-            </button>
-          </div>
+        <div className="flex flex-col gap-6">
+          {sortedDates.map((date) => {
+            const dayRecords = groupedByDate[date];
+            const d = new Date(date + 'T00:00:00');
+            const dayLabel = d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Student</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-center">Status</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</th>
-                </tr>
-              </thead>
-              <tbody>
-                {students.map((student) => (
-                  <tr key={student.student_id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors">
-                    <td className="py-4">
-                      <p className="text-sm font-bold text-slate-800">{student.student_name}</p>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Reg: {student.registration_number}</span>
-                    </td>
-                    <td className="py-4">
-                      <div className="flex items-center justify-center gap-1">
-                        {['Present', 'Absent', 'Late', 'Half Day'].map((status) => {
-                          const isSelected = student.status === status;
-                          let theme = 'border-slate-200 text-slate-500 hover:border-slate-300';
-                          if (isSelected) {
-                            if (status === 'Present') theme = 'bg-emerald-600 border-emerald-600 text-white';
-                            if (status === 'Absent') theme = 'bg-rose-600 border-rose-600 text-white';
-                            if (status === 'Late') theme = 'bg-amber-500 border-amber-500 text-white';
-                            if (status === 'Half Day') theme = 'bg-indigo-650 bg-indigo-600 border-indigo-600 text-white';
-                          }
+            return (
+              <div key={date} className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
+                {/* Date header */}
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h2 className="text-sm font-extrabold text-slate-800">{dayLabel}</h2>
+                    <p className="text-[11px] text-slate-400 font-medium mt-0.5">{dayRecords.length} records</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-[11px] font-bold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg border border-emerald-100">
+                      ✓ {dayRecords.filter((r) => r.status === 'Present').length}
+                    </span>
+                    <span className="text-[11px] font-bold px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg border border-rose-100">
+                      ✗ {dayRecords.filter((r) => r.status === 'Absent').length}
+                    </span>
+                    {dayRecords.filter((r) => r.status === 'Late').length > 0 && (
+                      <span className="text-[11px] font-bold px-2.5 py-1 bg-amber-50 text-amber-600 rounded-lg border border-amber-100">
+                        ⧗ {dayRecords.filter((r) => r.status === 'Late').length}
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-                          return (
-                            <button
-                              key={status}
-                              onClick={() => handleStatusChange(student.student_id, status)}
-                              className={`px-3 py-1.5 border rounded-xl text-xs font-bold transition-all cursor-pointer ${theme}`}
-                            >
-                              {status}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </td>
-                    <td className="py-4">
-                      <input
-                        type="text"
-                        value={student.remarks || ''}
-                        onChange={(e) => handleRemarksChange(student.student_id, e.target.value)}
-                        placeholder="Add optional remarks..."
-                        className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                {/* Records table */}
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-100">
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">#</th>
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Student</th>
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Class</th>
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subject</th>
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Period</th>
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Status</th>
+                        <th className="pb-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Remarks</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dayRecords.map((r, i) => (
+                        <tr key={r.id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors">
+                          <td className="py-3 text-xs text-slate-400 font-bold">{i + 1}</td>
+                          <td className="py-3">
+                            <p className="text-sm font-bold text-slate-800">{r.student_name}</p>
+                            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                              {r.registration_number}
+                            </span>
+                          </td>
+                          <td className="py-3 text-xs font-semibold text-slate-600">
+                            {r.class_name}{r.section_name ? ` · ${r.section_name}` : ''}
+                          </td>
+                          <td className="py-3 text-xs font-semibold text-slate-600">{r.subject_name}</td>
+                          <td className="py-3 text-xs font-semibold text-slate-600">
+                            {r.period_name}
+                            <span className="block text-[10px] text-slate-400">
+                              {r.period_start_time} – {r.period_end_time}
+                            </span>
+                          </td>
+                          <td className="py-3 text-center">{statusBadge(r.status)}</td>
+                          <td className="py-3 text-xs text-slate-500">{r.remarks || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
   );
 };
 
-export default AttendanceRegistryPage;
+export default AttendanceViewPage;

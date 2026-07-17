@@ -435,12 +435,15 @@ CREATE TRIGGER update_students_updated_at
 CREATE TABLE IF NOT EXISTS student_attendances (
     id BIGSERIAL PRIMARY KEY,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-    date DATE NOT NULL DEFAULT CURRENT_DATE,
-    status VARCHAR(50) NOT NULL DEFAULT 'Present' CHECK (status IN ('Present', 'Absent', 'Late', 'Half Day')),
-    remarks VARCHAR(255),
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    period_id BIGINT NOT NULL REFERENCES periods(id) ON DELETE CASCADE,
+    date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Present' CHECK (status IN ('Present', 'Absent', 'Late')),
+    remarks TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(student_id, date)
+    UNIQUE(student_id, date, subject_id, period_id)
 );
 
 DROP TRIGGER IF EXISTS update_student_attendances_updated_at ON student_attendances;

@@ -14,9 +14,11 @@ const ResultsPage = () => {
         const res = await fetch('/api/student/results');
         if (res.ok) {
           const resData = await res.json();
-          setData(resData);
-          if (resData.paylod.results && resData.paylod.results.length > 0) {
-            setSelectedExamId(resData.paylod.results[0].exam_id);
+          if (resData.paylod) {
+            setData(resData.paylod);
+            if (resData.paylod.results && resData.paylod.results.length > 0) {
+              setSelectedExamId(resData.paylod.results[0].exam_id);
+            }
           }
         }
       } catch (error) {
@@ -37,7 +39,7 @@ const ResultsPage = () => {
     );
   }
 
-  const { results, marks } = data;
+  const { results = [], marks = [] } = data || {};
 
   const currentResult = results.find((r) => r.exam_id === selectedExamId);
   const filteredMarks = marks.filter((m) => m.exam_id === selectedExamId);

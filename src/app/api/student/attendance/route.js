@@ -32,10 +32,21 @@ export async function GET() {
 
     // Fetch student's attendance history
     const historyRes = await query(`
-      SELECT id, date, status, remarks 
-      FROM student_attendances 
-      WHERE student_id = $1 
-      ORDER BY date DESC
+      SELECT 
+        sa.id, 
+        sa.date, 
+        sa.status, 
+        sa.remarks,
+        sub.name AS subject_name,
+        sub.code AS subject_code,
+        p.name AS period_name,
+        p.start_time,
+        p.end_time
+      FROM student_attendances sa 
+      JOIN subjects sub ON sa.subject_id = sub.id
+      JOIN periods p ON sa.period_id = p.id
+      WHERE sa.student_id = $1 
+      ORDER BY sa.date DESC, p.start_time ASC
     `, [studentId]);
 
     // Fetch summaries
@@ -44,8 +55,7 @@ export async function GET() {
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'Present' THEN 1 END) as present,
         COUNT(CASE WHEN status = 'Absent' THEN 1 END) as absent,
-        COUNT(CASE WHEN status = 'Late' THEN 1 END) as late,
-        COUNT(CASE WHEN status = 'Half Day' THEN 1 END) as half_day
+        COUNT(CASE WHEN status = 'Late' THEN 1 END) as late
       FROM student_attendances 
       WHERE student_id = $1
     `, [studentId]);

@@ -4,6 +4,8 @@ import { isAdmin } from '@/lib/auth';
 import Navbar from '@/component/bars/admin/Navbar';
 import Sidebar from '@/component/bars/admin/Sidebar';
 
+export const dynamic = 'force-dynamic';
+
 const AdminLayout = async ({ children }) => {
   const authenticated = await isAdmin();
 

@@ -46,7 +46,7 @@ const AdminStudentFeesPage = () => {
       // Fetch all registered students
       const studentsRes = await fetch('/api/students');
       const studentsData = await studentsRes.json();
-      setStudents((studentsData.students || []).filter((s) => s.is_registered));
+      setStudents((studentsData.paylod?.students || []).filter((s) => s.is_registered));
     } catch (err) {
       toast.error('Failed to load classes or student roster.');
     }
@@ -64,13 +64,13 @@ const AdminStudentFeesPage = () => {
 
       const feesRes = await fetch(feesUrl);
       const feesData = await feesRes.json();
-      setFees(feesData.fees || []);
+      setFees(feesData.paylod?.fees || []);
 
       let finesUrl = '/api/students/fines';
       if (filterStudentId) finesUrl += `?student_id=${filterStudentId}`;
       const finesRes = await fetch(finesUrl);
       const finesData = await finesRes.json();
-      setFines(finesData.fines || []);
+      setFines(finesData.paylod?.fines || []);
     } catch (err) {
       toast.error('Failed to retrieve financial logs.');
     } finally {

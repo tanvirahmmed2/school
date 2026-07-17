@@ -76,7 +76,7 @@ const StudentTranscriptsPage = () => {
       const response = await axios.get(
         `/api/students/transcripts?student_id=${transStudent}&exam_id=${transExam}`
       );
-      setTranscriptData(response.data);
+      setTranscriptData(response.data.paylod);
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     } finally {

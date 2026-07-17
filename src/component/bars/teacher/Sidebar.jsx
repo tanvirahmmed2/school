@@ -17,7 +17,8 @@ const Sidebar = () => {
   const teacherLinks = [
     { label: 'Dashboard', href: '/teacher', icon: FiHome },
     { label: 'Class Schedule', href: '/teacher/schedule', icon: FiClock },
-    { label: 'Student Attendance', href: '/teacher/attendance', icon: FiCalendar },
+    { label: 'Attendance Records', href: '/teacher/attendance', icon: FiCalendar },
+    { label: 'Record Attendance', href: '/teacher/attendance/record', icon: FiFileText },
     { label: 'My Subjects', href: '/teacher/subjects', icon: FiBook },
     { label: 'Student Marks', href: '/teacher/marks', icon: FiAward },
     { label: 'Leave Applications', href: '/teacher/leaves', icon: FiFileText },

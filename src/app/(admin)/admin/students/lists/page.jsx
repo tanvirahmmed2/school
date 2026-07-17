@@ -50,7 +50,7 @@ const AdminStudentListsPage = () => {
 
       const studentsRes = await fetch(url);
       const studentsData = await studentsRes.json();
-      setStudents(studentsData.students || []);
+      setStudents(studentsData.paylod?.students || []);
     } catch (err) {
       toast.error('Failed to load classes or student roster.');
     } finally {

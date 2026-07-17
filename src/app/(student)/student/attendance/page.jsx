@@ -13,7 +13,7 @@ const AttendancePage = () => {
         const res = await fetch('/api/student/attendance');
         if (res.ok) {
           const resData = await res.json();
-          setData(resData);
+          setData(resData.paylod);
         }
       } catch (error) {
         console.error('Error fetching attendance:', error);
@@ -33,13 +33,12 @@ const AttendancePage = () => {
     );
   }
 
-  const { history, summary } = data;
+  const { history = [], summary = null } = data;
 
   const total = parseInt(summary?.total || 0, 10);
   const present = parseInt(summary?.present || 0, 10);
   const absent = parseInt(summary?.absent || 0, 10);
   const late = parseInt(summary?.late || 0, 10);
-  const halfDay = parseInt(summary?.half_day || 0, 10);
 
   const rate = total > 0 ? Math.round(((present + late) / total) * 100) : 100;
 
@@ -47,8 +46,7 @@ const AttendancePage = () => {
     { label: 'Attendance Rate', value: `${rate}%`, color: 'text-blue-600 bg-blue-50 border-blue-100', icon: FiActivity },
     { label: 'Present Days', value: present, color: 'text-emerald-600 bg-emerald-50 border-emerald-100', icon: FiCheckCircle },
     { label: 'Absent Days', value: absent, color: 'text-rose-600 bg-rose-50 border-rose-100', icon: FiXCircle },
-    { label: 'Late Entries', value: late, color: 'text-amber-600 bg-amber-50 border-amber-100', icon: FiClock },
-    { label: 'Half Days', value: halfDay, color: 'text-indigo-600 bg-indigo-50 border-indigo-100', icon: FiAlertCircle }
+    { label: 'Late Entries', value: late, color: 'text-amber-600 bg-amber-50 border-amber-100', icon: FiClock }
   ];
 
   const getStatusBadge = (status) => {
@@ -59,8 +57,6 @@ const AttendancePage = () => {
         return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">Absent</span>;
       case 'Late':
         return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100">Late</span>;
-      case 'Half Day':
-        return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">Half Day</span>;
       default:
         return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-50 text-slate-600 border border-slate-100">{status}</span>;
     }
@@ -75,7 +71,7 @@ const AttendancePage = () => {
       </div>
 
       {/* Grid Summaries */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {cards.map((card, idx) => {
           const Icon = card.icon;
           return (
@@ -104,6 +100,8 @@ const AttendancePage = () => {
               <thead>
                 <tr className="border-b border-slate-100">
                   <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Date</th>
+                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Subject</th>
+                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Period</th>
                   <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Status</th>
                   <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</th>
                 </tr>
@@ -113,6 +111,12 @@ const AttendancePage = () => {
                   <tr key={row.id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors">
                     <td className="py-4 text-sm font-semibold text-slate-700">
                       {new Date(row.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </td>
+                    <td className="py-4 text-sm font-bold text-slate-800">
+                      {row.subject_name} <span className="text-xs font-normal text-slate-400">({row.subject_code})</span>
+                    </td>
+                    <td className="py-4 text-sm font-semibold text-slate-600">
+                      {row.period_name} <span className="text-xs font-normal text-slate-400">({row.start_time} - {row.end_time})</span>
                     </td>
                     <td className="py-4">
                       {getStatusBadge(row.status)}

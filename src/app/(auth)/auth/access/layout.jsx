@@ -2,6 +2,8 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import { isAdmin } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 const AccessLayout = async ({ children }) => {
   const authenticated = await isAdmin();
   
