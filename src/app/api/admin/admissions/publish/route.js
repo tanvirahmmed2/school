@@ -45,6 +45,11 @@ export async function POST(request) {
         sa.birth_regi_number,
         sa.guardian_name,
         sa.guardian_phone,
+        sa.image,
+        sa.image_id,
+        sa.signature,
+        sa.signature_id,
+        sa.signatre_id,
         c.name AS class_name,
         c.numeric_name AS class_numeric_name
       FROM accepted_admissions aa
@@ -163,8 +168,13 @@ export async function POST(request) {
             is_registered = FALSE,
             verification_code = $10,
             verification_code_expires = $11,
+            image = $12,
+            image_id = $13,
+            signature = $14,
+            signature_id = $15,
+            signatre_id = $16,
             updated_at = CURRENT_TIMESTAMP
-          WHERE id = $12
+          WHERE id = $17
         `, [
           cand.applicant_name,
           cand.phone,
@@ -177,6 +187,11 @@ export async function POST(request) {
           regNo,
           verificationCode,
           codeExpires,
+          cand.image,
+          cand.image_id,
+          cand.signature,
+          cand.signature_id,
+          cand.signatre_id || cand.signature_id,
           studentId
         ]);
 
@@ -200,8 +215,8 @@ export async function POST(request) {
           INSERT INTO students (
             name, email, phone, registration_number, class_id, date_of_birth, address,
             gender, birth_certificate_number, parents_info, is_active, is_registered,
-            verification_code, verification_code_expires
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12)
+            verification_code, verification_code_expires, image, image_id, signature, signature_id, signatre_id
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12, $13, $14, $15, $16, $17)
           RETURNING id
         `, [
           cand.applicant_name,
@@ -215,7 +230,12 @@ export async function POST(request) {
           cand.birth_regi_number,
           parentsInfo,
           verificationCode,
-          codeExpires
+          codeExpires,
+          cand.image,
+          cand.image_id,
+          cand.signature,
+          cand.signature_id,
+          cand.signatre_id || cand.signature_id
         ]);
 
         studentId = studentRes.rows[0].id;

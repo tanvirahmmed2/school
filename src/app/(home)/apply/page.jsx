@@ -79,7 +79,7 @@ const ApplyPage = () => {
             </p>
           </div>
           <Link
-            href="/auth/student/registration"
+            href="/admission"
             className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-sky-950 font-extrabold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
           >
             <span>Fill Application Form</span>

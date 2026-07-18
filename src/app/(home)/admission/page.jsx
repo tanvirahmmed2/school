@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FiCheckCircle, FiFileText, FiClock, FiDollarSign, FiArrowRight, FiLayers, FiCalendar } from 'react-icons/fi';
+import Life from '@/component/pages/home/Life';
 
 const AdmissionPage = () => {
   const [circulars, setCirculars] = useState([]);
@@ -31,20 +32,7 @@ const AdmissionPage = () => {
     fetchActiveCirculars();
   }, []);
 
-  const criteria = [
-    {
-      title: 'Academic Standing',
-      detail: 'Minimum GPA of 3.50 in secondary and higher school certificates or equivalent international courses.',
-    },
-    {
-      title: 'Entrance Evaluation',
-      detail: 'Successful completion of capability tests covering fundamental mathematics, logical reasoning, and basic coding.',
-    },
-    {
-      title: 'Documentation & Age limits',
-      detail: 'Birth registration certificate matching selected circular target age bracket limits, passport-size photographs, and school transcripts.',
-    }
-  ];
+
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
@@ -114,85 +102,7 @@ const AdmissionPage = () => {
           )}
         </div>
 
-        {/* Content Section: Requirements & Timeline */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12">
-          {/* Column 1: Entry Requirements */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 hover:shadow-xs transition-shadow md:col-span-2 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-650 flex items-center justify-center text-lg">
-                  <FiCheckCircle />
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-lg">Entry Criteria</h3>
-              </div>
-              <div className="flex flex-col gap-5">
-                {criteria.map((item, idx) => (
-                  <div key={idx} className="flex gap-4 items-start">
-                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-655 text-slate-600 shrink-0 mt-0.5">
-                      {idx + 1}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-slate-800 text-sm">{item.title}</span>
-                      <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-0.5">{item.detail}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-8 pt-4 border-t border-slate-50">
-              <Link
-                href="/admission/apply"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-850 transition-colors"
-              >
-                <span>View Generic Form</span>
-                <FiArrowRight />
-              </Link>
-            </div>
-          </div>
-
-          {/* Column 2: Tuition Fees overview */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 hover:shadow-xs transition-shadow flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-650 flex items-center justify-center text-lg">
-                  <FiDollarSign />
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-lg">Tuition Costs</h3>
-              </div>
-              <div className="flex flex-col gap-4 text-xs leading-relaxed">
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-slate-800">Enrollment Security</span>
-                  <p className="text-slate-500 text-[11px]">A one-time deposit of $150 covers administrative setup registration fees.</p>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-slate-800">Term Costs</span>
-                  <p className="text-slate-500 text-[11px]">Tuition fee covers courses, labs, and lms resources per billing semester.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Banner */}
-        <div className="bg-gradient-to-tr from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-800/10 via-transparent to-transparent"></div>
-          <div className="flex flex-col gap-2 relative z-10">
-            <h2 className="text-xl md:text-2xl font-black tracking-tight">
-              Ready to submit your application?
-            </h2>
-            <p className="text-sky-200 text-xs md:text-sm max-w-md mx-auto leading-relaxed">
-              Enroll today in Fontana. Processing admissions candidates registry updates takes less than 3 business days.
-            </p>
-          </div>
-          <Link
-            href="/admission/apply"
-            className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-sky-950 font-extrabold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
-          >
-            <FiFileText />
-            <span>Open Candidate Application</span>
-            <FiArrowRight />
-          </Link>
-        </div>
+        <Life/>
       </div>
     </div>
   );

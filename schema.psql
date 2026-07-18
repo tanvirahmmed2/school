@@ -419,6 +419,11 @@ CREATE TABLE IF NOT EXISTS students (
     verification_code_expires TIMESTAMPTZ,
     is_active BOOLEAN DEFAULT FALSE,
     is_registered BOOLEAN DEFAULT FALSE,
+    image TEXT,
+    image_id VARCHAR(255),
+    signature TEXT,
+    signature_id VARCHAR(255),
+    signatre_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -1214,6 +1219,11 @@ CREATE TABLE IF NOT EXISTS student_admissions (
     guardian_name VARCHAR(255) NOT NULL,
     guardian_phone VARCHAR(50) NOT NULL,
     birth_regi_number VARCHAR(100),
+    image TEXT,
+    image_id VARCHAR(255),
+    signature TEXT,
+    signature_id VARCHAR(255),
+    signatre_id VARCHAR(255),
     status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Rejected')),
     applied_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

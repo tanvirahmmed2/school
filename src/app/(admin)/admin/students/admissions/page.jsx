@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiUsers, FiCheck, FiX, FiLayers, FiCalendar, FiClock, FiChevronRight } from 'react-icons/fi';
+import { FiUsers, FiCheck, FiX, FiLayers, FiCalendar, FiClock, FiChevronRight, FiSearch } from 'react-icons/fi';
+import Link from 'next/link';
 
 const AdmissionsPage = () => {
   const [admissions, setAdmissions] = useState([]);
@@ -161,10 +162,17 @@ const AdmissionsPage = () => {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/admin/students/admissions/applicant?id=${adm.id}`}
+                            className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all"
+                            title="Preview Applicant Info"
+                          >
+                            <FiSearch className="text-sm" />
+                          </Link>
                           <button
                             disabled={processingId !== null}
                             onClick={() => handleProcessAdmission(adm.id, 'Approved')}
-                            className="p-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all cursor-pointer"
+                            className="p-2 bg-green-55 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all cursor-pointer"
                             title="Approve Admission"
                           >
                             <FiCheck className="text-sm" />
@@ -202,6 +210,7 @@ const AdmissionsPage = () => {
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applied Target</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Processed Date</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -232,6 +241,15 @@ const AdmissionsPage = () => {
                       }`}>
                         {adm.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link
+                        href={`/admin/students/admissions/applicant?id=${adm.id}`}
+                        className="inline-flex p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all"
+                        title="Preview Applicant Info"
+                      >
+                        <FiSearch className="text-sm" />
+                      </Link>
                     </td>
                   </tr>
                 ))}

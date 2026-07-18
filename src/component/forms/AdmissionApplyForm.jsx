@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FiUser, FiMail, FiPhone, FiCalendar, FiMapPin, FiLayers, FiAward, FiBook } from 'react-icons/fi';
+import { toast } from 'react-hot-toast';
 
 const AdmissionApplyForm = ({ 
   circulars, 
@@ -23,8 +24,25 @@ const AdmissionApplyForm = ({
     previous_school: '',
     guardian_name: '',
     guardian_phone: '',
-    birth_regi_number: ''
+    birth_regi_number: '',
+    image: '',
+    signature: ''
   });
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, [name]: reader.result }));
+      };
+      reader.onerror = () => {
+        toast.error(`Failed to read ${name} file.`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     if (selectedCircular) {
@@ -37,6 +55,14 @@ const AdmissionApplyForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!form.image) {
+      toast.error('Candidate profile image is required.');
+      return;
+    }
+    if (!form.signature) {
+      toast.error('Candidate signature is required.');
+      return;
+    }
     onSubmit(form);
   };
 
@@ -223,6 +249,70 @@ const AdmissionApplyForm = ({
               onChange={(e) => setForm((p) => ({ ...p, guardian_phone: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
             />
+          </div>
+        </div>
+      </div>
+
+      {/* Document Uploads */}
+      <div className="border-t border-slate-50 pt-4 mt-2">
+        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">3. Candidate Documents</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Image Upload */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Candidate Image (JPEG/PNG) *
+            </label>
+            <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl items-center text-center">
+              {form.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={form.image}
+                  alt="Candidate Preview"
+                  className="w-24 h-24 rounded-xl object-cover border border-slate-200 shadow-sm"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold">
+                  No Image Selected
+                </div>
+              )}
+              <input
+                type="file"
+                name="image"
+                required
+                accept="image/jpeg,image/png"
+                onChange={handleFileChange}
+                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+              />
+            </div>
+          </div>
+
+          {/* Signature Upload */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Candidate Signature (JPEG/PNG) *
+            </label>
+            <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl items-center text-center">
+              {form.signature ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={form.signature}
+                  alt="Signature Preview"
+                  className="w-full max-w-[150px] h-16 rounded-xl object-contain border border-slate-200 shadow-sm bg-white p-1"
+                />
+              ) : (
+                <div className="w-32 h-16 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold">
+                  No Signature Selected
+                </div>
+              )}
+              <input
+                type="file"
+                name="signature"
+                required
+                accept="image/jpeg,image/png"
+                onChange={handleFileChange}
+                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+              />
+            </div>
           </div>
         </div>
       </div>
