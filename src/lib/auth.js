@@ -97,5 +97,62 @@ export async function isStudent() {
   }
 }
 
+export async function isStaff() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-staff')?.value;
+    if (!token) return false;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return false;
+
+    const result = await query('SELECT id, role, is_active, is_registered FROM staffs WHERE id = $1', [decoded.id]);
+    if (result.rows.length === 0) return false;
+
+    const staff = result.rows[0];
+    return !!(staff.is_active && staff.is_registered);
+  } catch (error) {
+    console.error('Error verifying staff authorization:', error);
+    return false;
+  }
+}
+
+export async function getStaffUser() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-staff')?.value;
+    if (!token) return null;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return null;
+
+    const result = await query('SELECT id, name, email, role, is_active, is_registered FROM staffs WHERE id = $1', [decoded.id]);
+    if (result.rows.length === 0) return null;
+
+    const staff = result.rows[0];
+    if (staff.is_active && staff.is_registered) {
+      return staff;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function isCashier() {
+  const staff = await getStaffUser();
+  return staff?.role === 'cashier';
+}
+
+export async function isRegister() {
+  const staff = await getStaffUser();
+  return staff?.role === 'register' || staff?.role === 'registrar';
+}
+
+export async function isGeneralStaff() {
+  const staff = await getStaffUser();
+  return staff?.role === 'staff';
+}
+
 
 

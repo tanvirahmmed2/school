@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isCashier } from '@/lib/auth';
 
 // GET general transaction ledger
 export async function GET() {
   try {
-    const authenticated = await isAdmin();
-    if (!authenticated) {
+    const authorized = (await isAdmin()) || (await isCashier());
+    if (!authorized) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }
 

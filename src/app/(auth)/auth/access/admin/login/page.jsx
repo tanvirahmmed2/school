@@ -3,9 +3,9 @@
 import React from 'react';
 import Link from 'next/link';
 import AdminLoginForm from '@/component/forms/AdminLoginForm';
-import { FiHome, FiLock } from 'react-icons/fi';
+import { FiHome } from 'react-icons/fi';
 
-const AccessLogin = () => {
+const AdminLogin = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-50">
       {/* Subtle light background decorations */}
@@ -14,7 +14,6 @@ const AccessLogin = () => {
 
       <div className="w-full max-w-110 animate-fade-up z-10">
         <div className="flex flex-col items-center mb-8 text-center">
-          
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Administrative Portal</h1>
           <p className="text-sm text-slate-500 max-w-70">Authorized personnel login only. System access is monitored.</p>
         </div>
@@ -25,7 +24,7 @@ const AccessLogin = () => {
         <div className="w-full text-center mt-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors py-1.5 px-3 rounded-full hover:bg-slate-100"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-655 transition-colors py-1.5 px-3 rounded-full hover:bg-slate-100"
           >
             <FiHome className="text-sm" /> Return to Home
           </Link>
@@ -35,4 +34,4 @@ const AccessLogin = () => {
   );
 };
 
-export default AccessLogin;
+export default AdminLogin;

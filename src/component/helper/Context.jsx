@@ -11,6 +11,7 @@ export const ContextProvider = ({ children }) => {
   const [adminSidebar, setAdminSidebar] = useState(false);
   const [TeacherSidebar, setTeacherSidebar] = useState(false);
   const [studentSidebar, setStudentSidebar] = useState(false);
+  const [staffSidebar, setStaffSidebar] = useState(false);
 
   const [classes, setClasses]=useState([])
   const [clubs, setClubs]=useState([])
@@ -56,6 +57,8 @@ export const ContextProvider = ({ children }) => {
     setTeacherSidebar,
     studentSidebar,
     setStudentSidebar,
+    staffSidebar,
+    setStaffSidebar,
     classes, setClasses,clubs, setClubs
   };
 

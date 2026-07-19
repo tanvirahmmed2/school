@@ -32,11 +32,14 @@ const Navbar = () => {
         </Link>
 
         <section className="hidden md:flex flex-row items-center justify-end gap-5">
-          <div className="w-auto flex flex-row items-center justify-center gap-4 text-sm font-semibold text-slate-650">
-            <Link href={'/apply'} className={`transition-colors hover:text-amber-100 ${isActive('/apply') ? 'text-sky-600 font-bold' : ''}`}>
+          <div className="w-auto flex flex-row items-center justify-center gap-4 text-sm font-semibold">
+            <Link href={'/apply'} className={`transition-colors text-white hover:text-amber-100 ${isActive('/apply') ? 'text-amber-200 font-bold' : ''}`}>
               Apply
             </Link>
-            <Link href={'/auth'} className="text-amber-600 transition-all bg-white hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs">
+            <Link href={'/auth/student'} className={`transition-colors text-white hover:text-amber-100 ${isActive('/auth/student') ? 'text-amber-200 font-bold' : ''}`}>
+              Student Portal
+            </Link>
+            <Link href={'/auth/access'} className="text-amber-600 transition-all bg-white hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs">
               Login
             </Link>
           </div>

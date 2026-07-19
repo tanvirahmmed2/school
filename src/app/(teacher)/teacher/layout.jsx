@@ -15,7 +15,7 @@ const TeacherLayout = async ({children}) => {
   const authenticated = await isTeacher();
 
   if (!authenticated) {
-    redirect('/auth/teacher/login');
+    redirect('/auth/access/teacher/login');
   }
 
   return (

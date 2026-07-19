@@ -124,7 +124,7 @@ export async function POST(request) {
 
     // Construct the verification URL (use NEXT_PUBLIC_BASE_URL if set, else fall back)
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const verificationUrl = `${baseUrl}/auth/teacher/verify?token=${verificationToken}`;
+    const verificationUrl = `${baseUrl}/auth/access/teacher/verify?token=${verificationToken}`;
 
     // Send verification email via Brevo (non-blocking — don't fail the request if email fails)
     try {

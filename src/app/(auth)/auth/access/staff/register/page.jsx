@@ -4,15 +4,15 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
-import { FiMail, FiUserCheck, FiLock, FiPhone, FiMapPin, FiBriefcase, FiArrowRight, FiUserPlus } from 'react-icons/fi';
+import { FiMail, FiLock, FiMapPin, FiArrowRight, FiUserPlus } from 'react-icons/fi';
 
-const TeacherRegistration = () => {
+const StaffRegistration = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   
-  // Setup fields
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('');
   const [designation, setDesignation] = useState('');
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +20,6 @@ const TeacherRegistration = () => {
   const [step, setStep] = useState(1); // 1 = Verify email, 2 = Complete setup
   const [loading, setLoading] = useState(false);
 
-  // Step 1: Verify pre-created Teacher Email
   const handleVerifyEmail = async (e) => {
     e.preventDefault();
     if (!email) {
@@ -30,7 +29,7 @@ const TeacherRegistration = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/teachers/register', {
+      const response = await fetch('/api/staff/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim() }),
@@ -43,9 +42,10 @@ const TeacherRegistration = () => {
       }
 
       toast.success(data.message || 'Email verified. Complete your profile details below.');
-      setName(data.paylod.teacher.name);
-      setPhone(data.paylod.teacher.number);
-      setDesignation(data.paylod.teacher.designation);
+      setName(data.paylod.staff.name);
+      setPhone(data.paylod.staff.number);
+      setRole(data.paylod.staff.role);
+      setDesignation(data.paylod.staff.designation || 'Staff');
       setStep(2);
     } catch (err) {
       toast.error(err.message);
@@ -54,7 +54,6 @@ const TeacherRegistration = () => {
     }
   };
 
-  // Step 2: Complete profile registration details
   const handleCompleteSetup = async (e) => {
     e.preventDefault();
     
@@ -65,7 +64,7 @@ const TeacherRegistration = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/teachers/register', {
+      const response = await fetch('/api/staff/register', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -82,7 +81,7 @@ const TeacherRegistration = () => {
       }
 
       toast.success(data.message || 'Account setup completed successfully!');
-      router.push('/auth/teacher/login');
+      router.push('/auth/access/staff/login');
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -91,14 +90,14 @@ const TeacherRegistration = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900 relative px-4 py-12 overflow-hidden">
+    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-50">
       {/* Background blobs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-indigo-500/5 blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-sky-500/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-cyan-500/5 blur-[100px] pointer-events-none"></div>
 
       <div className="w-full max-w-140 animate-fade-up z-10">
         <div className="flex flex-col items-center mb-8 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Teacher Account Setup</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Staff Account Setup</h1>
           <p className="text-sm text-slate-500 max-w-100">
             {step === 1 
               ? 'Use the secure verification link emailed to you by administration to set up your account.' 
@@ -110,13 +109,13 @@ const TeacherRegistration = () => {
           {step === 1 ? (
             <form onSubmit={handleVerifyEmail} className="w-full max-w-110 mx-auto flex flex-col gap-5">
               {/* Primary flow notice */}
-              <div className="flex items-start gap-3 p-3.5 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-0.5">
-                  <FiMail className="text-indigo-600 text-xs" />
+              <div className="flex items-start gap-3 p-3.5 bg-sky-50 border border-sky-100 rounded-2xl">
+                <div className="w-7 h-7 rounded-full bg-sky-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <FiMail className="text-sky-600 text-xs" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-indigo-700">Check Your Email First</p>
-                  <p className="text-[11px] text-indigo-600 mt-0.5 leading-relaxed">
+                  <p className="text-xs font-bold text-sky-700">Check Your Email First</p>
+                  <p className="text-[11px] text-sky-655 mt-0.5 leading-relaxed">
                     The administration sent a verification link to your email. Use that link to set up your profile securely. This form is a manual fallback.
                   </p>
                 </div>
@@ -130,11 +129,11 @@ const TeacherRegistration = () => {
                 <input
                   type="email"
                   required
-                  placeholder="teacher@school.com"
+                  placeholder="staff@school.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10"
                 />
               </div>
 
@@ -142,7 +141,7 @@ const TeacherRegistration = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -170,8 +169,8 @@ const TeacherRegistration = () => {
                   <p className="text-xs font-bold text-slate-700 mt-0.5">{phone}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Designation</span>
-                  <p className="text-xs font-bold text-slate-700 mt-0.5">{designation}</p>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Role / Designation</span>
+                  <p className="text-xs font-bold text-slate-700 mt-0.5 capitalize">{role} ({designation})</p>
                 </div>
               </div>
 
@@ -187,7 +186,7 @@ const TeacherRegistration = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   disabled={loading}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 resize-none"
                 />
               </div>
 
@@ -203,7 +202,7 @@ const TeacherRegistration = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5"
                 />
               </div>
 
@@ -211,7 +210,7 @@ const TeacherRegistration = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -227,10 +226,10 @@ const TeacherRegistration = () => {
 
         <div className="w-full text-center mt-6">
           <Link
-            href="/auth/teacher/login"
-            className="text-xs font-semibold text-indigo-555 hover:text-indigo-600 transition-colors py-1.5 px-3 rounded-full hover:bg-indigo-50 text-indigo-650 text-indigo-600"
+            href="/auth/access/staff/login"
+            className="text-xs font-semibold text-sky-555 hover:text-sky-600 transition-colors py-1.5 px-3 rounded-full hover:bg-sky-50 text-sky-650 text-sky-600"
           >
-            Back to Teacher Login
+            Back to Staff Login
           </Link>
         </div>
       </div>
@@ -238,4 +237,4 @@ const TeacherRegistration = () => {
   );
 };
 
-export default TeacherRegistration;
+export default StaffRegistration;

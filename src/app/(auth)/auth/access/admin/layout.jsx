@@ -4,7 +4,7 @@ import { isAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-const AccessLayout = async ({ children }) => {
+const AdminAuthLayout = async ({ children }) => {
   const authenticated = await isAdmin();
   
   if (authenticated) {
@@ -16,4 +16,4 @@ const AccessLayout = async ({ children }) => {
   );
 };
 
-export default AccessLayout;
+export default AdminAuthLayout;

@@ -68,7 +68,7 @@ export async function POST(request) {
 
     // Build and send the verification email
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const verificationUrl = `${baseUrl}/auth/teacher/verify?token=${newToken}`;
+    const verificationUrl = `${baseUrl}/auth/access/teacher/verify?token=${newToken}`;
 
     try {
       await sendEmail({

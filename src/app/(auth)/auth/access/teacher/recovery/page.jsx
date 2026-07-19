@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { FiMail, FiKey, FiLock, FiArrowLeft, FiRefreshCw, FiAlertTriangle, FiArrowRight } from 'react-icons/fi';
 
-const AccessRecovery = () => {
+const TeacherRecovery = () => {
   const router = useRouter();
   const [step, setStep] = useState(1); // 1 = Request, 2 = Reset
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ const AccessRecovery = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/recovery', {
+      const response = await fetch('/api/teachers/recovery', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -60,8 +60,8 @@ const AccessRecovery = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/recovery', {
-        method: 'POST',
+      const response = await fetch('/api/teachers/recovery', {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
@@ -78,9 +78,7 @@ const AccessRecovery = () => {
 
       toast.success(data.message || 'Password reset successfully!');
       
-      setTimeout(() => {
-        router.push('/auth/access/login');
-      }, 1500);
+      router.push('/auth/access/teacher/login');
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -89,7 +87,7 @@ const AccessRecovery = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-50">
+    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-55 bg-slate-50">
       {/* Subtle light background decorations */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-blue-500/5 blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
@@ -104,7 +102,7 @@ const AccessRecovery = () => {
                 <FiAlertTriangle className="text-2xl text-amber-600" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Account Recovery</h1>
-              <p className="text-sm text-slate-500 max-w-[320px]">Enter your administrative email to request a secure 6-digit recovery token.</p>
+              <p className="text-sm text-slate-500 max-w-[320px]">Enter your registered email to request a secure 6-digit recovery token.</p>
             </div>
 
             {/* Step 1 Form */}
@@ -112,23 +110,23 @@ const AccessRecovery = () => {
               <form onSubmit={handleRequestToken} className="w-full flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                    <FiMail className="text-sm" /> Admin Email
+                    <FiMail className="text-sm" /> Registered Email
                   </label>
                   <input
                     type="email"
                     required
-                    placeholder="admin@school.com"
+                    placeholder="teacher@school.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-350 border-slate-300 rounded-xl text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -144,8 +142,8 @@ const AccessRecovery = () => {
             {/* Return Link */}
             <div className="w-full text-center mt-6">
               <Link
-                href="/auth/access/login"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors py-1.5 px-3 rounded-full hover:bg-slate-100"
+                href="/auth/access/teacher/login"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-655 transition-colors py-1.5 px-3 rounded-full hover:bg-slate-100"
               >
                 <FiArrowLeft className="text-sm" /> Return to Login
               </Link>
@@ -177,7 +175,7 @@ const AccessRecovery = () => {
                     value={recoveryToken}
                     onChange={(e) => setRecoveryToken(e.target.value)}
                     disabled={loading}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-center tracking-[0.2em] font-bold text-lg text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-center tracking-[0.2em] font-bold text-lg text-slate-900 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                   />
                 </div>
 
@@ -192,7 +190,7 @@ const AccessRecovery = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                   />
                 </div>
 
@@ -207,14 +205,14 @@ const AccessRecovery = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={loading}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-650 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -232,7 +230,7 @@ const AccessRecovery = () => {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors py-1.5 px-3 rounded-full hover:bg-slate-100"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-455 hover:text-slate-655 transition-colors py-1.5 px-3 rounded-full hover:bg-slate-100"
               >
                 <FiArrowLeft className="text-sm" /> Request New Token
               </button>
@@ -244,4 +242,4 @@ const AccessRecovery = () => {
   );
 };
 
-export default AccessRecovery;
+export default TeacherRecovery;

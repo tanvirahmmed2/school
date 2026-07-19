@@ -51,7 +51,7 @@ const Footer = () => {
                             <Link href={'/admission'} className='hover:text-sky-200 transition-colors duration-200'>Admission</Link>
                             <Link href={'/verify-student'} className='hover:text-sky-200 transition-colors duration-200 font-semibold text-emerald-350 text-emerald-300'>Verify Student</Link>
                             <Link href={'/auth/student'} className='hover:text-sky-200 transition-colors duration-200'>Student Portal</Link>
-                            <Link href={'/auth/teacher'} className='hover:text-sky-200 transition-colors duration-200'>Teacher Login</Link>
+                            <Link href={'/auth/access/teacher'} className='hover:text-sky-200 transition-colors duration-200'>Teacher Login</Link>
                             <Link href={'/auth/access'} className='hover:text-sky-200 transition-colors duration-200'>Access</Link>
                         </div>
                     </div>

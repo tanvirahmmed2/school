@@ -37,7 +37,7 @@ const Navbar = () => {
       });
       if (response.ok) {
         toast.success('Logged out successfully.');
-        router.push('/auth/teacher/login');
+        router.push('/auth/access/teacher/login');
       } else {
         toast.error('Failed to log out.');
       }

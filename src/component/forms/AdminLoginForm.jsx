@@ -67,7 +67,7 @@ const AdminLoginForm = () => {
             <FiLock className="text-sm" /> Password
           </label>
           <Link
-            href="/auth/access/recovery"
+            href="/auth/access/admin/recovery"
             className="text-xs font-medium text-blue-500 hover:text-blue-600 transition-colors"
           >
             Forgot Password?

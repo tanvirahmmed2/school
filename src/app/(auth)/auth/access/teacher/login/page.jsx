@@ -34,8 +34,6 @@ const TeacherLogin = () => {
       }
 
       toast.success(data.message || 'Logged in successfully!');
-      
-      // Redirect to teacher dashboard
       router.push('/teacher');
     } catch (err) {
       toast.error(err.message);
@@ -81,8 +79,8 @@ const TeacherLogin = () => {
                   <FiLock className="text-sm" /> Password
                 </label>
                 <Link
-                  href="/auth/teacher/recovery"
-                  className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  href="/auth/access/teacher/recovery"
+                  className="text-xs font-medium text-indigo-650 text-indigo-600 hover:text-indigo-700 transition-colors"
                 >
                   Forgot Password?
                 </Link>
@@ -116,7 +114,7 @@ const TeacherLogin = () => {
             {/* Registration setup link */}
             <div className="text-center text-xs font-semibold text-slate-400 mt-2">
               First time logging in?{' '}
-              <Link href="/auth/teacher/register" className="text-indigo-600 hover:text-indigo-700 transition-colors underline">
+              <Link href="/auth/access/teacher/register" className="text-indigo-600 hover:text-indigo-700 transition-colors underline">
                 Setup your account here
               </Link>
             </div>

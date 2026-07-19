@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister, isCashier } from '@/lib/auth';
 
 export async function PUT(request) {
   try {
-    const authenticated = await isAdmin();
-    if (!authenticated) {
+    const authorized = (await isAdmin()) || (await isRegister()) || (await isCashier());
+    if (!authorized) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }
 

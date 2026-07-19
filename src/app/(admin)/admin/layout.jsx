@@ -10,7 +10,7 @@ const AdminLayout = async ({ children }) => {
   const authenticated = await isAdmin();
 
   if (!authenticated) {
-    redirect('/auth/access/login');
+    redirect('/auth/access/admin/login');
   }
 
   return (

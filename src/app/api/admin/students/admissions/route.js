@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
 // GET Admissions (Admin only)
 export async function GET(request) {
   try {
-    const authenticated = await isAdmin();
-    if (!authenticated) {
+    const authorized = (await isAdmin()) || (await isRegister());
+    if (!authorized) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }
 
@@ -216,8 +216,8 @@ export async function POST(request) {
 // PUT Approve/Reject Admission (Admin only)
 export async function PUT(request) {
   try {
-    const authenticated = await isAdmin();
-    if (!authenticated) {
+    const authorized = (await isAdmin()) || (await isRegister());
+    if (!authorized) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }
 

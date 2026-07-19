@@ -311,12 +311,19 @@ const Sidebar = () => {
         {/* Footer Actions inside Drawer */}
         <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-slate-100">
           <Link
-            href="/auth"
+            href="/auth/student"
             onClick={closeSidebar}
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-sm transition-colors"
           >
+            <span>Student Portal</span>
+          </Link>
+          <Link
+            href="/auth/access"
+            onClick={closeSidebar}
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition-colors"
+          >
             <FiLogIn />
-            <span>Portal Login</span>
+            <span>Login</span>
           </Link>
           <Link
             href="/auth/student/registration"

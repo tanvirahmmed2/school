@@ -17,7 +17,7 @@ const Navbar = () => {
       });
       if (response.ok) {
         toast.success('Logged out successfully.');
-        router.push('/auth/access/login');
+        router.push('/auth/access/admin/login');
       } else {
         toast.error('Failed to log out.');
       }

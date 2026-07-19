@@ -4,20 +4,17 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
-import { FiShield, FiCheckCircle, FiAlertTriangle, FiClock, FiLock, FiMapPin, FiArrowRight, FiLoader } from 'react-icons/fi';
+import { FiShield, FiCheckCircle, FiAlertTriangle, FiClock, FiLock, FiMapPin, FiArrowRight } from 'react-icons/fi';
 
-// Inner component that uses useSearchParams (must be inside Suspense)
 const VerifyInner = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  // States: 'loading' | 'valid' | 'invalid' | 'expired' | 'used' | 'success'
   const [status, setStatus] = useState('loading');
   const [errorMessage, setErrorMessage] = useState('');
   const [teacher, setTeacher] = useState(null);
 
-  // Step 2 form state
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -96,7 +93,7 @@ const VerifyInner = () => {
 
       setStatus('success');
       toast.success('Account setup complete! Redirecting to login...');
-      setTimeout(() => router.push('/auth/teacher/login'), 2500);
+      setTimeout(() => router.push('/auth/access/teacher/login'), 2500);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -104,7 +101,6 @@ const VerifyInner = () => {
     }
   };
 
-  // ── Loading State ──────────────────────────────────────────────────────────
   if (status === 'loading') {
     return (
       <div className="w-full flex flex-col items-center justify-center gap-5 min-h-[280px]">
@@ -123,7 +119,6 @@ const VerifyInner = () => {
     );
   }
 
-  // ── Error States (invalid / expired / used) ────────────────────────────────
   if (status === 'invalid' || status === 'expired' || status === 'used') {
     const isExpired = status === 'expired';
     const isUsed = status === 'used';
@@ -156,7 +151,7 @@ const VerifyInner = () => {
         <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
           {isUsed ? (
             <Link
-              href="/auth/teacher/login"
+              href="/auth/access/teacher/login"
               className="flex-1 flex items-center justify-center gap-2 py-2.5 px-5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all"
             >
               Go to Login <FiArrowRight />
@@ -171,7 +166,6 @@ const VerifyInner = () => {
     );
   }
 
-  // ── Success State ──────────────────────────────────────────────────────────
   if (status === 'success') {
     return (
       <div className="w-full flex flex-col items-center gap-6 text-center">
@@ -187,10 +181,8 @@ const VerifyInner = () => {
     );
   }
 
-  // ── Valid State — Profile Setup Form ───────────────────────────────────────
   return (
     <div className="w-full flex flex-col gap-6">
-      {/* Verified Identity Badge */}
       <div className="flex items-center gap-3 p-3.5 bg-emerald-50 border border-emerald-100 rounded-2xl">
         <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
           <FiCheckCircle className="text-emerald-600 text-sm" />
@@ -198,12 +190,11 @@ const VerifyInner = () => {
         <div>
           <p className="text-xs font-bold text-emerald-700">Identity Verified</p>
           <p className="text-[11px] text-emerald-600">
-            Welcome, <strong>{teacher?.name}</strong>. Complete your credentials below.
+            Welcome, <strong>{teacher?.name}</strong>. Complete your credentials details below.
           </p>
         </div>
       </div>
 
-      {/* Pre-filled read-only info */}
       <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
         <div>
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Full Name</span>
@@ -223,9 +214,7 @@ const VerifyInner = () => {
         </div>
       </div>
 
-      {/* Setup Form */}
       <form onSubmit={handleCompleteSetup} className="flex flex-col gap-4">
-        {/* Residential Address */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
             <FiMapPin className="text-slate-400" /> Residential Address
@@ -241,7 +230,6 @@ const VerifyInner = () => {
           />
         </div>
 
-        {/* Password */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
             <FiLock className="text-slate-400" /> Choose Password
@@ -257,7 +245,6 @@ const VerifyInner = () => {
           />
         </div>
 
-        {/* Confirm Password */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
             <FiLock className="text-slate-400" /> Confirm Password
@@ -269,7 +256,7 @@ const VerifyInner = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={submitting}
-            className={`w-full px-3.5 py-2.5 bg-slate-50 border rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:ring-4 ${
+            className={`w-full px-3.5 py-2.5 bg-slate-55 border rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:ring-4 ${
               confirmPassword && password !== confirmPassword 
                 ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10' 
                 : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/5'
@@ -298,16 +285,14 @@ const VerifyInner = () => {
   );
 };
 
-// Main page component with Suspense boundary for useSearchParams
 const TeacherVerifyPage = () => {
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900 relative px-4 py-12 overflow-hidden">
+    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 bg-slate-50 text-slate-900 relative px-4 py-12 overflow-hidden">
       {/* Background blobs */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-indigo-500/5 blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
 
       <div className="w-full max-w-[520px] animate-fade-up z-10">
-        {/* Header */}
         <div className="flex flex-col items-center mb-8 text-center">
           <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center mb-4 shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
             <FiShield className="text-white text-2xl" />
@@ -318,7 +303,6 @@ const TeacherVerifyPage = () => {
           </p>
         </div>
 
-        {/* Card */}
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)]">
           <Suspense fallback={
             <div className="w-full flex flex-col items-center justify-center gap-5 min-h-[280px]">
@@ -332,8 +316,8 @@ const TeacherVerifyPage = () => {
 
         <div className="w-full text-center mt-6">
           <Link
-            href="/auth/teacher/login"
-            className="text-xs font-semibold hover:text-indigo-600 transition-colors py-1.5 px-3 rounded-full hover:bg-indigo-50 text-indigo-600"
+            href="/auth/access/teacher/login"
+            className="text-xs font-semibold hover:text-indigo-605 transition-colors py-1.5 px-3 rounded-full hover:bg-indigo-50 text-indigo-600"
           >
             Already have an account? Go to Login
           </Link>
