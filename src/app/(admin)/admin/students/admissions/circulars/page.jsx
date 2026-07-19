@@ -178,6 +178,7 @@ const CircularsPage = () => {
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Circular Title</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Target Class</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Admission Fee</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Age Limits</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Timeline Dates</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Status</th>
@@ -191,10 +192,19 @@ const CircularsPage = () => {
                       <div>
                         <p className="text-sm font-bold text-slate-800">{c.title}</p>
                         <p className="text-[9px] text-slate-400 font-bold mt-0.5">Birth Registration Requirement: {c.birth_regi_number || 'None'}</p>
+                        {c.description && (
+                          <div 
+                            className="text-[10px] text-slate-400 mt-1 max-w-[250px] line-clamp-1 italic font-normal" 
+                            dangerouslySetInnerHTML={{ __html: c.description.replace(/<[^>]*>/g, ' ') }} 
+                          />
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-xs font-bold text-blue-600">
                       Class: {c.class_name}
+                    </td>
+                    <td className="px-6 py-4 text-xs font-extrabold text-slate-750">
+                      ${parseFloat(c.fees || 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-650 font-bold">
                       {c.min_age !== null || c.max_age !== null ? (

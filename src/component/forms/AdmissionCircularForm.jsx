@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submitting }) => {
   const [form, setForm] = useState({
@@ -11,7 +12,9 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
     birth_regi_number: '',
     admission_start_date: '',
     finish_date: '',
-    result_date: ''
+    result_date: '',
+    fees: '0.00',
+    description: ''
   });
 
   useEffect(() => {
@@ -29,7 +32,9 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
         birth_regi_number: initialData.birth_regi_number || '',
         admission_start_date: formatDate(initialData.admission_start_date),
         finish_date: formatDate(initialData.finish_date),
-        result_date: formatDate(initialData.result_date)
+        result_date: formatDate(initialData.result_date),
+        fees: initialData.fees !== undefined && initialData.fees !== null ? initialData.fees : '0.00',
+        description: initialData.description || ''
       });
     } else {
       setForm({
@@ -40,7 +45,9 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
         birth_regi_number: '',
         admission_start_date: '',
         finish_date: '',
-        result_date: ''
+        result_date: '',
+        fees: '0.00',
+        description: ''
       });
     }
   }, [initialData]);
@@ -145,6 +152,28 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           value={form.result_date}
           onChange={(e) => setForm((p) => ({ ...p, result_date: e.target.value }))}
           className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+        />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admission Fees ($) *</label>
+        <input
+          type="number"
+          step="0.01"
+          required
+          placeholder="e.g. 100.00"
+          value={form.fees}
+          onChange={(e) => setForm((p) => ({ ...p, fees: e.target.value }))}
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+        />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Description</label>
+        <TiptapEditor
+          value={form.description}
+          onChange={(val) => setForm((p) => ({ ...p, description: val }))}
+          placeholder="Write details about requirements, syllabus, exam details, etc..."
         />
       </div>
 

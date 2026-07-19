@@ -16,10 +16,15 @@ export async function GET(request) {
 
     if (id) {
       const result = await query(`
-        SELECT sa.*, c.name AS class_name, adm.title AS admission_title 
+        SELECT sa.*, c.name AS class_name, 
+               adm.title AS admission_title,
+               adm.fees AS admission_fees_amount,
+               af.amount AS fee_amount,
+               af.status AS fee_status
         FROM student_admissions sa
         JOIN classes c ON sa.applied_class_id = c.id
         LEFT JOIN admissions adm ON sa.admission_id = adm.id
+        LEFT JOIN admission_fees af ON sa.id = af.student_admission_id
         WHERE sa.id = $1
       `, [id]);
 
@@ -34,10 +39,15 @@ export async function GET(request) {
     }
 
     const result = await query(`
-      SELECT sa.*, c.name AS class_name, adm.title AS admission_title 
+      SELECT sa.*, c.name AS class_name, 
+             adm.title AS admission_title,
+             adm.fees AS admission_fees_amount,
+             af.amount AS fee_amount,
+             af.status AS fee_status
       FROM student_admissions sa
       JOIN classes c ON sa.applied_class_id = c.id
       LEFT JOIN admissions adm ON sa.admission_id = adm.id
+      LEFT JOIN admission_fees af ON sa.id = af.student_admission_id
       ORDER BY sa.applied_date DESC
     `);
 
@@ -180,10 +190,22 @@ export async function POST(request) {
       signaturePublicId
     ]);
 
+    const applicant = result.rows[0];
+    const admissionFeeAmount = circular.fees || 0.00;
+    try {
+      await query(`
+        INSERT INTO admission_fees (student_admission_id, amount, status)
+        VALUES ($1, $2, 'Pending')
+        ON CONFLICT (student_admission_id) DO NOTHING
+      `, [applicant.id, admissionFeeAmount]);
+    } catch (feeErr) {
+      console.error('Failed to create admission fee record:', feeErr);
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Admission candidate application submitted successfully.',
-      paylod: { admission: result.rows[0] }
+      paylod: { admission: applicant }
     });
   } catch (error) {
     console.error('Error submitting admission application:', error);
@@ -216,6 +238,14 @@ export async function PUT(request) {
 
     if (admission.status !== 'Pending') {
       return NextResponse.json({ success: false, error: 'This application has already been processed.' }, { status: 400 });
+    }
+
+    if (status === 'Approved') {
+      const feeCheck = await query('SELECT status FROM admission_fees WHERE student_admission_id = $1', [id]);
+      const feeStatus = feeCheck.rows[0]?.status;
+      if (!feeStatus || (feeStatus.toLowerCase() !== 'paid')) {
+        return NextResponse.json({ success: false, error: 'Only paid candidates are eligible for admission approval. Please mark fee as Paid first.' }, { status: 400 });
+      }
     }
 
     if (status === 'Approved') {

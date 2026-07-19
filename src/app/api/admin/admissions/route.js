@@ -38,7 +38,9 @@ export async function POST(request) {
       birth_regi_number,
       admission_start_date,
       finish_date,
-      result_date
+      result_date,
+      fees,
+      description
     } = body;
 
     if (!title || !class_id || !admission_start_date || !finish_date) {
@@ -48,8 +50,8 @@ export async function POST(request) {
     const result = await query(`
       INSERT INTO admissions (
         title, class_id, min_age, max_age, birth_regi_number, 
-        admission_start_date, finish_date, result_date
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        admission_start_date, finish_date, result_date, fees, description
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *
     `, [
       title.trim(),
@@ -59,7 +61,9 @@ export async function POST(request) {
       birth_regi_number ? birth_regi_number.trim() : null,
       admission_start_date,
       finish_date,
-      result_date || null
+      result_date || null,
+      fees ? parseFloat(fees) : 0.00,
+      description || null
     ]);
 
     // Create a public notice board entry
@@ -103,7 +107,9 @@ export async function PUT(request) {
       birth_regi_number,
       admission_start_date,
       finish_date,
-      result_date
+      result_date,
+      fees,
+      description
     } = body;
 
     if (!id || !title || !class_id || !admission_start_date || !finish_date) {
@@ -120,8 +126,10 @@ export async function PUT(request) {
         admission_start_date = $6,
         finish_date = $7,
         result_date = $8,
+        fees = $9,
+        description = $10,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $9
+      WHERE id = $11
       RETURNING *
     `, [
       title.trim(),
@@ -132,6 +140,8 @@ export async function PUT(request) {
       admission_start_date,
       finish_date,
       result_date || null,
+      fees ? parseFloat(fees) : 0.00,
+      description || null,
       parseInt(id, 10)
     ]);
 

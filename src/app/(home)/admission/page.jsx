@@ -86,7 +86,22 @@ const AdmissionPage = () => {
                           <span>Age limits: <strong className="text-slate-700">{c.min_age || 0} to {c.max_age || '∞'} years</strong></span>
                         </div>
                       ) : null}
+                      {c.fees !== undefined && c.fees !== null && (
+                        <div className="flex items-center gap-1.5 text-blue-600">
+                          <FiDollarSign className="text-blue-500" />
+                          <span>Admission Fee: <strong className="text-blue-700">${parseFloat(c.fees).toFixed(2)}</strong></span>
+                        </div>
+                      )}
                     </div>
+                    {c.description && (
+                      <div className="border-t border-slate-100 pt-2.5 mt-1">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Details & Requirements</p>
+                        <div 
+                          className="prose prose-sm max-w-none text-[11px] text-slate-650 text-slate-650 leading-relaxed font-normal" 
+                          dangerouslySetInnerHTML={{ __html: c.description }} 
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <Link

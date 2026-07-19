@@ -119,6 +119,7 @@ const AdmissionsPage = () => {
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applicant / Birth Reg</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Contact Detail</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applied Class</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Fee Status</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Guardian Info</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                   </tr>
@@ -152,6 +153,20 @@ const AdmissionsPage = () => {
                               Circular: {adm.admission_title}
                             </p>
                           )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div>
+                          <p className="text-xs font-bold text-slate-800">${parseFloat(adm.fee_amount || adm.admission_fees_amount || 0).toFixed(2)}</p>
+                          <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 border ${
+                            adm.fee_status === 'Paid'
+                              ? 'bg-green-50 text-green-600 border-green-100'
+                              : adm.fee_status === 'Cancelled' || adm.fee_status === 'Cancel'
+                              ? 'bg-red-50 text-red-600 border-red-100'
+                              : 'bg-amber-50 text-amber-600 border-amber-100'
+                          }`}>
+                            {adm.fee_status || 'Pending'}
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -208,6 +223,7 @@ const AdmissionsPage = () => {
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applicant</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applied Target</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Admission Fee</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Processed Date</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
@@ -226,6 +242,20 @@ const AdmissionsPage = () => {
                       <span className="text-xs font-semibold text-slate-650 flex items-center gap-1.5">
                         Class: {adm.class_name}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div>
+                        <p className="text-xs font-bold text-slate-800">${parseFloat(adm.fee_amount || adm.admission_fees_amount || 0).toFixed(2)}</p>
+                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 border ${
+                          adm.fee_status === 'Paid'
+                            ? 'bg-green-50 text-green-600 border-green-100'
+                            : adm.fee_status === 'Cancelled' || adm.fee_status === 'Cancel'
+                            ? 'bg-red-50 text-red-600 border-red-100'
+                            : 'bg-amber-50 text-amber-600 border-amber-100'
+                        }`}>
+                          {adm.fee_status || 'Pending'}
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">

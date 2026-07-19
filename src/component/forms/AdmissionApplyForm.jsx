@@ -93,11 +93,25 @@ const AdmissionApplyForm = ({
           </select>
         )}
         {selectedCircular && (
-          <div className="text-[10px] text-slate-400 font-semibold flex flex-wrap gap-x-4 gap-y-1 mt-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-            {selectedCircular.min_age !== null && <div>• Min Age: <strong>{selectedCircular.min_age} years</strong></div>}
-            {selectedCircular.max_age !== null && <div>• Max Age: <strong>{selectedCircular.max_age} years</strong></div>}
-            {selectedCircular.birth_regi_number && <div>• Req Code: <strong>{selectedCircular.birth_regi_number}</strong></div>}
-            <div>• Deadline: <strong>{new Date(selectedCircular.finish_date).toLocaleDateString()}</strong></div>
+          <div className="flex flex-col gap-2.5 mt-1 bg-slate-50 p-3.5 rounded-xl border border-slate-150">
+            <div className="text-[10px] text-slate-400 font-semibold flex flex-wrap gap-x-4 gap-y-1">
+              {selectedCircular.min_age !== null && <div>• Min Age: <strong>{selectedCircular.min_age} years</strong></div>}
+              {selectedCircular.max_age !== null && <div>• Max Age: <strong>{selectedCircular.max_age} years</strong></div>}
+              {selectedCircular.birth_regi_number && <div>• Req Code: <strong>{selectedCircular.birth_regi_number}</strong></div>}
+              <div>• Deadline: <strong>{new Date(selectedCircular.finish_date).toLocaleDateString()}</strong></div>
+              {selectedCircular.fees !== undefined && selectedCircular.fees !== null && (
+                <div>• Admission Fee: <strong className="text-blue-650 font-bold">${parseFloat(selectedCircular.fees).toFixed(2)}</strong></div>
+              )}
+            </div>
+            {selectedCircular.description && (
+              <div className="border-t border-slate-200/60 pt-2.5">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Circular Description / Instructions</p>
+                <div 
+                  className="prose prose-sm max-w-none text-xs text-slate-600 leading-relaxed font-normal" 
+                  dangerouslySetInnerHTML={{ __html: selectedCircular.description }} 
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

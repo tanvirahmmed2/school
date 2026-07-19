@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { 
   FiArrowLeft, FiUser, FiMail, FiPhone, FiCalendar, 
-  FiMapPin, FiAward, FiBook, FiCheck, FiX, FiLayers, FiImage, FiFileText
+  FiMapPin, FiAward, FiBook, FiCheck, FiX, FiLayers, FiImage, FiFileText, FiDollarSign
 } from 'react-icons/fi';
 
 const ApplicantDetailsContent = () => {
@@ -37,6 +37,25 @@ const ApplicantDetailsContent = () => {
     };
     fetchApplicant();
   }, [id]);
+
+  const handleUpdateFeeStatus = async (newFeeStatus) => {
+    try {
+      const res = await fetch('/api/admin/students/admissions/fee-status', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_admission_id: id, status: newFeeStatus })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast.success(data.message || 'Fee status updated successfully!');
+        setApplicant(prev => ({ ...prev, fee_status: newFeeStatus }));
+      } else {
+        throw new Error(data.error || 'Failed to update fee status.');
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   const handleProcess = async (status) => {
     const confirm = window.confirm(`Are you sure you want to ${status.toLowerCase()} this application?`);
@@ -146,6 +165,45 @@ const ApplicantDetailsContent = () => {
                 No Signature Provided
               </div>
             )}
+          </div>
+
+          {/* Admission Fee Card */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col gap-4">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-start flex items-center gap-1.5">
+              <FiDollarSign className="text-xs text-amber-500" /> Admission Fee Status
+            </p>
+            <div className="w-full flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-semibold text-slate-500">Fee Amount:</span>
+                <span className="text-sm font-bold text-slate-800">${parseFloat(applicant.fee_amount || applicant.admission_fees_amount || 0).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-semibold text-slate-500">Status:</span>
+                <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+                  applicant.fee_status === 'Paid'
+                    ? 'bg-green-50 text-green-600 border-green-100'
+                    : applicant.fee_status === 'Cancelled' || applicant.fee_status === 'Cancel'
+                    ? 'bg-red-50 text-red-600 border-red-100'
+                    : 'bg-amber-50 text-amber-600 border-amber-100'
+                }`}>
+                  {applicant.fee_status || 'Pending'}
+                </span>
+              </div>
+              {applicant.status === 'Pending' && (
+                <div className="mt-3 pt-3 border-t border-slate-50 flex flex-col gap-1.5">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Update Payment Status</label>
+                  <select
+                    value={applicant.fee_status || 'Pending'}
+                    onChange={(e) => handleUpdateFeeStatus(e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-blue-500"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
