@@ -790,14 +790,15 @@ const Sidebar = () => {
 
         </div>
 
-        <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-2xl text-center mt-8">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
-            System Status
-          </p>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full shadow-inner">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Online
-          </span>
+        <div className="mt-8">
+          <Link
+            href="/"
+            onClick={() => setAdminSidebar(false)}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-sky-500 to-teal-500 hover:from-sky-600 hover:to-teal-600 text-white text-xs font-bold rounded-xl shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all duration-200 hover:-translate-y-0.5"
+          >
+            <FiHome className="text-sm" />
+            <span>Go to Home Page</span>
+          </Link>
         </div>
       </aside>
     </>

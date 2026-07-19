@@ -72,15 +72,15 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Info label at the bottom */}
-        <div className="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center mt-6">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
-            Portal Status
-          </p>
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Online
-          </span>
+        <div className="mt-6">
+          <Link
+            href="/"
+            onClick={() => setStudentSidebar(false)}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-blue-500 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 transition-all duration-200 hover:-translate-y-0.5"
+          >
+            <FiHome className="text-sm" />
+            <span>Go to Home Page</span>
+          </Link>
         </div>
       </aside>
     </>

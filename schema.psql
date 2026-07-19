@@ -1094,9 +1094,7 @@ CREATE TRIGGER update_assignment_submissions_updated_at
 
 CREATE TABLE IF NOT EXISTS website_settings (
     id BIGSERIAL PRIMARY KEY,
-    school_name VARCHAR(255) NOT NULL,
     site_title VARCHAR(255),
-    logo_url TEXT,
     logo_id VARCHAR(255),
     contact_phone VARCHAR(50),
     contact_email VARCHAR(255),
@@ -1105,8 +1103,6 @@ CREATE TABLE IF NOT EXISTS website_settings (
     twitter_url TEXT,
     instagram_url TEXT,
     youtube_url TEXT,
-    meta_title VARCHAR(255),
-    meta_description TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

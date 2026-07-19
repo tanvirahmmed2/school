@@ -106,14 +106,15 @@ const SettingsPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5 col-span-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">School Name *</label>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">School Name (Configured in Secrets) *</label>
                 <input
                   type="text"
                   name="school_name"
                   value={settings.school_name || ''}
                   onChange={handleChange}
+                  disabled
                   placeholder="e.g. Oakridge International School"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 outline-none cursor-not-allowed"
                 />
               </div>
 
@@ -130,7 +131,7 @@ const SettingsPage = () => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Branding Logo URL</label>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Branding Logo URL (Configured in Secrets)</label>
                 <div className="relative flex items-center">
                   <FiImage className="absolute left-3.5 text-slate-400" />
                   <input
@@ -138,8 +139,9 @@ const SettingsPage = () => {
                     name="logo_url"
                     value={settings.logo_url || ''}
                     onChange={handleChange}
+                    disabled
                     placeholder="https://example.com/logo.png"
-                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 outline-none cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -160,7 +162,7 @@ const SettingsPage = () => {
                     value={settings.contact_email || ''}
                     onChange={handleChange}
                     placeholder="support@oakridge.edu"
-                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-555 transition-colors"
                   />
                 </div>
               </div>
@@ -202,26 +204,28 @@ const SettingsPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5 col-span-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Meta Title Tag</label>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Meta Title Tag (Configured in Secrets)</label>
                 <input
                   type="text"
                   name="meta_title"
                   value={settings.meta_title || ''}
                   onChange={handleChange}
+                  disabled
                   placeholder="e.g. Oakridge Portal - Academic Excellence & Growth"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 outline-none cursor-not-allowed"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5 col-span-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Meta Description Tag</label>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Meta Description Tag (Configured in Secrets)</label>
                 <textarea
                   name="meta_description"
                   value={settings.meta_description || ''}
                   onChange={handleChange}
+                  disabled
                   placeholder="Manage student enrollments, exam records, gradesheets, timetables, and billing files dynamically."
                   rows={3}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 transition-colors resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 outline-none cursor-not-allowed resize-none"
                 />
               </div>
             </div>
