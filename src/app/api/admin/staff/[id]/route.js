@@ -12,7 +12,7 @@ export async function PUT(request, { params }) {
 
     const { id } = await params;
     const body = await request.json();
-    const { name, email, number, role, designation, address, is_active, password } = body;
+    const { name, email, number, role, address, is_active, password, grade_id } = body;
 
     if (!name || !email || !number || !role || is_active === undefined) {
       return NextResponse.json({
@@ -38,34 +38,34 @@ export async function PUT(request, { params }) {
       const hashedPass = await hashPassword(password);
       result = await query(`
         UPDATE staffs 
-        SET name = $1, email = $2, number = $3, role = $4, designation = $5, address = $6, is_active = $7, password_hash = $8, updated_at = CURRENT_TIMESTAMP
+        SET name = $1, email = $2, number = $3, role = $4, address = $5, is_active = $6, password_hash = $7, grade_id = $8, updated_at = CURRENT_TIMESTAMP
         WHERE id = $9
-        RETURNING id, name, email, number, role, designation, is_active, is_registered
+        RETURNING id, name, email, number, role, is_active, is_registered, grade_id
       `, [
         name.trim(),
         emailLower,
         number.trim(),
         role,
-        designation ? designation.trim() : null,
         address ? address.trim() : null,
         is_active,
         hashedPass,
+        grade_id ? parseInt(grade_id, 10) : null,
         parseInt(id, 10)
       ]);
     } else {
       result = await query(`
         UPDATE staffs 
-        SET name = $1, email = $2, number = $3, role = $4, designation = $5, address = $6, is_active = $7, updated_at = CURRENT_TIMESTAMP
+        SET name = $1, email = $2, number = $3, role = $4, address = $5, is_active = $6, grade_id = $7, updated_at = CURRENT_TIMESTAMP
         WHERE id = $8
-        RETURNING id, name, email, number, role, designation, is_active, is_registered
+        RETURNING id, name, email, number, role, is_active, is_registered, grade_id
       `, [
         name.trim(),
         emailLower,
         number.trim(),
         role,
-        designation ? designation.trim() : null,
         address ? address.trim() : null,
         is_active,
+        grade_id ? parseInt(grade_id, 10) : null,
         parseInt(id, 10)
       ]);
     }

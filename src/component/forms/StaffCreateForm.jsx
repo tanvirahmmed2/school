@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiUserPlus, FiMail } from 'react-icons/fi';
@@ -10,9 +10,22 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [role, setRole] = useState('staff');
-  const [designation, setDesignation] = useState('');
+  const [gradeId, setGradeId] = useState('');
+  const [payScales, setPayScales] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [verificationSentTo, setVerificationSentTo] = useState('');
+
+  useEffect(() => {
+    const fetchPayScales = async () => {
+      try {
+        const response = await axios.get('/api/staff-pay-scales');
+        setPayScales(response.data.paylod?.payScales || []);
+      } catch (err) {
+        console.error('Failed to fetch staff pay scales');
+      }
+    };
+    fetchPayScales();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,16 +41,17 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
         email: email.trim(), 
         number: number.trim(), 
         role,
-        designation: designation.trim()
+        grade_id: gradeId || null
       });
 
       toast.success(response.data.message || 'Staff profile placeholder created successfully!');
       const createdEmail = email.trim();
+      setGradeName ? setGradeName('') : null; // ignore or reset locally
       setName('');
       setEmail('');
       setNumber('');
-      setDesignation('');
       setRole('staff');
+      setGradeId('');
       setVerificationSentTo(createdEmail);
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -118,30 +132,35 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
 
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            Designation / Job Title
-          </label>
-          <input
-            type="text"
-            placeholder="e.g. Assistant Cashier / Lead Registrar"
-            value={designation}
-            onChange={(e) => setDesignation(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
             Portal Role *
           </label>
           <select
             required
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+            className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
           >
             <option value="staff">General Staff</option>
             <option value="cashier">Cashier (Finance Desk)</option>
             <option value="register">Registrar (Admissions & Enrollments)</option>
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Salary Pay Grade
+          </label>
+          <select
+            value={gradeId}
+            onChange={(e) => setGradeId(e.target.value)}
+            className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+          >
+            <option value="">Unassigned</option>
+            {payScales.map((scale) => (
+              <option key={scale.id} value={scale.id}>
+                {scale.name} (৳{(parseFloat(scale.basic_salary) + parseFloat(scale.allowance)).toLocaleString()})
+              </option>
+            ))}
           </select>
         </div>
 

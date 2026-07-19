@@ -1266,7 +1266,6 @@ CREATE TABLE IF NOT EXISTS staffs (
     email VARCHAR(255) UNIQUE NOT NULL,
     number VARCHAR(50) NOT NULL,
     role VARCHAR(50) NOT NULL CHECK (role IN ('cashier', 'register', 'staff')),
-    designation VARCHAR(255),
     address TEXT,
     password_hash VARCHAR(255),
     recovery_token VARCHAR(255),
@@ -1277,6 +1276,7 @@ CREATE TABLE IF NOT EXISTS staffs (
     verification_token_expires TIMESTAMPTZ,
     image TEXT,
     image_id VARCHAR(255),
+    grade_id BIGINT REFERENCES staff_pay_scale(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -1741,11 +1741,42 @@ CREATE TABLE IF NOT EXISTS login_logs (
 );
 
 
+-- ============================================================================
+-- STAFF PAY SCALES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff_pay_scale (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    basic_salary NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    allowance NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_staff_pay_scale_updated_at ON staff_pay_scale;
+CREATE TRIGGER update_staff_pay_scale_updated_at
+    BEFORE UPDATE ON staff_pay_scale
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
+-- ============================================================================
+-- STAFF SALARIES TABLE
+-- ============================================================================
 
+CREATE TABLE IF NOT EXISTS staff_salaries (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT REFERENCES staffs(id) ON DELETE CASCADE,
+    month VARCHAR(50) NOT NULL,
+    basic DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    allowance DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    deductions DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
 
-
-
-
-
+DROP TRIGGER IF EXISTS update_staff_salaries_updated_at ON staff_salaries;
+CREATE TRIGGER update_staff_salaries_updated_at
+    BEFORE UPDATE ON staff_salaries
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

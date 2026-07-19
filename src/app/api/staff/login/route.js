@@ -58,7 +58,6 @@ export async function POST(request) {
           email: staff.email,
           number: staff.number,
           role: staff.role,
-          designation: staff.designation,
           address: staff.address,
           is_active: staff.is_active,
           is_registered: staff.is_registered

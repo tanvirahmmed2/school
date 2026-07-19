@@ -14,8 +14,8 @@ export async function GET() {
 
     const result = await query(`
       SELECT 
-        id, name, email, number, role, designation, address, 
-        is_active, is_registered, created_at 
+        id, name, email, number, role, address, 
+        is_active, is_registered, grade_id, created_at 
       FROM staffs 
       ORDER BY name ASC
     `);
@@ -42,7 +42,7 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
-    const { name, email, number, role, designation } = await request.json();
+    const { name, email, number, role, grade_id } = await request.json();
 
     if (!name || !email || !number || !role) {
       return NextResponse.json({
@@ -82,18 +82,18 @@ export async function POST(request) {
 
     const newStaff = await query(`
       INSERT INTO staffs (
-        name, email, number, role, designation, is_active, is_registered, 
-        verification_token, verification_token_expires
-      ) VALUES ($1, $2, $3, $4, $5, FALSE, FALSE, $6, $7)
-      RETURNING id, name, email, number, role, designation, is_active, is_registered
+        name, email, number, role, is_active, is_registered, 
+        verification_token, verification_token_expires, grade_id
+      ) VALUES ($1, $2, $3, $4, FALSE, FALSE, $5, $6, $7)
+      RETURNING id, name, email, number, role, is_active, is_registered, grade_id
     `, [
       name.trim(),
       emailLower,
       number.trim(),
       role,
-      designation ? designation.trim() : null,
       verificationToken,
-      verificationExpires
+      verificationExpires,
+      grade_id ? parseInt(grade_id, 10) : null
     ]);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';

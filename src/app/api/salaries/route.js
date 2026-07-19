@@ -18,20 +18,32 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
 
-    let sql = `
-      SELECT s.*, 
-             t.name as teacher_name
-      FROM salaries s
-      LEFT JOIN teachers t ON s.teacher_id = t.id
-    `;
+    let sql;
+    let result;
 
-    if (type === 'teacher') {
-      sql += ` WHERE s.teacher_id IS NOT NULL`;
+    if (type === 'staff') {
+      sql = `
+        SELECT s.*, 
+               st.name as staff_name,
+               st.role as staff_role
+        FROM staff_salaries s
+        LEFT JOIN staffs st ON s.staff_id = st.id
+        ORDER BY s.id DESC
+      `;
+      result = await query(sql);
+    } else {
+      sql = `
+        SELECT s.*, 
+               t.name as teacher_name
+        FROM salaries s
+        LEFT JOIN teachers t ON s.teacher_id = t.id
+      `;
+      if (type === 'teacher') {
+        sql += ` WHERE s.teacher_id IS NOT NULL`;
+      }
+      sql += ` ORDER BY s.id DESC`;
+      result = await query(sql);
     }
-
-    sql += ` ORDER BY s.id DESC`;
-
-    const result = await query(sql);
     const res_data_784 = { salaries: result.rows };
       return NextResponse.json({
         success: true,

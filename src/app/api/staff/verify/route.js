@@ -13,7 +13,7 @@ export async function GET(request) {
     }
 
     const result = await query(
-      `SELECT id, name, email, number, role, designation, is_registered, verification_token_expires
+      `SELECT id, name, email, number, role, is_registered, verification_token_expires
        FROM staffs
        WHERE verification_token = $1`,
       [token]
@@ -44,8 +44,7 @@ export async function GET(request) {
           name: staff.name,
           email: staff.email,
           number: staff.number,
-          role: staff.role,
-          designation: staff.designation
+          role: staff.role
         }
       }
     }, { status: 200 });

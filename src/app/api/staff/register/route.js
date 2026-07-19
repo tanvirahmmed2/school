@@ -12,7 +12,7 @@ export async function POST(request) {
     }
 
     const result = await query(
-      `SELECT id, name, email, number, role, designation, is_registered, verification_token_expires
+      `SELECT id, name, email, number, role, is_registered, verification_token_expires
        FROM staffs
        WHERE verification_token = $1`,
       [token]
@@ -42,8 +42,7 @@ export async function POST(request) {
           name: staff.name,
           email: staff.email,
           number: staff.number,
-          role: staff.role,
-          designation: staff.designation
+          role: staff.role
         }
       }
     }, { status: 200 });
@@ -99,7 +98,7 @@ export async function PUT(request) {
            verification_token_expires = NULL,
            updated_at = CURRENT_TIMESTAMP
        WHERE verification_token = $3
-       RETURNING id, name, email, role, designation, is_active, is_registered`,
+       RETURNING id, name, email, role, is_active, is_registered`,
       [address.trim(), hashedPass, token]
     );
 

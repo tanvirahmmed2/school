@@ -37,24 +37,25 @@ const Sidebar = () => {
       { label: 'Portal Home', href: '/staff', icon: FiHome }
     ];
 
+    let roleLinks = [];
     if (role === 'cashier') {
-      return [
-        ...base,
+      roleLinks = [
         { label: 'Transaction Desk', href: '/staff/cashier/transactions', icon: FiDollarSign }
       ];
-    }
-
-    if (role === 'register' || role === 'registrar') {
-      return [
-        ...base,
+    } else if (role === 'register' || role === 'registrar') {
+      roleLinks = [
         { label: 'Admissions Registry', href: '/staff/register/admissions', icon: FiUsers }
+      ];
+    } else {
+      roleLinks = [
+        { label: 'Desk Activities', href: '/staff', icon: FiActivity }
       ];
     }
 
-    // general staff / fallback
     return [
       ...base,
-      { label: 'Desk Activities', href: '/staff', icon: FiActivity }
+      ...roleLinks,
+      { label: 'Salary Ledger', href: '/staff/salary', icon: FiDollarSign }
     ];
   };
 
