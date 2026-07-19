@@ -1780,3 +1780,68 @@ DROP TRIGGER IF EXISTS update_staff_salaries_updated_at ON staff_salaries;
 CREATE TRIGGER update_staff_salaries_updated_at
     BEFORE UPDATE ON staff_salaries
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STAFF ATTENDANCE TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff_attendance (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staffs(id) ON DELETE CASCADE,
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    check_in VARCHAR(50),
+    check_out VARCHAR(50),
+    status VARCHAR(50) NOT NULL DEFAULT 'Present',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(staff_id, date)
+);
+
+DROP TRIGGER IF EXISTS update_staff_attendance_updated_at ON staff_attendance;
+CREATE TRIGGER update_staff_attendance_updated_at
+    BEFORE UPDATE ON staff_attendance
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STAFF LEAVES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff_leaves (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staffs(id) ON DELETE CASCADE,
+    type VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_staff_leaves_updated_at ON staff_leaves;
+CREATE TRIGGER update_staff_leaves_updated_at
+    BEFORE UPDATE ON staff_leaves
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STAFF APPLICATIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff_applications (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT REFERENCES staffs(id) ON DELETE CASCADE,
+    type VARCHAR(100) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    details TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_staff_applications_updated_at ON staff_applications;
+CREATE TRIGGER update_staff_applications_updated_at
+    BEFORE UPDATE ON staff_applications
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

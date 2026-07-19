@@ -114,6 +114,8 @@ const Sidebar = () => {
   const staffLinks = [
     { label: 'New Staff Member', href: '/admin/staff/new', icon: FiUserPlus },
     { label: 'Staff Registry', href: '/admin/staff/list', icon: FiUsers },
+    { label: 'Attendance Registry', href: '/admin/staff/attendance', icon: FiCalendar },
+    { label: 'Leave Approvals', href: '/admin/staff/leaves', icon: FiCalendar },
     { label: 'Salary Ledger', href: '/admin/staff/salary', icon: FiDollarSign },
   ];
 

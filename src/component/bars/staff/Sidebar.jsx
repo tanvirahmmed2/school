@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity
+  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -55,6 +55,8 @@ const Sidebar = () => {
     return [
       ...base,
       ...roleLinks,
+      { label: 'My Attendance', href: '/staff/attendance', icon: FiCalendar },
+      { label: 'Leave Applications', href: '/staff/leaves', icon: FiCalendar },
       { label: 'Salary Ledger', href: '/staff/salary', icon: FiDollarSign }
     ];
   };
