@@ -97,12 +97,13 @@ export async function PUT(request, { params }) {
       const dupCert = await query('SELECT id FROM students WHERE LOWER(birth_certificate_number) = LOWER($1) AND id <> $2', [birth_certificate_number.trim(), id]);
       if (dupCert.rows.length > 0) {
         const res_err_3306 = { error: 'A student account with this birth certificate number already exists.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_3306?.error || res_err_3306?.message || 'An error occurred',
-        error: res_err_3306?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 400 });
+        return NextResponse.json({
+          success: false,
+          message: res_err_3306?.error || res_err_3306?.message || 'An error occurred',
+          error: res_err_3306?.error || 'Internal Server Error',
+          paylod: null
+        }, { status: 400 });
+      }
     }
 
     // Check duplicate roll number in class if roll is provided (excluding current student)

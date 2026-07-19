@@ -231,7 +231,6 @@ export async function PUT(request) {
       ]
     );
 
-    const studentId = result.rows[0].id;
     let parentName = parent_name || '';
     let parentContact = parent_contact || '';
 
