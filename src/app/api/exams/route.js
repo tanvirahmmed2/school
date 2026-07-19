@@ -8,15 +8,19 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status'); // 'current', 'upcoming', 'previous'
 
-    let sql = 'SELECT * FROM exams';
+    let sql = `
+      SELECT e.*, c.name AS class_name 
+      FROM exams e
+      LEFT JOIN classes c ON e.class_id = c.id
+    `;
     const params = [];
 
     if (status) {
-      sql += ' WHERE status = $1';
+      sql += ' WHERE e.status = $1';
       params.push(status);
     }
 
-    sql += ' ORDER BY start_date DESC';
+    sql += ' ORDER BY e.start_date DESC';
 
     const result = await query(sql, params);
     const res_data_602 = { exams: result.rows };
@@ -51,10 +55,10 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { name, term, start_date, end_date, status, schedules } = await request.json();
+    const { name, term, start_date, end_date, status, schedules, class_id, exam_fee } = await request.json();
 
-    if (!name || !start_date || !end_date || !status) {
-      const res_err_1964 = { error: 'Name, start date, end date, and status are required fields.' };
+    if (!name || !start_date || !end_date || !status || !class_id) {
+      const res_err_1964 = { error: 'Name, class, start date, end date, and status are required fields.' };
       return NextResponse.json({
         success: false,
         message: res_err_1964?.error || res_err_1964?.message || 'An error occurred',
@@ -65,13 +69,57 @@ export async function POST(request) {
 
     // Insert exam
     const newExamRes = await query(
-      `INSERT INTO exams (name, term, start_date, end_date, status) 
-       VALUES ($1, $2, $3, $4, $5) 
+      `INSERT INTO exams (name, term, start_date, end_date, status, class_id, exam_fee) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7) 
        RETURNING *`,
-      [name.trim(), term ? term.trim() : null, start_date, end_date, status]
+      [
+        name.trim(),
+        term ? term.trim() : null,
+        start_date,
+        end_date,
+        status,
+        parseInt(class_id, 10),
+        exam_fee ? parseFloat(exam_fee) : 0.00
+      ]
     );
 
     const exam = newExamRes.rows[0];
+
+    // Create notice board announcement linking to student exams routine page
+    try {
+      await query(
+        `INSERT INTO notices (title, link, is_pinned) 
+         VALUES ($1, '/student/exams', FALSE)`,
+        [`New Exam Announced: ${name.trim()}`]
+      );
+    } catch (noticeErr) {
+      console.error('Failed to auto-create notice for exam:', noticeErr);
+    }
+
+    // Generate unpaid student fees for active students in class
+    if (exam_fee && parseFloat(exam_fee) > 0) {
+      try {
+        const studentsRes = await query(
+          'SELECT id FROM students WHERE class_id = $1 AND is_active = TRUE',
+          [parseInt(class_id, 10)]
+        );
+
+        for (const student of studentsRes.rows) {
+          await query(
+            `INSERT INTO student_fees (student_id, title, amount, due_date, status) 
+             VALUES ($1, $2, $3, $4, 'Unpaid')`,
+            [
+              student.id,
+              `Exam Fee: ${name.trim()}`,
+              parseFloat(exam_fee),
+              start_date
+            ]
+          );
+        }
+      } catch (feeErr) {
+        console.error('Failed to auto-generate student fees for exam:', feeErr);
+      }
+    }
 
     // If schedule routines were provided, insert them
     if (schedules && Array.isArray(schedules) && schedules.length > 0) {

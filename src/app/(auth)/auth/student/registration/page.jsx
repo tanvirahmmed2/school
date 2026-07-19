@@ -97,6 +97,8 @@ const StudentRegistration = () => {
           date_of_birth: dob,
           address: address.trim(),
           parents_info: parentsInfoStr,
+          parent_name: parentName.trim(),
+          parent_contact: parentContact.trim(),
           birth_certificate_number: birthCert.trim(),
           password,
         }),

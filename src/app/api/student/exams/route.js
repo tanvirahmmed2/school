@@ -50,7 +50,7 @@ export async function GET() {
     // Fetch schedules for student's class
     const schedulesRes = await query(`
       SELECT es.id, es.exam_date, es.start_time, es.end_time, es.room_number,
-             e.name as exam_name, e.term as exam_term, e.status as exam_status,
+             e.name as exam_name, e.term as exam_term, e.status as exam_status, e.exam_fee,
              sub.name as subject_name, sub.code as subject_code
       FROM exam_schedules es
       JOIN exams e ON es.exam_id = e.id

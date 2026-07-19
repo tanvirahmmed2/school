@@ -42,7 +42,7 @@ export async function GET(request) {
       sql += ' WHERE ' + conditions.join(' AND ');
     }
 
-    sql += ' ORDER BY c.numeric_name ASC, sec.name ASC, s.registration_number ASC';
+    sql += ' ORDER BY c.numeric_name ASC, sec.name ASC, COALESCE(s.roll, 999999) ASC, s.registration_number ASC';
 
     const result = await query(sql, params);
     const res_data_1368 = { students: result.rows };
@@ -77,7 +77,7 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { registration_number, class_id, section_id, gender } = await request.json();
+    const { registration_number, class_id, section_id, gender, roll } = await request.json();
 
     if (!registration_number || !class_id) {
       const res_err_2706 = { error: 'Registration number and Target class are required to pre-create account.' };
@@ -124,6 +124,20 @@ export async function POST(request) {
       }
     }
 
+    // Check duplicate roll number in class if roll is provided
+    if (roll !== undefined && roll !== '' && roll !== null) {
+      const parsedRoll = parseInt(roll, 10);
+      const rollCheck = await query('SELECT id FROM students WHERE class_id = $1 AND roll = $2', [class_id, parsedRoll]);
+      if (rollCheck.rows.length > 0) {
+        return NextResponse.json({
+          success: false,
+          message: `Roll number ${parsedRoll} is already assigned to another student in this class.`,
+          error: 'Bad Request',
+          paylod: null
+        }, { status: 400 });
+      }
+    }
+
     // Check duplicate registration number
     const dupCheck = await query('SELECT id FROM students WHERE LOWER(registration_number) = LOWER($1)', [registration_number.trim()]);
     if (dupCheck.rows.length > 0) {
@@ -137,14 +151,15 @@ export async function POST(request) {
     }
 
     const result = await query(
-      `INSERT INTO students (registration_number, class_id, section_id, gender, is_active, is_registered) 
-       VALUES ($1, $2, $3, $4, FALSE, FALSE) 
+      `INSERT INTO students (registration_number, class_id, section_id, gender, is_active, is_registered, roll) 
+       VALUES ($1, $2, $3, $4, FALSE, FALSE, $5) 
        RETURNING *`,
       [
         registration_number.trim(),
         class_id,
         section_id ? parseInt(section_id, 10) : null,
-        gender || null
+        gender || null,
+        roll !== undefined && roll !== '' && roll !== null ? parseInt(roll, 10) : null
       ]
     );
 

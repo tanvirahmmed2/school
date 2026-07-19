@@ -108,6 +108,7 @@ export async function POST(request) {
 // PUT: Complete account setup
 export async function PUT(request) {
   try {
+    const body = await request.json();
     const {
       registration_number,
       name,
@@ -118,8 +119,10 @@ export async function PUT(request) {
       parents_info,
       birth_certificate_number,
       gender,
-      password
-    } = await request.json();
+      password,
+      parent_name,
+      parent_contact
+    } = body;
 
     if (!registration_number || !name || !email || !phone || !date_of_birth || !address || !parents_info || !birth_certificate_number || !password) {
       const res_err_3205 = { error: 'All fields are required to complete registration setup.' };
@@ -227,6 +230,45 @@ export async function PUT(request) {
         registration_number.trim()
       ]
     );
+
+    const studentId = result.rows[0].id;
+    let parentName = parent_name || '';
+    let parentContact = parent_contact || '';
+
+    if (!parentName || !parentContact) {
+      if (parents_info) {
+        const parts = parents_info.split(', ');
+        parts.forEach(p => {
+          if (p.startsWith('Parent Name:')) parentName = p.replace('Parent Name:', '').trim();
+          if (p.startsWith('Contact:')) parentContact = p.replace('Contact:', '').trim();
+        });
+      }
+    }
+
+    // Check if guardian exists for this student
+    const guardianCheck = await query(
+      'SELECT id FROM student_guardians WHERE student_id = $1',
+      [studentId]
+    );
+
+    if (guardianCheck.rows.length > 0) {
+      // Update existing guardian
+      await query(
+        `UPDATE student_guardians 
+         SET name = $1,
+             phone = $2,
+             updated_at = CURRENT_TIMESTAMP
+         WHERE student_id = $3`,
+        [parentName || 'Parent', parentContact || phone, studentId]
+      );
+    } else {
+      // Insert new guardian
+      await query(
+        `INSERT INTO student_guardians (student_id, name, relationship, phone)
+         VALUES ($1, $2, 'Parent', $3)`,
+        [studentId, parentName || 'Parent', parentContact || phone]
+      );
+    }
 
     const res_data_4585 = {
       message: 'Student account setup completed successfully. You can now login.',

@@ -320,6 +320,8 @@ CREATE TABLE IF NOT EXISTS exams (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'upcoming' CHECK (status IN ('current', 'upcoming', 'previous')),
+    class_id BIGINT REFERENCES classes(id) ON DELETE CASCADE,
+    exam_fee NUMERIC(10, 2) DEFAULT 0.00,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -412,6 +414,7 @@ CREATE TABLE IF NOT EXISTS students (
     parents_info TEXT,
     birth_certificate_number VARCHAR(100) UNIQUE,
     gender VARCHAR(20),
+    roll INT,
     password_hash VARCHAR(255),
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,

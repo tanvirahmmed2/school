@@ -31,7 +31,8 @@ export async function PUT(request, { params }) {
       parents_info,
       birth_certificate_number,
       gender,
-      is_active
+      is_active,
+      roll
     } = body;
 
     if (gender && !['Male', 'Female'].includes(gender)) {
@@ -102,6 +103,19 @@ export async function PUT(request, { params }) {
         error: res_err_3306?.error || 'Internal Server Error',
         paylod: null
       }, { status: 400 });
+    }
+
+    // Check duplicate roll number in class if roll is provided (excluding current student)
+    if (roll !== undefined && roll !== '' && roll !== null) {
+      const parsedRoll = parseInt(roll, 10);
+      const rollCheck = await query('SELECT id FROM students WHERE class_id = $1 AND roll = $2 AND id <> $3', [class_id, parsedRoll, id]);
+      if (rollCheck.rows.length > 0) {
+        return NextResponse.json({
+          success: false,
+          message: `Roll number ${parsedRoll} is already assigned to another student in this class.`,
+          error: 'Bad Request',
+          paylod: null
+        }, { status: 400 });
       }
     }
 
@@ -119,8 +133,9 @@ export async function PUT(request, { params }) {
            birth_certificate_number = $10,
            gender = $11,
            is_active = $12,
+           roll = $13,
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $13
+       WHERE id = $14
        RETURNING *`,
       [
         name ? name.trim() : null,
@@ -135,6 +150,7 @@ export async function PUT(request, { params }) {
         birth_certificate_number ? birth_certificate_number.trim() : null,
         gender || null,
         is_active === undefined ? true : is_active,
+        roll !== undefined && roll !== '' && roll !== null ? parseInt(roll, 10) : null,
         id
       ]
     );

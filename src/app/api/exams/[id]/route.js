@@ -7,7 +7,12 @@ export async function GET(request, { params }) {
   try {
     const { id } = await params;
 
-    const examRes = await query('SELECT * FROM exams WHERE id = $1', [id]);
+    const examRes = await query(`
+      SELECT e.*, c.name AS class_name 
+      FROM exams e
+      LEFT JOIN classes c ON e.class_id = c.id
+      WHERE e.id = $1
+    `, [id]);
     if (examRes.rows.length === 0) {
       const res_err_385 = { error: 'Exam not found.' };
       return NextResponse.json({
@@ -63,10 +68,10 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { name, term, start_date, end_date, status, schedules } = await request.json();
+    const { name, term, start_date, end_date, status, schedules, class_id, exam_fee } = await request.json();
 
-    if (!name || !start_date || !end_date || !status) {
-      const res_err_2528 = { error: 'Name, start date, end date, and status are required fields.' };
+    if (!name || !start_date || !end_date || !status || !class_id) {
+      const res_err_2528 = { error: 'Name, class, start date, end date, and status are required fields.' };
       return NextResponse.json({
         success: false,
         message: res_err_2528?.error || res_err_2528?.message || 'An error occurred',
@@ -78,10 +83,19 @@ export async function PUT(request, { params }) {
     // Update exam table
     const updateExamRes = await query(
       `UPDATE exams 
-       SET name = $1, term = $2, start_date = $3, end_date = $4, status = $5, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $6 
+       SET name = $1, term = $2, start_date = $3, end_date = $4, status = $5, class_id = $6, exam_fee = $7, updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $8 
        RETURNING *`,
-      [name.trim(), term ? term.trim() : null, start_date, end_date, status, id]
+      [
+        name.trim(),
+        term ? term.trim() : null,
+        start_date,
+        end_date,
+        status,
+        parseInt(class_id, 10),
+        exam_fee ? parseFloat(exam_fee) : 0.00,
+        id
+      ]
     );
 
     if (updateExamRes.rowCount === 0) {

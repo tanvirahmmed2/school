@@ -56,6 +56,7 @@ export async function POST(request) {
       JOIN student_admissions sa ON aa.student_admission_id = sa.id
       JOIN classes c ON aa.class_id = c.id
       WHERE aa.admission_id = $1
+      ORDER BY sa.applicant_name ASC, aa.id ASC
     `, [admission_id]);
 
     const candidates = acceptedCandidatesRes.rows;
@@ -93,6 +94,13 @@ export async function POST(request) {
 
     const academicYear = new Date().getFullYear();
     let registeredCount = 0;
+
+    // Get current max roll in this class to assign sequential rolls
+    const maxRollRes = await query(
+      'SELECT MAX(roll) as max_roll FROM students WHERE class_id = $1',
+      [circular.class_id]
+    );
+    let nextRoll = parseInt(maxRollRes.rows[0]?.max_roll || 0, 10) + 1;
 
     // 4. Process each accepted candidate
     for (const cand of candidates) {
@@ -173,8 +181,9 @@ export async function POST(request) {
             signature = $14,
             signature_id = $15,
             signatre_id = $16,
+            roll = $17,
             updated_at = CURRENT_TIMESTAMP
-          WHERE id = $17
+          WHERE id = $18
         `, [
           cand.applicant_name,
           cand.phone,
@@ -192,6 +201,7 @@ export async function POST(request) {
           cand.signature,
           cand.signature_id,
           cand.signatre_id || cand.signature_id,
+          nextRoll,
           studentId
         ]);
 
@@ -215,8 +225,9 @@ export async function POST(request) {
           INSERT INTO students (
             name, email, phone, registration_number, class_id, date_of_birth, address,
             gender, birth_certificate_number, parents_info, is_active, is_registered,
-            verification_code, verification_code_expires, image, image_id, signature, signature_id, signatre_id
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12, $13, $14, $15, $16, $17)
+            verification_code, verification_code_expires, image, image_id, signature, signature_id, signatre_id,
+            roll
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12, $13, $14, $15, $16, $17, $18)
           RETURNING id
         `, [
           cand.applicant_name,
@@ -235,7 +246,8 @@ export async function POST(request) {
           cand.image_id,
           cand.signature,
           cand.signature_id,
-          cand.signatre_id || cand.signature_id
+          cand.signatre_id || cand.signature_id,
+          nextRoll
         ]);
 
         studentId = studentRes.rows[0].id;
@@ -288,6 +300,7 @@ export async function POST(request) {
       }
 
       registeredCount++;
+      nextRoll++;
     }
 
     // 4. Update circular to published
