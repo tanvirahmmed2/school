@@ -127,6 +127,16 @@ const AdminCurrentExamsPage = () => {
                           {exam.term}
                         </span>
                       )}
+                      {exam.class_name && (
+                        <span className="font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">
+                          Class: {exam.class_name}
+                        </span>
+                      )}
+                      {exam.exam_fee !== undefined && (
+                        <span className="font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                          Exam Fee: {exam.exam_fee} BDT
+                        </span>
+                      )}
                       <span>
                         Timeline: <strong>{startStr}</strong> to <strong>{endStr}</strong>
                       </span>

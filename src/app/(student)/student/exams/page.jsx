@@ -73,7 +73,14 @@ const ExamsPage = () => {
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div>
                   <h2 className="text-lg font-bold text-slate-800">{group.name}</h2>
-                  <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mt-0.5">Term: {group.term}</p>
+                  <div className="flex flex-wrap items-center gap-3 mt-1.5">
+                    <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Term: {group.term}</p>
+                    {group.schedules[0]?.exam_fee !== undefined && parseFloat(group.schedules[0].exam_fee) > 0 && (
+                      <span className="font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full text-[10px]">
+                        Fee: {parseFloat(group.schedules[0].exam_fee).toFixed(2)} BDT
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                   group.status === 'Active' 

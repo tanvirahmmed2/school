@@ -121,10 +121,20 @@ const AdminUpcomingExamsPage = () => {
                     <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
                       {exam.name}
                     </h2>
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-5050 text-slate-550 text-slate-500 mt-1">
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 mt-1">
                       {exam.term && (
                         <span className="font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                           {exam.term}
+                        </span>
+                      )}
+                      {exam.class_name && (
+                        <span className="font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">
+                          Class: {exam.class_name}
+                        </span>
+                      )}
+                      {exam.exam_fee !== undefined && (
+                        <span className="font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                          Exam Fee: {exam.exam_fee} BDT
                         </span>
                       )}
                       <span>

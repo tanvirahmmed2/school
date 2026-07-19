@@ -11,6 +11,8 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState('upcoming');
+  const [classId, setClassId] = useState('');
+  const [examFee, setExamFee] = useState('0');
 
   const [schedules, setSchedules] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -32,7 +34,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
 
         if (examId) {
           const examRes = await axios.get(`/api/exams/${examId}`);
-          const { exam, schedules: loadedSchedules } = examRes.data;
+          const { exam, schedules: loadedSchedules } = examRes.data.paylod;
           if (exam) {
             setName(exam.name);
             setTerm(exam.term || '');
@@ -40,6 +42,8 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
             setStartDate(new Date(exam.start_date).toISOString().split('T')[0]);
             setEndDate(new Date(exam.end_date).toISOString().split('T')[0]);
             setStatus(exam.status);
+            setClassId(exam.class_id ? exam.class_id.toString() : '');
+            setExamFee(exam.exam_fee ? exam.exam_fee.toString() : '0');
           }
           if (loadedSchedules) {
             setSchedules(
@@ -91,8 +95,8 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !startDate || !endDate || !status) {
-      toast.error('Name, start date, end date, and status are required fields.');
+    if (!name || !startDate || !endDate || !status || !classId) {
+      toast.error('Name, class, start date, end date, and status are required fields.');
       return;
     }
 
@@ -104,6 +108,8 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
         start_date: startDate,
         end_date: endDate,
         status,
+        class_id: classId,
+        exam_fee: examFee,
         schedules,
       };
 
@@ -185,6 +191,42 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               <option value="current">Current Active Exam</option>
               <option value="previous">Previous Past Exam</option>
             </select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              Target Class
+            </label>
+            <select
+              required
+              value={classId}
+              onChange={(e) => setClassId(e.target.value)}
+              disabled={loading}
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer"
+            >
+              <option value="">Select class...</option>
+              {classes.map((cls) => (
+                <option key={cls.id} value={cls.id}>
+                  {cls.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              Exam Fee (BDT)
+            </label>
+            <input
+              type="number"
+              min="0"
+              required
+              placeholder="e.g. 500"
+              value={examFee}
+              onChange={(e) => setExamFee(e.target.value)}
+              disabled={loading}
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4"
+            />
           </div>
 
           <div className="flex flex-col gap-1.5">
