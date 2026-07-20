@@ -45,14 +45,17 @@ const Footer = () => {
                             <Link href={'/results'} className='hover:text-sky-200 transition-colors duration-200'>Results</Link>
                             <Link href={'/acheivements'} className='hover:text-sky-200 transition-colors duration-200'>Achievements</Link>
                             <Link href={'/collaborations'} className='hover:text-sky-200 transition-colors duration-200'>Collaborations</Link>
+                            <Link href={'/news'} className='hover:text-sky-200 transition-colors duration-200'>News Hub</Link>
+                            <Link href={'/admission'} className='hover:text-sky-200 transition-colors duration-200'>Admission Apply</Link>
                         </div>
                         <div className='w-1/2 flex flex-col gap-2'>
-                            <Link href={'/news'} className='hover:text-sky-200 transition-colors duration-200'>News Hub</Link>
-                            <Link href={'/admission'} className='hover:text-sky-200 transition-colors duration-200'>Admission</Link>
-                            <Link href={'/verify-student'} className='hover:text-sky-200 transition-colors duration-200 font-semibold text-emerald-350 text-emerald-300'>Verify Student</Link>
+                            <Link href={'/admission-status'} className='hover:text-sky-200 transition-colors duration-200 font-semibold '>Admission Status</Link>
+                            <Link href={'/verify-student'} className='hover:text-sky-200 transition-colors duration-200 font-semibold '>Verify Student</Link>
+                            <Link href={'/payments'} className='hover:text-sky-200 transition-colors duration-200 font-semibold '>Bills & Payments</Link>
+                            <Link href={'/student-fees'} className='hover:text-sky-200 transition-colors duration-200 '>Class Tuition Fees</Link>
                             <Link href={'/auth/student'} className='hover:text-sky-200 transition-colors duration-200'>Student Portal</Link>
                             <Link href={'/auth/access/teacher'} className='hover:text-sky-200 transition-colors duration-200'>Teacher Login</Link>
-                            <Link href={'/auth/access'} className='hover:text-sky-200 transition-colors duration-200'>Access</Link>
+                            <Link href={'/auth/access'} className='hover:text-sky-200 transition-colors duration-200'>Access Portal</Link>
                         </div>
                     </div>
                 </div>
