@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isCashier } from '@/lib/auth';
 
-// GET student fines (Admin and Students)
+// GET student fines (Admin, Cashier and Students)
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -51,10 +51,10 @@ export async function GET(request) {
   }
 }
 
-// POST: Add student fine (Admin only)
+// POST: Add student fine (Admin/Cashier only)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
       const res_err_1898 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({
@@ -139,10 +139,10 @@ export async function POST(request) {
   }
 }
 
-// PUT: Update student fine payment status (Admin only)
+// PUT: Update student fine payment status (Admin/Cashier only)
 export async function PUT(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
       const res_err_5442 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({

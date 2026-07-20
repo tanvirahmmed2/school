@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import pool, { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isCashier } from '@/lib/auth';
 
-// GET student fees logs (Admin only)
+// GET student fees logs (Admin/Cashier only)
 export async function GET(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
       const res_err_288 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({
@@ -67,10 +67,10 @@ export async function GET(request) {
   }
 }
 
-// POST: Add student fee structure (individual or class-wide) (Admin only)
+// POST: Add student fee structure (individual or class-wide) (Admin/Cashier only)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
       const res_err_2462 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({
@@ -192,11 +192,11 @@ export async function POST(request) {
   }
 }
 
-// PUT: Process student fee payments (Admin only)
+// PUT: Process student fee payments (Admin/Cashier only)
 export async function PUT(request) {
   let client;
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
       const res_err_7756 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({

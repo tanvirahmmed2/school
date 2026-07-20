@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isCashier } from '@/lib/auth';
 
-// GET student fee payment logs (Admin only)
+// GET student fee payment logs (Admin/Cashier only)
 export async function GET(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
       const res_err_289 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({

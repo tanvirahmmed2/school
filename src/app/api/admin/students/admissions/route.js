@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin, isRegister } from '@/lib/auth';
+import { isAdmin, isRegister, isCashier } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
-// GET Admissions (Admin only)
+// GET Admissions (Admin/Registrar/Cashier only)
 export async function GET(request) {
   try {
-    const authorized = (await isAdmin()) || (await isRegister());
+    const authorized = (await isAdmin()) || (await isRegister()) || (await isCashier());
     if (!authorized) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }

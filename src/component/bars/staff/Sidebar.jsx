@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar
+  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar, FiBookOpen, FiCreditCard
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -40,7 +40,11 @@ const Sidebar = () => {
     let roleLinks = [];
     if (role === 'cashier') {
       roleLinks = [
-        { label: 'Transaction Desk', href: '/staff/cashier/transactions', icon: FiDollarSign }
+        { label: 'Transaction Desk', href: '/staff/cashier/transactions', icon: FiDollarSign },
+        { label: 'Admission Fees', href: '/staff/cashier/admission-fee', icon: FiUsers },
+        { label: 'Monthly Fees', href: '/staff/cashier/monthly-fee', icon: FiCalendar },
+        { label: 'Exam Fees', href: '/staff/cashier/exam-fee', icon: FiBookOpen },
+        { label: 'Payroll Desk', href: '/staff/cashier/salary', icon: FiCreditCard }
       ];
     } else if (role === 'register' || role === 'registrar') {
       roleLinks = [
