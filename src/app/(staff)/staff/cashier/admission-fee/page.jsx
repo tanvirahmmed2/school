@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiUsers, FiDollarSign, FiSearch, FiSliders, FiCheck, FiClock, FiAlertOctagon } from 'react-icons/fi';
+import { FiUsers, FiDollarSign, FiSearch, FiSliders, FiCheck, FiClock, FiAlertOctagon, FiCreditCard, FiX } from 'react-icons/fi';
 
 const AdmissionFeeDesk = () => {
   const [role, setRole] = useState(null);
@@ -15,6 +15,14 @@ const AdmissionFeeDesk = () => {
   const [filterClass, setFilterClass] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [updatingId, setUpdatingId] = useState(null);
+
+  // Payment collection modal states
+  const [collectingPaymentAdm, setCollectingPaymentAdm] = useState(null);
+  const [paymentAmount, setPaymentAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('Cash');
+  const [transactionId, setTransactionId] = useState('');
+  const [remarks, setRemarks] = useState('');
+  const [submittingPayment, setSubmittingPayment] = useState(false);
 
   useEffect(() => {
     const initData = async () => {
@@ -60,7 +68,7 @@ const AdmissionFeeDesk = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to update fee status');
-      toast.success(`Fee marked as ${nextStatus}!`);
+      toast.success(`Fee status updated to ${nextStatus}!`);
 
       // Update state locally
       setAdmissions(prev => 
@@ -72,6 +80,52 @@ const AdmissionFeeDesk = () => {
       toast.error(err.message);
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const handleCollectAdmissionPayment = async (e) => {
+    e.preventDefault();
+    if (!paymentAmount || isNaN(parseFloat(paymentAmount))) {
+      toast.error('Please enter a valid payment amount.');
+      return;
+    }
+
+    setSubmittingPayment(true);
+    try {
+      const res = await fetch('/api/admin/students/admissions/fee-status', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          student_admission_id: collectingPaymentAdm.id,
+          status: 'Paid',
+          amount_paid: paymentAmount,
+          payment_method: paymentMethod,
+          transaction_id: transactionId,
+          remarks: remarks
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to process payment.');
+
+      toast.success('Admission fee payment processed and registered successfully!');
+      
+      // Update state locally
+      setAdmissions(prev => 
+        prev.map(adm => 
+          adm.id === collectingPaymentAdm.id ? { ...adm, fee_status: 'Paid' } : adm
+        )
+      );
+
+      setCollectingPaymentAdm(null);
+      setPaymentAmount('');
+      setPaymentMethod('Cash');
+      setTransactionId('');
+      setRemarks('');
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setSubmittingPayment(false);
     }
   };
 
@@ -92,7 +146,7 @@ const AdmissionFeeDesk = () => {
         </div>
         <div>
           <h2 className="text-base font-bold text-red-800">Access Denied</h2>
-          <p className="text-xs text-red-650 mt-1">
+          <p className="text-xs text-red-655 text-red-600 mt-1">
             This module is restricted to the <strong>Cashier</strong> role only.
           </p>
         </div>
@@ -162,6 +216,88 @@ const AdmissionFeeDesk = () => {
           </div>
         </div>
       </div>
+
+      {/* Payment details collector form */}
+      {collectingPaymentAdm && (
+        <form onSubmit={handleCollectAdmissionPayment} className="bg-white border border-slate-100 p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-5 animate-fade-down">
+          <div>
+            <h2 className="text-base font-bold text-slate-850 flex items-center gap-1.5">
+              <FiCreditCard className="text-emerald-600" /> Collect Admission Fee
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Log admission fee cash/online payment collection for applicant <strong>{collectingPaymentAdm.applicant_name}</strong>.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Amount Collected (BDT) *</label>
+              <input
+                type="number"
+                step="0.01"
+                required
+                value={paymentAmount}
+                onChange={(e) => setPaymentAmount(e.target.value)}
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Payment Method *</label>
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500 cursor-pointer"
+              >
+                <option value="Cash">Cash Desk</option>
+                <option value="bKash">bKash Merchant</option>
+                <option value="Rocket">Rocket Pay</option>
+                <option value="Nagad">Nagad Pay</option>
+                <option value="Bank Transfer">Direct Bank Transfer</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction ID</label>
+              <input
+                type="text"
+                placeholder="e.g. TXN9201"
+                value={transactionId}
+                onChange={(e) => setTransactionId(e.target.value)}
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</label>
+              <input
+                type="text"
+                placeholder="e.g. Admission Desk receipt"
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => setCollectingPaymentAdm(null)}
+              className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-all cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submittingPayment}
+              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 disabled:opacity-60"
+            >
+              {submittingPayment ? 'Processing Payment...' : 'Confirm Receipt Payment'}
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* Search & Filters */}
       <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col lg:flex-row items-center gap-4">
@@ -253,7 +389,7 @@ const AdmissionFeeDesk = () => {
                           normalizedStatus === 'paid' 
                             ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
                             : normalizedStatus === 'cancelled'
-                            ? 'bg-red-50 text-red-655 text-red-600 border border-red-100'
+                            ? 'bg-red-50 text-red-600 border border-red-100'
                             : 'bg-amber-50 text-amber-600 border border-amber-100'
                         }`}>
                           {normalizedStatus === 'paid' ? <FiCheck /> : <FiClock />}
@@ -265,17 +401,20 @@ const AdmissionFeeDesk = () => {
                           <button
                             onClick={() => handleUpdateStatus(adm.id, 'Pending')}
                             disabled={updatingId === adm.id}
-                            className="text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                            className="text-xs font-bold text-amber-650 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50"
                           >
                             Mark Pending
                           </button>
                         ) : (
                           <button
-                            onClick={() => handleUpdateStatus(adm.id, 'Paid')}
+                            onClick={() => {
+                              setCollectingPaymentAdm(adm);
+                              setPaymentAmount(parseFloat(adm.admission_fees_amount || adm.fee_amount || 0).toFixed(2));
+                            }}
                             disabled={updatingId === adm.id}
-                            className="text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                            className="text-xs font-bold text-emerald-650 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1"
                           >
-                            Mark Paid
+                            <FiCreditCard className="text-xs" /> Record Pay
                           </button>
                         )}
                       </td>

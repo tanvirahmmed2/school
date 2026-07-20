@@ -63,6 +63,7 @@ export async function GET(request) {
 }
 
 export async function PUT(request) {
+  let client;
   try {
     const authenticated = (await isAdmin()) || (await isCashier());
     if (!authenticated) {
@@ -78,9 +79,12 @@ export async function PUT(request) {
       }, { status: 400 });
     }
 
+    client = await pool.connect();
+    await client.query('BEGIN');
+
     const table = type === 'staff' ? 'staff_salaries' : 'salaries';
 
-    const result = await query(`
+    const result = await client.query(`
       UPDATE ${table}
       SET status = $1, updated_at = CURRENT_TIMESTAMP
       WHERE id = $2
@@ -88,6 +92,8 @@ export async function PUT(request) {
     `, [status, parseInt(salary_id, 10)]);
 
     if (result.rows.length === 0) {
+      await client.query('ROLLBACK');
+      client.release();
       return NextResponse.json({ success: false, error: 'Salary record not found.' }, { status: 404 });
     }
 
@@ -95,9 +101,27 @@ export async function PUT(request) {
     if (status === 'Paid') {
       const salary = result.rows[0];
       const netPay = parseFloat(salary.basic) + parseFloat(salary.allowance) - parseFloat(salary.deductions);
-      const transactionNo = `TXN-PAY-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
+      const remarksText = `Paid ${type} salary for record #${salary.id} month ${salary.month}`;
 
-      await query(`
+      let paymentId;
+      if (type === 'staff') {
+        const paymentRes = await client.query(`
+          INSERT INTO staff_salary_payments (staff_salary_id, amount_paid, payment_method, remarks)
+          VALUES ($1, $2, 'Bank Transfer', $3)
+          RETURNING id
+        `, [salary.id, netPay, remarksText]);
+        paymentId = paymentRes.rows[0].id;
+      } else {
+        const paymentRes = await client.query(`
+          INSERT INTO teacher_salary_payments (salary_id, amount_paid, payment_method, remarks)
+          VALUES ($1, $2, 'Bank Transfer', $3)
+          RETURNING id
+        `, [salary.id, netPay, remarksText]);
+        paymentId = paymentRes.rows[0].id;
+      }
+
+      const transactionNo = `TXN-PAY-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
+      await client.query(`
         INSERT INTO payment_transactions (
           transaction_number, payment_method, amount, transaction_type, category, 
           reference_id, status, remarks, payment_date
@@ -106,10 +130,13 @@ export async function PUT(request) {
         transactionNo,
         netPay,
         type === 'staff' ? 'Staff Salary' : 'Teacher Salary',
-        salary.id,
-        `Paid ${type} salary for record #${salary.id} month ${salary.month}`
+        paymentId,
+        remarksText
       ]);
     }
+
+    await client.query('COMMIT');
+    client.release();
 
     return NextResponse.json({
       success: true,
@@ -117,6 +144,14 @@ export async function PUT(request) {
       paylod: { salary: result.rows[0] }
     });
   } catch (error) {
+    if (client) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (rollbackErr) {
+        console.error('Error during rollback:', rollbackErr);
+      }
+      client.release();
+    }
     console.error('Error updating salary status:', error);
     return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
   }

@@ -1845,3 +1845,66 @@ DROP TRIGGER IF EXISTS update_staff_applications_updated_at ON staff_application
 CREATE TRIGGER update_staff_applications_updated_at
     BEFORE UPDATE ON staff_applications
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- ADMISSION FEE PAYMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS admission_fee_payments (
+    id BIGSERIAL PRIMARY KEY,
+    admission_fee_id BIGINT NOT NULL REFERENCES admission_fees(id) ON DELETE CASCADE,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'Cash',
+    transaction_id VARCHAR(100),
+    remarks TEXT,
+    payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_admission_fee_payments_updated_at ON admission_fee_payments;
+CREATE TRIGGER update_admission_fee_payments_updated_at
+    BEFORE UPDATE ON admission_fee_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- TEACHER SALARY PAYMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teacher_salary_payments (
+    id BIGSERIAL PRIMARY KEY,
+    salary_id BIGINT NOT NULL REFERENCES salaries(id) ON DELETE CASCADE,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'Bank Transfer',
+    transaction_id VARCHAR(100),
+    remarks TEXT,
+    payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_teacher_salary_payments_updated_at ON teacher_salary_payments;
+CREATE TRIGGER update_teacher_salary_payments_updated_at
+    BEFORE UPDATE ON teacher_salary_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STAFF SALARY PAYMENTS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff_salary_payments (
+    id BIGSERIAL PRIMARY KEY,
+    staff_salary_id BIGINT NOT NULL REFERENCES staff_salaries(id) ON DELETE CASCADE,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'Bank Transfer',
+    transaction_id VARCHAR(100),
+    remarks TEXT,
+    payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_staff_salary_payments_updated_at ON staff_salary_payments;
+CREATE TRIGGER update_staff_salary_payments_updated_at
+    BEFORE UPDATE ON staff_salary_payments
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
