@@ -4,7 +4,7 @@ import { isRegister } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-const RegisterFolderLayout = async ({ children }) => {
+const RegistrarFolderLayout = async ({ children }) => {
   const authorized = await isRegister();
 
   if (!authorized) {
@@ -14,4 +14,4 @@ const RegisterFolderLayout = async ({ children }) => {
   return <>{children}</>;
 };
 
-export default RegisterFolderLayout;
+export default RegistrarFolderLayout;

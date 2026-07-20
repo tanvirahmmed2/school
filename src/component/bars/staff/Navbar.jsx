@@ -50,7 +50,7 @@ const Navbar = () => {
     switch (role) {
       case 'cashier':
         return 'Cashier';
-      case 'register':
+      case 'registrar':
         return 'Registrar';
       default:
         return 'Staff';

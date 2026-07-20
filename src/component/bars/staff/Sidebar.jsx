@@ -46,14 +46,14 @@ const Sidebar = () => {
         { label: 'Exam Fees', href: '/staff/cashier/exam-fee', icon: FiBookOpen },
         { label: 'Payroll Desk', href: '/staff/cashier/salary', icon: FiCreditCard }
       ];
-    } else if (role === 'register' || role === 'registrar') {
+    } else if (role === 'registrar') {
       roleLinks = [
-        { label: 'Admissions Registry', href: '/staff/register/admissions', icon: FiUsers },
-        { label: 'Class Routines', href: '/staff/register/routine', icon: FiClock },
-        { label: 'Campus News', href: '/staff/register/news', icon: FiFileText },
-        { label: 'Club Announcements', href: '/staff/register/club-news', icon: FiActivity },
-        { label: 'Achievements', href: '/staff/register/acheivement', icon: FiSliders },
-        { label: 'Notice Board', href: '/staff/register/notices', icon: FiBookOpen }
+        { label: 'Admissions Registry', href: '/staff/registrar/admissions', icon: FiUsers },
+        { label: 'Class Routines', href: '/staff/registrar/routine', icon: FiClock },
+        { label: 'Campus News', href: '/staff/registrar/news', icon: FiFileText },
+        { label: 'Club Announcements', href: '/staff/registrar/club-news', icon: FiActivity },
+        { label: 'Achievements', href: '/staff/registrar/acheivement', icon: FiSliders },
+        { label: 'Notice Board', href: '/staff/registrar/notices', icon: FiBookOpen }
       ];
     } else {
       roleLinks = [

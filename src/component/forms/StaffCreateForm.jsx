@@ -142,7 +142,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           >
             <option value="staff">General Staff</option>
             <option value="cashier">Cashier (Finance Desk)</option>
-            <option value="register">Registrar (Admissions & Enrollments)</option>
+            <option value="registrar">Registrar (Admissions & Enrollments)</option>
           </select>
         </div>
 

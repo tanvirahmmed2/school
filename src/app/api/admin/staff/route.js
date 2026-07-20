@@ -51,10 +51,10 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    if (!['cashier', 'register', 'staff'].includes(role)) {
+    if (!['cashier', 'registrar', 'staff'].includes(role)) {
       return NextResponse.json({
         success: false,
-        error: 'Invalid role. Must be cashier, register, or staff.'
+        error: 'Invalid role. Must be cashier, registrar, or staff.'
       }, { status: 400 });
     }
 

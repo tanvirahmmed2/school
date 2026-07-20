@@ -21,7 +21,7 @@ export async function PUT(request, { params }) {
       }, { status: 400 });
     }
 
-    if (!['cashier', 'register', 'staff'].includes(role)) {
+    if (!['cashier', 'registrar', 'staff'].includes(role)) {
       return NextResponse.json({ success: false, error: 'Invalid role.' }, { status: 400 });
     }
 

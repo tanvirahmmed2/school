@@ -142,7 +142,7 @@ const AdminStaffListPage = () => {
     switch (role) {
       case 'cashier':
         return 'bg-amber-50 text-amber-600 border border-amber-100';
-      case 'register':
+      case 'registrar':
         return 'bg-sky-50 text-sky-600 border border-sky-100';
       default:
         return 'bg-slate-50 text-slate-655 border border-slate-200';
@@ -153,7 +153,7 @@ const AdminStaffListPage = () => {
     switch (role) {
       case 'cashier':
         return 'Cashier';
-      case 'register':
+      case 'registrar':
         return 'Registrar';
       default:
         return 'General Staff';
@@ -334,7 +334,7 @@ const AdminStaffListPage = () => {
                   >
                     <option value="staff">General Staff</option>
                     <option value="cashier">Cashier</option>
-                    <option value="register">Registrar</option>
+                    <option value="registrar">Registrar</option>
                   </select>
                 </div>
 

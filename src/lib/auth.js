@@ -146,7 +146,7 @@ export async function isCashier() {
 
 export async function isRegister() {
   const staff = await getStaffUser();
-  return staff?.role === 'register' || staff?.role === 'registrar';
+  return staff?.role === 'registrar';
 }
 
 export async function isGeneralStaff() {
