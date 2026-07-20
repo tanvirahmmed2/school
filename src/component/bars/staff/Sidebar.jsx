@@ -40,11 +40,11 @@ const Sidebar = () => {
     let roleLinks = [];
     if (role === 'cashier') {
       roleLinks = [
-        { label: 'Transaction Desk', href: '/staff/cashier/transactions', icon: FiDollarSign },
         { label: 'Admission Fees', href: '/staff/cashier/admission-fee', icon: FiUsers },
         { label: 'Monthly Fees', href: '/staff/cashier/monthly-fee', icon: FiCalendar },
         { label: 'Exam Fees', href: '/staff/cashier/exam-fee', icon: FiBookOpen },
-        { label: 'Payroll Desk', href: '/staff/cashier/salary', icon: FiCreditCard }
+        { label: 'Payroll Desk', href: '/staff/cashier/salary', icon: FiCreditCard },
+        { label: 'Transaction Desk', href: '/staff/cashier/transactions', icon: FiDollarSign },
       ];
     } else if (role === 'registrar') {
       roleLinks = [
@@ -53,7 +53,10 @@ const Sidebar = () => {
         { label: 'Campus News', href: '/staff/registrar/news', icon: FiFileText },
         { label: 'Club Announcements', href: '/staff/registrar/club-news', icon: FiActivity },
         { label: 'Achievements', href: '/staff/registrar/acheivement', icon: FiSliders },
-        { label: 'Notice Board', href: '/staff/registrar/notices', icon: FiBookOpen }
+        { label: 'Notice Board', href: '/staff/registrar/notices', icon: FiBookOpen },
+        { label: 'Student Attendance', href: '/staff/registrar/student-attendence', icon: FiCalendar },
+        { label: 'Teacher Attendance', href: '/staff/registrar/teacher-attendence', icon: FiCalendar },
+        { label: 'Leave Applications', href: '/staff/registrar/leaves', icon: FiFileText }
       ];
     } else {
       roleLinks = [
@@ -63,10 +66,7 @@ const Sidebar = () => {
 
     return [
       ...base,
-      ...roleLinks,
-      { label: 'My Attendance', href: '/staff/attendance', icon: FiCalendar },
-      { label: 'Leave Applications', href: '/staff/leaves', icon: FiCalendar },
-      { label: 'Salary Ledger', href: '/staff/salary', icon: FiDollarSign }
+      ...roleLinks
     ];
   };
 

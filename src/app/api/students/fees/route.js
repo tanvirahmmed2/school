@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pool, { query } from '@/lib/db';
 import { isAdmin, isCashier } from '@/lib/auth';
+import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 // GET student fees logs (Admin/Cashier only)
 export async function GET(request) {
@@ -15,6 +16,10 @@ export async function GET(request) {
         paylod: null
       }, { status: 403 });
     }
+
+    // Auto-generate missing monthly fees
+    await triggerMonthlyFeeGeneration();
+
     const { searchParams } = new URL(request.url);
     const studentId = searchParams.get('student_id');
     const classId = searchParams.get('class_id');
@@ -295,6 +300,28 @@ export async function PUT(request) {
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
       [fee_id, numPaid, method, transaction_id ? transaction_id.trim() : null, remarks ? remarks.trim() : null]
     );
+
+    // Also log in exam_fee_payments if this is an exam fee
+    if (fee.title.startsWith('Exam Fee:')) {
+      const examName = fee.title.replace(/^Exam Fee:\s*/i, '').trim();
+      const examCheck = await client.query('SELECT id FROM exams WHERE LOWER(name) = LOWER($1)', [examName]);
+      if (examCheck.rows.length > 0) {
+        const examId = examCheck.rows[0].id;
+        await client.query(
+          `INSERT INTO exam_fee_payments (fee_id, exam_id, student_id, amount, payment_method, transaction_id, remarks)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+          [
+            fee_id,
+            examId,
+            fee.student_id,
+            numPaid,
+            method,
+            transaction_id ? transaction_id.trim() : null,
+            remarks ? remarks.trim() : null
+          ]
+        );
+      }
+    }
 
     await client.query('COMMIT');
     client.release();

@@ -13,7 +13,7 @@ const FeesPage = () => {
         const res = await fetch('/api/student/fees');
         if (res.ok) {
           const resData = await res.json();
-          setData(resData);
+          setData(resData.paylod || { fees: [], fines: [] });
         }
       } catch (error) {
         console.error('Error fetching fees:', error);

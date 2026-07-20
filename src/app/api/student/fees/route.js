@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT } from '@/lib/auth';
 import { query } from '@/lib/db';
+import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 export async function GET() {
   try {
@@ -27,6 +28,9 @@ export async function GET() {
         paylod: null
       }, { status: 401 });
     }
+
+    // Auto-generate missing monthly fees
+    await triggerMonthlyFeeGeneration();
 
     const studentId = decoded.id;
 

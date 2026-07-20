@@ -63,6 +63,7 @@ const Sidebar = () => {
     { label: 'Student Leaves', href: '/admin/students/leaves', icon: FiCalendar },
     { label: 'Attendance Registry', href: '/admin/students/attendance', icon: FiCalendar },
     { label: 'Fees & Ledgers', href: '/admin/students/fees', icon: FiDollarSign },
+    { label: 'Monthly Fee Rates', href: '/admin/students/fees/monthly-rates', icon: FiDollarSign },
     { label: 'Enter Marks', href: '/admin/students/marks', icon: FiBook },
     { label: 'Publish Results', href: '/admin/students/results', icon: FiAward },
     { label: 'Transcripts Card', href: '/admin/students/transcripts', icon: FiFileText },
