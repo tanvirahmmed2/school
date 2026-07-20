@@ -154,5 +154,10 @@ export async function isGeneralStaff() {
   return staff?.role === 'staff';
 }
 
+export async function isStaffRole() {
+  const staff = await getStaffUser();
+  return staff?.role === 'staff';
+}
+
 
 
