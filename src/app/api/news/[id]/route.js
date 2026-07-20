@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 
 // PUT update news (Admin only)
 export async function PUT(request, { params }) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_288 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({
@@ -71,7 +71,7 @@ export async function PUT(request, { params }) {
 // DELETE news (Admin only)
 export async function DELETE(request, { params }) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_2719 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({

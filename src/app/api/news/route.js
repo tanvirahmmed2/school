@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
 function slugify(text) {
@@ -38,7 +38,7 @@ export async function GET() {
 // POST create news (Admin only)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_1483 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({

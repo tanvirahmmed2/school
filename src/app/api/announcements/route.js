@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 
 // GET the active announcement (at most one exists)
 export async function GET() {
@@ -28,7 +28,7 @@ export async function GET() {
 // POST create the single announcement (fails if one already exists)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       return NextResponse.json({
         success: false,
@@ -96,7 +96,7 @@ export async function POST(request) {
 // PUT update the single active announcement
 export async function PUT(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       return NextResponse.json({
         success: false,
@@ -168,7 +168,7 @@ export async function PUT(request) {
 // DELETE the active announcement
 export async function DELETE() {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       return NextResponse.json({
         success: false,

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 
 // GET class routines
 export async function GET(request) {
@@ -86,7 +86,7 @@ export async function GET(request) {
 // POST create class routine (Admin only)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       return NextResponse.json({
         success: false,

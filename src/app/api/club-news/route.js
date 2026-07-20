@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
 // GET all club news
@@ -33,7 +33,7 @@ export async function GET() {
 // POST create club news (Admin only)
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_1320 = { error: 'Unauthorized. Admins only.' };
       return NextResponse.json({

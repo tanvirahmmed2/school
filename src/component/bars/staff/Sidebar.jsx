@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar, FiBookOpen, FiCreditCard
+  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar, FiBookOpen, FiCreditCard, FiClock, FiFileText
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -48,7 +48,12 @@ const Sidebar = () => {
       ];
     } else if (role === 'register' || role === 'registrar') {
       roleLinks = [
-        { label: 'Admissions Registry', href: '/staff/register/admissions', icon: FiUsers }
+        { label: 'Admissions Registry', href: '/staff/register/admissions', icon: FiUsers },
+        { label: 'Class Routines', href: '/staff/register/routine', icon: FiClock },
+        { label: 'Campus News', href: '/staff/register/news', icon: FiFileText },
+        { label: 'Club Announcements', href: '/staff/register/club-news', icon: FiActivity },
+        { label: 'Achievements', href: '/staff/register/acheivement', icon: FiSliders },
+        { label: 'Notice Board', href: '/staff/register/notices', icon: FiBookOpen }
       ];
     } else {
       roleLinks = [
