@@ -52,10 +52,17 @@ const Footer = () => {
                 </div>
 
                 <div className='w-full flex flex-col items-center justify-center gap-4 mt-6 md:mt-0 sm:col-span-2 md:col-span-1'>
-                    <div className='w-2/3 aspect-video bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl flex items-center justify-center p-3 shadow-inner hover:scale-105 transition-transform duration-300'>
-                        <span className='font-extrabold text-white text-lg md:text-xl tracking-tight text-center'>
-                            FIT
-                        </span>
+                    <div className='w-full aspect-video bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-md'>
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3515.3160107217595!2d90.47247927524832!3d24.898498477904493!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375653ef6517fdcf%3A0x360557fb2a9073f9!2sDisibin!5e1!3m2!1sen!2sbd!4v1784655551008!5m2!1sen!2sbd" 
+                            width="100%" 
+                            height="100%" 
+                            style={{ border: 0 }} 
+                            allowFullScreen="" 
+                            loading="lazy" 
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            title="FIT Location Map"
+                        ></iframe>
                     </div>
                     <p className='text-sky-100/90 text-center text-xs font-semibold'>Copyright reserved © FIT 2026</p>
                 </div>
