@@ -6,7 +6,7 @@ import { IoCall, IoMail } from 'react-icons/io5'
 const Footer = () => {
     return (
         <footer className='w-full bg-sky-950 text-white flex flex-col items-center justify-center border-t border-sky-500/30 shadow-inner px-4 md:px-8 py-8 md:py-12 overflow-x-hidden'>
-            <div className='w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs md:text-sm'>
+            <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs md:text-sm'>
                 <div className='w-full flex flex-col gap-3'>
                     <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-sky-500/50 pb-2 text-white'>
                         Contact with FIT

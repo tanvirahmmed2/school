@@ -27,7 +27,7 @@ const Events = () => {
 
   return (
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto">
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-bold text-sky-655 bg-sky-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest mb-3 text-sky-600">
             Calendar

@@ -50,7 +50,7 @@ const PublicMonthlyFeesPage = () => {
   ];
 
   return (
-    <div className="w-full min-h-[80vh] py-12 px-4 md:px-8 max-w-6xl mx-auto flex flex-col gap-10 animate-fade-up">
+    <div className="w-full min-h-[80vh] py-12 px-4 md:px-8 mx-auto flex flex-col gap-10 animate-fade-up">
       {/* Hero Header */}
       <div className="text-center flex flex-col gap-3">
         <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 bg-sky-50 border border-sky-100 px-3 py-1 rounded-full w-fit mx-auto">

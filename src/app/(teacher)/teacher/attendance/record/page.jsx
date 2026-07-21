@@ -5,7 +5,7 @@ import ExcelAttendanceForm from '@/component/forms/ExcelAttendanceForm';
 
 const AttendanceRecordPage = () => {
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto pb-12">
+    <div className="flex flex-col gap-8 w-full mx-auto pb-12">
       {/* Title */}
       <div>
         <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Record Attendance</h1>

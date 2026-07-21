@@ -101,7 +101,7 @@ const ClassDetailsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto flex flex-col gap-8">
+      <div className="mx-auto flex flex-col gap-8">
 
         {/* Navigation Action Area */}
         <div className="flex items-center justify-between">
@@ -129,7 +129,7 @@ const ClassDetailsPage = () => {
           </div>
         ) : selectedClass ? (
           <div className="flex flex-col gap-10">
-            <div className="w-full h-50 bg-linear-to-br from-sky-300 to-blue-500   flex items-center justify-center text-white rounded-xl">
+            <div className="w-full h-50 bg-linear-to-br from-sky-300 to-blue-500 flex items-center justify-center text-white rounded-xl">
 
               
               <h1 className="text-3xl md:text-5xl font-black tracking-tight">

@@ -27,7 +27,7 @@ const RecognitionsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto">
         {/* Back */}
         <Link
           href="/"

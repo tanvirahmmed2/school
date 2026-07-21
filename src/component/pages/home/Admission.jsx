@@ -7,7 +7,7 @@ import { FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 const Admission = () => {
   return (
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-100">
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto">
         <div className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row gap-8 items-center justify-between">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.1),transparent_35%)]" />
           

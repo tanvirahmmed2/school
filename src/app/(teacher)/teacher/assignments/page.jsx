@@ -90,7 +90,7 @@ const TeacherAssignmentsPageContent = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>

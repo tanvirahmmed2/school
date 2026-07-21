@@ -43,7 +43,7 @@ const SalaryHistoryPage = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
         <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Salary Ledger History</h1>

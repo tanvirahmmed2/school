@@ -6,10 +6,9 @@ import { FiAward, FiBook, FiCheckCircle } from 'react-icons/fi';
 const About = () => {
   return (
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Content column */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             <span className="inline-block text-xs font-bold text-sky-650 bg-sky-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest w-fit text-sky-600">
               Who We Are

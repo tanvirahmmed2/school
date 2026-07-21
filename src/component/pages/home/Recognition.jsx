@@ -28,7 +28,7 @@ const Recognition = () => {
   if (loading) {
     return (
       <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-6xl mx-auto flex justify-center py-12">
+        <div className="mx-auto flex justify-center py-12">
           <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
         </div>
       </section>
@@ -39,7 +39,7 @@ const Recognition = () => {
 
   return (
     <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-slate-50/60">
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest mb-3">

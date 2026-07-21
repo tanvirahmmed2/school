@@ -27,8 +27,8 @@ const Navbar = () => {
   return (
     <nav className="relative w-full bg-sky-900 text-white flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
 
-      <section className="w-full max-w-7xl flex flex-row items-center justify-between h-14 md:h-16">
-        <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white  transition-colors tracking-tight">
+      <section className="w-full flex flex-row items-center justify-between h-14 md:h-16">
+        <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight">
           {SCHOOL_NAME}
         </Link>
 
@@ -55,7 +55,7 @@ const Navbar = () => {
         </button>
       </section>
 
-      <section className="w-full max-w-7xl hidden md:flex flex-row items-center justify-between gap-1 text-[13px] font-semibold text-white h-10 ">
+      <section className="w-full hidden md:flex flex-row items-center justify-between gap-1 text-[13px] font-semibold text-white h-10">
         <Link href={'/'} className={linkStyle('/')}>Home</Link>
         <Link href={'/events'} className={linkStyle('/events')}>Events</Link>
 
@@ -63,7 +63,7 @@ const Navbar = () => {
           <Link href={'/authorities'} className={dropdownTriggerStyle(isDropdownActive('/authorities'))}>
             Authorities
           </Link>
-          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col shadow-xl  min-w-60 z-50 text-slate-700 bg-white">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white">
             <Link href={'/authorities/principal'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Principal</Link>
             <Link href={'/authorities/chairman'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Chairman</Link>
             <Link href={'/authorities/director'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Director</Link>
@@ -78,7 +78,7 @@ const Navbar = () => {
           <Link href={'/about'} className={dropdownTriggerStyle(isAboutActive())}>
             About
           </Link>
-          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col shadow-xl  min-w-60 z-50 text-slate-700 bg-white">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white">
             <Link href={'/about/campus'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">My Campus</Link>
             <Link href={'/missions'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Mission</Link>
             <Link href={'/about/vision'} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Vision</Link>
@@ -90,7 +90,7 @@ const Navbar = () => {
           <Link href={'/classes'} className={dropdownTriggerStyle(isDropdownActive('/classes'))}>
             Classes
           </Link>
-          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col shadow-xl  min-w-60 z-50 text-slate-700 bg-white">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white">
             {classes && classes.length > 0 ? (
               classes.map((c) => (
                 <Link href={`/classes/${c.code || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">
@@ -107,7 +107,7 @@ const Navbar = () => {
           <Link href={'/clubs'} className={dropdownTriggerStyle(isDropdownActive('/clubs'))}>
             Clubs
           </Link>
-          <div className="absolute top-full left-1/2 -translate-x-1/2  hidden group-hover:flex flex-col shadow-xl  min-w-60 z-50 text-slate-700 bg-white">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white">
             {clubs && clubs.length > 0 ? (
               clubs.map((c) => (
                 <Link href={`/clubs/${c.slug || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">

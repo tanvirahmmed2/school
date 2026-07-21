@@ -44,7 +44,7 @@ const RoutinePage = () => {
   const dailyClasses = routine.filter((r) => r.day_of_week === activeTab);
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
         <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Class Routine</h1>

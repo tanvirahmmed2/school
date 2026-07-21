@@ -87,7 +87,7 @@ const TeacherHomePage = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full mx-auto">
       
       <div className="bg-linear-to-r from-indigo-600 to-violet-700 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-indigo-500/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>

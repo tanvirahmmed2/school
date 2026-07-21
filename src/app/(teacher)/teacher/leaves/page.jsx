@@ -97,7 +97,7 @@ const LeavesPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title & Apply action */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>

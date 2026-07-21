@@ -57,7 +57,7 @@ const Hero = () => {
 
  
       {/* Content Container */}
-      <div className="max-w-6xl mx-auto w-full relative z-10 flex flex-col items-center text-center">
+      <div className="mx-auto w-full relative z-10 flex flex-col items-center text-center">
         
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-none mb-8 max-w-4xl">

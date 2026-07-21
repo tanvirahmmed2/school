@@ -84,7 +84,7 @@ const SubmissionGradingPageContent = ({ params }) => {
   }
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+    <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div className="flex items-center gap-4">
         <button
