@@ -17,8 +17,8 @@ export const BREVO_SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL;
 export const BREVO_SENDER_NAME = process.env.BREVO_SENDER_NAME;
 export const BREVO_API_KEY = process.env.BREVO_API_KEY;
 
-export const SCHOOL_NAME = 'Fontana Institute of Technology'
+export const SCHOOL_NAME = 'Rose International Academy'
 export const LOGO_URL = ''
-export const META_TITLE = "Fontana Institute of Technology - Academic Excellence & Growth"
+export const META_TITLE = "Rose International Academy - Academic Excellence & Growth"
 export const META_DESCRIPTION = 'Manage student enrollments, exam records, gradesheets, timetables, and billing files dynamically.'
 

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Context } from '../helper/Context';
 import { MdMenu } from 'react-icons/md';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const Navbar = () => {
   const { classes, clubs, sidebar, setSidebar } = useContext(Context);
@@ -28,7 +29,7 @@ const Navbar = () => {
 
       <section className="w-full max-w-7xl flex flex-row items-center justify-between h-14 md:h-16">
         <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white  transition-colors tracking-tight">
-          Fontana Institute of Technology
+          {SCHOOL_NAME}
         </Link>
 
         <section className="hidden md:flex flex-row items-center justify-end gap-5">

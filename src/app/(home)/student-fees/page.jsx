@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiDollarSign, FiInfo, FiLayers, FiCheckCircle, FiShield, FiTrendingUp } from 'react-icons/fi';
+import { 
+  FiDollarSign, FiInfo, FiLayers, FiCheckCircle, FiBookOpen, 
+  FiAward, FiActivity, FiUsers, FiCpu 
+} from 'react-icons/fi';
 
 const PublicMonthlyFeesPage = () => {
   const [fees, setFees] = useState([]);
@@ -27,125 +30,154 @@ const PublicMonthlyFeesPage = () => {
     fetchPublicFees();
   }, []);
 
-  // Institutional Fee Parameters
-  const generalFeeData = [
-    { name: 'Admission Application Processing', amount: '৳500.00', frequency: 'One-time (Non-refundable)', description: 'Incurred upon candidate circular application submission.' },
-    { name: 'Annual Sports & Activity fee', amount: '৳2,500.00', frequency: 'Annual (Payable in January)', description: 'Includes library access, cultural functions, sports facility usage, and gym.' },
-    { name: 'Term Examination fee', amount: 'As Scheduled by Admin', frequency: 'Per Exam Term', description: 'Assigned automatically when term schedule details are announced.' }
+  // Academic Levels Information
+  const academicLevels = [
+    {
+      title: 'Primary Section (Classes 1 - 5)',
+      description: 'Focuses on building core language skills, mathematical reasoning, and natural sciences. Interactive learning methods are used to foster curiosity.',
+      curriculum: 'National Curriculum & English Language Foundation'
+    },
+    {
+      title: 'Middle Section (Classes 6 - 8)',
+      description: 'Introduces computer science, analytical thinking, and global history. Prepares students for advanced stream selection.',
+      curriculum: 'National Curriculum & Preliminary ICT Labs'
+    },
+    {
+      title: 'Secondary Section (Classes 9 - 10)',
+      description: 'Offers structured specialization in Science, Commerce, or Humanities stream with complete laboratory practice.',
+      curriculum: 'National Board Examination Syllabus'
+    }
   ];
 
   return (
-    <div className="w-full min-h-[70vh] py-12 px-4 md:px-8 max-w-4xl mx-auto flex flex-col gap-8 animate-fade-up">
-      {/* Title */}
-      <div className="text-center">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
-          <FiDollarSign className="text-sky-600" /> Class-wise Fee Structures
+    <div className="w-full min-h-[80vh] py-12 px-4 md:px-8 max-w-6xl mx-auto flex flex-col gap-10 animate-fade-up">
+      {/* Hero Header */}
+      <div className="text-center flex flex-col gap-3">
+        <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 bg-sky-50 border border-sky-100 px-3 py-1 rounded-full w-fit mx-auto">
+          FIT Academic Portal
+        </span>
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+          Academic Overview & Tuition Fees
         </h1>
-        <p className="text-sm text-slate-500 mt-2 max-w-lg mx-auto">
-          Review transparent breakdown rates for monthly student tuition fees, exam schedules, and miscellaneous institutional fees.
+        <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
+          Learn about our educational curriculum, academic programs, facilities, and dynamic class-wise monthly tuition fee configurations.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-        {/* Monthly Tuition Fee List */}
-        <div className="md:col-span-2 bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-5">
-          <div>
-            <h3 className="text-base font-bold text-slate-800 flex items-center gap-1.5">
-              🏫 Base Monthly Tuition Fees
-            </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Tuition fee rates assigned to students of respective active class tiers.
-            </p>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        
+        {/* Left 2/3 Panel: Institution Info & Curriculum */}
+        <div className="lg:col-span-2 flex flex-col gap-8">
+          
+          {/* Institutional Education Section */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
+            <div>
+              <h2 className="text-lg font-black text-slate-800 flex items-center gap-2">
+                🎓 Our Educational Approach
+              </h2>
+              <p className="text-xs text-slate-550 mt-1">
+                We believe in providing structured learning that challenges students intellectually while fostering personal growth.
+              </p>
+            </div>
 
-          {loading ? (
-            <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-xs font-semibold text-slate-400">Loading fee structures...</span>
-            </div>
-          ) : fees.length === 0 ? (
-            <div className="py-12 text-center text-slate-400 flex flex-col items-center justify-center gap-2 border border-dashed border-slate-150 rounded-2xl">
-              <FiInfo className="text-3xl" />
-              <p className="text-xs font-semibold">No active class tuition fees are currently configured.</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left text-xs font-semibold text-slate-600">
-                <thead>
-                  <tr className="bg-slate-50/50 border-b border-slate-100">
-                    <th className="px-5 py-3 text-slate-400 uppercase text-[10px] tracking-wider">Class Tiers</th>
-                    <th className="px-5 py-3 text-slate-400 uppercase text-[10px] tracking-wider text-right pr-8">Monthly tuition rate</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50 text-slate-800">
-                  {fees.map((fee) => (
-                    <tr key={fee.class_name} className="hover:bg-slate-50/20 transition-colors">
-                      <td className="px-5 py-3.5 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 font-bold text-sky-600 bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-full">
-                          <FiLayers className="text-sky-400 text-xs" />
-                          {fee.class_name}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3.5 whitespace-nowrap text-right pr-8">
-                        {parseFloat(fee.amount) > 0 ? (
-                          <span className="text-sm font-extrabold text-slate-900">
-                            ৳{parseFloat(fee.amount).toFixed(2)}
-                          </span>
-                        ) : (
-                          <span className="text-xs font-bold text-slate-400 italic">
-                            TBD (৳0.00)
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-
-        {/* Institutional Charges / Guidelines */}
-        <div className="md:col-span-1 flex flex-col gap-6">
-          {/* General Institutional Charges */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Other Institutional Fees</h4>
-            <div className="flex flex-col gap-4 text-xs">
-              {generalFeeData.map((item, idx) => (
-                <div key={idx} className="flex flex-col gap-0.5 pb-3 border-b border-slate-50 last:border-0 last:pb-0">
-                  <span className="font-bold text-slate-800">{item.name}</span>
-                  <div className="flex items-center justify-between mt-1 text-[11px] font-semibold">
-                    <span className="text-sky-600 font-bold">{item.amount}</span>
-                    <span className="text-slate-400">{item.frequency}</span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">{item.description}</p>
+            <div className="flex flex-col gap-4">
+              {academicLevels.map((level, idx) => (
+                <div key={idx} className="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl flex flex-col gap-2">
+                  <span className="text-sm font-bold text-slate-800">{level.title}</span>
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium">{level.description}</p>
+                  <span className="text-[10px] text-sky-600 font-bold uppercase tracking-wider mt-1 block">
+                    Curriculum: {level.curriculum}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Payment Guidelines Checklist */}
+          {/* Institutional Highlights */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm text-center flex flex-col items-center gap-2.5">
+              <div className="p-3 bg-sky-50 text-sky-500 rounded-2xl border border-sky-100">
+                <FiUsers className="text-xl" />
+              </div>
+              <span className="text-xs font-black text-slate-800">Qualified Educators</span>
+              <p className="text-[10px] text-slate-450 leading-relaxed font-medium">Expert subject mentors and certified counselors.</p>
+            </div>
+
+            <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm text-center flex flex-col items-center gap-2.5">
+              <div className="p-3 bg-emerald-50 text-emerald-500 rounded-2xl border border-emerald-100">
+                <FiCpu className="text-xl" />
+              </div>
+              <span className="text-xs font-black text-slate-800">Smart Smart Labs</span>
+              <p className="text-[10px] text-slate-450 leading-relaxed font-medium">Computer ICT hubs and advanced physics/chemistry labs.</p>
+            </div>
+
+            <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm text-center flex flex-col items-center gap-2.5">
+              <div className="p-3 bg-amber-50 text-amber-500 rounded-2xl border border-amber-100">
+                <FiBookOpen className="text-xl" />
+              </div>
+              <span className="text-xs font-black text-slate-800">Rich Library</span>
+              <p className="text-[10px] text-slate-450 leading-relaxed font-medium">A wide collection of textbooks, research volumes, and silent study desks.</p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Right 1/3 Panel: Tuition Fee Rates */}
+        <div className="lg:col-span-1 flex flex-col gap-6">
+          
+          {/* Tuition Rates Card */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col gap-5">
+            <div>
+              <h3 className="text-xs font-black uppercase text-slate-400 tracking-wider">Class Monthly Fees</h3>
+              <p className="text-[10px] text-slate-450 mt-1 font-semibold">Active monthly tuition rates dynamically fetched from the database.</p>
+            </div>
+
+            {loading ? (
+              <div className="w-full py-8 flex flex-col items-center justify-center gap-3">
+                <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-[10px] text-slate-450 font-semibold">Fetching rates...</span>
+              </div>
+            ) : fees.length === 0 ? (
+              <div className="py-6 text-center text-slate-400 flex flex-col items-center justify-center gap-2 border border-dashed border-slate-150 rounded-2xl">
+                <FiInfo className="text-2xl text-slate-350" />
+                <p className="text-[10px] font-semibold">Tuition rates are not published yet.</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3.5">
+                {fees.map((fee) => (
+                  <div key={fee.class_name} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0 last:pb-0">
+                    <div className="flex items-center gap-2 font-bold text-slate-700 text-xs">
+                      <FiLayers className="text-sky-500 text-sm" />
+                      {fee.class_name}
+                    </div>
+                    <span className="text-xs font-extrabold text-slate-900">
+                      {parseFloat(fee.amount) > 0 ? `৳${parseFloat(fee.amount).toFixed(2)}` : 'TBD'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Payment Terms Guide */}
           <div className="bg-slate-950 text-white rounded-3xl p-6 shadow-md flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase tracking-wider text-sky-400">Payment Policies</h4>
-            <ul className="flex flex-col gap-3 text-xs leading-relaxed text-slate-300 font-medium">
-              <li className="flex items-start gap-2">
+            <h4 className="text-xs font-black uppercase tracking-wider text-sky-400">Fee Payment Terms</h4>
+            <ul className="flex flex-col gap-3.5 text-xs leading-relaxed text-slate-300 font-medium">
+              <li className="flex items-start gap-2.5">
                 <FiCheckCircle className="text-emerald-400 mt-0.5 shrink-0" />
                 <span>Monthly tuition fee invoices are auto-generated on the 1st of every calendar month.</span>
               </li>
-              <li className="flex items-start gap-2">
+              <li className="flex items-start gap-2.5">
                 <FiCheckCircle className="text-emerald-400 mt-0.5 shrink-0" />
-                <span>Tuition payment bills are payable by the last calendar day of the same month.</span>
+                <span>Invoices are payable by the last day of the current calendar month.</span>
               </li>
-              <li className="flex items-start gap-2">
+              <li className="flex items-start gap-2.5">
                 <FiCheckCircle className="text-emerald-400 mt-0.5 shrink-0" />
-                <span>Late payments may trigger administrative fines automatically logged to the student desk.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <FiCheckCircle className="text-emerald-400 mt-0.5 shrink-0" />
-                <span>Cashier manual logs support Cash counter and major digital wallet transfers (bKash/Nagad).</span>
+                <span>All tuition records can be verified in real-time on our public payments check portal.</span>
               </li>
             </ul>
           </div>
+
         </div>
       </div>
     </div>
