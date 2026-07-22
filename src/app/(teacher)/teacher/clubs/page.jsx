@@ -8,7 +8,7 @@ import {
   FiUsers, FiFileText, FiInfo, FiArrowRight, FiAlertCircle,
   FiUserCheck, FiCalendar, FiEdit2
 } from 'react-icons/fi';
-import ClubAdminNav from '@/component/bars/teacher/ClubAdminNav';
+
 
 const TeacherClubsOverviewPage = () => {
   const [loading, setLoading] = useState(true);
