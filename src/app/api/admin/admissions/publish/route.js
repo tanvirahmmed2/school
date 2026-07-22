@@ -49,7 +49,6 @@ export async function POST(request) {
         sa.image_id,
         sa.signature,
         sa.signature_id,
-        sa.signatre_id,
         c.name AS class_name,
         c.numeric_name AS class_numeric_name
       FROM accepted_admissions aa
@@ -180,10 +179,9 @@ export async function POST(request) {
             image_id = $13,
             signature = $14,
             signature_id = $15,
-            signatre_id = $16,
-            roll = $17,
+            roll = $16,
             updated_at = CURRENT_TIMESTAMP
-          WHERE id = $18
+          WHERE id = $17
         `, [
           cand.applicant_name,
           cand.phone,
@@ -200,7 +198,6 @@ export async function POST(request) {
           cand.image_id,
           cand.signature,
           cand.signature_id,
-          cand.signatre_id || cand.signature_id,
           nextRoll,
           studentId
         ]);
@@ -225,9 +222,9 @@ export async function POST(request) {
           INSERT INTO students (
             name, email, phone, registration_number, class_id, date_of_birth, address,
             gender, birth_certificate_number, parents_info, is_active, is_registered,
-            verification_code, verification_code_expires, image, image_id, signature, signature_id, signatre_id,
+            verification_code, verification_code_expires, image, image_id, signature, signature_id,
             roll
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12, $13, $14, $15, $16, $17, $18)
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12, $13, $14, $15, $16, $17)
           RETURNING id
         `, [
           cand.applicant_name,
@@ -246,7 +243,6 @@ export async function POST(request) {
           cand.image_id,
           cand.signature,
           cand.signature_id,
-          cand.signatre_id || cand.signature_id,
           nextRoll
         ]);
 

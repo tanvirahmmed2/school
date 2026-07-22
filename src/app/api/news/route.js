@@ -61,8 +61,8 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Generate unique slug
-    let finalSlug = slug ? slugify(slug) : slugify(title);
+    // Generate unique slug automatically from title
+    let finalSlug = slugify(title);
     if (!finalSlug) {
       finalSlug = `news-${Date.now()}`;
     }

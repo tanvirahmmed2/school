@@ -15,6 +15,7 @@ export const ContextProvider = ({ children }) => {
 
   const [classes, setClasses]=useState([])
   const [clubs, setClubs]=useState([])
+  const [designations, setDesignations]=useState([])
 
 
   const goBack=()=>{
@@ -22,7 +23,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const fetchClassesAndClubs = async () => {
+    const fetchClassesClubsAndDesignations = async () => {
       try {
         const classesRes = await fetch('/api/classes');
         if (classesRes.ok) {
@@ -42,9 +43,19 @@ export const ContextProvider = ({ children }) => {
       } catch (err) {
         console.error('Error fetching clubs in Context:', err);
       }
+
+      try {
+        const designationsRes = await fetch('/api/authorities/designations');
+        if (designationsRes.ok) {
+          const data = await designationsRes.json();
+          setDesignations(data.paylod.designations || []);
+        }
+      } catch (err) {
+        console.error('Error fetching designations in Context:', err);
+      }
     };
 
-    fetchClassesAndClubs();
+    fetchClassesClubsAndDesignations();
   }, []);
 
   const values = {
@@ -59,7 +70,8 @@ export const ContextProvider = ({ children }) => {
     setStudentSidebar,
     staffSidebar,
     setStaffSidebar,
-    classes, setClasses,clubs, setClubs
+    classes, setClasses,clubs, setClubs,
+    designations, setDesignations
   };
 
   return (

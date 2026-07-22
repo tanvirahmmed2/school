@@ -7,7 +7,12 @@ import { uploadImage, deleteImage } from '@/lib/cloudinary';
 export async function GET(request, { params }) {
   try {
     const { id } = await params;
-    const result = await query('SELECT * FROM authorities WHERE id = $1', [id]);
+    const result = await query(`
+      SELECT a.*, d.title AS designation_title, d.slug AS designation
+      FROM authorities a
+      JOIN authority_designations d ON a.designation_id = d.id
+      WHERE a.id = $1
+    `, [id]);
 
     if (result.rows.length === 0) {
       const res_err_429 = { error: 'Authority member not found.' };
@@ -110,15 +115,29 @@ export async function PUT(request, { params }) {
       }
     }
 
+    let designationId = null;
+    if (designation && !isNaN(designation)) {
+      designationId = parseInt(designation, 10);
+    } else if (designation) {
+      const lookup = await query('SELECT id FROM authority_designations WHERE slug = $1', [designation.trim()]);
+      if (lookup.rows.length > 0) {
+        designationId = lookup.rows[0].id;
+      }
+    }
+
+    if (!designationId) {
+      return NextResponse.json({ success: false, error: 'Valid designation is required.' }, { status: 400 });
+    }
+
     const result = await query(
       `UPDATE authorities 
-       SET name = $1, bio = $2, designation = $3, email = $4, contact = $5, image = $6, image_id = $7, updated_at = CURRENT_TIMESTAMP
+       SET name = $1, bio = $2, designation_id = $3, email = $4, contact = $5, image = $6, image_id = $7, updated_at = CURRENT_TIMESTAMP
        WHERE id = $8 
        RETURNING *`,
       [
         name.trim(),
         bio ? bio.trim() : null,
-        designation.trim(),
+        designationId,
         email ? email.trim() : null,
         contact ? contact.trim() : null,
         imageUrl,
@@ -127,9 +146,16 @@ export async function PUT(request, { params }) {
       ]
     );
 
+    const joinedRes = await query(`
+      SELECT a.*, d.title AS designation_title, d.slug AS designation
+      FROM authorities a
+      JOIN authority_designations d ON a.designation_id = d.id
+      WHERE a.id = $1
+    `, [id]);
+
     const res_data_3338 = {
       message: 'Authority member updated successfully.',
-      authority: result.rows[0]
+      authority: joinedRes.rows[0]
     };
       return NextResponse.json({
         success: true,

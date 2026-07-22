@@ -6,7 +6,12 @@ import { uploadImage } from '@/lib/cloudinary';
 // GET all authorities
 export async function GET() {
   try {
-    const result = await query('SELECT * FROM authorities ORDER BY id ASC');
+    const result = await query(`
+      SELECT a.*, d.title AS designation_title, d.slug AS designation
+      FROM authorities a
+      JOIN authority_designations d ON a.designation_id = d.id
+      ORDER BY a.id ASC
+    `);
     const res_data_356 = { authorities: result.rows };
       return NextResponse.json({
         success: true,
@@ -51,6 +56,20 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
+    let designationId = null;
+    if (designation && !isNaN(designation)) {
+      designationId = parseInt(designation, 10);
+    } else if (designation) {
+      const lookup = await query('SELECT id FROM authority_designations WHERE slug = $1', [designation.trim()]);
+      if (lookup.rows.length > 0) {
+        designationId = lookup.rows[0].id;
+      }
+    }
+
+    if (!designationId) {
+      return NextResponse.json({ success: false, error: 'Valid designation is required.' }, { status: 400 });
+    }
+
     let imageUrl = null;
     let imageId = null;
 
@@ -76,13 +95,13 @@ export async function POST(request) {
     }
 
     const result = await query(
-      `INSERT INTO authorities (name, bio, designation, email, contact, image, image_id) 
+      `INSERT INTO authorities (name, bio, designation_id, email, contact, image, image_id) 
        VALUES ($1, $2, $3, $4, $5, $6, $7) 
        RETURNING *`,
       [
         name.trim(),
         bio ? bio.trim() : null,
-        designation.trim(),
+        designationId,
         email ? email.trim() : null,
         contact ? contact.trim() : null,
         imageUrl,
@@ -90,7 +109,15 @@ export async function POST(request) {
       ]
     );
 
-    const res_data_2390 = { message: 'Authority member created successfully.', authority: result.rows[0] };
+    const createdId = result.rows[0].id;
+    const joinedRes = await query(`
+      SELECT a.*, d.title AS designation_title, d.slug AS designation
+      FROM authorities a
+      JOIN authority_designations d ON a.designation_id = d.id
+      WHERE a.id = $1
+    `, [createdId]);
+
+    const res_data_2390 = { message: 'Authority member created successfully.', authority: joinedRes.rows[0] };
       return NextResponse.json({
         success: true,
         message: res_data_2390?.message || 'Successfully fecthed data',

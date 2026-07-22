@@ -81,6 +81,27 @@ CREATE TRIGGER update_sections_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
+-- TEACHER PAY SCALES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teacher_pay_scale (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    basic_salary NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    allowance NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_teacher_pay_scale_updated_at ON teacher_pay_scale;
+CREATE TRIGGER update_teacher_pay_scale_updated_at
+    BEFORE UPDATE ON teacher_pay_scale
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+
+
+-- ============================================================================
 -- TEACHERS TABLE
 -- ============================================================================
 
@@ -228,25 +249,6 @@ CREATE TRIGGER update_club_news_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
--- TEACHER PAY SCALES TABLE
--- ============================================================================
-
-CREATE TABLE IF NOT EXISTS teacher_pay_scale (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    basic_salary NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
-    allowance NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-);
-
-DROP TRIGGER IF EXISTS update_teacher_pay_scale_updated_at ON teacher_pay_scale;
-CREATE TRIGGER update_teacher_pay_scale_updated_at
-    BEFORE UPDATE ON teacher_pay_scale
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-
--- ============================================================================
 -- SALARIES TABLE
 -- ============================================================================
 
@@ -254,9 +256,9 @@ CREATE TABLE IF NOT EXISTS salaries (
     id BIGSERIAL PRIMARY KEY,
     teacher_id BIGINT REFERENCES teachers(id) ON DELETE CASCADE,
     month VARCHAR(50) NOT NULL,
-    basic DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    allowance DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    deductions DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    basic DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (basic >= 0.00),
+    allowance DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (allowance >= 0.00),
+    deductions DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (deductions >= 0.00),
     status VARCHAR(50) NOT NULL DEFAULT 'Pending',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
@@ -413,8 +415,8 @@ CREATE TABLE IF NOT EXISTS students (
     address TEXT,
     parents_info TEXT,
     birth_certificate_number VARCHAR(100) UNIQUE,
-    gender VARCHAR(20),
-    roll INT,
+    gender VARCHAR(20) CHECK (gender IN ('Male', 'Female', 'Other')),
+    roll INT CHECK (roll > 0),
     password_hash VARCHAR(255),
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,
@@ -426,7 +428,6 @@ CREATE TABLE IF NOT EXISTS students (
     image_id VARCHAR(255),
     signature TEXT,
     signature_id VARCHAR(255),
-    signatre_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -467,7 +468,7 @@ CREATE TABLE IF NOT EXISTS student_fees (
     id BIGSERIAL PRIMARY KEY,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     due_date DATE NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid', 'Partially Paid')),
     paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
@@ -490,7 +491,7 @@ CREATE TABLE IF NOT EXISTS student_fines (
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     fee_id BIGINT REFERENCES student_fees(id) ON DELETE SET NULL,
     title VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid')),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
@@ -671,7 +672,7 @@ CREATE TRIGGER update_notices_updated_at
 CREATE TABLE IF NOT EXISTS student_fee_payments (
     id BIGSERIAL PRIMARY KEY,
     student_fee_id BIGINT NOT NULL REFERENCES student_fees(id) ON DELETE CASCADE,
-    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount_paid >= 0.00),
     payment_method VARCHAR(50) NOT NULL DEFAULT 'Cash',
     transaction_id VARCHAR(100),
     remarks TEXT,
@@ -686,6 +687,20 @@ CREATE TRIGGER update_student_fee_payments_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
+-- -- ============================================================================
+-- AUTHORITY DESIGNATIONS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS authority_designations (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) UNIQUE NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- ============================================================================
 -- AUTHORITIES TABLE
 -- ============================================================================
@@ -694,7 +709,7 @@ CREATE TABLE IF NOT EXISTS authorities (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     bio TEXT,
-    designation VARCHAR(255) NOT NULL,
+    designation_id BIGINT NOT NULL REFERENCES authority_designations(id) ON DELETE RESTRICT,
     email VARCHAR(255) UNIQUE,
     contact VARCHAR(50),
     image TEXT,
@@ -823,7 +838,7 @@ CREATE TABLE IF NOT EXISTS hostels (
     description TEXT,
     total_room INT NOT NULL DEFAULT 0,
     location VARCHAR(255) NOT NULL,
-    gender VARCHAR(20),
+    gender VARCHAR(20) CHECK (gender IN ('Male', 'Female', 'Other')),
     image TEXT,
     image_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -907,7 +922,7 @@ CREATE TRIGGER update_hostel_allocations_updated_at
 CREATE TABLE IF NOT EXISTS hostel_fees (
     id BIGSERIAL PRIMARY KEY,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     due_date DATE NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid', 'Partially Paid')),
     paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
@@ -1173,12 +1188,54 @@ CREATE TABLE IF NOT EXISTS admissions (
     admission_start_date DATE NOT NULL,
     finish_date DATE NOT NULL,
     result_date DATE,
-    fees DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    fees DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (fees >= 0.00),
     description TEXT,
     is_result_published BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TRIGGER IF EXISTS update_admissions_updated_at ON admissions;
+CREATE TRIGGER update_admissions_updated_at
+    BEFORE UPDATE ON admissions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- STUDENT ADMISSIONS TABLE (APPLICATIONS)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS student_admissions (
+    id BIGSERIAL PRIMARY KEY,
+    admission_id BIGINT REFERENCES admissions(id) ON DELETE CASCADE,
+    student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
+    applicant_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(20) NOT NULL CHECK (gender IN ('Male', 'Female', 'Other')),
+    address TEXT NOT NULL,
+    applied_class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    previous_school TEXT,
+    guardian_name VARCHAR(255) NOT NULL,
+    guardian_phone VARCHAR(50) NOT NULL,
+    birth_regi_number VARCHAR(100),
+    image TEXT,
+    image_id VARCHAR(255),
+    signature TEXT,
+    signature_id VARCHAR(255),
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('Pending', 'Approved', 'Rejected')),
+    applied_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_student_admissions_updated_at ON student_admissions;
+CREATE TRIGGER update_student_admissions_updated_at
+    BEFORE UPDATE ON student_admissions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+
 
 -- ============================================================================
 -- ACCEPTED ADMISSIONS TABLE
@@ -1195,46 +1252,7 @@ CREATE TABLE IF NOT EXISTS accepted_admissions (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TRIGGER IF EXISTS update_admissions_updated_at ON admissions;
-CREATE TRIGGER update_admissions_updated_at
-    BEFORE UPDATE ON admissions
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-
--- ============================================================================
--- STUDENT ADMISSIONS TABLE (APPLICATIONS)
--- ============================================================================
-
-CREATE TABLE IF NOT EXISTS student_admissions (
-    id BIGSERIAL PRIMARY KEY,
-    admission_id BIGINT REFERENCES admissions(id) ON DELETE CASCADE,
-    student_id BIGINT REFERENCES students(id) ON DELETE SET NULL,
-    applicant_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(50) NOT NULL,
-    date_of_birth DATE NOT NULL,
-    gender VARCHAR(20) NOT NULL,
-    address TEXT NOT NULL,
-    applied_class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
-    previous_school TEXT,
-    guardian_name VARCHAR(255) NOT NULL,
-    guardian_phone VARCHAR(50) NOT NULL,
-    birth_regi_number VARCHAR(100),
-    image TEXT,
-    image_id VARCHAR(255),
-    signature TEXT,
-    signature_id VARCHAR(255),
-    signatre_id VARCHAR(255),
-    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Rejected')),
-    applied_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-);
-
-DROP TRIGGER IF EXISTS update_student_admissions_updated_at ON student_admissions;
-CREATE TRIGGER update_student_admissions_updated_at
-    BEFORE UPDATE ON student_admissions
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 
 -- ============================================================================
@@ -1244,8 +1262,8 @@ CREATE TRIGGER update_student_admissions_updated_at
 CREATE TABLE IF NOT EXISTS admission_fees (
     id BIGSERIAL PRIMARY KEY,
     student_admission_id BIGINT UNIQUE NOT NULL REFERENCES student_admissions(id) ON DELETE CASCADE,
-    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Paid', 'Cancelled', 'Cancel', 'pending', 'paid', 'cancel')),
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'cancelled')),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -1254,6 +1272,27 @@ DROP TRIGGER IF EXISTS update_admission_fees_updated_at ON admission_fees;
 CREATE TRIGGER update_admission_fees_updated_at
     BEFORE UPDATE ON admission_fees
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+-- ============================================================================
+-- STAFF PAY SCALES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staff_pay_scale (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    basic_salary NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    allowance NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_staff_pay_scale_updated_at ON staff_pay_scale;
+CREATE TRIGGER update_staff_pay_scale_updated_at
+    BEFORE UPDATE ON staff_pay_scale
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
 
 
 -- ============================================================================
@@ -1319,7 +1358,7 @@ CREATE TABLE IF NOT EXISTS student_enrollments (
     class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
     section_id BIGINT REFERENCES sections(id) ON DELETE SET NULL,
     session_year VARCHAR(50) NOT NULL,
-    roll_number INT,
+    roll_number INT CHECK (roll_number > 0),
     enrollment_date DATE NOT NULL DEFAULT CURRENT_DATE,
     status VARCHAR(50) DEFAULT 'Active' CHECK (status IN ('Active', 'Completed', 'Dropped', 'Transferred')),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -1344,7 +1383,7 @@ CREATE TABLE IF NOT EXISTS student_transfers (
     transfer_reason TEXT NOT NULL,
     target_school VARCHAR(255) NOT NULL,
     tc_number VARCHAR(100) UNIQUE NOT NULL,
-    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Cancelled')),
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('Pending', 'Approved', 'Cancelled')),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -1507,7 +1546,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     id BIGSERIAL PRIMARY KEY,
     category_id BIGINT NOT NULL REFERENCES expense_categories(id) ON DELETE RESTRICT,
     title VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     expense_date DATE NOT NULL DEFAULT CURRENT_DATE,
     paid_by VARCHAR(255),
     receipt_image TEXT,
@@ -1549,7 +1588,7 @@ CREATE TABLE IF NOT EXISTS incomes (
     id BIGSERIAL PRIMARY KEY,
     category_id BIGINT NOT NULL REFERENCES income_categories(id) ON DELETE RESTRICT,
     title VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     income_date DATE NOT NULL DEFAULT CURRENT_DATE,
     received_by VARCHAR(255),
     description TEXT,
@@ -1678,8 +1717,8 @@ CREATE TABLE IF NOT EXISTS purchases (
     supplier_id BIGINT NOT NULL REFERENCES suppliers(id) ON DELETE RESTRICT,
     purchase_number VARCHAR(100) UNIQUE NOT NULL,
     purchase_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (total_amount >= 0.00),
+    paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (paid_amount >= 0.00),
     payment_status VARCHAR(50) DEFAULT 'Unpaid' CHECK (payment_status IN ('Paid', 'Unpaid', 'Partially Paid')),
     remarks TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -1742,25 +1781,6 @@ CREATE TABLE IF NOT EXISTS login_logs (
 
 
 -- ============================================================================
--- STAFF PAY SCALES TABLE
--- ============================================================================
-
-CREATE TABLE IF NOT EXISTS staff_pay_scale (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    basic_salary NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
-    allowance NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-);
-
-DROP TRIGGER IF EXISTS update_staff_pay_scale_updated_at ON staff_pay_scale;
-CREATE TRIGGER update_staff_pay_scale_updated_at
-    BEFORE UPDATE ON staff_pay_scale
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-
--- ============================================================================
 -- STAFF SALARIES TABLE
 -- ============================================================================
 
@@ -1768,9 +1788,9 @@ CREATE TABLE IF NOT EXISTS staff_salaries (
     id BIGSERIAL PRIMARY KEY,
     staff_id BIGINT REFERENCES staffs(id) ON DELETE CASCADE,
     month VARCHAR(50) NOT NULL,
-    basic DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    allowance DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    deductions DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    basic DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (basic >= 0.00),
+    allowance DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (allowance >= 0.00),
+    deductions DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (deductions >= 0.00),
     status VARCHAR(50) NOT NULL DEFAULT 'Pending',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
@@ -1853,7 +1873,7 @@ CREATE TRIGGER update_staff_applications_updated_at
 CREATE TABLE IF NOT EXISTS admission_fee_payments (
     id BIGSERIAL PRIMARY KEY,
     admission_fee_id BIGINT NOT NULL REFERENCES admission_fees(id) ON DELETE CASCADE,
-    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount_paid >= 0.00),
     payment_method VARCHAR(50) NOT NULL DEFAULT 'Cash',
     transaction_id VARCHAR(100),
     remarks TEXT,
@@ -1874,7 +1894,7 @@ CREATE TRIGGER update_admission_fee_payments_updated_at
 CREATE TABLE IF NOT EXISTS teacher_salary_payments (
     id BIGSERIAL PRIMARY KEY,
     salary_id BIGINT NOT NULL REFERENCES salaries(id) ON DELETE CASCADE,
-    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount_paid >= 0.00),
     payment_method VARCHAR(50) NOT NULL DEFAULT 'Bank Transfer',
     transaction_id VARCHAR(100),
     remarks TEXT,
@@ -1895,7 +1915,7 @@ CREATE TRIGGER update_teacher_salary_payments_updated_at
 CREATE TABLE IF NOT EXISTS staff_salary_payments (
     id BIGSERIAL PRIMARY KEY,
     staff_salary_id BIGINT NOT NULL REFERENCES staff_salaries(id) ON DELETE CASCADE,
-    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount_paid >= 0.00),
     payment_method VARCHAR(50) NOT NULL DEFAULT 'Bank Transfer',
     transaction_id VARCHAR(100),
     remarks TEXT,
@@ -1908,3 +1928,15 @@ DROP TRIGGER IF EXISTS update_staff_salary_payments_updated_at ON staff_salary_p
 CREATE TRIGGER update_staff_salary_payments_updated_at
     BEFORE UPDATE ON staff_salary_payments
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- PERFORMANCE OPTIMIZATION INDEXES
+-- ============================================================================
+
+CREATE INDEX IF NOT EXISTS idx_marks_exam_subject ON marks (exam_subject_id);
+CREATE INDEX IF NOT EXISTS idx_marks_student_enrollment ON marks (student_enrollment_id);
+CREATE INDEX IF NOT EXISTS idx_student_attendances_enrollment ON student_attendances (student_enrollment_id);
+CREATE INDEX IF NOT EXISTS idx_student_fee_payments_fee ON student_fee_payments (student_fee_id);
+CREATE INDEX IF NOT EXISTS idx_hostel_allocations_room ON hostel_allocations (room_id);
+CREATE INDEX IF NOT EXISTS idx_hostel_allocations_student ON hostel_allocations (student_id);
+CREATE INDEX IF NOT EXISTS idx_class_routines_lookup ON class_routines (class_id, section_id);

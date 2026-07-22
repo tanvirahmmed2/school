@@ -110,6 +110,7 @@ const Sidebar = () => {
     { label: 'New Board Member', href: '/admin/authorities/new', icon: FiUserPlus },
     { label: 'Board Members List', href: '/admin/authorities/list', icon: FiUsers },
     { label: 'Board Qualifications', href: '/admin/authorities/qualification', icon: FiAward },
+    { label: 'Designations', href: '/admin/authorities/designations', icon: FiAward },
   ];
 
   const staffLinks = [

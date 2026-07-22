@@ -167,8 +167,8 @@ export async function POST(request) {
       INSERT INTO student_admissions (
         admission_id, applicant_name, email, phone, date_of_birth, gender, address, 
         applied_class_id, previous_school, guardian_name, guardian_phone, birth_regi_number, 
-        image, image_id, signature, signature_id, signatre_id, status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, 'Pending')
+        image, image_id, signature, signature_id, status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'Pending')
       RETURNING *
     `, [
       parseInt(admission_id, 10),
@@ -186,7 +186,6 @@ export async function POST(request) {
       imageUrl,
       imagePublicId,
       signatureUrl,
-      signaturePublicId,
       signaturePublicId
     ]);
 
@@ -287,12 +286,6 @@ export async function PUT(request) {
         } catch (err) {
           console.error('Failed to delete applicant signature from Cloudinary:', err);
         }
-      } else if (admission.signatre_id) {
-        try {
-          await deleteImage(admission.signatre_id);
-        } catch (err) {
-          console.error('Failed to delete applicant signatre from Cloudinary:', err);
-        }
       }
 
       // 1. Remove from accepted_admissions if present
@@ -309,7 +302,6 @@ export async function PUT(request) {
           image_id = NULL,
           signature = NULL,
           signature_id = NULL,
-          signatre_id = NULL,
           updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
       `, [id]);

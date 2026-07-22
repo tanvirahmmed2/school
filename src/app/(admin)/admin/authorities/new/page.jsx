@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { FiUserPlus, FiBookOpen, FiMail, FiPhone, FiInfo, FiUpload, FiArrowLeft, FiCamera } from 'react-icons/fi';
 import Link from 'next/link';
+import { Context } from '@/component/helper/Context';
 
 const DESIGNATIONS = [
   { value: 'chairman', label: 'Chairman' },
@@ -18,6 +19,7 @@ const DESIGNATIONS = [
 ];
 
 export default function NewAuthorityPage() {
+  const { designations } = useContext(Context);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -156,11 +158,19 @@ export default function NewAuthorityPage() {
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 font-semibold"
                 required
               >
-                {DESIGNATIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
+                {designations && designations.length > 0 ? (
+                  designations.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.title}
+                    </option>
+                  ))
+                ) : (
+                  DESIGNATIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 

@@ -8,7 +8,7 @@ import { MdMenu } from 'react-icons/md';
 import { SCHOOL_NAME } from '@/lib/secret';
 
 const Navbar = () => {
-  const { classes, clubs, sidebar, setSidebar } = useContext(Context);
+  const { classes, clubs, designations, sidebar, setSidebar } = useContext(Context);
   const pathname = usePathname();
 
   const isActive = (path) => pathname === path;
@@ -64,13 +64,23 @@ const Navbar = () => {
             Authorities
           </Link>
           <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white">
-            <Link href={'/authorities/principal'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Principal</Link>
-            <Link href={'/authorities/chairman'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Chairman</Link>
-            <Link href={'/authorities/director'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Director</Link>
-            <Link href={'/authorities/council'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Council</Link>
-            <Link href={'/authorities/registrar'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Registrar</Link>
-            <Link href={'/authorities/staff'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Staff</Link>
-            <Link href={'/authorities/officers'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Officers</Link>
+            {designations && designations.length > 0 ? (
+              designations.map((d) => (
+                <Link href={`/authorities/${d.slug}`} key={d.id} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">
+                  {d.title}
+                </Link>
+              ))
+            ) : (
+              <>
+                <Link href={'/authorities/principal'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Principal</Link>
+                <Link href={'/authorities/chairman'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Chairman</Link>
+                <Link href={'/authorities/director'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Director</Link>
+                <Link href={'/authorities/council'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Council</Link>
+                <Link href={'/authorities/registrar'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Registrar</Link>
+                <Link href={'/authorities/staff'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Staff</Link>
+                <Link href={'/authorities/officers'} className="px-4 w-full py-2 hover:bg-sky-50/85 hover:text-sky-600 transition-colors text-xs font-semibold text-left">Officers</Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -121,6 +131,7 @@ const Navbar = () => {
         </div>
 
         <Link href={'/teachers'} className={linkStyle('/teachers')}>Teachers</Link>
+        <Link href={'/staffs'} className={linkStyle('/staffs')}>Staff</Link>
         <Link href={'/acheivements'} className={linkStyle('/acheivements')}>Achievements</Link>
         <Link href={'/news'} className={linkStyle('/news')}>News</Link>
         <Link href={'/results'} className={linkStyle('/results')}>Results</Link>

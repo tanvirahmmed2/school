@@ -194,9 +194,9 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
 
     // Retrieve image_id, signature_id, and signatre_id before deleting to clean up Cloudinary assets
-    const studentRes = await query('SELECT image_id, signature_id, signatre_id FROM students WHERE id = $1', [id]);
+    const studentRes = await query('SELECT image_id, signature_id FROM students WHERE id = $1', [id]);
     if (studentRes.rows.length > 0) {
-      const { image_id, signature_id, signatre_id } = studentRes.rows[0];
+      const { image_id, signature_id } = studentRes.rows[0];
       if (image_id) {
         try {
           await deleteImage(image_id);
@@ -209,12 +209,6 @@ export async function DELETE(request, { params }) {
           await deleteImage(signature_id);
         } catch (err) {
           console.error('Failed to delete student signature from Cloudinary:', err);
-        }
-      } else if (signatre_id) {
-        try {
-          await deleteImage(signatre_id);
-        } catch (err) {
-          console.error('Failed to delete student signatre from Cloudinary:', err);
         }
       }
     }

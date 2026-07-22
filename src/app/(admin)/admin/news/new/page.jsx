@@ -18,13 +18,6 @@ const CreateNewsPage = () => {
       placeholder: 'e.g. FIT Annual Convocation 2026'
     },
     {
-      name: 'slug',
-      label: 'SEO URL Slug (Optional)',
-      type: 'text',
-      required: false,
-      placeholder: 'e.g. annual-convocation-2026'
-    },
-    {
       name: 'image',
       label: 'Cover Image File',
       type: 'file',

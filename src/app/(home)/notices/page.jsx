@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiBookOpen, FiInfo, FiExternalLink } from 'react-icons/fi';
+import NoticeCard from '@/component/cards/NoticeCard';
+import { FiBookOpen } from 'react-icons/fi';
 
 const NoticesPage = () => {
   const [notices, setNotices] = useState([]);
@@ -29,7 +30,7 @@ const NoticesPage = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest border border-sky-100">
             Academic Bulletins
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -55,59 +56,9 @@ const NoticesPage = () => {
           </div>
         ) : notices.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {notices.map((notice) => {
-              const noticeDate = new Date(notice.created_at);
-              return (
-                <div
-                  key={notice.id}
-                  className={`bg-white rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-all duration-150 ${
-                    notice.is_pinned
-                      ? 'border-amber-200 shadow-sm bg-amber-50/10'
-                      : 'border-slate-100 hover:border-slate-200 hover:shadow-xs'
-                  }`}
-                >
-                  <div className="flex gap-3 items-start">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-                      notice.is_pinned
-                        ? 'bg-amber-100 text-amber-600'
-                        : 'bg-slate-50 text-slate-400'
-                    }`}>
-                      {notice.is_pinned ? <FiInfo className="text-base" /> : <FiBookOpen className="text-base" />}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="font-extrabold text-slate-800 text-sm md:text-base leading-snug">
-                          {notice.title}
-                        </h3>
-                        {notice.is_pinned && (
-                          <span className="text-[9px] font-black text-amber-700 bg-amber-100/60 px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
-                            Pinned
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-semibold text-slate-400">
-                        {noticeDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}
-                      </span>
-                    </div>
-                  </div>
-
-                  <a
-                    href={notice.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                      notice.is_pinned
-                        ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm'
-                        : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/50'
-                    }`}
-                  >
-                    <span>View Document</span>
-                    <FiExternalLink />
-                  </a>
-                </div>
-              );
-            })}
+            {notices.map((notice) => (
+              <NoticeCard key={notice.id} notice={notice} />
+            ))}
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center max-w-md mx-auto shadow-xs mt-8">

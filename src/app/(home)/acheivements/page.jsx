@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import AchievementCard from '@/component/cards/AchievementCard';
 import { FiAward } from 'react-icons/fi';
 
 const AchievementsPage = () => {
@@ -29,11 +30,11 @@ const AchievementsPage = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest border border-sky-100">
             Institutional Pride
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
-            Awards & Achievements
+            Awards &amp; Achievements
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
             FIT strives to maintain high academic, sports, and research credentials. Explore some of our latest milestones.
@@ -47,33 +48,19 @@ const AchievementsPage = () => {
           </div>
         ) : achievements.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {achievements.map((h, idx) => (
-              <div
-                key={h.id || idx}
-                className="bg-white rounded-3xl border border-slate-100 overflow-hidden flex flex-col hover:shadow-xs transition-shadow duration-150"
-              >
-                {h.image_url && (
-                  <div className="w-full h-48 bg-slate-100">
-                    <img src={h.image_url} alt={h.title} className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <div className="p-6 flex flex-col gap-1.5 flex-1">
-                  <h3 className="font-extrabold text-slate-900 text-base">
-                    {h.title}
-                  </h3>
-                  <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-2 whitespace-pre-wrap">
-                    {h.description}
-                  </p>
-                </div>
-              </div>
+            {achievements.map((item, idx) => (
+              <AchievementCard key={item.id || idx} achievement={item} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
+          <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center max-w-md mx-auto shadow-xs mt-8">
+            <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
               <FiAward />
             </div>
-            <h3 className="font-bold text-slate-800">No achievements recorded yet</h3>
+            <h3 className="font-bold text-slate-800 text-base">No achievements recorded yet</h3>
+            <p className="text-slate-500 text-xs mt-1">
+              Check back soon for upcoming institutional awards and milestone honors.
+            </p>
           </div>
         )}
       </div>

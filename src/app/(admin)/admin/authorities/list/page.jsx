@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiUsers, FiEdit2, FiTrash2, FiAward, FiMail, FiPhone, FiInfo, FiPlus, FiCamera, FiUpload, FiX } from 'react-icons/fi';
 import Link from 'next/link';
+import { Context } from '@/component/helper/Context';
 
 const DESIGNATION_LABELS = {
   chairman: 'Chairman',
@@ -27,6 +28,7 @@ const DESIGNATIONS = [
 ];
 
 export default function AuthoritiesListPage() {
+  const { designations } = useContext(Context);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingMember, setEditingMember] = useState(null);
@@ -162,7 +164,7 @@ export default function AuthoritiesListPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-slate-800 text-sm truncate group-hover:text-blue-600 transition-colors">{m.name}</h3>
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100/50 mt-1 capitalize">
-                    {DESIGNATION_LABELS[m.designation] || m.designation}
+                    {m.designation_title || DESIGNATION_LABELS[m.designation] || m.designation}
                   </span>
                 </div>
               </div>
@@ -269,14 +271,20 @@ export default function AuthoritiesListPage() {
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Designation</label>
                     <select
                       name="designation"
-                      value={editingMember.designation}
+                      value={editingMember.designation_id || editingMember.designation}
                       onChange={handleEditChange}
                       className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 outline-none font-semibold"
                       required
                     >
-                      {DESIGNATIONS.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
+                      {designations && designations.length > 0 ? (
+                        designations.map(opt => (
+                          <option key={opt.id} value={opt.id}>{opt.title}</option>
+                        ))
+                      ) : (
+                        DESIGNATIONS.map(opt => (
+                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))
+                      )}
                     </select>
                   </div>
 

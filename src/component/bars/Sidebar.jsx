@@ -278,6 +278,20 @@ const Sidebar = () => {
               <span>News Hub</span>
             </Link>
 
+            {/* Staff */}
+            <Link
+              href="/staffs"
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
+                isActive('/staffs')
+                  ? 'bg-sky-50 text-sky-600'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+              }`}
+            >
+              <FiBookOpen className="text-base" />
+              <span>Staff Directory</span>
+            </Link>
+
             {/* Result */}
             <Link
               href="/result"

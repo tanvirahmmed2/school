@@ -1,70 +1,85 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
+import { uploadImage, deleteImage } from '@/lib/cloudinary';
+
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+}
 
 // PUT update news (Admin only)
 export async function PUT(request, { params }) {
   try {
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
-      const res_err_288 = { error: 'Unauthorized. Admins only.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_288?.error || res_err_288?.message || 'An error occurred',
-        error: res_err_288?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 403 });
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { id } = await params;
-    const { title, content, image, image_id } = await request.json();
+    const { title, content, image } = await request.json();
 
     if (!title || !content) {
-      const res_err_747 = { error: 'Title and content are required.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_747?.error || res_err_747?.message || 'An error occurred',
-        error: res_err_747?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'Title and content are required.' }, { status: 400 });
+    }
+
+    const existingRes = await query('SELECT * FROM news WHERE id = $1', [parseInt(id, 10)]);
+    if (existingRes.rows.length === 0) {
+      return NextResponse.json({ success: false, error: 'News article not found.' }, { status: 404 });
+    }
+
+    const existing = existingRes.rows[0];
+    let imageUrl = existing.image;
+    let imageId = existing.image_id;
+
+    if (image && image.startsWith('data:image')) {
+      try {
+        if (existing.image_id) {
+          await deleteImage(existing.image_id);
+        }
+        const uploadResult = await uploadImage(image, 'news');
+        imageUrl = uploadResult.url;
+        imageId = uploadResult.publicId;
+      } catch (uploadErr) {
+        console.error('Cloudinary news upload failed:', uploadErr);
+        return NextResponse.json({ success: false, error: 'Failed to upload cover image.' }, { status: 500 });
+      }
+    } else if (image !== undefined) {
+      imageUrl = image;
+    }
+
+    // Dynamic slug update if title changed
+    let finalSlug = existing.slug;
+    if (title.trim() !== existing.title) {
+      finalSlug = slugify(title);
+      if (!finalSlug) finalSlug = `news-${Date.now()}`;
+      const checkSlug = await query('SELECT id FROM news WHERE slug = $1 AND id <> $2', [finalSlug, parseInt(id, 10)]);
+      if (checkSlug.rows.length > 0) {
+        finalSlug = `${finalSlug}-${Date.now()}`;
+      }
     }
 
     const result = await query(
       `UPDATE news 
-       SET title = $1, content = $2, image = $3, image_id = $4, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $5 
+       SET title = $1, slug = $2, content = $3, image = $4, image_id = $5, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $6 
        RETURNING *`,
-      [title.trim(), content.trim(), image ? image.trim() : null, image_id ? image_id.trim() : null, id]
+      [title.trim(), finalSlug, content.trim(), imageUrl, imageId, parseInt(id, 10)]
     );
 
-    if (result.rows.length === 0) {
-      const res_err_1416 = { error: 'News article not found.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_1416?.error || res_err_1416?.message || 'An error occurred',
-        error: res_err_1416?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 404 });
-    }
-
-    const res_data_1094 = {
+    return NextResponse.json({
+      success: true,
       message: 'News article updated successfully.',
-      news: result.rows[0],
-    };
-      return NextResponse.json({
-        success: true,
-        message: res_data_1094?.message || 'Successfully fecthed data',
-        paylod: res_data_1094
-      }, { status: 200 });
+      paylod: { news: result.rows[0] }
+    }, { status: 200 });
   } catch (error) {
     console.error('Error updating news:', error);
-    const res_err_2206 = { error: 'Failed to update news article. Internal server error.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_2206?.error || res_err_2206?.message || 'An error occurred',
-        error: res_err_2206?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'Failed to update news article.' }, { status: 500 });
   }
 }
 
@@ -73,46 +88,31 @@ export async function DELETE(request, { params }) {
   try {
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
-      const res_err_2719 = { error: 'Unauthorized. Admins only.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_2719?.error || res_err_2719?.message || 'An error occurred',
-        error: res_err_2719?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 403 });
+      return NextResponse.json({ success: false, error: 'Unauthorized. Admins only.' }, { status: 403 });
     }
 
     const { id } = await params;
-
-    const result = await query('DELETE FROM news WHERE id = $1 RETURNING id', [id]);
-
-    if (result.rows.length === 0) {
-      const res_err_3204 = { error: 'News article not found.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_3204?.error || res_err_3204?.message || 'An error occurred',
-        error: res_err_3204?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 404 });
+    const existingRes = await query('SELECT image_id FROM news WHERE id = $1', [parseInt(id, 10)]);
+    if (existingRes.rows.length === 0) {
+      return NextResponse.json({ success: false, error: 'News article not found.' }, { status: 404 });
     }
 
-    const res_data_2186 = {
-      message: 'News article deleted successfully.',
-      id: result.rows[0].id,
-    };
-      return NextResponse.json({
-        success: true,
-        message: res_data_2186?.message || 'Successfully fecthed data',
-        paylod: res_data_2186
-      }, { status: 200 });
+    if (existingRes.rows[0].image_id) {
+      try {
+        await deleteImage(existingRes.rows[0].image_id);
+      } catch (e) {
+        console.error('Cloudinary delete error:', e);
+      }
+    }
+
+    await query('DELETE FROM news WHERE id = $1', [parseInt(id, 10)]);
+
+    return NextResponse.json({
+      success: true,
+      message: 'News article deleted successfully.'
+    }, { status: 200 });
   } catch (error) {
     console.error('Error deleting news:', error);
-    const res_err_3995 = { error: 'Failed to delete news article. Internal server error.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_3995?.error || res_err_3995?.message || 'An error occurred',
-        error: res_err_3995?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'Failed to delete news article.' }, { status: 500 });
   }
 }
