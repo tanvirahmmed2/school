@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -12,6 +12,22 @@ import { Context } from '@/component/helper/Context';
 const Sidebar = () => {
   const pathname = usePathname();
   const { studentSidebar, setStudentSidebar } = useContext(Context);
+  const [isClubModerator, setIsClubModerator] = useState(false);
+
+  useEffect(() => {
+    async function checkClubModerator() {
+      try {
+        const res = await fetch('/api/student/clubs/moderator');
+        const data = await res.json();
+        if (data?.success && data?.paylod?.isClubModerator) {
+          setIsClubModerator(true);
+        }
+      } catch (err) {
+        console.error('Error checking club moderator status:', err);
+      }
+    }
+    checkClubModerator();
+  }, []);
 
   const studentLinks = [
     { label: 'Dashboard', href: '/student', icon: FiHome },
@@ -22,6 +38,7 @@ const Sidebar = () => {
     { label: 'My Marks & Results', href: '/student/results', icon: FiAward },
     { label: 'Fees & Fines', href: '/student/fees', icon: FiDollarSign },
     { label: 'Clubs & Activities', href: '/student/clubs', icon: FiUsers },
+    ...(isClubModerator ? [{ label: 'Club Moderator', href: '/student/clubs/moderator', icon: FiUsers }] : []),
     { label: 'My Profile', href: '/student/profile', icon: FiUser },
   ];
 

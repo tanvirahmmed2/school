@@ -97,6 +97,50 @@ export async function isStudent() {
   }
 }
 
+export async function getTeacherUser() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-teacher')?.value;
+    if (!token) return null;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return null;
+
+    const result = await query('SELECT id, name, email, is_active, is_registered FROM teachers WHERE id = $1', [decoded.id]);
+    if (result.rows.length === 0) return null;
+
+    const teacher = result.rows[0];
+    if (teacher.is_active && teacher.is_registered) {
+      return teacher;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getStudentUser() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-student')?.value;
+    if (!token) return null;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return null;
+
+    const result = await query('SELECT id, name, email, registration_number, is_active, is_registered FROM students WHERE id = $1', [decoded.id]);
+    if (result.rows.length === 0) return null;
+
+    const student = result.rows[0];
+    if (student.is_active && student.is_registered) {
+      return student;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function isStaff() {
   try {
     const cookieStore = await cookies();

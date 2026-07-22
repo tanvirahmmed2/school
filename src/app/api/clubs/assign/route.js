@@ -33,11 +33,11 @@ export async function GET(request) {
 
     if (clubId) {
       const adminsPromise = query(
-        `SELECT teacher_id AS id, designation FROM clubs_admins WHERE club_id = $1`,
+        `SELECT teacher_id AS id, designation FROM club_admin WHERE club_id = $1`,
         [clubId]
       );
       const membersPromise = query(
-        `SELECT student_id AS id FROM club_members WHERE club_id = $1`,
+        `SELECT student_id AS id FROM club_moderator WHERE club_id = $1`,
         [clubId]
       );
 
@@ -101,8 +101,7 @@ export async function POST(request) {
     }
 
     // 1. Wipe old assignments
-    await query('DELETE FROM clubs_admins WHERE club_id = $1', [club_id]);
-    await query('DELETE FROM club_members WHERE club_id = $1', [club_id]);
+    await query('DELETE FROM club_admin WHERE club_id = $1', [club_id]);
 
     // 2. Insert new ones
     if (teachers && Array.isArray(teachers)) {
@@ -110,14 +109,14 @@ export async function POST(request) {
         const tId = typeof entry === 'object' ? entry.teacher_id : entry;
         const des = typeof entry === 'object' ? entry.designation : null;
         await query(
-          'INSERT INTO clubs_admins (club_id, teacher_id, designation) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING',
+          'INSERT INTO club_admin (club_id, teacher_id, designation) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING',
           [club_id, tId, des ? des.trim() : null]
         );
       }
     } else if (teacher_ids && Array.isArray(teacher_ids)) {
       for (const tId of teacher_ids) {
         await query(
-          'INSERT INTO clubs_admins (club_id, teacher_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+          'INSERT INTO club_admin (club_id, teacher_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
           [club_id, tId]
         );
       }

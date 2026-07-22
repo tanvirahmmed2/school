@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiPlus, FiEdit, FiTrash2, FiActivity, FiTag, FiBookOpen } from 'react-icons/fi';
+import { FiPlus, FiEdit, FiTrash2, FiActivity, FiBookOpen, FiMessageSquare } from 'react-icons/fi';
 import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const AdminClubsNewPage = () => {
@@ -12,7 +12,7 @@ const AdminClubsNewPage = () => {
 
   // Form states
   const [name, setName] = useState('');
-  const [slug, setSlug] = useState('');
+  const [motto, setMotto] = useState('');
   const [description, setDescription] = useState('');
   
   const [editId, setEditId] = useState(null);
@@ -66,16 +66,20 @@ const AdminClubsNewPage = () => {
     setSubmitting(true);
     try {
       if (editId) {
-        const response = await axios.put(`/api/clubs/${editId}`, { name, slug, description, image });
+        const response = await axios.put(`/api/clubs/${editId}`, { 
+          name, motto, description, image 
+        });
         toast.success(response.data.message || 'Club details updated successfully!');
         setEditId(null);
       } else {
-        const response = await axios.post('/api/clubs', { name, slug, description, image });
+        const response = await axios.post('/api/clubs', { 
+          name, motto, description, image 
+        });
         toast.success(response.data.message || 'Club registered successfully!');
       }
 
       setName('');
-      setSlug('');
+      setMotto('');
       setDescription('');
       setImage('');
       setImagePreview('');
@@ -89,8 +93,8 @@ const AdminClubsNewPage = () => {
 
   const handleEditClick = (club) => {
     setEditId(club.id);
-    setName(club.name);
-    setSlug(club.slug);
+    setName(club.name || '');
+    setMotto(club.motto || '');
     setDescription(club.description || '');
     setImage('');
     setImagePreview(club.image || '');
@@ -99,7 +103,7 @@ const AdminClubsNewPage = () => {
   const handleCancelEdit = () => {
     setEditId(null);
     setName('');
-    setSlug('');
+    setMotto('');
     setDescription('');
     setImage('');
     setImagePreview('');
@@ -128,10 +132,10 @@ const AdminClubsNewPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiActivity className="text-blue-600" /> Student Clubs & Societies
+          <FiActivity className="text-blue-600" /> Student Clubs &amp; Societies
         </h1>
         <p className="text-sm text-slate-500">
-          Create, edit, or remove school club registries and co-curricular programs.
+          Create, edit, or remove school club registries, mottos, and co-curricular programs.
         </p>
       </div>
 
@@ -147,7 +151,7 @@ const AdminClubsNewPage = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Club Name
+                Club Name *
               </label>
               <input
                 type="text"
@@ -162,15 +166,15 @@ const AdminClubsNewPage = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                <FiTag /> Slug (Optional URL handle)
+                <FiMessageSquare /> Club Motto
               </label>
               <input
                 type="text"
-                placeholder="e.g. debating-society"
-                value={slug}
-                onChange={(e) => setSlug(e.target.value)}
+                placeholder="e.g. Innovate, Empower, Lead"
+                value={motto}
+                onChange={(e) => setMotto(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500"
               />
             </div>
 
@@ -227,7 +231,7 @@ const AdminClubsNewPage = () => {
                 type="submit"
                 disabled={submitting}
                 className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                  editId ? 'bg-indigo-650 hover:bg-indigo-700 bg-indigo-600' : 'bg-blue-600 hover:bg-blue-700 w-full'
+                  editId ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-blue-600 hover:bg-blue-700 w-full'
                 } ${editId && 'w-1/2'} disabled:opacity-50`}
               >
                 {submitting ? (
@@ -269,8 +273,7 @@ const AdminClubsNewPage = () => {
                 <thead>
                   <tr className="bg-slate-50/50 border-b border-slate-100">
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Club Name</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Slug</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Description</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Motto</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
@@ -291,15 +294,18 @@ const AdminClubsNewPage = () => {
                           <span>{club.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-500">/{club.slug}</td>
                       <td className="px-6 py-4 text-xs text-slate-600 max-w-[240px] truncate">
-                        {club.description || <span className="text-slate-300 italic">No description</span>}
+                        {club.motto ? (
+                          <span className="font-medium italic text-slate-700">"{club.motto}"</span>
+                        ) : (
+                          <span className="text-slate-300 italic">No motto</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(club)}
                           className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors cursor-pointer"
-                          title="Edit Club details"
+                          title="Edit & Update Club info"
                         >
                           <FiEdit className="text-sm" />
                         </button>

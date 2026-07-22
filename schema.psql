@@ -197,7 +197,9 @@ CREATE TABLE IF NOT EXISTS clubs (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
+    motto TEXT,
     description TEXT,
+    notice_info TEXT,
     image TEXT,
     image_id VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -210,10 +212,10 @@ CREATE TRIGGER update_clubs_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
--- CLUBS ADMINS TABLE (TEACHERS ASSIGNED TO CLUBS)
+-- CLUB ADMIN TABLE (ONLY TEACHERS ASSIGNED TO CLUBS AS ADMINS)
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS clubs_admins (
+CREATE TABLE IF NOT EXISTS club_admin (
     id BIGSERIAL PRIMARY KEY,
     club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
     teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
@@ -223,9 +225,28 @@ CREATE TABLE IF NOT EXISTS clubs_admins (
     UNIQUE(club_id, teacher_id)
 );
 
-DROP TRIGGER IF EXISTS update_clubs_admins_updated_at ON clubs_admins;
-CREATE TRIGGER update_clubs_admins_updated_at
-    BEFORE UPDATE ON clubs_admins
+DROP TRIGGER IF EXISTS update_club_admin_updated_at ON club_admin;
+CREATE TRIGGER update_club_admin_updated_at
+    BEFORE UPDATE ON club_admin
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CLUB MODERATOR TABLE (ONLY STUDENTS ASSIGNED TO CLUBS AS MODERATORS)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS club_moderator (
+    id BIGSERIAL PRIMARY KEY,
+    club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    designation VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(club_id, student_id)
+);
+
+DROP TRIGGER IF EXISTS update_club_moderator_updated_at ON club_moderator;
+CREATE TRIGGER update_club_moderator_updated_at
+    BEFORE UPDATE ON club_moderator
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================

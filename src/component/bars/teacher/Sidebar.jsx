@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -13,6 +13,22 @@ import Back from '@/component/button/Back';
 const Sidebar = () => {
   const pathname = usePathname();
   const { TeacherSidebar, setTeacherSidebar } = useContext(Context);
+  const [isClubAdmin, setIsClubAdmin] = useState(false);
+
+  useEffect(() => {
+    async function checkClubAdmin() {
+      try {
+        const res = await fetch('/api/teacher/clubs');
+        const data = await res.json();
+        if (data?.success && data?.paylod?.isClubAdmin) {
+          setIsClubAdmin(true);
+        }
+      } catch (err) {
+        console.error('Error checking club admin status:', err);
+      }
+    }
+    checkClubAdmin();
+  }, []);
 
   const teacherLinks = [
     { label: 'Dashboard', href: '/teacher', icon: FiHome },
@@ -21,6 +37,7 @@ const Sidebar = () => {
     { label: 'Record Attendance', href: '/teacher/attendance/record', icon: FiFileText },
     { label: 'My Subjects', href: '/teacher/subjects', icon: FiBook },
     { label: 'Student Marks', href: '/teacher/marks', icon: FiAward },
+    ...(isClubAdmin ? [{ label: 'Club Admin', href: '/teacher/clubs', icon: FiUsers }] : []),
     { label: 'Leave Applications', href: '/teacher/leaves', icon: FiFileText },
     { label: 'Salary History', href: '/teacher/salary', icon: FiDollarSign },
     { label: 'My Profile', href: '/teacher/profile', icon: FiUser },
