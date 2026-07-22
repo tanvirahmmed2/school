@@ -5,3 +5,4 @@ export { default as NewsCard } from './NewsCard';
 export { default as AchievementCard } from './AchievementCard';
 export { default as NoticeCard } from './NoticeCard';
 export { default as SubjectCard } from './SubjectCard';
+export { default as ClubCard } from './ClubCard';
