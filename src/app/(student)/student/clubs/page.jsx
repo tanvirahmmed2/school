@@ -1,143 +1,301 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { FiUsers, FiPlus, FiMinus, FiCheck, FiInfo } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import {
+  FiUsers, FiFileText, FiTrash2, FiEdit2, FiSave,
+  FiAlertCircle, FiInfo, FiCalendar, FiShield
+} from 'react-icons/fi';
 
-const ClubsPage = () => {
-  const [clubs, setClubs] = useState([]);
-  const [joinedClubIds, setJoinedClubIds] = useState([]);
+const StudentClubsDashboardPage = () => {
   const [loading, setLoading] = useState(true);
-  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [isClubMember, setIsClubMember] = useState(false);
+  const [clubs, setClubs] = useState([]);
+  const [selectedClubId, setSelectedClubId] = useState('');
 
-  const [reloadTrigger, setReloadTrigger] = useState(0);
+  // News management states for moderators
+  const [editingNewsId, setEditingNewsId] = useState(null);
+  const [newsTitle, setNewsTitle] = useState('');
+  const [newsContent, setNewsContent] = useState('');
+  const [newsImage, setNewsImage] = useState('');
+  const [savingNews, setSavingNews] = useState(false);
 
   useEffect(() => {
-    const fetchClubs = async () => {
-      try {
-        const res = await fetch('/api/student/clubs');
-        if (res.ok) {
-          const data = await res.json();
-          setClubs(data.paylod.clubs || []);
-          setJoinedClubIds(data.joinedClubIds || []);
-        }
-      } catch (error) {
-        console.error('Error fetching clubs:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchStudentClubs();
+  }, []);
 
-    fetchClubs();
-  }, [reloadTrigger]);
-
-  const handleClubAction = async (clubId, action) => {
-    setActionLoadingId(clubId);
+  const fetchStudentClubs = async () => {
+    setLoading(true);
     try {
-      const res = await fetch('/api/student/clubs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ club_id: clubId, action })
-      });
-
-      if (res.ok) {
-        toast.success(action === 'join' ? 'Joined club successfully!' : 'Left club successfully.');
-        setReloadTrigger((prev) => prev + 1);
+      const response = await axios.get('/api/student/clubs');
+      const payload = response.data?.paylod || {};
+      if (payload.isClubMember && payload.clubs?.length > 0) {
+        setIsClubMember(true);
+        setClubs(payload.clubs);
+        const firstClub = payload.clubs[0];
+        setSelectedClubId(String(firstClub.id));
       } else {
-        const errorData = await res.json();
-        toast.error(errorData.error || 'Action failed.');
+        setIsClubMember(false);
+        setClubs([]);
       }
     } catch (error) {
-      toast.error('An error occurred.');
+      toast.error('Failed to load club details.');
     } finally {
-      setActionLoadingId(null);
+      setLoading(false);
     }
   };
 
+  const currentClub = clubs.find(c => String(c.id) === String(selectedClubId));
+
+  useEffect(() => {
+    if (currentClub) {
+      setEditingNewsId(null);
+      setNewsTitle('');
+      setNewsContent('');
+      setNewsImage('');
+    }
+  }, [selectedClubId]);
+
+  // Image handler
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 4 * 1024 * 1024) {
+        toast.error('Image size must be less than 4MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewsImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Save News (Moderators only)
+  const handleSaveNews = async (e) => {
+    e.preventDefault();
+    if (!newsTitle || !newsContent) {
+      toast.error('Title and content are required.');
+      return;
+    }
+
+    setSavingNews(true);
+    try {
+      const res = await axios.post('/api/student/clubs', {
+        action: 'manage_news',
+        club_id: selectedClubId,
+        news_id: editingNewsId,
+        title: newsTitle,
+        content: newsContent,
+        image: newsImage
+      });
+      toast.success(res.data.message || 'Club news saved!');
+      setEditingNewsId(null);
+      setNewsTitle('');
+      setNewsContent('');
+      setNewsImage('');
+      fetchStudentClubs();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to save news');
+    } finally {
+      setSavingNews(false);
+    }
+  };
+
+  // Delete News
+  const handleDeleteNews = async (newsId) => {
+    if (!confirm('Delete this news post?')) return;
+    try {
+      const res = await axios.post('/api/student/clubs', {
+        action: 'delete_news',
+        club_id: selectedClubId,
+        news_id: newsId
+      });
+      toast.success(res.data.message || 'News deleted');
+      fetchStudentClubs();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete news');
+    }
+  };
+
+  const handleEditNewsClick = (item) => {
+    setEditingNewsId(item.id);
+    setNewsTitle(item.title);
+    setNewsContent(item.content);
+    setNewsImage(item.image_url || '');
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+      <div className="w-full min-h-[300px] flex items-center justify-center">
+        <span className="text-xs text-slate-400">Loading Club Dashboard...</span>
       </div>
     );
   }
 
+  if (!isClubMember || clubs.length === 0) {
+    return (
+      <div className="w-full bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-2">
+        <FiAlertCircle className="text-2xl text-slate-400 mx-auto" />
+        <h2 className="text-sm font-bold text-slate-800">Not Enrolled in Any Club</h2>
+        <p className="text-xs text-slate-500">You are not currently listed as a member of any student club.</p>
+      </div>
+    );
+  }
+
+  const isModerator = currentClub?.student_role === 'moderator';
+
   return (
-    <div className="flex flex-col gap-8 w-full mx-auto">
-      {/* Title */}
-      <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Clubs & Activities</h1>
-        <p className="text-slate-500 text-sm font-medium">Explore co-curricular clubs, manage memberships, and participate in events.</p>
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-bold text-slate-900">{currentClub?.name}</h1>
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+              isModerator ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700'
+            }`}>
+              {isModerator ? 'Club Moderator' : 'Club Member'}
+            </span>
+          </div>
+          {currentClub?.motto && (
+            <p className="text-xs italic text-indigo-600 font-medium mt-0.5">"{currentClub.motto}"</p>
+          )}
+        </div>
+
+        {clubs.length > 1 && (
+          <select
+            value={selectedClubId}
+            onChange={(e) => setSelectedClubId(e.target.value)}
+            className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none"
+          >
+            {clubs.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        )}
       </div>
 
-      {clubs.length === 0 ? (
-        <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-          <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-4">
-            <FiInfo className="text-3xl" />
-          </div>
-          <h3 className="font-bold text-slate-800 text-base mb-1">No Clubs Available</h3>
-          <p className="text-slate-400 text-xs font-medium max-w-xs">There are no co-curricular clubs registered in the system at this time.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {clubs.map((club) => {
-            const isJoined = joinedClubIds.includes(String(club.id));
-            const isLoading = actionLoadingId === club.id;
-
-            return (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left Column: Notice Info (Members Only) & Moderator Actions */}
+        <div className="space-y-6">
+          
+          {/* Member Notice Card */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2">
+            <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+              <FiInfo className="text-indigo-600" /> Club Notice &amp; Announcements
+            </h2>
+            {currentClub?.notice_info ? (
               <div
-                key={club.id}
-                className={`bg-white border transition-all duration-200 rounded-3xl p-6 flex flex-col justify-between ${
-                  isJoined ? 'border-blue-100 shadow-md shadow-blue-500/[0.02]' : 'border-slate-100 hover:border-slate-200'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-xl ${isJoined ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400'}`}>
-                      <FiUsers className="text-xl" />
-                    </div>
-                    {isJoined && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-50 border border-blue-100 rounded-full text-xs font-bold text-blue-600">
-                        <FiCheck className="text-sm" /> Joined
-                      </span>
+                className="text-xs text-slate-700 leading-relaxed bg-slate-50 border border-slate-200 p-3 rounded-xl whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: currentClub.notice_info }}
+              />
+            ) : (
+              <p className="text-xs text-slate-400 py-2">No active notice posted for members.</p>
+            )}
+          </div>
+
+          {/* Moderator Form if role === 'moderator' */}
+          {isModerator && (
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
+              <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <FiFileText /> {editingNewsId ? 'Edit News Article' : 'Publish News Article'}
+                </h2>
+                {editingNewsId && (
+                  <button
+                    onClick={() => {
+                      setEditingNewsId(null);
+                      setNewsTitle('');
+                      setNewsContent('');
+                      setNewsImage('');
+                    }}
+                    className="text-xs text-slate-400 hover:text-slate-600"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+
+              <form onSubmit={handleSaveNews} className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="News Title *"
+                  value={newsTitle}
+                  onChange={(e) => setNewsTitle(e.target.value)}
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none"
+                />
+
+                <textarea
+                  rows={4}
+                  placeholder="News Content *"
+                  value={newsContent}
+                  onChange={(e) => setNewsContent(e.target.value)}
+                  className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none resize-none"
+                />
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-100"
+                />
+
+                <button
+                  type="submit"
+                  disabled={savingNews}
+                  className="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-50"
+                >
+                  {savingNews ? 'Publishing...' : editingNewsId ? 'Update Article' : 'Publish Article'}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: News List */}
+        <div className="lg:col-span-2">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
+            <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2">
+              Club News &amp; Activity Posts
+            </h2>
+
+            <div className="space-y-3">
+              {currentClub?.news?.map(item => (
+                <div key={item.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                  <div className="flex justify-between items-start">
+                    <h3 className="text-sm font-bold text-slate-800">{item.title}</h3>
+                    {isModerator && (
+                      <div className="flex gap-2">
+                        <button onClick={() => handleEditNewsClick(item)} className="p-1 text-slate-500 hover:text-slate-800">
+                          <FiEdit2 />
+                        </button>
+                        <button onClick={() => handleDeleteNews(item.id)} className="p-1 text-slate-500 hover:text-red-600">
+                          <FiTrash2 />
+                        </button>
+                      </div>
                     )}
                   </div>
-                  <h3 className="font-bold text-slate-800 text-base mb-2">{club.name}</h3>
-                  <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">Slug: {club.slug}</p>
-                  <p className="text-slate-500 text-xs font-medium leading-relaxed mb-6">
-                    {club.description || 'No description provided for this club.'}
-                  </p>
+                  <div
+                    className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap"
+                    dangerouslySetInnerHTML={{ __html: item.content }}
+                  />
                 </div>
+              ))}
 
-                <div className="border-t border-slate-100 pt-4">
-                  {isJoined ? (
-                    <button
-                      disabled={isLoading}
-                      onClick={() => handleClubAction(club.id, 'leave')}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 bg-red-50 hover:bg-red-100 disabled:bg-slate-50 text-red-600 disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all cursor-pointer"
-                    >
-                      <FiMinus className="text-sm" />
-                      <span>{isLoading ? 'Processing...' : 'Leave Club'}</span>
-                    </button>
-                  ) : (
-                    <button
-                      disabled={isLoading}
-                      onClick={() => handleClubAction(club.id, 'join')}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/15 disabled:shadow-none transition-all cursor-pointer"
-                    >
-                      <FiPlus className="text-sm" />
-                      <span>{isLoading ? 'Processing...' : 'Join Club'}</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              {(!currentClub?.news || currentClub.news.length === 0) && (
+                <p className="text-center text-xs text-slate-400 py-6">No news articles published yet.</p>
+              )}
+            </div>
+          </div>
         </div>
-      )}
+
+      </div>
     </div>
   );
 };
 
-export default ClubsPage;
+export default StudentClubsDashboardPage;

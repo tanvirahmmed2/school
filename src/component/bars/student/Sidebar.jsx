@@ -12,21 +12,21 @@ import { Context } from '@/component/helper/Context';
 const Sidebar = () => {
   const pathname = usePathname();
   const { studentSidebar, setStudentSidebar } = useContext(Context);
-  const [isClubModerator, setIsClubModerator] = useState(false);
+  const [isClubMember, setIsClubMember] = useState(false);
 
   useEffect(() => {
-    async function checkClubModerator() {
+    async function checkClubMember() {
       try {
-        const res = await fetch('/api/student/clubs/moderator');
+        const res = await fetch('/api/student/clubs');
         const data = await res.json();
-        if (data?.success && data?.paylod?.isClubModerator) {
-          setIsClubModerator(true);
+        if (data?.success && data?.paylod?.isClubMember) {
+          setIsClubMember(true);
         }
       } catch (err) {
-        console.error('Error checking club moderator status:', err);
+        console.error('Error checking club membership status:', err);
       }
     }
-    checkClubModerator();
+    checkClubMember();
   }, []);
 
   const studentLinks = [
@@ -37,8 +37,7 @@ const Sidebar = () => {
     { label: 'Exam Routine', href: '/student/exams', icon: FiCalendar },
     { label: 'My Marks & Results', href: '/student/results', icon: FiAward },
     { label: 'Fees & Fines', href: '/student/fees', icon: FiDollarSign },
-    { label: 'Clubs & Activities', href: '/student/clubs', icon: FiUsers },
-    ...(isClubModerator ? [{ label: 'Club Moderator', href: '/student/clubs/moderator', icon: FiUsers }] : []),
+    ...(isClubMember ? [{ label: 'My Club Dashboard', href: '/student/clubs', icon: FiUsers }] : []),
     { label: 'My Profile', href: '/student/profile', icon: FiUser },
   ];
 
@@ -67,7 +66,9 @@ const Sidebar = () => {
             <nav className="flex flex-col gap-1">
               {studentLinks.map((link) => {
                 const Icon = link.icon;
-                const isActive = pathname === link.href;
+                const isActive = link.href === '/student'
+                  ? pathname === '/student'
+                  : pathname.startsWith(link.href);
 
                 return (
                   <Link

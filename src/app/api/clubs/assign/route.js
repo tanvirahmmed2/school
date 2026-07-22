@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import { query, ensureClubTables } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
 // GET assignments for a club and options
 export async function GET(request) {
   try {
+    await ensureClubTables();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err_286 = { error: 'Unauthorized. Admins only.' };
@@ -37,7 +38,7 @@ export async function GET(request) {
         [clubId]
       );
       const membersPromise = query(
-        `SELECT student_id AS id FROM club_moderator WHERE club_id = $1`,
+        `SELECT student_id AS id FROM club_member WHERE club_id = $1`,
         [clubId]
       );
 
@@ -76,6 +77,7 @@ export async function GET(request) {
 // POST update assignments
 export async function POST(request) {
   try {
+    await ensureClubTables();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err_2722 = { error: 'Unauthorized. Admins only.' };
@@ -125,7 +127,7 @@ export async function POST(request) {
     if (student_ids && Array.isArray(student_ids)) {
       for (const stId of student_ids) {
         await query(
-          'INSERT INTO club_members (club_id, student_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+          "INSERT INTO club_member (club_id, student_id, role) VALUES ($1, $2, 'member') ON CONFLICT DO NOTHING",
           [club_id, stId]
         );
       }

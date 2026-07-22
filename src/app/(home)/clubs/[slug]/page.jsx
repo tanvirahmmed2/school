@@ -16,17 +16,16 @@ const ClubDetailsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [clubsRes, newsRes] = await Promise.all([
-          fetch('/api/clubs'),
+        const [clubRes, newsRes] = await Promise.all([
+          fetch(`/api/clubs/${slug}`),
           fetch('/api/club-news')
         ]);
 
         let foundClub = null;
-        if (clubsRes.ok) {
-          const clubsData = await clubsRes.json();
-          const list = clubsData.paylod?.clubs || [];
-          foundClub = list.find(c => String(c.slug) === String(slug) || String(c.id) === String(slug));
-          setSelectedClub(foundClub || null);
+        if (clubRes.ok) {
+          const clubData = await clubRes.json();
+          foundClub = clubData.paylod?.club || null;
+          setSelectedClub(foundClub);
         }
 
         if (newsRes.ok && foundClub) {

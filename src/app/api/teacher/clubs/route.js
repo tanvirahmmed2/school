@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import { query, ensureClubTables } from '@/lib/db';
 import { getTeacherUser } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
 // GET clubs assigned to teacher as club admin
 export async function GET() {
   try {
+    await ensureClubTables();
     const teacher = await getTeacherUser();
     if (!teacher) {
       return NextResponse.json({
@@ -16,7 +17,6 @@ export async function GET() {
       }, { status: 401 });
     }
 
-    // Ensure notice_info column exists on clubs
     try {
       await query('ALTER TABLE clubs ADD COLUMN IF NOT EXISTS notice_info TEXT');
     } catch (e) {
@@ -46,17 +46,16 @@ export async function GET() {
     }
 
     const clubs = assignedClubsRes.rows;
-
-    // Fetch moderators and news for assigned clubs
     const clubIds = clubs.map(c => c.id);
 
-    const moderatorsRes = await query(
-      `SELECT cm.id, cm.club_id, cm.student_id, cm.designation, cm.created_at,
+    // Fetch members and moderators from club_member
+    const membersRes = await query(
+      `SELECT cm.id, cm.club_id, cm.student_id, cm.role, cm.designation, cm.created_at,
               s.name as student_name, s.registration_number, s.email as student_email
-       FROM club_moderator cm
+       FROM club_member cm
        JOIN students s ON cm.student_id = s.id
        WHERE cm.club_id = ANY($1::bigint[])
-       ORDER BY s.name ASC`,
+       ORDER BY CASE WHEN cm.role = 'moderator' THEN 1 ELSE 2 END, s.name ASC`,
       [clubIds]
     );
 
@@ -73,7 +72,7 @@ export async function GET() {
 
     const clubsWithDetails = clubs.map(club => ({
       ...club,
-      moderators: moderatorsRes.rows.filter(m => String(m.club_id) === String(club.id)),
+      members: membersRes.rows.filter(m => String(m.club_id) === String(club.id)),
       news: newsRes.rows.filter(n => String(n.club_id) === String(club.id))
     }));
 
@@ -97,7 +96,7 @@ export async function GET() {
   }
 }
 
-// POST/PUT actions for Club Admin (Add Moderator, Update Notice Info, Manage News)
+// POST actions for Club Admin
 export async function POST(request) {
   try {
     const teacher = await getTeacherUser();
@@ -137,17 +136,19 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    // 1. ADD MODERATOR (Only students can be moderators)
-    if (action === 'add_moderator') {
-      const { student_id, designation } = body;
+    // 1. ADD MEMBER / MODERATOR
+    if (action === 'add_member') {
+      const { student_id, role, designation } = body;
       if (!student_id) {
         return NextResponse.json({
           success: false,
-          message: 'student_id is required to add a moderator.',
+          message: 'student_id is required.',
           error: 'Validation Error',
           paylod: null
         }, { status: 400 });
       }
+
+      const assignedRole = role === 'moderator' ? 'moderator' : 'member';
 
       // Verify student existence
       const stCheck = await query(`SELECT id FROM students WHERE id = $1`, [student_id]);
@@ -161,21 +162,48 @@ export async function POST(request) {
       }
 
       await query(
-        `INSERT INTO club_moderator (club_id, student_id, designation)
-         VALUES ($1, $2, $3)
+        `INSERT INTO club_member (club_id, student_id, role, designation)
+         VALUES ($1, $2, $3, $4)
          ON CONFLICT (club_id, student_id) 
-         DO UPDATE SET designation = EXCLUDED.designation, updated_at = CURRENT_TIMESTAMP`,
-        [club_id, student_id, designation ? designation.trim() : 'Moderator']
+         DO UPDATE SET role = EXCLUDED.role, designation = EXCLUDED.designation, updated_at = CURRENT_TIMESTAMP`,
+        [club_id, student_id, assignedRole, designation ? designation.trim() : (assignedRole === 'moderator' ? 'Moderator' : 'Member')]
       );
 
       return NextResponse.json({
         success: true,
-        message: 'Club moderator added successfully.'
+        message: `Student added to club as ${assignedRole}.`
       }, { status: 200 });
     }
 
-    // 2. REMOVE MODERATOR
-    if (action === 'remove_moderator') {
+    // 2. UPDATE MEMBER ROLE / DESIGNATION
+    if (action === 'update_member_role') {
+      const { student_id, role, designation } = body;
+      if (!student_id || !role) {
+        return NextResponse.json({
+          success: false,
+          message: 'student_id and role are required.',
+          error: 'Validation Error',
+          paylod: null
+        }, { status: 400 });
+      }
+
+      const assignedRole = role === 'moderator' ? 'moderator' : 'member';
+
+      await query(
+        `UPDATE club_member
+         SET role = $1, designation = $2, updated_at = CURRENT_TIMESTAMP
+         WHERE club_id = $3 AND student_id = $4`,
+        [assignedRole, designation ? designation.trim() : (assignedRole === 'moderator' ? 'Moderator' : 'Member'), club_id, student_id]
+      );
+
+      return NextResponse.json({
+        success: true,
+        message: `Student role updated to ${assignedRole}.`
+      }, { status: 200 });
+    }
+
+    // 3. REMOVE MEMBER
+    if (action === 'remove_member') {
       const { student_id } = body;
       if (!student_id) {
         return NextResponse.json({
@@ -187,17 +215,17 @@ export async function POST(request) {
       }
 
       await query(
-        `DELETE FROM club_moderator WHERE club_id = $1 AND student_id = $2`,
+        `DELETE FROM club_member WHERE club_id = $1 AND student_id = $2`,
         [club_id, student_id]
       );
 
       return NextResponse.json({
         success: true,
-        message: 'Club moderator removed successfully.'
+        message: 'Student removed from club.'
       }, { status: 200 });
     }
 
-    // 3. UPDATE NOTICE INFORMATION
+    // 4. UPDATE NOTICE INFORMATION
     if (action === 'update_notice') {
       const { notice_info } = body;
       await query(
@@ -211,7 +239,7 @@ export async function POST(request) {
       }, { status: 200 });
     }
 
-    // 4. MANAGE NEWS (Create / Update)
+    // 5. MANAGE NEWS (Create / Update)
     if (action === 'manage_news') {
       const { news_id, title, content, image } = body;
 
@@ -276,7 +304,7 @@ export async function POST(request) {
       }
     }
 
-    // 5. DELETE NEWS
+    // 6. DELETE NEWS
     if (action === 'delete_news') {
       const { news_id } = body;
       if (!news_id) {

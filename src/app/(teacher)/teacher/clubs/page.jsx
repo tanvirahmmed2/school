@@ -2,35 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import {
-  FiShield, FiUsers, FiFileText, FiPlus, FiTrash2, FiEdit2,
-  FiSave, FiSearch, FiAlertCircle, FiInfo, FiLayers, FiImage
+  FiUsers, FiFileText, FiInfo, FiArrowRight, FiAlertCircle,
+  FiUserCheck, FiCalendar, FiEdit2
 } from 'react-icons/fi';
+import ClubAdminNav from '@/component/bars/teacher/ClubAdminNav';
 
-const TeacherClubsAdminPage = () => {
+const TeacherClubsOverviewPage = () => {
   const [loading, setLoading] = useState(true);
   const [isClubAdmin, setIsClubAdmin] = useState(false);
   const [clubs, setClubs] = useState([]);
-  const [students, setStudents] = useState([]);
   const [selectedClubId, setSelectedClubId] = useState('');
-
-  // Form states
-  const [noticeText, setNoticeText] = useState('');
-  const [savingNotice, setSavingNotice] = useState(false);
-
-  // Add Moderator states
-  const [selectedStudentId, setSelectedStudentId] = useState('');
-  const [modDesignation, setModDesignation] = useState('Moderator');
-  const [studentSearch, setStudentSearch] = useState('');
-  const [addingMod, setAddingMod] = useState(false);
-
-  // Manage News states
-  const [editingNewsId, setEditingNewsId] = useState(null);
-  const [newsTitle, setNewsTitle] = useState('');
-  const [newsContent, setNewsContent] = useState('');
-  const [newsImage, setNewsImage] = useState('');
-  const [savingNews, setSavingNews] = useState(false);
 
   useEffect(() => {
     fetchTeacherClubs();
@@ -44,10 +28,8 @@ const TeacherClubsAdminPage = () => {
       if (payload.isClubAdmin && payload.clubs?.length > 0) {
         setIsClubAdmin(true);
         setClubs(payload.clubs);
-        setStudents(payload.students || []);
         const firstClub = payload.clubs[0];
         setSelectedClubId(String(firstClub.id));
-        setNoticeText(firstClub.notice_info || '');
       } else {
         setIsClubAdmin(false);
         setClubs([]);
@@ -61,159 +43,10 @@ const TeacherClubsAdminPage = () => {
 
   const currentClub = clubs.find(c => String(c.id) === String(selectedClubId));
 
-  useEffect(() => {
-    if (currentClub) {
-      setNoticeText(currentClub.notice_info || '');
-      setEditingNewsId(null);
-      setNewsTitle('');
-      setNewsContent('');
-      setNewsImage('');
-    }
-  }, [selectedClubId]);
-
-  // Notice Update
-  const handleSaveNotice = async (e) => {
-    e.preventDefault();
-    if (!selectedClubId) return;
-
-    setSavingNotice(true);
-    try {
-      const res = await axios.post('/api/teacher/clubs', {
-        action: 'update_notice',
-        club_id: selectedClubId,
-        notice_info: noticeText
-      });
-      toast.success(res.data.message || 'Notice updated successfully!');
-      fetchTeacherClubs();
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to update notice');
-    } finally {
-      setSavingNotice(false);
-    }
-  };
-
-  // Add Moderator (Student only)
-  const handleAddModerator = async (e) => {
-    e.preventDefault();
-    if (!selectedStudentId || !selectedClubId) {
-      toast.error('Please select a student.');
-      return;
-    }
-
-    setAddingMod(true);
-    try {
-      const res = await axios.post('/api/teacher/clubs', {
-        action: 'add_moderator',
-        club_id: selectedClubId,
-        student_id: selectedStudentId,
-        designation: modDesignation
-      });
-      toast.success(res.data.message || 'Moderator added!');
-      setSelectedStudentId('');
-      setModDesignation('Moderator');
-      fetchTeacherClubs();
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to add moderator');
-    } finally {
-      setAddingMod(false);
-    }
-  };
-
-  // Remove Moderator
-  const handleRemoveModerator = async (studentId) => {
-    if (!confirm('Remove this moderator?')) return;
-    try {
-      const res = await axios.post('/api/teacher/clubs', {
-        action: 'remove_moderator',
-        club_id: selectedClubId,
-        student_id: studentId
-      });
-      toast.success(res.data.message || 'Moderator removed');
-      fetchTeacherClubs();
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to remove moderator');
-    }
-  };
-
-  // Image file handler for News
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 4 * 1024 * 1024) {
-        toast.error('Image size must be less than 4MB');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewsImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Manage News
-  const handleSaveNews = async (e) => {
-    e.preventDefault();
-    if (!newsTitle || !newsContent) {
-      toast.error('Title and content are required.');
-      return;
-    }
-
-    setSavingNews(true);
-    try {
-      const res = await axios.post('/api/teacher/clubs', {
-        action: 'manage_news',
-        club_id: selectedClubId,
-        news_id: editingNewsId,
-        title: newsTitle,
-        content: newsContent,
-        image: newsImage
-      });
-      toast.success(res.data.message || 'Club news saved!');
-      setEditingNewsId(null);
-      setNewsTitle('');
-      setNewsContent('');
-      setNewsImage('');
-      fetchTeacherClubs();
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to save news');
-    } finally {
-      setSavingNews(false);
-    }
-  };
-
-  // Delete News
-  const handleDeleteNews = async (newsId) => {
-    if (!confirm('Delete this news post?')) return;
-    try {
-      const res = await axios.post('/api/teacher/clubs', {
-        action: 'delete_news',
-        club_id: selectedClubId,
-        news_id: newsId
-      });
-      toast.success(res.data.message || 'News deleted');
-      fetchTeacherClubs();
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete news');
-    }
-  };
-
-  const handleEditNewsClick = (item) => {
-    setEditingNewsId(item.id);
-    setNewsTitle(item.title);
-    setNewsContent(item.content);
-    setNewsImage(item.image_url || '');
-  };
-
-  const filteredStudents = students.filter(st =>
-    st.name.toLowerCase().includes(studentSearch.toLowerCase()) ||
-    st.registration_number.toLowerCase().includes(studentSearch.toLowerCase())
-  );
-
   if (loading) {
     return (
       <div className="w-full min-h-[300px] flex items-center justify-center">
-        <span className="text-xs text-slate-400">Loading Club Admin...</span>
+        <span className="text-xs text-slate-400">Loading Club Overview...</span>
       </div>
     );
   }
@@ -228,12 +61,17 @@ const TeacherClubsAdminPage = () => {
     );
   }
 
+  const membersList = currentClub?.members || [];
+  const newsList = currentClub?.news || [];
+  const memberCount = membersList.length;
+  const moderatorCount = membersList.filter(m => m.role === 'moderator').length;
+
   return (
     <div className="w-full space-y-6">
-      {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* Page Header */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">{currentClub?.name}</h1>
+          <h1 className="text-xl font-bold text-slate-900">{currentClub?.name || 'Club Admin'}</h1>
           <p className="text-xs text-slate-500">
             Role: <span className="font-semibold text-slate-700">{currentClub?.admin_designation || 'Club Admin'}</span>
           </p>
@@ -243,7 +81,7 @@ const TeacherClubsAdminPage = () => {
           <select
             value={selectedClubId}
             onChange={(e) => setSelectedClubId(e.target.value)}
-            className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none"
+            className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none cursor-pointer"
           >
             {clubs.map(c => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -252,199 +90,156 @@ const TeacherClubsAdminPage = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Stats Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-1 shadow-xs">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Members</span>
+          <p className="text-2xl font-black text-slate-900">{memberCount}</p>
+          <p className="text-xs text-indigo-600 font-semibold">{moderatorCount} Designated Moderators</p>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-1 shadow-xs">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Published Articles</span>
+          <p className="text-2xl font-black text-slate-900">{newsList.length}</p>
+          <p className="text-xs text-slate-500 font-medium">Club News &amp; Updates</p>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-1 shadow-xs">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Club Notice Status</span>
+          <p className="text-sm font-bold text-slate-800 truncate mt-1">
+            {currentClub?.notice_info ? 'Active Member Notice' : 'No Notice Drafted'}
+          </p>
+          <p className="text-[11px] text-slate-500">Restricted to Members</p>
+        </div>
+      </div>
+
+      {/* Quick Action Navigation Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        {/* Notice Info & Add Moderator */}
-        <div className="space-y-6">
-          
-          {/* Notice Card */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
-            <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-              <FiInfo /> Notice Information
-            </h2>
-            <form onSubmit={handleSaveNotice} className="space-y-3">
-              <textarea
-                rows={4}
-                value={noticeText}
-                onChange={(e) => setNoticeText(e.target.value)}
-                placeholder="Notice info for members..."
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 outline-none resize-none"
-              />
-              <button
-                type="submit"
-                disabled={savingNotice}
-                className="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50"
-              >
-                {savingNotice ? 'Saving...' : 'Update Notice'}
-              </button>
-            </form>
+        {/* 1. Notice Info Card */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-xs group">
+          <div className="space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 text-lg group-hover:scale-105 transition-transform">
+              <FiInfo />
+            </div>
+            <h3 className="font-bold text-slate-900 text-base group-hover:text-indigo-600 transition-colors">
+              Notice Information
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Draft or update announcements visible exclusively to members and moderators.
+            </p>
+          </div>
+          <Link
+            href="/teacher/clubs/notice"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 pt-2"
+          >
+            <span>Edit Notice Info</span>
+            <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+        {/* 2. Members & Roles Card */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-xs group">
+          <div className="space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 text-lg group-hover:scale-105 transition-transform">
+              <FiUsers />
+            </div>
+            <h3 className="font-bold text-slate-900 text-base group-hover:text-sky-600 transition-colors">
+              Members &amp; Roles
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Add student members, toggle Moderator permissions, and update student designations.
+            </p>
+          </div>
+          <Link
+            href="/teacher/clubs/members"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-800 pt-2"
+          >
+            <span>Manage Roster &amp; Roles</span>
+            <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+        {/* 3. Club News Card */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-xs group">
+          <div className="space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 text-lg group-hover:scale-105 transition-transform">
+              <FiFileText />
+            </div>
+            <h3 className="font-bold text-slate-900 text-base group-hover:text-emerald-600 transition-colors">
+              Club News &amp; Updates
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Publish news posts with cover photos and manage club activity articles.
+            </p>
+          </div>
+          <Link
+            href="/teacher/clubs/news"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-800 pt-2"
+          >
+            <span>Publish &amp; Manage News</span>
+            <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+      </div>
+
+      {/* Bottom Previews Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        {/* Recent Members Preview */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-xs">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+              <FiUsers /> Members Preview
+            </h3>
+            <Link href="/teacher/clubs/members" className="text-xs font-bold text-indigo-600 hover:underline">
+              View All ({memberCount})
+            </Link>
           </div>
 
-          {/* Moderator List Card */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-              <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <FiUsers /> Student Moderators
-              </h2>
-              <span className="text-xs font-bold text-slate-500">
-                {currentClub?.moderators?.length || 0}
-              </span>
-            </div>
-
-            {/* Add Moderator Form */}
-            <form onSubmit={handleAddModerator} className="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
-              <input
-                type="text"
-                placeholder="Filter student..."
-                value={studentSearch}
-                onChange={(e) => setStudentSearch(e.target.value)}
-                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none"
-              />
-
-              <select
-                value={selectedStudentId}
-                onChange={(e) => setSelectedStudentId(e.target.value)}
-                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none"
-              >
-                <option value="">-- Select Student --</option>
-                {filteredStudents.map(st => (
-                  <option key={st.id} value={st.id}>
-                    {st.name} ({st.registration_number})
-                  </option>
-                ))}
-              </select>
-
-              <input
-                type="text"
-                placeholder="Designation"
-                value={modDesignation}
-                onChange={(e) => setModDesignation(e.target.value)}
-                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none"
-              />
-
-              <button
-                type="submit"
-                disabled={addingMod}
-                className="w-full py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold cursor-pointer disabled:opacity-50"
-              >
-                {addingMod ? 'Adding...' : '+ Add Moderator'}
-              </button>
-            </form>
-
-            <div className="space-y-2 max-h-60 overflow-y-auto">
-              {currentClub?.moderators?.map(mod => (
-                <div key={mod.id} className="flex justify-between items-center p-2.5 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-                  <div>
-                    <p className="font-semibold text-slate-800">{mod.student_name}</p>
-                    <p className="text-[10px] text-slate-500">Reg: {mod.registration_number} • {mod.designation}</p>
-                  </div>
-                  <button
-                    onClick={() => handleRemoveModerator(mod.student_id)}
-                    className="p-1 text-slate-400 hover:text-red-600 rounded"
-                  >
-                    <FiTrash2 />
-                  </button>
+          <div className="space-y-2">
+            {membersList.slice(0, 4).map(m => (
+              <div key={m.id} className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                <div>
+                  <p className="font-bold text-slate-800">{m.student_name}</p>
+                  <p className="text-[10px] text-slate-500 font-mono">Reg: {m.registration_number}</p>
                 </div>
-              ))}
-              {(!currentClub?.moderators || currentClub.moderators.length === 0) && (
-                <p className="text-center text-xs text-slate-400 py-3">No moderators assigned.</p>
-              )}
-            </div>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                  m.role === 'moderator' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  {m.role === 'moderator' ? 'Moderator' : 'Member'}
+                </span>
+              </div>
+            ))}
+            {membersList.length === 0 && (
+              <p className="text-center text-xs text-slate-400 py-6">No members added to this club yet.</p>
+            )}
           </div>
         </div>
 
-        {/* Club News Section */}
-        <div className="lg:col-span-2 space-y-6">
-          
-          {/* Post Form */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-              <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <FiFileText /> {editingNewsId ? 'Edit Club News' : 'Publish Club News'}
-              </h2>
-              {editingNewsId && (
-                <button
-                  onClick={() => {
-                    setEditingNewsId(null);
-                    setNewsTitle('');
-                    setNewsContent('');
-                    setNewsImage('');
-                  }}
-                  className="text-xs text-slate-400 hover:text-slate-600"
-                >
-                  Cancel
-                </button>
-              )}
-            </div>
-
-            <form onSubmit={handleSaveNews} className="space-y-3">
-              <input
-                type="text"
-                placeholder="News Title *"
-                value={newsTitle}
-                onChange={(e) => setNewsTitle(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none"
-              />
-
-              <textarea
-                rows={4}
-                placeholder="News Content *"
-                value={newsContent}
-                onChange={(e) => setNewsContent(e.target.value)}
-                className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none resize-none"
-              />
-
-              <div className="flex items-center gap-3">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-100"
-                />
-              </div>
-
-              <div className="flex justify-end pt-1">
-                <button
-                  type="submit"
-                  disabled={savingNews}
-                  className="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-50"
-                >
-                  {savingNews ? 'Publishing...' : editingNewsId ? 'Update Post' : 'Publish News'}
-                </button>
-              </div>
-            </form>
+        {/* Recent News Preview */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-xs">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+              <FiFileText /> Recent News Posts
+            </h3>
+            <Link href="/teacher/clubs/news" className="text-xs font-bold text-indigo-600 hover:underline">
+              Manage News ({newsList.length})
+            </Link>
           </div>
 
-          {/* News List */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
-            <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2">
-              Published News Posts
-            </h2>
-
-            <div className="space-y-3">
-              {currentClub?.news?.map(item => (
-                <div key={item.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                  <div className="flex justify-between items-start">
-                    <h3 className="text-sm font-bold text-slate-800">{item.title}</h3>
-                    <div className="flex gap-2">
-                      <button onClick={() => handleEditNewsClick(item)} className="p-1 text-slate-500 hover:text-slate-800">
-                        <FiEdit2 />
-                      </button>
-                      <button onClick={() => handleDeleteNews(item.id)} className="p-1 text-slate-500 hover:text-red-600">
-                        <FiTrash2 />
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">{item.content}</p>
-                </div>
-              ))}
-
-              {(!currentClub?.news || currentClub.news.length === 0) && (
-                <p className="text-center text-xs text-slate-400 py-6">No news posts published yet.</p>
-              )}
-            </div>
+          <div className="space-y-2">
+            {newsList.slice(0, 3).map(n => (
+              <div key={n.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1 text-xs">
+                <h4 className="font-bold text-slate-800 line-clamp-1">{n.title}</h4>
+                <p className="text-slate-600 line-clamp-2 text-[11px] leading-relaxed">{n.content}</p>
+              </div>
+            ))}
+            {newsList.length === 0 && (
+              <p className="text-center text-xs text-slate-400 py-6">No news posts published yet.</p>
+            )}
           </div>
-
         </div>
 
       </div>
@@ -452,4 +247,4 @@ const TeacherClubsAdminPage = () => {
   );
 };
 
-export default TeacherClubsAdminPage;
+export default TeacherClubsOverviewPage;

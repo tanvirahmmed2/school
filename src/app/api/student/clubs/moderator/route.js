@@ -3,7 +3,7 @@ import { query } from '@/lib/db';
 import { getStudentUser } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
-// GET clubs assigned to student as club moderator
+// GET clubs assigned to student as club moderator in club_member
 export async function GET() {
   try {
     const student = await getStudentUser();
@@ -16,12 +16,11 @@ export async function GET() {
       }, { status: 401 });
     }
 
-    // Check club assignments in club_moderator
     const assignedClubsRes = await query(
       `SELECT c.id, c.name, c.slug, c.motto, c.description, c.notice_info, c.image, c.image_id, cm.designation as moderator_designation
-       FROM club_moderator cm
+       FROM club_member cm
        JOIN clubs c ON cm.club_id = c.id
-       WHERE cm.student_id = $1
+       WHERE cm.student_id = $1 AND cm.role = 'moderator'
        ORDER BY c.name ASC`,
       [student.id]
     );
@@ -71,7 +70,7 @@ export async function GET() {
   }
 }
 
-// POST/PUT actions for Club Moderator (Manage Club News ONLY)
+// POST actions for Club Moderator (Manage Club News ONLY)
 export async function POST(request) {
   try {
     const student = await getStudentUser();
@@ -96,9 +95,9 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Validate that this student is a moderator for this club
+    // Validate that student is in club_member with role = 'moderator'
     const modCheck = await query(
-      `SELECT id FROM club_moderator WHERE club_id = $1 AND student_id = $2`,
+      `SELECT id FROM club_member WHERE club_id = $1 AND student_id = $2 AND role = 'moderator'`,
       [club_id, student.id]
     );
 
@@ -111,7 +110,6 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    // ONLY ALLOW news management actions!
     if (action === 'manage_news') {
       const { news_id, title, content, image } = body;
 

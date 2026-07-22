@@ -231,22 +231,23 @@ CREATE TRIGGER update_club_admin_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
--- CLUB MODERATOR TABLE (ONLY STUDENTS ASSIGNED TO CLUBS AS MODERATORS)
+-- CLUB MEMBER TABLE (ONLY STUDENTS ASSIGNED AS MEMBERS OR MODERATORS)
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS club_moderator (
+CREATE TABLE IF NOT EXISTS club_member (
     id BIGSERIAL PRIMARY KEY,
     club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    role VARCHAR(50) NOT NULL DEFAULT 'member' CHECK (role IN ('member', 'moderator')),
     designation VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(club_id, student_id)
 );
 
-DROP TRIGGER IF EXISTS update_club_moderator_updated_at ON club_moderator;
-CREATE TRIGGER update_club_moderator_updated_at
-    BEFORE UPDATE ON club_moderator
+DROP TRIGGER IF EXISTS update_club_member_updated_at ON club_member;
+CREATE TRIGGER update_club_member_updated_at
+    BEFORE UPDATE ON club_member
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================

@@ -1,7 +1,84 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { query, ensureClubTables } from '@/lib/db';
+import { isAdmin, getTeacherUser, getStudentUser } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
+
+// GET single club details with restricted notice_info access
+export async function GET(request, { params }) {
+  try {
+    await ensureClubTables();
+    const { id } = await params;
+    const result = await query(
+      'SELECT id, name, motto, slug, description, notice_info, image, created_at FROM clubs WHERE id::text = $1 OR slug = $1',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'Club not found',
+        error: 'Not Found',
+        paylod: null
+      }, { status: 404 });
+    }
+
+    const club = result.rows[0];
+
+    // Check notice authorization: Admin, Teacher in club_admin, Student in club_member
+    let canViewNotice = false;
+
+    if (await isAdmin()) {
+      canViewNotice = true;
+    } else {
+      const teacher = await getTeacherUser();
+      if (teacher) {
+        const teacherCheck = await query(
+          'SELECT id FROM club_admin WHERE club_id = $1 AND teacher_id = $2',
+          [club.id, teacher.id]
+        );
+        if (teacherCheck.rows.length > 0) {
+          canViewNotice = true;
+        }
+      }
+
+      if (!canViewNotice) {
+        const student = await getStudentUser();
+        if (student) {
+          const studentCheck = await query(
+            'SELECT id FROM club_member WHERE club_id = $1 AND student_id = $2',
+            [club.id, student.id]
+          );
+          if (studentCheck.rows.length > 0) {
+            canViewNotice = true;
+          }
+        }
+      }
+    }
+
+    const sanitizedClub = {
+      ...club,
+      notice_info: canViewNotice ? club.notice_info : null
+    };
+
+    return NextResponse.json({
+      success: true,
+      message: 'Club details retrieved',
+      paylod: {
+        club: sanitizedClub,
+        canViewNotice
+      }
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error('Error fetching club details:', error);
+    return NextResponse.json({
+      success: false,
+      message: 'Failed to retrieve club.',
+      error: 'Internal Server Error',
+      paylod: null
+    }, { status: 500 });
+  }
+}
 
 function slugify(text) {
   return text
