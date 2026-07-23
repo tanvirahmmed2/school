@@ -156,7 +156,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admission Fees ($) *</label>
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admission Fees (BDT) *</label>
         <input
           type="number"
           step="0.01"

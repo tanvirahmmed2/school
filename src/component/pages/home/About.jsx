@@ -10,9 +10,7 @@ const About = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <span className="inline-block text-xs font-bold text-sky-650 bg-sky-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest w-fit text-sky-600">
-              Who We Are
-            </span>
+            
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
               A Legacy of Academic and Personal Excellence
             </h2>

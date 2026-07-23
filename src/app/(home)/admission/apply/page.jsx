@@ -3,7 +3,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { FiFileText } from 'react-icons/fi';
+import { FiFileText, FiCheckCircle, FiCopy, FiMail, FiDollarSign, FiArrowLeft } from 'react-icons/fi';
+import Link from 'next/link';
 import AdmissionApplyForm from '@/component/forms/AdmissionApplyForm';
 
 const ApplyFormContent = () => {
@@ -15,6 +16,7 @@ const ApplyFormContent = () => {
   const [selectedCircular, setSelectedCircular] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [receiptData, setReceiptData] = useState(null);
 
   useEffect(() => {
     const loadCirculars = async () => {
@@ -26,7 +28,6 @@ const ApplyFormContent = () => {
           const list = data.paylod.circulars;
           setCirculars(list);
 
-          // If circular ID parameter is provided, auto-select it
           if (admissionIdParam) {
             const found = list.find((c) => c.id.toString() === admissionIdParam);
             if (found) {
@@ -67,14 +68,13 @@ const ApplyFormContent = () => {
       return;
     }
 
-    // Client-side age validation
     const candidateAge = calculateAge(formValues.date_of_birth);
     if (selectedCircular.min_age !== null && candidateAge < selectedCircular.min_age) {
-      toast.error(`Age requirement not met. Candidate age (${candidateAge}) is under target minimum of ${selectedCircular.min_age} years.`);
+      toast.error(`Candidate age (${candidateAge}) is under target minimum of ${selectedCircular.min_age} years.`);
       return;
     }
     if (selectedCircular.max_age !== null && candidateAge > selectedCircular.max_age) {
-      toast.error(`Age requirement not met. Candidate age (${candidateAge}) exceeds target maximum of ${selectedCircular.max_age} years.`);
+      toast.error(`Candidate age (${candidateAge}) exceeds target maximum of ${selectedCircular.max_age} years.`);
       return;
     }
 
@@ -91,8 +91,14 @@ const ApplyFormContent = () => {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        toast.success('Your application has been registered successfully!');
-        router.push('/admission');
+        toast.success('Application submitted! Receipt sent to candidate email.');
+        setReceiptData({
+          applicantNumber: data.paylod?.applicant_number || `APP-1000${data.paylod?.admission?.id}`,
+          applicantName: formValues.applicant_name,
+          email: formValues.email,
+          circularTitle: selectedCircular.title,
+          feeAmount: data.paylod?.fee_amount || selectedCircular.fees || 0
+        });
       } else {
         throw new Error(data.error || 'Failed to submit application.');
       }
@@ -100,6 +106,13 @@ const ApplyFormContent = () => {
       toast.error(err.message);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const copyReceiptNumber = () => {
+    if (receiptData?.applicantNumber) {
+      navigator.clipboard.writeText(receiptData.applicantNumber);
+      toast.success('Applicant Number copied to clipboard!');
     }
   };
 
@@ -112,6 +125,67 @@ const ApplyFormContent = () => {
     );
   }
 
+  if (receiptData) {
+    return (
+      <div className="w-full max-w-lg mx-auto bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)] text-center animate-scale-up">
+        <div className="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+          <FiCheckCircle />
+        </div>
+
+        <span className="text-xs font-extrabold text-green-700 bg-green-50 px-3 py-1 rounded-full uppercase tracking-wider">
+          Application Submitted
+        </span>
+
+        <h2 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          Application Receipt
+        </h2>
+        <p className="text-xs text-slate-500 mt-1">
+          A receipt has been dispatched to <strong>{receiptData.email}</strong>.
+        </p>
+
+        {/* Receipt Box */}
+        <div className="my-6 bg-slate-50 p-5 rounded-2xl border border-slate-150 text-left flex flex-col gap-3">
+          <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Applicant Number</p>
+              <p className="text-xl font-black text-sky-600 font-mono mt-0.5">{receiptData.applicantNumber}</p>
+            </div>
+            <button
+              onClick={copyReceiptNumber}
+              className="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200 transition-colors text-xs font-bold flex items-center gap-1 cursor-pointer"
+            >
+              <FiCopy /> Copy
+            </button>
+          </div>
+
+          <div className="text-xs text-slate-700 flex flex-col gap-1.5 pt-1">
+            <p><strong>Candidate:</strong> {receiptData.applicantName}</p>
+            <p><strong>Circular:</strong> {receiptData.circularTitle}</p>
+            <p><strong>Admission Fee:</strong> <span className="text-green-600 font-bold">BDT {parseFloat(receiptData.feeAmount).toFixed(2)}</span></p>
+            <p><strong>Payment Status:</strong> <span className="text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded-full text-[10px]">UNPAID</span></p>
+          </div>
+        </div>
+
+        {/* Instructions */}
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-left mb-6">
+          <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5 mb-1">
+            <FiDollarSign className="text-amber-600" /> Next Step: Visit Cashier Office
+          </h4>
+          <p className="text-[11px] text-amber-800 leading-relaxed">
+            Please visit the institution cashier office with your <strong>Applicant Number ({receiptData.applicantNumber})</strong> to complete your fee payment. Upon payment, you will receive an email to upload your profile photo and signature.
+          </p>
+        </div>
+
+        <Link
+          href="/admission"
+          className="inline-flex items-center justify-center gap-1.5 w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl transition-colors shadow-xs"
+        >
+          <FiArrowLeft /> Return to Admission Home
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
       <div className="flex items-center gap-3 mb-6">
@@ -120,7 +194,7 @@ const ApplyFormContent = () => {
         </div>
         <div>
           <h2 className="text-lg font-black text-slate-900 tracking-tight">Admission Registration Form</h2>
-          <p className="text-xs text-slate-450 text-slate-400">Fill in the candidate's profile credentials.</p>
+          <p className="text-xs text-slate-400">Fill in the candidate's profile credentials.</p>
         </div>
       </div>
 

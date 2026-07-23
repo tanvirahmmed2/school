@@ -27,11 +27,9 @@ const Events = () => {
 
   return (
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="mx-auto">
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="inline-block text-xs font-bold text-sky-655 bg-sky-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest mb-3 text-sky-600">
-            Calendar
-          </span>
+          
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             Upcoming Campus Events
           </h2>
@@ -42,7 +40,7 @@ const Events = () => {
 
         {loading ? (
           <div className="w-full py-12 flex justify-center">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : events.length === 0 ? (
           <div className="w-full py-12 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center justify-center text-center p-6">
@@ -64,7 +62,7 @@ const Events = () => {
                   className="bg-slate-50 border border-slate-100 rounded-2xl p-5 hover:border-slate-200 hover:bg-slate-50/70 transition-all flex gap-5"
                 >
                   {/* Calendar Badge */}
-                  <div className="w-14 h-14 bg-sky-50 border border-sky-100 text-sky-600 rounded-2xl flex flex-col items-center justify-center shrink-0">
+                  <div className="w-14 h-14 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-2xl flex flex-col items-center justify-center shrink-0">
                     <span className="text-lg font-black leading-none">{day}</span>
                     <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">{month}</span>
                   </div>
@@ -100,7 +98,7 @@ const Events = () => {
           <div className="text-center mt-10">
             <Link
               href="/events"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-605 hover:text-sky-850 transition-colors text-sky-600"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-605 hover:text-emerald-850 transition-colors text-emerald-600"
             >
               <span>View Full Campus Event Calendar</span>
               <span>→</span>

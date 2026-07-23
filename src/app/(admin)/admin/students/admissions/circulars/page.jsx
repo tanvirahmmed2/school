@@ -204,7 +204,7 @@ const CircularsPage = () => {
                       Class: {c.class_name}
                     </td>
                     <td className="px-6 py-4 text-xs font-extrabold text-slate-750">
-                      ${parseFloat(c.fees || 0).toFixed(2)}
+                      BDT {parseFloat(c.fees || 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-650 font-bold">
                       {c.min_age !== null || c.max_age !== null ? (

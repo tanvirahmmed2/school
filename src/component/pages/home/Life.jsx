@@ -3,17 +3,17 @@
 import React from 'react';
 import { FiHome, FiCompass, FiTarget } from 'react-icons/fi';
 import Link from 'next/link';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const Life = () => {
+  let schoolname=SCHOOL_NAME
   return (
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
-      <div className="mx-auto">
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="inline-block text-xs font-bold text-sky-600 bg-sky-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest mb-3">
-            Campus Experience
-          </span>
+          
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Student Life at FIT
+            Student Life at {schoolname.split(" ").map(word => word[0]).join("")}
           </h2>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-sm">
             Education goes beyond classrooms. We provide rich campus spaces for co-curricular clubs, sports, and secure community living.

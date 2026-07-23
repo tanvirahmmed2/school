@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import pool, { query } from '@/lib/db';
+import pool from '@/lib/db';
 import { isAdmin, isRegister, isCashier } from '@/lib/auth';
+import { sendEmail } from '@/lib/brevo';
 
 export async function PUT(request) {
   let client;
@@ -30,56 +31,50 @@ export async function PUT(request) {
     client = await pool.connect();
     await client.query('BEGIN');
 
+    // Fetch applicant info
+    const admRes = await client.query(`
+      SELECT sa.id, sa.applicant_name, sa.email, sa.phone, adm.title AS circular_title, adm.fees 
+      FROM student_admissions sa
+      LEFT JOIN admissions adm ON sa.admission_id = adm.id
+      WHERE sa.id = $1
+    `, [parseInt(student_admission_id, 10)]);
+
+    if (admRes.rows.length === 0) {
+      await client.query('ROLLBACK');
+      client.release();
+      return NextResponse.json({ success: false, error: 'Admission application not found.' }, { status: 404 });
+    }
+
+    const applicant = admRes.rows[0];
+
     // Update the admission fee status
     let feeResult = await client.query(`
       UPDATE admission_fees
       SET status = $1, updated_at = CURRENT_TIMESTAMP
       WHERE student_admission_id = $2
       RETURNING *
-    `, [status, parseInt(student_admission_id, 10)]);
+    `, [status.toLowerCase(), parseInt(student_admission_id, 10)]);
 
     let feeRecord;
 
     if (feeResult.rows.length === 0) {
-      // If it doesn't exist for some reason, fetch from admissions circular and insert
-      const admRes = await client.query(`
-        SELECT sa.admission_id, sa.applicant_name, sa.email, sa.phone, adm.fees 
-        FROM student_admissions sa
-        LEFT JOIN admissions adm ON sa.admission_id = adm.id
-        WHERE sa.id = $1
-      `, [parseInt(student_admission_id, 10)]);
-
-      if (admRes.rows.length === 0) {
-        await client.query('ROLLBACK');
-        client.release();
-        return NextResponse.json({ success: false, error: 'Admission application not found.' }, { status: 404 });
-      }
-
-      const fees = admRes.rows[0].fees || 0.00;
+      const fees = applicant.fees || 0.00;
       const insertResult = await client.query(`
         INSERT INTO admission_fees (student_admission_id, amount, status)
         VALUES ($1, $2, $3)
         RETURNING *
-      `, [parseInt(student_admission_id, 10), fees, status]);
+      `, [parseInt(student_admission_id, 10), fees, status.toLowerCase()]);
       
       feeRecord = insertResult.rows[0];
     } else {
       feeRecord = feeResult.rows[0];
     }
 
-    // If status is Paid, record the payment details and unified ledger transaction
-    if (status === 'Paid') {
+    // If status is Paid, record transaction & send email for photo/signature upload
+    if (status.toLowerCase() === 'paid') {
       const actualAmountPaid = amount_paid !== undefined ? parseFloat(amount_paid) : parseFloat(feeRecord.amount);
       const method = payment_method || 'Cash';
-      const txnId = transaction_id || null;
       const rmk = remarks || `Collected admission fee for candidate #${student_admission_id}`;
-
-      // Insert into admission_fee_payments
-      const paymentRes = await client.query(`
-        INSERT INTO admission_fee_payments (admission_fee_id, amount_paid, payment_method, transaction_id, remarks)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *
-      `, [feeRecord.id, actualAmountPaid, method, txnId, rmk]);
 
       // Insert into unified transactions ledger (Credit transaction)
       const transactionNo = `TXN-ADM-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
@@ -92,9 +87,52 @@ export async function PUT(request) {
         transactionNo,
         method,
         actualAmountPaid,
-        paymentRes.rows[0].id,
+        applicant.id,
         rmk
       ]);
+
+      // Send email to applicant with upload link for candidate image & signature
+      const origin = request.headers.get('origin') || 'http://localhost:3000';
+      const uploadLink = `${origin}/admission/upload/${applicant.id}`;
+
+      try {
+        await sendEmail({
+          to: applicant.email,
+          toName: applicant.applicant_name,
+          subject: `Payment Completed - Action Required: Upload Photo & Signature`,
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
+              <div style="text-align: center; padding-bottom: 16px; border-b: 1px solid #f1f5f9;">
+                <h2 style="color: #16a34a; margin: 0;">Payment Confirmed!</h2>
+                <p style="color: #64748b; font-size: 14px; margin-top: 4px;">Admission fee payment has been successfully recorded</p>
+              </div>
+
+              <div style="margin: 20px 0; background: #f0fdf4; padding: 16px; border-radius: 12px; border: 1px solid #bbf7d0;">
+                <p style="margin: 6px 0; font-size: 14px;"><strong>Applicant Name:</strong> ${applicant.applicant_name}</p>
+                <p style="margin: 6px 0; font-size: 14px;"><strong>Applicant Number:</strong> APP-1000${applicant.id}</p>
+                <p style="margin: 6px 0; font-size: 14px;"><strong>Amount Paid:</strong> BDT ${actualAmountPaid.toFixed(2)} (${method})</p>
+                <p style="margin: 6px 0; font-size: 14px;"><strong>Status:</strong> <span style="color: #15803d; font-weight: bold;">PAID</span></p>
+              </div>
+
+              <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
+                <h3 style="color: #0f172a; margin: 0 0 8px 0;">Final Step: Provide Photo & Signature</h3>
+                <p style="color: #475569; font-size: 13px; margin: 0 0 16px 0;">
+                  Please click the link below to upload your profile photo and candidate signature so your application can be reviewed for final approval by administration.
+                </p>
+                <a href="${uploadLink}" style="display: inline-block; background-color: #0284c7; color: #ffffff; text-decoration: none; padding: 10px 24px; border-radius: 9999px; font-weight: bold; font-size: 14px;">
+                  Upload Photo & Signature
+                </a>
+              </div>
+
+              <p style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 24px; border-top: 1px solid #f1f5f9; padding-top: 12px;">
+                School Academic Administration Board
+              </p>
+            </div>
+          `
+        });
+      } catch (mailErr) {
+        console.error('Failed to send upload link email to applicant:', mailErr);
+      }
     }
 
     await client.query('COMMIT');
@@ -102,7 +140,7 @@ export async function PUT(request) {
 
     return NextResponse.json({
       success: true,
-      message: `Admission fee status updated to ${status} successfully.`,
+      message: `Admission fee status updated to ${status} successfully. Email sent to applicant.`,
       paylod: { fee: feeRecord }
     });
   } catch (error) {

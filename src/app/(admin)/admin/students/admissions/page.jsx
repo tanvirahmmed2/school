@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiUsers, FiCheck, FiX, FiLayers, FiCalendar, FiClock, FiChevronRight, FiSearch } from 'react-icons/fi';
+import { FiUsers, FiCheck, FiX, FiLayers, FiCalendar, FiClock, FiSearch, FiCheckSquare, FiCheckCircle } from 'react-icons/fi';
 import Link from 'next/link';
 
 const AdmissionsPage = () => {
@@ -10,6 +10,8 @@ const AdmissionsPage = () => {
   const [activeTab, setActiveTab] = useState('pending');
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [bulkProcessing, setBulkProcessing] = useState(false);
 
   const fetchAdmissions = async () => {
     setLoading(true);
@@ -45,6 +47,7 @@ const AdmissionsPage = () => {
 
       if (res.ok && data.success) {
         toast.success(data.message || `Application ${status.toLowerCase()} successfully!`);
+        setSelectedIds((prev) => prev.filter((item) => item !== id));
         fetchAdmissions();
       } else {
         throw new Error(data.error || 'Failed to process application.');
@@ -56,43 +59,132 @@ const AdmissionsPage = () => {
     }
   };
 
+  const handleBulkAction = async (status) => {
+    if (selectedIds.length === 0) {
+      toast.error('Please select at least one applicant.');
+      return;
+    }
+
+    const confirm = window.confirm(
+      `Are you sure you want to bulk ${status.toLowerCase()} ${selectedIds.length} selected applicant(s)?`
+    );
+    if (!confirm) return;
+
+    setBulkProcessing(true);
+    try {
+      const res = await fetch('/api/admin/students/admissions/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: selectedIds, status })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success(data.message || `Selected applicants ${status.toLowerCase()} successfully!`);
+        setSelectedIds([]);
+        fetchAdmissions();
+      } else {
+        throw new Error(data.error || `Failed to bulk ${status.toLowerCase()} applicants.`);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setBulkProcessing(false);
+    }
+  };
+
   const pendingAdmissions = admissions.filter((a) => a.status === 'Pending');
   const processedAdmissions = admissions.filter((a) => a.status !== 'Pending');
+
+  const currentTabAdmissions = activeTab === 'pending' ? pendingAdmissions : processedAdmissions;
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedIds(currentTabAdmissions.map((a) => a.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelectOne = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-blue-600 animate-pulse" /> Student Admission Applications
-        </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Review, verify, and approve pending applicant admissions. Approved profiles automatically register as students.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+            <FiUsers className="text-blue-600 animate-pulse" /> Student Admission Applications
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Review, multi-select, and approve pending applicant admissions.
+          </p>
+        </div>
+
+        <Link
+          href="/admin/students/admissions/circulars"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded-xl text-xs transition-colors self-start md:self-auto"
+        >
+          <FiLayers />
+          <span>Manage Circulars</span>
+        </Link>
       </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-slate-100 gap-1.5">
-        <button
-          onClick={() => setActiveTab('pending')}
-          className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
-            activeTab === 'pending'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-slate-400 hover:text-slate-600'
-          }`}
-        >
-          Pending Applications ({pendingAdmissions.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('archive')}
-          className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
-            activeTab === 'archive'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-slate-400 hover:text-slate-600'
-          }`}
-        >
-          Archive Log ({processedAdmissions.length})
-        </button>
+      {/* Tabs & Bulk Action Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-2">
+        <div className="flex gap-1.5">
+          <button
+            onClick={() => {
+              setActiveTab('pending');
+              setSelectedIds([]);
+            }}
+            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+              activeTab === 'pending'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            Pending Applications ({pendingAdmissions.length})
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('archive');
+              setSelectedIds([]);
+            }}
+            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
+              activeTab === 'archive'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            Archive Log ({processedAdmissions.length})
+          </button>
+        </div>
+
+        {/* Multi-Select Bulk Actions */}
+        {selectedIds.length > 0 && (
+          <div className="flex items-center gap-2 bg-slate-900 text-white px-3.5 py-1.5 rounded-2xl shadow-md text-xs font-bold animate-fade-down">
+            <span>{selectedIds.length} Selected</span>
+            <button
+              disabled={bulkProcessing}
+              onClick={() => handleBulkAction('Approved')}
+              className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1 text-[11px]"
+            >
+              <FiCheck /> Approve Selected
+            </button>
+            <button
+              disabled={bulkProcessing}
+              onClick={() => handleBulkAction('Rejected')}
+              className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1 text-[11px]"
+            >
+              <FiX /> Reject Selected
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Main Container */}
@@ -116,94 +208,126 @@ const AdmissionsPage = () => {
               <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="bg-slate-50/50 border-b border-slate-100">
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applicant / Birth Reg</th>
+                    <th className="px-4 py-4 w-10 text-center">
+                      <input
+                        type="checkbox"
+                        checked={
+                          pendingAdmissions.length > 0 &&
+                          selectedIds.length === pendingAdmissions.length
+                        }
+                        onChange={handleSelectAll}
+                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      />
+                    </th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applicant / Receipt</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Contact Detail</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applied Class</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Fee Status</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Guardian Info</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Documents</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {pendingAdmissions.map((adm) => (
-                    <tr key={adm.id} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-sm font-bold text-slate-800">{adm.applicant_name}</p>
-                          <p className="text-[10px] text-slate-400 font-bold mt-0.5">Birth Reg No: {adm.birth_regi_number || 'N/A'}</p>
-                          <span className="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5 mt-1">
-                            <FiCalendar /> DOB: {new Date(adm.date_of_birth).toLocaleDateString()} | Gender: {adm.gender}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-xs font-semibold text-slate-700">{adm.phone}</p>
-                          <p className="text-xs text-slate-400 mt-0.5">{adm.email}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
-                            <FiLayers className="text-xs text-blue-400" />
-                            Class: {adm.class_name}
-                          </span>
-                          {adm.admission_title && (
-                            <p className="text-[9px] text-slate-400 font-semibold mt-1 truncate max-w-[150px]" title={adm.admission_title}>
-                              Circular: {adm.admission_title}
+                  {pendingAdmissions.map((adm) => {
+                    const isSelected = selectedIds.includes(adm.id);
+                    const hasDocuments = adm.image && adm.signature;
+                    return (
+                      <tr
+                        key={adm.id}
+                        className={`transition-colors ${
+                          isSelected ? 'bg-blue-50/40' : 'hover:bg-slate-50/30'
+                        }`}
+                      >
+                        <td className="px-4 py-4 text-center">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleSelectOne(adm.id)}
+                            className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="text-sm font-bold text-slate-800">{adm.applicant_name}</p>
+                            <p className="text-[10px] text-blue-600 font-mono font-bold mt-0.5">
+                              APP-1000{adm.id}
                             </p>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-xs font-bold text-slate-800">${parseFloat(adm.fee_amount || adm.admission_fees_amount || 0).toFixed(2)}</p>
-                          <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 border ${
-                            adm.fee_status === 'Paid'
-                              ? 'bg-green-50 text-green-600 border-green-100'
-                              : adm.fee_status === 'Cancelled' || adm.fee_status === 'Cancel'
-                              ? 'bg-red-50 text-red-600 border-red-100'
-                              : 'bg-amber-50 text-amber-600 border-amber-100'
+                            <span className="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5 mt-1">
+                              <FiCalendar /> DOB: {new Date(adm.date_of_birth).toLocaleDateString()} | {adm.gender}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="text-xs font-semibold text-slate-700">{adm.phone}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{adm.email}</p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                              <FiLayers className="text-xs text-blue-400" />
+                              Class: {adm.class_name}
+                            </span>
+                            {adm.admission_title && (
+                              <p className="text-[9px] text-slate-400 font-semibold mt-1 truncate max-w-[150px]" title={adm.admission_title}>
+                                {adm.admission_title}
+                              </p>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="text-xs font-bold text-slate-800">BDT {parseFloat(adm.fee_amount || adm.admission_fees_amount || 0).toFixed(2)}</p>
+                            <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 border ${
+                              adm.fee_status === 'paid' || adm.fee_status === 'Paid'
+                                ? 'bg-green-50 text-green-600 border-green-100'
+                                : 'bg-amber-50 text-amber-600 border-amber-100'
+                            }`}>
+                              {adm.fee_status || 'Pending'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                            hasDocuments
+                              ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                              : 'bg-slate-50 text-slate-400 border-slate-200'
                           }`}>
-                            {adm.fee_status || 'Pending'}
+                            {hasDocuments ? <FiCheckCircle /> : <FiClock />}
+                            {hasDocuments ? 'Photo & Sig Ready' : 'Pending Upload'}
                           </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-xs font-semibold text-slate-700">{adm.guardian_name}</p>
-                          <p className="text-[10px] text-slate-400 mt-0.5">Phone: {adm.guardian_phone}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Link
-                            href={`/admin/students/admissions/applicant?id=${adm.id}`}
-                            className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all"
-                            title="Preview Applicant Info"
-                          >
-                            <FiSearch className="text-sm" />
-                          </Link>
-                          <button
-                            disabled={processingId !== null}
-                            onClick={() => handleProcessAdmission(adm.id, 'Approved')}
-                            className="p-2 bg-green-55 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all cursor-pointer"
-                            title="Approve Admission"
-                          >
-                            <FiCheck className="text-sm" />
-                          </button>
-                          <button
-                            disabled={processingId !== null}
-                            onClick={() => handleProcessAdmission(adm.id, 'Rejected')}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all cursor-pointer"
-                            title="Reject Admission"
-                          >
-                            <FiX className="text-sm" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Link
+                              href={`/admin/students/admissions/applicant?id=${adm.id}`}
+                              className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all"
+                              title="Preview Applicant Info"
+                            >
+                              <FiSearch className="text-sm" />
+                            </Link>
+                            <button
+                              disabled={processingId !== null}
+                              onClick={() => handleProcessAdmission(adm.id, 'Approved')}
+                              className="p-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all cursor-pointer"
+                              title="Approve Admission"
+                            >
+                              <FiCheck className="text-sm" />
+                            </button>
+                            <button
+                              disabled={processingId !== null}
+                              onClick={() => handleProcessAdmission(adm.id, 'Rejected')}
+                              className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all cursor-pointer"
+                              title="Reject Admission"
+                            >
+                              <FiX className="text-sm" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -245,12 +369,10 @@ const AdmissionsPage = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-xs font-bold text-slate-800">${parseFloat(adm.fee_amount || adm.admission_fees_amount || 0).toFixed(2)}</p>
+                        <p className="text-xs font-bold text-slate-800">BDT {parseFloat(adm.fee_amount || adm.admission_fees_amount || 0).toFixed(2)}</p>
                         <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 border ${
-                          adm.fee_status === 'Paid'
+                          adm.fee_status === 'paid' || adm.fee_status === 'Paid'
                             ? 'bg-green-50 text-green-600 border-green-100'
-                            : adm.fee_status === 'Cancelled' || adm.fee_status === 'Cancel'
-                            ? 'bg-red-50 text-red-600 border-red-100'
                             : 'bg-amber-50 text-amber-600 border-amber-100'
                         }`}>
                           {adm.fee_status || 'Pending'}

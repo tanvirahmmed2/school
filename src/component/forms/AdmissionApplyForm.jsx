@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FiUser, FiMail, FiPhone, FiCalendar, FiMapPin, FiLayers, FiAward, FiBook } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiCalendar, FiMapPin, FiLayers, FiAward, FiBook, FiUploadCloud } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 
 const AdmissionApplyForm = ({ 
@@ -55,14 +55,6 @@ const AdmissionApplyForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.image) {
-      toast.error('Candidate profile image is required.');
-      return;
-    }
-    if (!form.signature) {
-      toast.error('Candidate signature is required.');
-      return;
-    }
     onSubmit(form);
   };
 
@@ -82,7 +74,7 @@ const AdmissionApplyForm = ({
             required
             value={selectedCircular ? selectedCircular.id : ''}
             onChange={(e) => onCircularChange(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 cursor-pointer"
           >
             <option value="">Choose an open circular drive...</option>
             {circulars.map((c) => (
@@ -97,15 +89,14 @@ const AdmissionApplyForm = ({
             <div className="text-[10px] text-slate-400 font-semibold flex flex-wrap gap-x-4 gap-y-1">
               {selectedCircular.min_age !== null && <div>• Min Age: <strong>{selectedCircular.min_age} years</strong></div>}
               {selectedCircular.max_age !== null && <div>• Max Age: <strong>{selectedCircular.max_age} years</strong></div>}
-              {selectedCircular.birth_regi_number && <div>• Req Code: <strong>{selectedCircular.birth_regi_number}</strong></div>}
               <div>• Deadline: <strong>{new Date(selectedCircular.finish_date).toLocaleDateString()}</strong></div>
               {selectedCircular.fees !== undefined && selectedCircular.fees !== null && (
-                <div>• Admission Fee: <strong className="text-blue-650 font-bold">${parseFloat(selectedCircular.fees).toFixed(2)}</strong></div>
+                <div>• Admission Fee: <strong className="text-blue-600 font-bold">BDT {parseFloat(selectedCircular.fees).toFixed(2)}</strong></div>
               )}
             </div>
             {selectedCircular.description && (
               <div className="border-t border-slate-200/60 pt-2.5">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Circular Description / Instructions</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Circular Instructions</p>
                 <div 
                   className="prose prose-sm max-w-none text-xs text-slate-600 leading-relaxed font-normal" 
                   dangerouslySetInnerHTML={{ __html: selectedCircular.description }} 
@@ -118,16 +109,16 @@ const AdmissionApplyForm = ({
 
       {/* Candidate Section */}
       <div className="border-t border-slate-50 pt-4 mt-2">
-        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">1. Candidate Information</h3>
+        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">1. Candidate Details</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-450 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiUser /> Applicant Full Name *
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. John Doe"
+              placeholder="e.g. Jane Doe"
               value={form.applicant_name}
               onChange={(e) => setForm((p) => ({ ...p, applicant_name: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
@@ -135,7 +126,7 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiCalendar /> Date of Birth *
             </label>
             <input
@@ -148,7 +139,7 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiAward /> Birth Registration No *
             </label>
             <input
@@ -162,11 +153,11 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest">Gender *</label>
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Gender *</label>
             <select
               value={form.gender}
               onChange={(e) => setForm((p) => ({ ...p, gender: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 cursor-pointer"
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -175,7 +166,7 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiMail /> Candidate Email *
             </label>
             <input
@@ -189,7 +180,7 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiPhone /> Candidate Phone *
             </label>
             <input
@@ -205,7 +196,7 @@ const AdmissionApplyForm = ({
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiBook /> Previous School (Optional)
             </label>
             <input
@@ -218,7 +209,7 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiMapPin /> Residential Address *
             </label>
             <textarea
@@ -235,10 +226,10 @@ const AdmissionApplyForm = ({
 
       {/* Guardian Section */}
       <div className="border-t border-slate-50 pt-4 mt-2">
-        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">2. Parent / Guardian Information</h3>
+        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">2. Parent / Guardian Details</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiUser /> Guardian Name *
             </label>
             <input
@@ -252,7 +243,7 @@ const AdmissionApplyForm = ({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold text-slate-455 text-slate-400 uppercase tracking-widest flex items-center gap-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
               <FiPhone /> Guardian Phone *
             </label>
             <input
@@ -267,14 +258,20 @@ const AdmissionApplyForm = ({
         </div>
       </div>
 
-      {/* Document Uploads */}
+      {/* Document Uploads (Optional Initial) */}
       <div className="border-t border-slate-50 pt-4 mt-2">
-        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">3. Candidate Documents</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">3. Candidate Documents (Optional)</h3>
+          <span className="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded-full">
+            Can upload now or via email link after fee payment
+          </span>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Image Upload */}
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Candidate Image (JPEG/PNG) *
+              Candidate Photo (Optional)
             </label>
             <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl items-center text-center">
               {form.image ? (
@@ -285,14 +282,14 @@ const AdmissionApplyForm = ({
                   className="w-24 h-24 rounded-xl object-cover border border-slate-200 shadow-sm"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold">
-                  No Image Selected
+                <div className="w-24 h-24 rounded-xl bg-slate-100 flex flex-col items-center justify-center text-slate-400 text-xs font-semibold gap-1">
+                  <FiUploadCloud className="text-lg" />
+                  <span>Select Image</span>
                 </div>
               )}
               <input
                 type="file"
                 name="image"
-                required
                 accept="image/jpeg,image/png"
                 onChange={handleFileChange}
                 className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
@@ -303,7 +300,7 @@ const AdmissionApplyForm = ({
           {/* Signature Upload */}
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Candidate Signature (JPEG/PNG) *
+              Candidate Signature (Optional)
             </label>
             <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl items-center text-center">
               {form.signature ? (
@@ -314,14 +311,14 @@ const AdmissionApplyForm = ({
                   className="w-full max-w-[150px] h-16 rounded-xl object-contain border border-slate-200 shadow-sm bg-white p-1"
                 />
               ) : (
-                <div className="w-32 h-16 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold">
-                  No Signature Selected
+                <div className="w-32 h-16 rounded-xl bg-slate-100 flex flex-col items-center justify-center text-slate-400 text-xs font-semibold gap-1">
+                  <FiUploadCloud className="text-lg" />
+                  <span>Select Signature</span>
                 </div>
               )}
               <input
                 type="file"
                 name="signature"
-                required
                 accept="image/jpeg,image/png"
                 onChange={handleFileChange}
                 className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
@@ -345,7 +342,7 @@ const AdmissionApplyForm = ({
           disabled={submitting}
           className="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm disabled:opacity-60 flex items-center gap-1.5"
         >
-          {submitting ? 'Submitting...' : 'Submit Application'}
+          {submitting ? 'Submitting Application...' : 'Submit Application & Get Receipt'}
         </button>
       </div>
     </form>

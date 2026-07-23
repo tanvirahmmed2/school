@@ -156,9 +156,13 @@ const AdmissionFeeDesk = () => {
 
   // Filter admissions
   const filteredAdmissions = admissions.filter(adm => {
-    const matchesSearch = adm.applicant_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          adm.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          adm.phone.includes(searchQuery);
+    const q = searchQuery.toLowerCase().trim();
+    const appNum = `app-1000${adm.id}`;
+    const matchesSearch = adm.applicant_name.toLowerCase().includes(q) ||
+                          adm.email.toLowerCase().includes(q) ||
+                          adm.phone.includes(q) ||
+                          appNum.includes(q) ||
+                          adm.id.toString() === q;
     const matchesClass = filterClass === '' || adm.applied_class_id.toString() === filterClass;
     
     const normalizedFeeStatus = (adm.fee_status || 'Pending').toLowerCase();

@@ -175,7 +175,7 @@ const ApplicantDetailsContent = () => {
             <div className="w-full flex flex-col gap-2">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-semibold text-slate-500">Fee Amount:</span>
-                <span className="text-sm font-bold text-slate-800">${parseFloat(applicant.fee_amount || applicant.admission_fees_amount || 0).toFixed(2)}</span>
+                <span className="text-sm font-bold text-slate-800">BDT {parseFloat(applicant.fee_amount || applicant.admission_fees_amount || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs font-semibold text-slate-500">Status:</span>

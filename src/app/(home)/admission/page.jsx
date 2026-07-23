@@ -89,7 +89,7 @@ const AdmissionPage = () => {
                       {c.fees !== undefined && c.fees !== null && (
                         <div className="flex items-center gap-1.5 text-blue-600">
                           <FiDollarSign className="text-blue-500" />
-                          <span>Admission Fee: <strong className="text-blue-700">${parseFloat(c.fees).toFixed(2)}</strong></span>
+                          <span>Admission Fee: <strong className="text-blue-700">BDT {parseFloat(c.fees).toFixed(2)}</strong></span>
                         </div>
                       )}
                     </div>

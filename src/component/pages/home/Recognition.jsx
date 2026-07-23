@@ -39,7 +39,7 @@ const Recognition = () => {
     return (
       <section className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="mx-auto flex justify-center py-8">
-          <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
         </div>
       </section>
     );
@@ -48,14 +48,11 @@ const Recognition = () => {
   if (recognitions.length === 0) return null;
 
   return (
-    <section className="w-full py-14 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-amber-50/20 to-slate-50/60 overflow-hidden">
-      <div className="mx-auto max-w-7xl">
-        {/* Section Header & Navigation Controls */}
+    <section className="w-full py-14 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-white via-emerald-50/20 to-slate-50/60 overflow-hidden">
+      <div className="w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest mb-2 border border-amber-100">
-              Honours &amp; Awards
-            </span>
+            
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
               Recognitions
             </h2>
@@ -69,14 +66,14 @@ const Recognition = () => {
             <button
               onClick={() => handleScroll('left')}
               aria-label="Previous recognitions"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-amber-600 hover:border-amber-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
             >
               <FiChevronLeft className="text-lg" />
             </button>
             <button
               onClick={() => handleScroll('right')}
               aria-label="Next recognitions"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-amber-600 hover:border-amber-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
             >
               <FiChevronRight className="text-lg" />
             </button>
@@ -84,7 +81,7 @@ const Recognition = () => {
             {/* View All Button */}
             <Link
               href="/recognitions"
-              className="ml-2 inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 px-3.5 py-2 rounded-full border border-amber-200/80 transition-colors"
+              className="ml-2 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-full border border-emerald-200/80 transition-colors"
             >
               <span>View All</span>
               <FiArrowRight className="text-xs" />

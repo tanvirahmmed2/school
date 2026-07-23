@@ -29,11 +29,9 @@ const Notices = () => {
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="mx-auto">
         <div className="text-center mb-12">
-          <span className="inline-block text-xs font-bold text-sky-600 bg-sky-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest mb-3">
-            Bulletin Board
-          </span>
+          
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Academic Announcements
+            Notice Board
           </h2>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-sm">
             Stay informed with the latest updates, circulars, and notices released by the registrar office.
@@ -52,13 +50,12 @@ const Notices = () => {
             <p className="text-slate-655 text-xs text-slate-400 font-medium">No announcements published at the moment.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {notices.slice(0, 4).map((notice) => (
               <div
                 key={notice.id}
                 className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col gap-3"
               >
-                {/* Pinned Badge */}
                 {notice.is_pinned && (
                   <span className="absolute top-0 right-0 bg-sky-500 text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl">
                     Pinned
