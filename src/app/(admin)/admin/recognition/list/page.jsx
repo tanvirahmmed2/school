@@ -5,6 +5,11 @@ import Link from 'next/link';
 import { FiPlus, FiAward, FiCalendar, FiImage, FiTrash2, FiUser, FiEdit2 } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 
+const stripHtml = (html) => {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+};
+
 const RecognitionListPage = () => {
   const [recognitions, setRecognitions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +20,8 @@ const RecognitionListPage = () => {
       const res = await fetch('/api/recognitions');
       if (res.ok) {
         const data = await res.json();
-        setRecognitions(data.paylod.recognitions || []);
+        const list = data.paylod?.recognitions || data.payload?.recognitions || data.recognitions || [];
+        setRecognitions(list);
       }
     } catch (err) {
       console.error('Error fetching recognitions:', err);
@@ -84,9 +90,9 @@ const RecognitionListPage = () => {
                 <tr className="border-b border-slate-100 bg-slate-50/50">
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6">Image</th>
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Recognition Name</th>
+                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Description</th>
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Awarded By</th>
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Date</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Slug</th>
                   <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right">Actions</th>
                 </tr>
               </thead>
@@ -106,23 +112,27 @@ const RecognitionListPage = () => {
                       )}
                     </td>
 
-                    {/* Name + description */}
-                    <td className="p-4 max-w-xs">
+                    {/* Name */}
+                    <td className="p-4 max-w-[200px]">
                       <div className="flex items-center gap-2">
                         <FiAward className="text-amber-500 flex-shrink-0" />
-                        <div>
-                          <span className="font-extrabold text-slate-900">{item.name}</span>
-                          {item.description && (
-                            <p className="text-slate-400 text-[10px] font-medium mt-0.5 line-clamp-1 max-w-[200px]">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
+                        <span className="font-extrabold text-slate-900">{item.name}</span>
                       </div>
                     </td>
 
+                    {/* Description */}
+                    <td className="p-4 max-w-xs">
+                      {item.description ? (
+                        <p className="text-slate-500 text-xs font-normal line-clamp-2 leading-relaxed">
+                          {stripHtml(item.description)}
+                        </p>
+                      ) : (
+                        <span className="text-slate-300 italic text-[11px]">No description</span>
+                      )}
+                    </td>
+
                     {/* Awarded By */}
-                    <td className="p-4 text-slate-600 font-medium">
+                    <td className="p-4 text-slate-600 font-medium whitespace-nowrap">
                       <span className="flex items-center gap-1.5">
                         <FiUser className="text-slate-400" />
                         {item.awarded_by}
@@ -130,7 +140,7 @@ const RecognitionListPage = () => {
                     </td>
 
                     {/* Date */}
-                    <td className="p-4 text-slate-500 font-medium">
+                    <td className="p-4 text-slate-500 font-medium whitespace-nowrap">
                       <span className="flex items-center gap-1.5">
                         <FiCalendar />
                         {new Date(item.date).toLocaleDateString(undefined, {
@@ -141,13 +151,8 @@ const RecognitionListPage = () => {
                       </span>
                     </td>
 
-                    {/* Slug */}
-                    <td className="p-4 text-slate-400 font-mono text-[10px]">
-                      {item.slug}
-                    </td>
-
                     {/* Actions */}
-                    <td className="p-4 pr-6 text-right">
+                    <td className="p-4 pr-6 text-right whitespace-nowrap">
                       <div className="flex items-center gap-3 justify-end">
                         <Link
                           href={`/admin/recognition/${item.id}/edit`}
