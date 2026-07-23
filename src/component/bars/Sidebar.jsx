@@ -33,23 +33,22 @@ const Sidebar = () => {
       />
 
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
+        className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-emerald-500 text-white z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
           sidebar ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div className="flex items-center justify-between pb-4 border-b border-emerald-400/40">
             <Link href="/" onClick={closeSidebar} className="flex items-center gap-2 group">
-              
               <div className="flex flex-col">
-                <span className="font-extrabold text-slate-800 text-sm leading-tight">
+                <span className="font-extrabold text-white text-base leading-tight">
                   Fontana
                 </span>
               </div>
             </Link>
             <button
               onClick={closeSidebar}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-white hover:bg-emerald-600 transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <FiX className="text-xl" />
@@ -64,11 +63,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiHome className="text-base" />
+              <FiHome className="text-base text-white" />
               <span>Home</span>
             </Link>
 
@@ -78,11 +77,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/notices')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <MdOutlineAnnouncement className="text-base" />
+              <MdOutlineAnnouncement className="text-base text-white" />
               <span>Notices</span>
             </Link>
 
@@ -92,29 +91,29 @@ const Sidebar = () => {
                 onClick={() => toggleSection('about')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'about'
-                    ? 'bg-slate-50 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <FiInfo className="text-base" />
+                  <FiInfo className="text-base text-white" />
                   <span>About FIT</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs transition-transform duration-200 ${
+                  className={`text-xs text-white transition-transform duration-200 ${
                     openSection === 'about' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               {openSection === 'about' && (
-                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-slate-100 ml-6 mt-1">
-                  <Link href="/about" onClick={closeSidebar} className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors">
+                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1">
+                  <Link href="/about" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     About Overview
                   </Link>
-                  <Link href="/about/mission-vission" onClick={closeSidebar} className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors">
+                  <Link href="/about/mission-vission" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     Mission & Vision
                   </Link>
-                  <Link href="/about/campus-details" onClick={closeSidebar} className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors">
+                  <Link href="/about/campus-details" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     Campus Details
                   </Link>
                 </div>
@@ -127,11 +126,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/administration')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiBookOpen className="text-base" />
+              <FiBookOpen className="text-base text-white" />
               <span>Administration</span>
             </Link>
 
@@ -141,11 +140,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/programs')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiGrid className="text-base" />
+              <FiGrid className="text-base text-white" />
               <span>Programs</span>
             </Link>
 
@@ -155,35 +154,35 @@ const Sidebar = () => {
                 onClick={() => toggleSection('classes')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'classes'
-                    ? 'bg-slate-50 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <FiBookOpen className="text-base" />
+                  <FiBookOpen className="text-base text-white" />
                   <span>Classes</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs transition-transform duration-200 ${
+                  className={`text-xs text-white transition-transform duration-200 ${
                     openSection === 'classes' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               {openSection === 'classes' && (
-                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-slate-100 ml-6 mt-1 max-h-48 overflow-y-auto">
+                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1 max-h-48 overflow-y-auto">
                   {classes && classes.length > 0 ? (
                     classes.map((c) => (
                       <Link
                         key={c.id || c.code}
                         href={`/classes/${c.code || c.id}`}
                         onClick={closeSidebar}
-                        className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors"
+                        className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors"
                       >
                         {c.name}
                       </Link>
                     ))
                   ) : (
-                    <span className="text-xs text-slate-400 italic py-1">No classes available</span>
+                    <span className="text-xs text-white/70 italic py-1 px-2">No classes available</span>
                   )}
                 </div>
               )}
@@ -195,29 +194,29 @@ const Sidebar = () => {
                 onClick={() => toggleSection('facilities')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'facilities'
-                    ? 'bg-slate-50 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <FiGrid className="text-base" />
+                  <FiGrid className="text-base text-white" />
                   <span>Facilities</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs transition-transform duration-200 ${
+                  className={`text-xs text-white transition-transform duration-200 ${
                     openSection === 'facilities' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               {openSection === 'facilities' && (
-                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-slate-100 ml-6 mt-1">
-                  <Link href="/facilities" onClick={closeSidebar} className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors">
+                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1">
+                  <Link href="/facilities" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     Facilities Overview
                   </Link>
-                  <Link href="/facilities/classrooms" onClick={closeSidebar} className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors">
+                  <Link href="/facilities/classrooms" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     Classrooms
                   </Link>
-                  <Link href="/facilities/hostels" onClick={closeSidebar} className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors">
+                  <Link href="/facilities/hostels" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     Hostels
                   </Link>
                 </div>
@@ -230,35 +229,35 @@ const Sidebar = () => {
                 onClick={() => toggleSection('clubs')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'clubs'
-                    ? 'bg-slate-50 text-slate-800'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <FiInfo className="text-base" />
+                  <FiInfo className="text-base text-white" />
                   <span>Clubs</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs transition-transform duration-200 ${
+                  className={`text-xs text-white transition-transform duration-200 ${
                     openSection === 'clubs' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
               {openSection === 'clubs' && (
-                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-slate-100 ml-6 mt-1 max-h-48 overflow-y-auto">
+                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1 max-h-48 overflow-y-auto">
                   {clubs && clubs.length > 0 ? (
                     clubs.map((c) => (
                       <Link
                         key={c.id || c.slug}
                         href={`/clubs/${c.slug || c.id}`}
                         onClick={closeSidebar}
-                        className="text-xs text-slate-500 hover:text-sky-600 py-1 transition-colors"
+                        className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors"
                       >
                         {c.name}
                       </Link>
                     ))
                   ) : (
-                    <span className="text-xs text-slate-400 italic py-1">No clubs available</span>
+                    <span className="text-xs text-white/70 italic py-1 px-2">No clubs available</span>
                   )}
                 </div>
               )}
@@ -270,11 +269,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/news')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiInfo className="text-base" />
+              <FiInfo className="text-base text-white" />
               <span>News Hub</span>
             </Link>
 
@@ -284,11 +283,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/staffs')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiBookOpen className="text-base" />
+              <FiBookOpen className="text-base text-white" />
               <span>Staff Directory</span>
             </Link>
 
@@ -298,11 +297,11 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/result')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiGrid className="text-base" />
+              <FiGrid className="text-base text-white" />
               <span>Result Portal</span>
             </Link>
 
@@ -312,29 +311,29 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/contact')
-                  ? 'bg-sky-50 text-sky-600'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
               }`}
             >
-              <FiMail className="text-base" />
+              <FiMail className="text-base text-white" />
               <span>Contact Us</span>
             </Link>
           </nav>
         </div>
 
         {/* Footer Actions inside Drawer */}
-        <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-slate-100">
+        <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-emerald-400/40">
           <Link
             href="/auth/student"
             onClick={closeSidebar}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-sm transition-colors"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-white/30 text-white hover:bg-emerald-600 font-bold text-sm transition-colors"
           >
             <span>Student Portal</span>
           </Link>
           <Link
             href="/auth/access"
             onClick={closeSidebar}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition-colors"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-white/15 hover:bg-emerald-600 text-white font-bold text-sm transition-colors"
           >
             <FiLogIn />
             <span>Login</span>
@@ -342,7 +341,7 @@ const Sidebar = () => {
           <Link
             href="/auth/student/registration"
             onClick={closeSidebar}
-            className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-bold text-sm shadow-md shadow-sky-50 hover:shadow-lg transition-all"
+            className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-sm shadow-md transition-all"
           >
             <span>Apply Now</span>
             <FiArrowRight />

@@ -37,6 +37,7 @@ const Sidebar = () => {
     { label: 'Exam Routine', href: '/student/exams', icon: FiCalendar },
     { label: 'My Marks & Results', href: '/student/results', icon: FiAward },
     { label: 'Fees & Fines', href: '/student/fees', icon: FiDollarSign },
+    { label: 'Campus Events', href: '/student/events', icon: FiCalendar },
     ...(isClubMember ? [{ label: 'My Club Dashboard', href: '/student/clubs', icon: FiUsers }] : []),
     { label: 'My Profile', href: '/student/profile', icon: FiUser },
   ];
@@ -53,14 +54,14 @@ const Sidebar = () => {
 
       {/* Sidebar container */}
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-100 z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-emerald-500 text-white z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           studentSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col gap-6">
           {/* Sidebar Navigation */}
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2">
+            <span className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2 opacity-90">
               Student Navigation
             </span>
             <nav className="flex flex-col gap-1">
@@ -77,11 +78,11 @@ const Sidebar = () => {
                     onClick={() => setStudentSidebar(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                       isActive
-                        ? 'bg-blue-50 text-blue-600'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                        ? 'bg-emerald-600 text-white font-bold'
+                        : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                     }`}
                   >
-                    <Icon className={`text-base ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                    <Icon className="text-base text-white" />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -94,7 +95,7 @@ const Sidebar = () => {
           <Link
             href="/"
             onClick={() => setStudentSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-blue-500 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

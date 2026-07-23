@@ -20,15 +20,13 @@ const AuthPortalSelectionPage = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-800 relative px-4 py-16 overflow-hidden">
       {/* Background aesthetics */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] aspect-square rounded-full bg-blue-500/5 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] aspect-square rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] aspect-square rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] aspect-square rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none"></div>
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f080_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f080_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-40"></div>
 
       <div className="w-full max-w-md bg-white border border-slate-100 rounded-3xl p-8 shadow-[0_15px_50px_rgba(0,0,0,0.03)] z-10 animate-fade-up">
         <div className="flex flex-col items-center text-center mb-8">
-          <span className="text-[10px] font-bold tracking-widest text-sky-600 uppercase bg-sky-50 border border-sky-100 px-3 py-1 rounded-full mb-3">
-            Portal Selection
-          </span>
+          
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Choose Portal</h1>
           <p className="text-sm text-slate-500 mt-2">Which system access portal do you want to enter?</p>
         </div>
@@ -37,7 +35,7 @@ const AuthPortalSelectionPage = () => {
           {/* Student Radio option */}
           <label className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
             selectedRole === 'student'
-              ? 'border-blue-500 bg-blue-50/20'
+              ? 'border-emerald-500 bg-emerald-50/20'
               : 'border-slate-100 hover:border-slate-200 bg-slate-50/30'
           }`}>
             <input
@@ -49,7 +47,7 @@ const AuthPortalSelectionPage = () => {
               className="hidden"
             />
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              selectedRole === 'student' ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500'
+              selectedRole === 'student' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'
             }`}>
               <FiBookOpen className="text-lg" />
             </div>
@@ -58,7 +56,7 @@ const AuthPortalSelectionPage = () => {
               <p className="text-xs text-slate-400 mt-0.5">Access grades, classes & reports</p>
             </div>
             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-              selectedRole === 'student' ? 'border-blue-500 bg-blue-500' : 'border-slate-300'
+              selectedRole === 'student' ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300'
             }`}>
               {selectedRole === 'student' && <div className="w-1.5 h-1.5 rounded-full bg-white"></div>}
             </div>
@@ -67,7 +65,7 @@ const AuthPortalSelectionPage = () => {
           {/* Administration Radio option */}
           <label className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
             selectedRole === 'administration'
-              ? 'border-indigo-500 bg-indigo-50/20'
+              ? 'border-emerald-500 bg-emerald-50/20'
               : 'border-slate-100 hover:border-slate-200 bg-slate-50/30'
           }`}>
             <input
@@ -79,7 +77,7 @@ const AuthPortalSelectionPage = () => {
               className="hidden"
             />
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              selectedRole === 'administration' ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-500'
+              selectedRole === 'administration' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'
             }`}>
               <FiShield className="text-lg" />
             </div>
@@ -87,7 +85,7 @@ const AuthPortalSelectionPage = () => {
               <p className="text-sm font-bold text-slate-800">Administration</p>
             </div>
             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-              selectedRole === 'administration' ? 'border-indigo-500 bg-indigo-500' : 'border-slate-300'
+              selectedRole === 'administration' ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300'
             }`}>
               {selectedRole === 'administration' && <div className="w-1.5 h-1.5 rounded-full bg-white"></div>}
             </div>

@@ -57,33 +57,44 @@ const EventsPage = () => {
             {events.map((event) => {
               const eventDate = new Date(event.event_date);
               return (
-                <div key={event.id} className="bg-white rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-[0_10px_30px_rgba(14,165,233,0.04)] shadow-xs p-6 flex flex-col justify-between transition-all duration-200 group">
-                  <div className="flex flex-col gap-3">
-                    {/* Date Tag */}
-                    <div className="flex items-center gap-1.5 text-sky-600 bg-sky-50 px-3 py-1 rounded-lg text-xs font-bold w-fit">
-                      <FiCalendar className="text-sm" />
-                      <span>{eventDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                <div key={event.id} className="bg-white rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-md shadow-xs overflow-hidden flex flex-col justify-between transition-all duration-200 group">
+                  {event.image && (
+                    <div className="w-full h-48 bg-slate-100 overflow-hidden relative">
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 flex flex-col justify-between flex-1">
+                    <div className="flex flex-col gap-3">
+                      {/* Date Tag */}
+                      <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg text-xs font-bold w-fit">
+                        <FiCalendar className="text-sm" />
+                        <span>{eventDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                      </div>
+
+                      <h2 className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mt-1">
+                        {event.title}
+                      </h2>
+
+                      <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                        {event.description}
+                      </p>
                     </div>
 
-                    <h2 className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors mt-1">
-                      {event.title}
-                    </h2>
-
-                    <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
-                      {event.description}
-                    </p>
-                  </div>
-
-                  {/* Location & Meta info */}
-                  <div className="flex flex-wrap gap-4 items-center border-t border-slate-50 pt-4 mt-6 text-xs text-slate-500 font-semibold">
-                    <span className="flex items-center gap-1.5">
-                      <FiMapPin className="text-slate-400 text-sm" />
-                      {event.location}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <FiClock className="text-slate-400 text-sm" />
-                      {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
-                    </span>
+                    {/* Location & Meta info */}
+                    <div className="flex flex-wrap gap-4 items-center border-t border-slate-100 pt-4 mt-6 text-xs text-slate-500 font-semibold">
+                      <span className="flex items-center gap-1.5">
+                        <FiMapPin className="text-emerald-600 text-sm" />
+                        {event.location}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <FiClock className="text-emerald-600 text-sm" />
+                        {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                      </span>
+                    </div>
                   </div>
                 </div>
               );

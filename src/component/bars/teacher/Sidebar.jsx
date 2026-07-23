@@ -70,14 +70,14 @@ const Sidebar = () => {
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-100 z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-emerald-500 text-white z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           TeacherSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Back />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2">
+            <span className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2 opacity-90">
               Teacher Navigation
             </span>
             <nav className="flex flex-col gap-1">
@@ -94,11 +94,11 @@ const Sidebar = () => {
                     onClick={() => setTeacherSidebar(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                       isActive
-                        ? 'bg-indigo-50 text-indigo-600'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                        ? 'bg-emerald-600 text-white font-bold'
+                        : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                     }`}
                   >
-                    <Icon className={`text-base ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
+                    <Icon className="text-base text-white" />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -111,20 +111,20 @@ const Sidebar = () => {
                     onClick={() => setClubDropdownOpen(!clubDropdownOpen)}
                     className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                       pathname.startsWith('/teacher/clubs')
-                        ? 'bg-indigo-50 text-indigo-600'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                        ? 'bg-emerald-600 text-white font-bold'
+                        : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <FiUsers className={`text-base ${pathname.startsWith('/teacher/clubs') ? 'text-indigo-600' : 'text-slate-400'}`} />
+                      <FiUsers className="text-base text-white" />
                       <span>Club Admin</span>
                     </div>
-                    {clubDropdownOpen ? <FiChevronDown className="text-sm" /> : <FiChevronRight className="text-sm" />}
+                    {clubDropdownOpen ? <FiChevronDown className="text-sm text-white/80" /> : <FiChevronRight className="text-sm text-white/80" />}
                   </button>
 
                   {/* Sub Links */}
                   {clubDropdownOpen && (
-                    <div className="flex flex-col gap-1 pl-6 border-l-2 border-slate-100 ml-5 my-1">
+                    <div className="flex flex-col gap-1 pl-6 border-l-2 border-emerald-400/40 ml-5 my-1">
                       {clubSubLinks.map((sub) => {
                         const SubIcon = sub.icon;
                         const isSubActive = sub.href === '/teacher/clubs'
@@ -138,11 +138,11 @@ const Sidebar = () => {
                             onClick={() => setTeacherSidebar(false)}
                             className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150 ${
                               isSubActive
-                                ? 'bg-indigo-600 text-white font-bold shadow-xs'
-                                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                                ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                                : 'text-white/80 hover:bg-emerald-600/50 hover:text-white'
                             }`}
                           >
-                            <SubIcon className="text-sm" />
+                            <SubIcon className="text-sm text-white" />
                             <span>{sub.label}</span>
                           </Link>
                         );
@@ -163,11 +163,11 @@ const Sidebar = () => {
                     onClick={() => setTeacherSidebar(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                       isActive
-                        ? 'bg-indigo-50 text-indigo-600'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                        ? 'bg-emerald-600 text-white font-bold'
+                        : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                     }`}
                   >
-                    <Icon className={`text-base ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
+                    <Icon className="text-base text-white" />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -180,7 +180,7 @@ const Sidebar = () => {
           <Link
             href="/"
             onClick={() => setTeacherSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white text-xs font-bold rounded-xl shadow-md shadow-indigo-500/10 hover:shadow-indigo-500/20 transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

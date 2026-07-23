@@ -55,4 +55,38 @@ export async function ensureClubTables() {
   }
 }
 
+let eventsTablesEnsured = false;
+export async function ensureEventsTables() {
+  if (eventsTablesEnsured) return;
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS events (
+        id BIGSERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        event_date TIMESTAMPTZ NOT NULL,
+        location VARCHAR(255) NOT NULL,
+        image TEXT,
+        image_id TEXT,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
+
+      ALTER TABLE events ADD COLUMN IF NOT EXISTS image TEXT;
+      ALTER TABLE events ADD COLUMN IF NOT EXISTS image_id TEXT;
+
+      CREATE TABLE IF NOT EXISTS event_participants (
+        id BIGSERIAL PRIMARY KEY,
+        event_id BIGINT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+        student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+        joined_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(event_id, student_id)
+      );
+    `);
+    eventsTablesEnsured = true;
+  } catch (err) {
+    console.error('Error ensuring events database tables:', err);
+  }
+}
+
 export default pool;

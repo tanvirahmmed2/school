@@ -51,6 +51,9 @@ const Sidebar = () => {
         { label: 'Admissions Registry', href: '/staff/registrar/admissions', icon: FiUsers },
         { label: 'Class Routines', href: '/staff/registrar/routine', icon: FiClock },
         { label: 'Campus News', href: '/staff/registrar/news', icon: FiFileText },
+        { label: 'Events List', href: '/staff/registrar/events', icon: FiCalendar },
+        { label: 'Create Event', href: '/staff/registrar/events/new', icon: FiPlus },
+        { label: 'Event Participants', href: '/staff/registrar/events/participants', icon: FiUsers },
         { label: 'Club Announcements', href: '/staff/registrar/club-news', icon: FiActivity },
         { label: 'Achievements', href: '/staff/registrar/acheivement', icon: FiSliders },
         { label: 'Notice Board', href: '/staff/registrar/notices', icon: FiBookOpen },
@@ -82,21 +85,21 @@ const Sidebar = () => {
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-100 z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-emerald-500 text-white z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           staffSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Back />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2 mt-2">
+            <span className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2 mt-2 opacity-90">
               Staff Navigation
             </span>
 
             {loading ? (
               <div className="flex flex-col gap-2 px-3">
-                <div className="h-8 bg-slate-100 rounded-xl animate-pulse"></div>
-                <div className="h-8 bg-slate-100 rounded-xl animate-pulse"></div>
+                <div className="h-8 bg-emerald-600/50 rounded-xl animate-pulse"></div>
+                <div className="h-8 bg-emerald-600/50 rounded-xl animate-pulse"></div>
               </div>
             ) : (
               <nav className="flex flex-col gap-1">
@@ -111,11 +114,11 @@ const Sidebar = () => {
                       onClick={() => setStaffSidebar(false)}
                       className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                         isActive
-                          ? 'bg-sky-50 text-sky-600'
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
+                          ? 'bg-emerald-600 text-white font-bold'
+                          : 'text-white/90 hover:bg-emerald-600 hover:text-white'
                       }`}
                     >
-                      <Icon className={`text-base ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                      <Icon className="text-base text-white" />
                       <span>{link.label}</span>
                     </Link>
                   );
@@ -129,7 +132,7 @@ const Sidebar = () => {
           <Link
             href="/"
             onClick={() => setStaffSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white text-xs font-bold rounded-xl shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

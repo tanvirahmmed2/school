@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT, isStudent } from '@/lib/auth';
-import { query } from '@/lib/db';
+import { query, ensureEventsTables } from '@/lib/db';
 
 // GET all events and join status for logged-in student
 export async function GET() {
   try {
+    await ensureEventsTables();
     const authenticated = await isStudent();
     if (!authenticated) {
       const res_err_348 = { error: 'Unauthorized. Students only.' };
