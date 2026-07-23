@@ -4,14 +4,14 @@ import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Context } from '../helper/Context';
-import { FiX, FiChevronDown, FiHome, FiInfo, FiBookOpen, FiGrid, FiMail, FiLogIn, FiArrowRight } from 'react-icons/fi';
+import { FiX, FiChevronDown, FiHome, FiInfo, FiBookOpen, FiGrid, FiMail, FiLogIn, FiArrowRight, FiCalendar } from 'react-icons/fi';
 import { MdOutlineAnnouncement } from 'react-icons/md';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const Sidebar = () => {
   const { sidebar, setSidebar, classes, clubs } = useContext(Context);
   const pathname = usePathname();
 
-  // Accordion active state
   const [openSection, setOpenSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -20,7 +20,6 @@ const Sidebar = () => {
 
   const closeSidebar = () => setSidebar(false);
 
-  // Helper to determine link styling
   const isActive = (path) => pathname === path;
 
   return (
@@ -41,8 +40,8 @@ const Sidebar = () => {
           <div className="flex items-center justify-between pb-4 border-b border-emerald-400/40">
             <Link href="/" onClick={closeSidebar} className="flex items-center gap-2 group">
               <div className="flex flex-col">
-                <span className="font-extrabold text-white text-base leading-tight">
-                  Fontana
+                <span className="font-semibold text-white text-base leading-tight">
+                  {SCHOOL_NAME}
                 </span>
               </div>
             </Link>
@@ -55,9 +54,7 @@ const Sidebar = () => {
             </button>
           </div>
 
-          {/* Navigation Links */}
           <nav className="flex flex-col gap-1.5">
-            {/* Home */}
             <Link
               href="/"
               onClick={closeSidebar}
@@ -69,6 +66,20 @@ const Sidebar = () => {
             >
               <FiHome className="text-base text-white" />
               <span>Home</span>
+            </Link>
+
+            {/* Events */}
+            <Link
+              href="/events"
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
+                isActive('/events')
+                  ? 'bg-emerald-600 text-white font-bold'
+                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+              }`}
+            >
+              <FiCalendar className="text-base text-white" />
+              <span>Events</span>
             </Link>
 
             {/* Notices */}

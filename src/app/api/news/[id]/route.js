@@ -13,6 +13,43 @@ function slugify(text) {
     .replace(/\-\-+/g, '-');
 }
 
+// GET single news article by ID or slug
+export async function GET(request, { params }) {
+  try {
+    const { id } = await params;
+    const isNum = /^\d+$/.test(id);
+    let result;
+    if (isNum) {
+      result = await query('SELECT * FROM news WHERE id = $1 OR slug = $2', [parseInt(id, 10), id]);
+    } else {
+      result = await query('SELECT * FROM news WHERE slug = $1', [id]);
+    }
+
+    if (result.rows.length === 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'News article not found',
+        error: 'Not Found',
+        paylod: null
+      }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Successfully fetched news article',
+      paylod: { news: result.rows[0] }
+    }, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching single news article:', error);
+    return NextResponse.json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message,
+      paylod: null
+    }, { status: 500 });
+  }
+}
+
 // PUT update news (Admin only)
 export async function PUT(request, { params }) {
   try {

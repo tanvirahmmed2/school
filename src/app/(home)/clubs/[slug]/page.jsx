@@ -152,9 +152,10 @@ const ClubDetailsPage = () => {
           {clubNews.length > 0 ? (
             <div className="space-y-4">
               {clubNews.map((news) => (
-                <div
+                <Link
                   key={news.id}
-                  className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row gap-4 items-start"
+                  href={`/club-news/${news.slug || news.id}`}
+                  className="p-4 bg-slate-50 border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/40 rounded-xl flex flex-col sm:flex-row gap-4 items-start transition-all group block"
                 >
                   {news.image_url && (
                     <img
@@ -165,16 +166,16 @@ const ClubDetailsPage = () => {
                   )}
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-1 text-[11px] text-slate-400">
-                      <FiCalendar />
+                      <FiCalendar className="text-emerald-600" />
                       <span>{new Date(news.created_at).toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                     </div>
-                    <h3 className="text-sm font-bold text-slate-800">{news.title}</h3>
+                    <h3 className="text-sm font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">{news.title}</h3>
                     <div
                       className="text-xs text-slate-600 leading-relaxed line-clamp-3"
                       dangerouslySetInnerHTML={{ __html: news.content }}
                     />
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (

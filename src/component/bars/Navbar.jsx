@@ -114,7 +114,7 @@ const Navbar = () => {
 
         <Link href={'/teachers'} className={linkStyle()}>Teachers</Link>
         <Link href={'/staffs'} className={linkStyle()}>Staff</Link>
-        <Link href={'/acheivements'} className={linkStyle()}>Achievements</Link>
+        <Link href={'/achievements'} className={linkStyle()}>Achievements</Link>
         <Link href={'/news'} className={linkStyle()}>News</Link>
         <Link href={'/results'} className={linkStyle()}>Results</Link>
         <Link href={'/notices'} className={linkStyle()}>Notices</Link>

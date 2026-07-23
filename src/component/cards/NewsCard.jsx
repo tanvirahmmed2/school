@@ -46,21 +46,21 @@ const NewsCard = ({ news, href, className = '' }) => {
           {content}
         </p>
 
-        {href && (
-          <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-sky-600 group-hover:text-sky-700">
-            <span>Read Article</span>
-            <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-          </div>
-        )}
+        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700">
+          <span>Read Article</span>
+          <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+        </div>
       </div>
     </div>
   );
 
-  if (href) {
-    return <Link href={href} className="block h-full">{card}</Link>;
-  }
+  const targetHref = href || `/news/${news.slug || news.id}`;
 
-  return card;
+  return (
+    <Link href={targetHref} className="block h-full">
+      {card}
+    </Link>
+  );
 };
 
 export default NewsCard;

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { FiPlusCircle, FiAward } from 'react-icons/fi';
+import { FiAward } from 'react-icons/fi';
 import Link from 'next/link';
 import AdminForm from '@/component/forms/AdminForm';
 
@@ -38,7 +38,7 @@ const CreateAchievementPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-100">
             Control Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -46,7 +46,7 @@ const CreateAchievementPage = () => {
           </h1>
         </div>
         <Link
-          href="/admin/acheivement/list"
+          href="/admin/achievements/list"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
         >
           <FiAward />
@@ -60,7 +60,7 @@ const CreateAchievementPage = () => {
         apiEndpoint="/api/achievements"
         icon={FiAward}
         onSuccess={() => {
-          router.push('/admin/acheivement/list');
+          router.push('/admin/achievements/list');
         }}
       />
     </div>

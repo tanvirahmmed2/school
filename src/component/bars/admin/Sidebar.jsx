@@ -25,7 +25,7 @@ const Sidebar = () => {
   const [studentsOpen, setStudentsOpen] = useState(pathname.startsWith('/admin/students'));
   const [clubsOpen, setClubsOpen] = useState(pathname.startsWith('/admin/clubs'));
   const [newsOpen, setNewsOpen] = useState(pathname.startsWith('/admin/news'));
-  const [achievementsOpen, setAchievementsOpen] = useState(pathname.startsWith('/admin/acheivement'));
+  const [achievementsOpen, setAchievementsOpen] = useState(pathname.startsWith('/admin/achievements'));
   const [recognitionsOpen, setRecognitionsOpen] = useState(pathname.startsWith('/admin/recognition'));
   const [eventsOpen, setEventsOpen] = useState(pathname.startsWith('/admin/events'));
 
@@ -88,8 +88,8 @@ const Sidebar = () => {
   ];
 
   const achievementLinks = [
-    { label: 'Recorded Achievements', href: '/admin/acheivement/list', icon: FiAward },
-    { label: 'Add Achievement', href: '/admin/acheivement/new', icon: FiPlus },
+    { label: 'Recorded Achievements', href: '/admin/achievements/list', icon: FiAward },
+    { label: 'Add Achievement', href: '/admin/achievements/new', icon: FiPlus },
   ];
 
   const recognitionLinks = [

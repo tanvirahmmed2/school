@@ -35,7 +35,7 @@ const Footer = () => {
                             <Link href={'/collaborations'} className='hover:text-emerald-200 transition-colors duration-200'>Collaborations</Link>
                         </div>
                         <div className='flex flex-col gap-2'>
-                            <Link href={'/acheivements'} className='hover:text-emerald-200 transition-colors duration-200'>Achievements</Link>
+                            <Link href={'/achievements'} className='hover:text-emerald-200 transition-colors duration-200'>Achievements</Link>
                             <Link href={'/admission'} className='hover:text-emerald-200 transition-colors duration-200'>Admission Apply</Link>
                             <Link href={'/payments'} className='hover:text-emerald-200 transition-colors duration-200'>Bills & Payments</Link>
                             <Link href={'/news'} className='hover:text-emerald-200 transition-colors duration-200'>News Hub</Link>

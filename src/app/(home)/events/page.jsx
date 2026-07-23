@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiCalendar, FiMapPin, FiClock } from 'react-icons/fi';
+import Link from 'next/link';
+import { FiCalendar, FiMapPin, FiClock, FiArrowRight } from 'react-icons/fi';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
@@ -57,7 +58,11 @@ const EventsPage = () => {
             {events.map((event) => {
               const eventDate = new Date(event.event_date);
               return (
-                <div key={event.id} className="bg-white rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-md shadow-xs overflow-hidden flex flex-col justify-between transition-all duration-200 group">
+                <Link
+                  key={event.id}
+                  href={`/events/${event.id}`}
+                  className="bg-white rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-md shadow-xs overflow-hidden flex flex-col justify-between transition-all duration-200 group block"
+                >
                   {event.image && (
                     <div className="w-full h-48 bg-slate-100 overflow-hidden relative">
                       <img
@@ -79,24 +84,31 @@ const EventsPage = () => {
                         {event.title}
                       </h2>
 
-                      <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                      <p className="text-slate-600 text-xs md:text-sm leading-relaxed line-clamp-3">
                         {event.description}
                       </p>
                     </div>
 
                     {/* Location & Meta info */}
-                    <div className="flex flex-wrap gap-4 items-center border-t border-slate-100 pt-4 mt-6 text-xs text-slate-500 font-semibold">
-                      <span className="flex items-center gap-1.5">
-                        <FiMapPin className="text-emerald-600 text-sm" />
-                        {event.location}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <FiClock className="text-emerald-600 text-sm" />
-                        {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                    <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-6 text-xs text-slate-500 font-semibold">
+                      <div className="flex flex-wrap gap-4 items-center">
+                        <span className="flex items-center gap-1.5">
+                          <FiMapPin className="text-emerald-600 text-sm" />
+                          {event.location}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <FiClock className="text-emerald-600 text-sm" />
+                          {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                        </span>
+                      </div>
+
+                      <span className="flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700">
+                        <span>Details</span>
+                        <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

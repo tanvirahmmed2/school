@@ -7,7 +7,19 @@ import { uploadImage, deleteImage } from '@/lib/cloudinary';
 export async function GET(request, { params }) {
   try {
     const { id } = await params;
-    const result = await query('SELECT * FROM achievements WHERE id = $1', [parseInt(id, 10)]);
+    const isNum = /^\d+$/.test(id);
+    let result;
+    if (isNum) {
+      result = await query('SELECT * FROM achievements WHERE id = $1', [parseInt(id, 10)]);
+    } else {
+      // Clean up slug hyphens for title comparison
+      const formattedTitle = id.replace(/-/g, ' ');
+      result = await query('SELECT * FROM achievements WHERE LOWER(title) LIKE $1 OR LOWER(title) = $2', [
+        `%${formattedTitle.toLowerCase()}%`,
+        formattedTitle.toLowerCase()
+      ]);
+    }
+
     if (result.rows.length === 0) {
       return NextResponse.json({ success: false, error: 'Achievement not found' }, { status: 404 });
     }

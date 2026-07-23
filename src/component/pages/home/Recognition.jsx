@@ -38,7 +38,7 @@ const Recognition = () => {
   if (recognitions.length === 0) return null;
 
   return (
-    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-slate-50/60">
+    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-white to-slate-50/60">
       <div className="mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">

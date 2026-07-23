@@ -55,7 +55,7 @@ const Sidebar = () => {
         { label: 'Create Event', href: '/staff/registrar/events/new', icon: FiPlus },
         { label: 'Event Participants', href: '/staff/registrar/events/participants', icon: FiUsers },
         { label: 'Club Announcements', href: '/staff/registrar/club-news', icon: FiActivity },
-        { label: 'Achievements', href: '/staff/registrar/acheivement', icon: FiSliders },
+        { label: 'Achievements', href: '/staff/registrar/achievements', icon: FiSliders },
         { label: 'Notice Board', href: '/staff/registrar/notices', icon: FiBookOpen },
         { label: 'Student Attendance', href: '/staff/registrar/student-attendence', icon: FiCalendar },
         { label: 'Teacher Attendance', href: '/staff/registrar/teacher-attendence', icon: FiCalendar },
