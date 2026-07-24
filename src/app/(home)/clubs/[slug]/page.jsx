@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { FiArrowLeft, FiCalendar, FiUsers } from 'react-icons/fi';
+import Image from 'next/image';
 
 const ClubDetailsPage = () => {
   const params = useParams();
@@ -80,9 +81,8 @@ const ClubDetailsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-8 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         
-        {/* Back Button */}
         <div>
           <button
             onClick={() => router.back()}
@@ -92,13 +92,11 @@ const ClubDetailsPage = () => {
           </button>
         </div>
 
-        {/* Main Content Card */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs space-y-6">
+        <div className=" space-y-6">
           
-          {/* 1. Image */}
           {selectedClub.image && (
-            <div className="w-full h-64 sm:h-80 rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
-              <img
+            <div className="w-full  rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+              <Image width={1000} height={1000}
                 src={selectedClub.image}
                 alt={selectedClub.name}
                 className="w-full h-full object-cover"
@@ -106,7 +104,6 @@ const ClubDetailsPage = () => {
             </div>
           )}
 
-          {/* 2. Club Name & 3. Motto */}
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
               {selectedClub.name}
