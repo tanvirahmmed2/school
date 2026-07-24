@@ -13,7 +13,7 @@ import {
   FiBookOpen
 } from 'react-icons/fi';
 
-const MissionVisionPage = () => {
+const MissionPage = () => {
   const strategies = [
     {
       title: 'Practical Curriculum Integration',
@@ -149,4 +149,4 @@ const MissionVisionPage = () => {
   );
 };
 
-export default MissionVisionPage;
+export default MissionPage;

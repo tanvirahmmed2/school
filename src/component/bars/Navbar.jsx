@@ -72,7 +72,7 @@ const Navbar = () => {
           </Link>
           <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-emerald-100">
             <Link href={'/about/campus'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">My Campus</Link>
-            <Link href={'/missions'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">Mission</Link>
+            <Link href={'/about/mission'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">Mission</Link>
             <Link href={'/about/vision'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">Vision</Link>
             <Link href={'/about/history'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">History</Link>
           </div>
