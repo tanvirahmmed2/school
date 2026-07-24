@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiUsers, FiArrowRight } from 'react-icons/fi';
+import Image from 'next/image';
 
 const stripHtml = (html) => {
   if (!html) return '';
@@ -23,7 +24,7 @@ const ClubCard = ({ club, className = '' }) => {
         {/* Cover / Image Area */}
         {image ? (
           <div className="w-full h-44 bg-slate-100 overflow-hidden relative border-b border-slate-100">
-            <img
+            <Image width={500} height={500}
               src={image}
               alt={name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

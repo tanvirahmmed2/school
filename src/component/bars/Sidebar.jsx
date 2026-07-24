@@ -4,12 +4,12 @@ import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Context } from '../helper/Context';
-import { FiX, FiChevronDown, FiHome, FiInfo, FiBookOpen, FiGrid, FiMail, FiLogIn, FiArrowRight, FiCalendar } from 'react-icons/fi';
+import { FiX, FiChevronDown, FiHome, FiInfo, FiBookOpen, FiGrid, FiMail, FiLogIn, FiArrowRight, FiCalendar, FiShield } from 'react-icons/fi';
 import { MdOutlineAnnouncement } from 'react-icons/md';
 import { SCHOOL_NAME } from '@/lib/secret';
 
 const Sidebar = () => {
-  const { sidebar, setSidebar, classes, clubs } = useContext(Context);
+  const { sidebar, setSidebar, classes, clubs, designations } = useContext(Context);
   const pathname = usePathname();
 
   const [openSection, setOpenSection] = useState(null);
@@ -127,6 +127,53 @@ const Sidebar = () => {
                   <Link href="/about/campus-details" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
                     Campus Details
                   </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Accordion: Authorities */}
+            <div className="flex flex-col">
+              <button
+                onClick={() => toggleSection('authorities')}
+                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
+                  openSection === 'authorities'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiShield className="text-base text-white" />
+                  <span>Authorities</span>
+                </div>
+                <FiChevronDown
+                  className={`text-xs text-white transition-transform duration-200 ${
+                    openSection === 'authorities' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              {openSection === 'authorities' && (
+                <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1 max-h-48 overflow-y-auto">
+                  <Link
+                    href="/authorities"
+                    onClick={closeSidebar}
+                    className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors font-bold"
+                  >
+                    All Authorities
+                  </Link>
+                  {designations && designations.length > 0 ? (
+                    designations.map((d) => (
+                      <Link
+                        key={d.id || d.slug}
+                        href={`/authorities/${d.slug}`}
+                        onClick={closeSidebar}
+                        className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors"
+                      >
+                        {d.title}
+                      </Link>
+                    ))
+                  ) : (
+                    <span className="text-xs text-white/70 italic py-1 px-2">No roles available</span>
+                  )}
                 </div>
               )}
             </div>

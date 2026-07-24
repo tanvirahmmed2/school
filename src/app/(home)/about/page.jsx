@@ -15,12 +15,12 @@ import {
   FiMail,
   FiShield
 } from 'react-icons/fi';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const About = () => {
   const stats = [
     { value: '5,000+', label: 'Enrolled Students', desc: 'Active scholars across multiple technical and management programs.', color: 'from-blue-600 to-sky-500' },
     { value: '150+', label: 'Expert Faculty', desc: 'PhD holders, certified mentors, and leading industry professionals.', color: 'from-amber-600 to-orange-500' },
-    { value: '94%', label: 'Placement Rate', desc: 'Graduates hired by top-tier global software and business corporations.', color: 'from-emerald-600 to-teal-500' },
     { value: '15+', label: 'Active Clubs', desc: 'Nurturing leadership, coding skills, and extra-curricular interests.', color: 'from-rose-600 to-pink-500' },
   ];
 
@@ -81,33 +81,26 @@ const About = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto flex flex-col gap-16">
+      <div className="w-full flex flex-col gap-16">
         
-        {/* Hero Header Section */}
         <div className="relative bg-slate-900 text-white rounded-3xl p-8 md:p-14 overflow-hidden shadow-xl border border-slate-800">
-          <div className="absolute inset-0 bg-gradient-to-tr from-sky-950/80 via-slate-900 to-indigo-950/80 z-0" />
+          <div className="absolute inset-0 bg-linear-to-tr from-sky-950/80 via-slate-900 to-indigo-950/80 z-0" />
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
 
           <div className="relative z-10 text-center flex flex-col items-center gap-4">
-            <span className="text-[10px] sm:text-xs font-bold text-sky-400 bg-sky-500/10 border border-sky-400/20 px-3.5 py-1.5 rounded-full uppercase tracking-widest">
-              Institutional Profile
-            </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mt-2 max-w-2xl leading-[1.15]">
-              Empowering Minds, <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-300">Engineering Futures</span>
-            </h1>
+            
             <p className="text-slate-300 max-w-2xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed mt-2">
-              Fontana Institute of Technology (FIT) is a premier academic institution built to inspire, train, and support student success in technology, hardware engineering, and business management fields.
+              {SCHOOL_NAME} ({SCHOOL_NAME.split(' ').map((w)=>w[0]).join('')}) is a premier academic institution built to inspire, train, and support student success in technology, hardware engineering, and business management fields.
             </p>
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {stats.map((stat, idx) => (
             <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-shadow">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 to-indigo-500" />
-              <span className={`text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${stat.color}`}>
+              <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-sky-500 to-indigo-500" />
+              <span className={`text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-linear-to-r ${stat.color}`}>
                 {stat.value}
               </span>
               <span className="font-extrabold text-slate-800 text-xs sm:text-sm">
@@ -120,7 +113,6 @@ const About = () => {
           ))}
         </div>
 
-        {/* Quick Links Section */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
@@ -152,7 +144,7 @@ const About = () => {
                     {sec.desc}
                   </p>
                   <div className="mt-auto pt-2 text-[10px] font-bold text-sky-600 uppercase tracking-wider flex items-center gap-1 group-hover:text-sky-800">
-                    <span>Explore Section</span>
+                    <span>Explore</span>
                     <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                   </div>
                 </Link>
@@ -207,7 +199,6 @@ const About = () => {
           </div>
         </div>
 
-        {/* FIT Charter Section */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col md:flex-row gap-6 items-start relative overflow-hidden">
           <div className="absolute top-0 right-0 w-2 h-full bg-sky-600" />
           <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 border border-sky-100 mt-1">
@@ -215,7 +206,7 @@ const About = () => {
           </div>
           <div className="flex flex-col gap-3">
             <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-              FIT Charter of Academic Quality
+              Charter of Academic Quality
             </h3>
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
               We are committed to delivering global standard computer science and business administration courses. Fontana recruits seasoned faculty members, hosts regular career placement seminars, and maintains modern lab setups. By utilizing clean digital registry workflows (student records, results, schedules), we ensure maximum transparency for parents and students alike.

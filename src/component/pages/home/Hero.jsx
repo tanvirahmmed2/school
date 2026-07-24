@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FiArrowRight, FiBookOpen, FiUsers, FiLayers } from 'react-icons/fi';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const Hero = () => {
   const [stats, setStats] = useState({
@@ -10,7 +11,6 @@ const Hero = () => {
     totalTeachers: 80,
     totalClasses: 12
   });
-  const [schoolName, setSchoolName] = useState('Fontana Institute of Technology');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +61,7 @@ const Hero = () => {
         
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-none mb-8 max-w-4xl">
-          {schoolName}
+          {SCHOOL_NAME}
         </h1>
 
         <p className="text-slate-300 text-base sm:text-lg md:text-xl max-w-2xl mb-12 leading-relaxed font-light">

@@ -57,24 +57,10 @@ const CampusPage = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto flex flex-col gap-10">
+    <div className="w-full min-h-screen bg-slate-50/50 p-4 md:p-8">
+      <div className="w-full flex flex-col gap-10">
         
-        {/* Navigation back */}
-        <div className="flex justify-between items-center">
-          <Link
-            href="/about"
-            className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
-          >
-            <FiArrowLeft className="text-sm" />
-            Back to Overview
-          </Link>
-          <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
-            Campus Life
-          </span>
-        </div>
-
-        {/* Header */}
+        
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Our Campus & Infrastructure
@@ -140,9 +126,8 @@ const CampusPage = () => {
           </div>
         </div>
 
-        {/* CTA Banner */}
         <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-sky-950/40 via-slate-900 to-indigo-950/40 z-0" />
+          <div className="absolute inset-0 bg-linear-to-r from-sky-950/40 via-slate-900 to-indigo-950/40 z-0" />
           
           <div className="relative z-10 flex flex-col gap-1.5 max-w-xl">
             <h4 className="font-black text-white text-base sm:text-lg">
@@ -154,10 +139,10 @@ const CampusPage = () => {
           </div>
 
           <Link
-            href="/about/campus-details"
+            href="/contact"
             className="relative z-10 bg-white hover:bg-slate-50 text-slate-900 font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs hover:shadow-md cursor-pointer shrink-0 flex items-center gap-1.5"
           >
-            <span>Campus Specifications</span>
+            <span>Contact</span>
             <FiArrowRight />
           </Link>
         </div>

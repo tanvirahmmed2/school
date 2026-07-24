@@ -3,30 +3,64 @@ import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
-// GET all authorities
-export async function GET() {
+// GET all authorities (supports ?role=... or ?designation=... or ?slug=...)
+export async function GET(request) {
   try {
-    const result = await query(`
+    let queryText = `
       SELECT a.*, d.title AS designation_title, d.slug AS designation
       FROM authorities a
       JOIN authority_designations d ON a.designation_id = d.id
-      ORDER BY a.id ASC
-    `);
-    const res_data_356 = { authorities: result.rows };
-      return NextResponse.json({
-        success: true,
-        message: res_data_356?.message || 'Successfully fecthed data',
-        paylod: res_data_356
-      }, { status: 200 });
+    `;
+    const queryParams = [];
+
+    if (request && request.url) {
+      const { searchParams } = new URL(request.url);
+      const role = searchParams.get('role') || searchParams.get('designation') || searchParams.get('slug');
+      if (role) {
+        queryText += ` WHERE LOWER(d.slug) = LOWER($1) OR LOWER(d.title) = LOWER($1)`;
+        queryParams.push(role.trim());
+      }
+    }
+
+    queryText += ` ORDER BY a.id ASC`;
+
+    const result = await query(queryText, queryParams);
+
+    // Fetch qualifications for returned authorities if any exist
+    const authorities = result.rows;
+    if (authorities.length > 0) {
+      const authIds = authorities.map(a => a.id);
+      const qualsResult = await query(
+        `SELECT * FROM authority_qualifications WHERE authority_id = ANY($1) ORDER BY passing_year DESC`,
+        [authIds]
+      );
+      const qualsMap = {};
+      qualsResult.rows.forEach(q => {
+        if (!qualsMap[q.authority_id]) qualsMap[q.authority_id] = [];
+        qualsMap[q.authority_id].push(q);
+      });
+      authorities.forEach(a => {
+        a.qualifications = qualsMap[a.id] || [];
+      });
+    }
+
+    const res_data_356 = { authorities };
+    return NextResponse.json({
+      success: true,
+      message: 'Successfully fetched data',
+      paylod: res_data_356,
+      payload: res_data_356
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching authorities:', error);
     const res_err_721 = { error: 'Failed to retrieve authorities. Internal server error.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_721?.error || res_err_721?.message || 'An error occurred',
-        error: res_err_721?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      message: res_err_721?.error || res_err_721?.message || 'An error occurred',
+      error: res_err_721?.error || 'Internal Server Error',
+      paylod: null,
+      payload: null
+    }, { status: 500 });
   }
 }
 

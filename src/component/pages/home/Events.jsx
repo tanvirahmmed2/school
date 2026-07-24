@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiCalendar, FiMapPin, FiClock, FiInfo } from 'react-icons/fi';
+import { FiInfo, FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
+import EventCard from '@/component/cards/EventCard';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -11,13 +12,13 @@ const Events = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch('/api/events');
+        const res = await fetch('/api/events/home');
         if (res.ok) {
           const data = await res.json();
-          setEvents(data.paylod?.events || []);
+          setEvents(data.paylod?.events || data.payload?.events || []);
         }
       } catch (err) {
-        console.error('Error fetching events:', err);
+        console.error('Error fetching home events:', err);
       } finally {
         setLoading(false);
       }
@@ -27,9 +28,8 @@ const Events = () => {
 
   return (
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="w-full">
+      <div className="w-full mx-auto">
         <div className="text-center mb-12">
-          
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             Upcoming Campus Events
           </h2>
@@ -51,60 +51,21 @@ const Events = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {events.slice(0, 4).map((event) => {
-              const dateObj = new Date(event.event_date);
-              const day = dateObj.getDate();
-              const month = dateObj.toLocaleDateString(undefined, { month: 'short' });
-              
-              return (
-                <div
-                  key={event.id}
-                  className="bg-slate-50 border border-slate-100 rounded-2xl p-5 hover:border-slate-200 hover:bg-slate-50/70 transition-all flex gap-5"
-                >
-                  {/* Calendar Badge */}
-                  <div className="w-14 h-14 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-2xl flex flex-col items-center justify-center shrink-0">
-                    <span className="text-lg font-black leading-none">{day}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">{month}</span>
-                  </div>
-
-                  {/* Details */}
-                  <div className="flex flex-col gap-2">
-                    <h3 className="font-bold text-slate-800 text-sm leading-snug">
-                      {event.title}
-                    </h3>
-                    
-                    <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
-                      {event.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-1 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                      {event.location && (
-                        <span className="flex items-center gap-1">
-                          <FiMapPin /> {event.location}
-                        </span>
-                      )}
-                      <span className="flex items-center gap-1">
-                        <FiClock /> {dateObj.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
           </div>
         )}
 
-        {events.length > 4 && (
-          <div className="text-center mt-10">
-            <Link
-              href="/events"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-605 hover:text-emerald-850 transition-colors text-emerald-600"
-            >
-              <span>View Full Campus Event Calendar</span>
-              <span>→</span>
-            </Link>
-          </div>
-        )}
+        <div className="text-center mt-10">
+          <Link
+            href="/events"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs hover:shadow-md"
+          >
+            <span>View All Events</span>
+            <FiArrowRight className="text-sm" />
+          </Link>
+        </div>
       </div>
     </section>
   );

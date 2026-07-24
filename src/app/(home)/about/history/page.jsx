@@ -58,23 +58,9 @@ const HistoryPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto flex flex-col gap-10">
+      <div className="w-full flex flex-col gap-10">
         
-        {/* Navigation back */}
-        <div className="flex justify-between items-center">
-          <Link
-            href="/about"
-            className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
-          >
-            <FiArrowLeft className="text-sm" />
-            Back to Overview
-          </Link>
-          <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
-            FIT Chronicle
-          </span>
-        </div>
-
-        {/* Header */}
+        
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Our Historic Journey
@@ -84,7 +70,6 @@ const HistoryPage = () => {
           </p>
         </div>
 
-        {/* Founding Philosophy Quote */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col gap-4 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-200" />
           <blockquote className="text-slate-600 italic text-xs sm:text-sm leading-relaxed">
@@ -142,16 +127,7 @@ const HistoryPage = () => {
           </div>
         </div>
 
-        {/* Navigation Footer */}
-        <div className="flex justify-center pt-4">
-          <Link
-            href="/about/vision"
-            className="bg-sky-600 hover:bg-sky-700 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs hover:shadow-md cursor-pointer flex items-center gap-2"
-          >
-            <span>Next: Vision & Core Values</span>
-            <FiStar />
-          </Link>
-        </div>
+        
 
       </div>
     </div>

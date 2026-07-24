@@ -15,12 +15,12 @@ const Home = () => {
     <Hero/>
     <About/>
     <Life/>
-    <Recognition/>
     <Admission/>
     <Notices/>
     <Events/>
     <News/>
     <AnnouncementPopup/>
+    <Recognition/>
     </>
   )
 }

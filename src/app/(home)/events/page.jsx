@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { FiCalendar, FiMapPin, FiClock, FiArrowRight } from 'react-icons/fi';
+import EventCard from '@/component/cards/EventCard';
+import { FiCalendar } from 'react-icons/fi';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
@@ -14,7 +14,7 @@ const EventsPage = () => {
         const res = await fetch('/api/events');
         if (res.ok) {
           const data = await res.json();
-          setEvents(data.paylod.events || []);
+          setEvents(data.paylod?.events || data.payload?.events || []);
         }
       } catch (err) {
         console.error('Failed to fetch events:', err);
@@ -27,12 +27,9 @@ const EventsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto">
-        {/* Page Header */}
+      <div className="w-full mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full">
-            FIT Community
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
             Upcoming Events & Seminars
           </h1>
@@ -55,62 +52,9 @@ const EventsPage = () => {
           </div>
         ) : events.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {events.map((event) => {
-              const eventDate = new Date(event.event_date);
-              return (
-                <Link
-                  key={event.id}
-                  href={`/events/${event.id}`}
-                  className="bg-white rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-md shadow-xs overflow-hidden flex flex-col justify-between transition-all duration-200 group block"
-                >
-                  {event.image && (
-                    <div className="w-full h-48 bg-slate-100 overflow-hidden relative">
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6 flex flex-col justify-between flex-1">
-                    <div className="flex flex-col gap-3">
-                      {/* Date Tag */}
-                      <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg text-xs font-bold w-fit">
-                        <FiCalendar className="text-sm" />
-                        <span>{eventDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
-                      </div>
-
-                      <h2 className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mt-1">
-                        {event.title}
-                      </h2>
-
-                      <p className="text-slate-600 text-xs md:text-sm leading-relaxed line-clamp-3">
-                        {event.description}
-                      </p>
-                    </div>
-
-                    {/* Location & Meta info */}
-                    <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-6 text-xs text-slate-500 font-semibold">
-                      <div className="flex flex-wrap gap-4 items-center">
-                        <span className="flex items-center gap-1.5">
-                          <FiMapPin className="text-emerald-600 text-sm" />
-                          {event.location}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <FiClock className="text-emerald-600 text-sm" />
-                          {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
-                        </span>
-                      </div>
-
-                      <span className="flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700">
-                        <span>Details</span>
-                        <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center max-w-md mx-auto shadow-xs mt-8">
@@ -119,7 +63,7 @@ const EventsPage = () => {
             </div>
             <h3 className="font-bold text-slate-800 text-base">No events scheduled</h3>
             <p className="text-slate-500 text-xs mt-1">
-              There are currently no upcoming events list on the institutional panel. Please check back later.
+              There are currently no upcoming events listed on the institutional panel. Please check back later.
             </p>
           </div>
         )}

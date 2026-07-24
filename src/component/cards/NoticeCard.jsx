@@ -11,7 +11,7 @@ const NoticeCard = ({ notice, className = '' }) => {
 
   return (
     <div
-      className={`bg-white rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-all duration-200 ${
+      className={`bg-white rounded-2xl border p-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-all duration-200 ${
         is_pinned
           ? 'border-amber-200 shadow-xs bg-amber-50/20 hover:border-amber-300'
           : 'border-slate-100 hover:border-sky-200 hover:shadow-xs'
@@ -30,7 +30,7 @@ const NoticeCard = ({ notice, className = '' }) => {
 
         <div className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-extrabold text-slate-800 text-sm md:text-base leading-snug">
+            <h3 className="font-semibold text-slate-800 text-sm md:text-base leading-snug">
               {title}
             </h3>
             {is_pinned && (
@@ -52,7 +52,7 @@ const NoticeCard = ({ notice, className = '' }) => {
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+          className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs transition-all shrink-0 cursor-pointer ${
             is_pinned
               ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'
               : 'bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-100 hover:border-sky-200'

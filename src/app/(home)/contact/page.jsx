@@ -1,5 +1,6 @@
 'use client';
 
+import { SCHOOL_NAME } from '@/lib/secret';
 import React from 'react';
 import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
 
@@ -7,12 +8,9 @@ const Contact = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
-            Support Desk
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
             Contact Academic Office
           </h1>
@@ -22,15 +20,14 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          {/* Info Side */}
+          
           <div className="md:col-span-5  p-6 rounded-3xl shadow-xs flex flex-col gap-6">
-            <h3 className="font-extrabold text-slate-900 text-base">FIT Campus Address</h3>
+            <h3 className="font-extrabold text-slate-900 text-base">{SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')} Campus Address</h3>
             
             <div className="flex flex-col gap-4">
               <div className="flex gap-3 items-start">
                 <FiMapPin className="text-sky-500 text-base shrink-0 mt-0.5" />
                 <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                  FIT Administrative Block, <br />
                   West Campus Road, Section 4, <br />
                   Dhaka, Bangladesh
                 </p>

@@ -26,22 +26,18 @@ const NewsPage = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
+    <div className="w-full min-h-screen bg-slate-50 p-4 md:p-8">
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest border border-sky-100">
-            Campus Updates
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
-            Campus News &amp; Stories
+            Campus News 
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
             Stay tuned with updates on academics, student achievements, campus activities, and scientific breakthroughs.
           </p>
         </div>
 
-        {/* Loading / Cards Grid */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (

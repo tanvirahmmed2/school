@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { FiArrowLeft, FiCalendar, FiFileText, FiClock } from 'react-icons/fi';
+import Image from 'next/image';
 
 const NewsDetailPage = () => {
   const { slug } = useParams();
@@ -54,7 +55,7 @@ const NewsDetailPage = () => {
   if (!newsItem) {
     return (
       <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4">
-        <div className="max-w-md mx-auto bg-white p-8 rounded-2xl border border-slate-100 shadow-xs text-center space-y-4">
+        <div className="max-w-7xl mx-auto bg-white p-8 rounded-2xl border border-slate-100 shadow-xs text-center space-y-4">
           <FiFileText className="text-4xl text-slate-300 mx-auto" />
           <h2 className="text-xl font-bold text-slate-900">Article Not Found</h2>
           <p className="text-slate-500 text-xs">The news article you are looking for may have been removed or updated.</p>
@@ -73,8 +74,8 @@ const NewsDetailPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Navigation */}
+      <div className="max-w-7xl mx-auto space-y-8">
+      
         <div>
           <Link
             href="/news"
@@ -85,21 +86,19 @@ const NewsDetailPage = () => {
           </Link>
         </div>
 
-        {/* Article Container */}
         <article className="bg-white rounded-3xl border border-slate-100 shadow-xs overflow-hidden">
-          {/* Cover Poster Image */}
+        
           {newsItem.image && (
-            <div className="w-full h-64 md:h-96 bg-slate-100 overflow-hidden relative">
-              <img
+            <div className="w-full  bg-slate-100 overflow-hidden relative">
+              <Image width={1000} height={1000}
                 src={newsItem.image}
                 alt={newsItem.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover "
               />
             </div>
           )}
 
-          <div className="p-6 md:p-10 space-y-6">
-            {/* Header info */}
+          <div className="p-6  space-y-6">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">
@@ -113,19 +112,17 @@ const NewsDetailPage = () => {
                 )}
               </div>
 
-              <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
+              <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight leading-snug">
                 {newsItem.title}
               </h1>
             </div>
 
-            {/* Article Content */}
             <div className="prose prose-slate max-w-none text-slate-700 text-sm md:text-base leading-relaxed whitespace-pre-wrap border-t border-slate-100 pt-6">
-              {newsItem.content}
+              {newsItem.content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()}
             </div>
           </div>
         </article>
 
-        {/* Recent News Section */}
         {recentNews.length > 0 && (
           <div className="space-y-4 pt-4">
             <h2 className="text-lg font-bold text-slate-900">More Recent Stories</h2>

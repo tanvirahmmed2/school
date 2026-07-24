@@ -44,23 +44,8 @@ const MissionVisionPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto flex flex-col gap-10">
+      <div className="w-full flex flex-col gap-10">
         
-        {/* Navigation back */}
-        <div className="flex justify-between items-center">
-          <Link
-            href="/about"
-            className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
-          >
-            <FiArrowLeft className="text-sm" />
-            Back to Overview
-          </Link>
-          <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
-            FIT Creed
-          </span>
-        </div>
-
-        {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Our Mission & Objectives
@@ -70,9 +55,7 @@ const MissionVisionPage = () => {
           </p>
         </div>
 
-        {/* Pillars: Mission & Vision */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Mission Card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
             <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 border border-sky-100">
               <FiGlobe className="text-xl" />
@@ -87,7 +70,6 @@ const MissionVisionPage = () => {
             </div>
           </div>
 
-          {/* Vision Card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
             <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
               <FiEye className="text-xl" />
@@ -103,7 +85,6 @@ const MissionVisionPage = () => {
           </div>
         </div>
 
-        {/* Strategies Section */}
         <div className="flex flex-col gap-6">
           <h2 className="text-xl font-bold text-slate-900 tracking-tight">
             How We Achieve Our Mission
@@ -133,12 +114,11 @@ const MissionVisionPage = () => {
           </div>
         </div>
 
-        {/* Goals 2030 (Targeted Goals) */}
         <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-md border border-slate-800 flex flex-col gap-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-tr from-sky-950/40 via-slate-900 to-indigo-950/40 z-0" />
+          <div className="absolute inset-0 bg-linear-to-tr from-sky-950/40 via-slate-900 to-indigo-950/40 z-0" />
           <div className="relative z-10 flex flex-col gap-2">
             <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider">
-              FIT Vision 2030
+              Vision 2030
             </span>
             <h3 className="font-black text-white text-lg sm:text-xl">
               Strategic Growth Benchmarks
@@ -162,16 +142,7 @@ const MissionVisionPage = () => {
           </div>
         </div>
 
-        {/* Navigation Footer */}
-        <div className="flex justify-center pt-4">
-          <Link
-            href="/about/campus"
-            className="bg-sky-600 hover:bg-sky-700 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs hover:shadow-md cursor-pointer flex items-center gap-2"
-          >
-            <span>Next: Campus & Facilities</span>
-            <FiMap />
-          </Link>
-        </div>
+      
 
       </div>
     </div>

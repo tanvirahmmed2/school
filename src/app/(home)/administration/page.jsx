@@ -34,13 +34,7 @@ const AdministrationPage = () => {
     fetchAuthorities();
   }, []);
 
-  // Default fallback if database is empty
-  const displayMembers = members.length > 0 ? members : [
-    { name: 'Alhaji A. Rahman', designation: 'chairman', email: 'chairman@fit.edu.bd', contact: '+880 180 500 0301' },
-    { name: 'Mr. Hasan Mahmood', designation: 'director', email: 'director@fit.edu.bd', contact: '+880 180 500 0302' },
-    { name: 'Prof. Dr. Rahman', designation: 'principal', email: 'principal@fit.edu.bd', contact: '+880 180 500 0300' },
-    { name: 'Dr. Sarah Islam', designation: 'registrar', email: 'registrar@fit.edu.bd', contact: '+880 180 500 0303' }
-  ];
+  const displayMembers = members;
 
   // Grouping members
   const executiveRoles = ['chairman', 'director', 'principal', 'registrar'];

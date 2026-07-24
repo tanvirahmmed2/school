@@ -27,12 +27,9 @@ const NoticesPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest border border-sky-100">
-            Academic Bulletins
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
             Notices &amp; Announcements
           </h1>
@@ -41,7 +38,6 @@ const NoticesPage = () => {
           </p>
         </div>
 
-        {/* Loading / Notices List */}
         {loading ? (
           <div className="flex flex-col gap-4">
             {[1, 2, 3].map((i) => (
@@ -55,7 +51,7 @@ const NoticesPage = () => {
             ))}
           </div>
         ) : notices.length > 0 ? (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {notices.map((notice) => (
               <NoticeCard key={notice.id} notice={notice} />
             ))}

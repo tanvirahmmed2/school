@@ -3,6 +3,7 @@
 import React from 'react';
 import { FiFileText, FiCalendar, FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const NewsCard = ({ news, href, className = '' }) => {
   if (!news) return null;
@@ -17,19 +18,18 @@ const NewsCard = ({ news, href, className = '' }) => {
       {/* Cover Image */}
       {image ? (
         <div className="w-full h-48 overflow-hidden bg-slate-100 shrink-0 relative">
-          <img
+          <Image width={500} height={500}
             src={image}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
           />
         </div>
       ) : (
-        <div className="w-full h-48 bg-gradient-to-br from-sky-50 to-indigo-50 flex items-center justify-center shrink-0 relative">
+        <div className="w-full h-48 bg-linear-to-br from-sky-50 to-indigo-50 flex items-center justify-center shrink-0 relative">
           <FiFileText className="text-5xl text-sky-200" />
         </div>
       )}
 
-      {/* Info Container */}
       <div className="p-5 flex flex-col gap-3 flex-1">
         {newsDate && (
           <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -43,7 +43,7 @@ const NewsCard = ({ news, href, className = '' }) => {
         </h3>
 
         <p className="text-slate-500 text-xs leading-relaxed line-clamp-4 whitespace-pre-wrap flex-1">
-          {content}
+          {content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()}
         </p>
 
         <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700">

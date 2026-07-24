@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiBell, FiCalendar, FiMapPin, FiInfo } from 'react-icons/fi';
+import { FiInfo, FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
+import NoticeCard from '@/component/cards/NoticeCard';
 
 const Notices = () => {
   const [notices, setNotices] = useState([]);
@@ -11,13 +12,13 @@ const Notices = () => {
   useEffect(() => {
     const fetchNotices = async () => {
       try {
-        const res = await fetch('/api/notices');
+        const res = await fetch('/api/notices/home');
         if (res.ok) {
           const data = await res.json();
-          setNotices(data.paylod?.notices || []);
+          setNotices(data.paylod?.notices || data.payload?.notices || []);
         }
       } catch (err) {
-        console.error('Error fetching notices:', err);
+        console.error('Error fetching home notices:', err);
       } finally {
         setLoading(false);
       }
@@ -29,7 +30,6 @@ const Notices = () => {
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
       <div className="mx-auto">
         <div className="text-center mb-12">
-          
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             Notice Board
           </h2>
@@ -47,63 +47,25 @@ const Notices = () => {
             <div className="w-10 h-10 bg-slate-50 text-slate-400 rounded-xl flex items-center justify-center text-sm mb-3">
               <FiInfo />
             </div>
-            <p className="text-slate-655 text-xs text-slate-400 font-medium">No announcements published at the moment.</p>
+            <p className="text-slate-400 text-xs font-medium">No announcements published at the moment.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {notices.slice(0, 4).map((notice) => (
-              <div
-                key={notice.id}
-                className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col gap-3"
-              >
-                {notice.is_pinned && (
-                  <span className="absolute top-0 right-0 bg-sky-500 text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl">
-                    Pinned
-                  </span>
-                )}
-
-                <div className="flex gap-2 items-center text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                  <FiCalendar />
-                  <span>
-                    {new Date(notice.created_at).toLocaleDateString(undefined, {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </span>
-                </div>
-
-                <h3 className="font-extrabold text-slate-900 text-sm leading-snug">
-                  {notice.title}
-                </h3>
-
-                <p className="text-slate-500 text-xs leading-relaxed line-clamp-3">
-                  {notice.content}
-                </p>
-
-                <Link
-                  href="/notices"
-                  className="mt-auto text-[10px] font-bold text-sky-600 hover:text-sky-800 transition-colors uppercase tracking-wider flex items-center gap-1 w-fit pt-2"
-                >
-                  <span>View Details</span>
-                  <span>→</span>
-                </Link>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {notices.map((notice) => (
+              <NoticeCard key={notice.id} notice={notice} />
             ))}
           </div>
         )}
 
-        {notices.length > 4 && (
-          <div className="text-center mt-10">
-            <Link
-              href="/notices"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-605 hover:text-sky-800 transition-colors text-sky-600"
-            >
-              <span>View All Notice Board Announcements</span>
-              <span>→</span>
-            </Link>
-          </div>
-        )}
+        <div className="text-center mt-10">
+          <Link
+            href="/notices"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition-all shadow-xs hover:shadow-md"
+          >
+            <span>View All Notices</span>
+            <FiArrowRight className="text-sm" />
+          </Link>
+        </div>
       </div>
     </section>
   );
