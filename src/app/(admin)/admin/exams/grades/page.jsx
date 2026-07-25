@@ -65,7 +65,7 @@ const AdminGradesPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiAward className="text-blue-600" /> Grade Scale Setup
+            <FiAward className="text-primary" /> Grade Scale Setup
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Configure letter grades and their corresponding minimum and maximum mark thresholds.
@@ -77,7 +77,7 @@ const AdminGradesPage = () => {
             setShowAddForm(!showAddForm);
             setEditingGrade(null);
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer animate-pulse-slow"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer animate-pulse-slow"
         >
           {showAddForm ? (
             <>
@@ -124,7 +124,7 @@ const AdminGradesPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading grade scale...</span>
           </div>
         ) : grades.length === 0 ? (
@@ -159,7 +159,7 @@ const AdminGradesPage = () => {
                   <tr key={grade.grade_id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-black text-sm shadow-xs">
+                        <div className="w-10 h-10 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center font-black text-sm shadow-xs">
                           {grade.letter_grade}
                         </div>
                         <div>
@@ -183,7 +183,7 @@ const AdminGradesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleStartEdit(grade)}
-                        className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Edit Grade"
                       >
                         <FiEdit2 className="text-sm" />

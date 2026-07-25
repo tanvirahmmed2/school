@@ -84,7 +84,7 @@ const ApplicantDetailsContent = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading applicant details...</span>
       </div>
     );
@@ -126,7 +126,7 @@ const ApplicantDetailsContent = () => {
           {/* Candidate Image Card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col items-center text-center gap-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-start flex items-center gap-1.5">
-              <FiImage className="text-xs text-blue-500" /> Candidate Photo
+              <FiImage className="text-xs text-primary" /> Candidate Photo
             </p>
             {applicant.image ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -142,7 +142,7 @@ const ApplicantDetailsContent = () => {
             )}
             <div>
               <h2 className="text-base font-black text-slate-800">{applicant.applicant_name}</h2>
-              <span className="inline-flex mt-1.5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-blue-50 text-blue-600 border border-blue-100">
+              <span className="inline-flex mt-1.5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-primary-light text-primary border border-primary-light">
                 Class: {applicant.class_name}
               </span>
             </div>
@@ -151,7 +151,7 @@ const ApplicantDetailsContent = () => {
           {/* Candidate Signature Card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col items-center text-center gap-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-start flex items-center gap-1.5">
-              <FiFileText className="text-xs text-emerald-500" /> Signature
+              <FiFileText className="text-xs text-primary" /> Signature
             </p>
             {applicant.signature ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -195,7 +195,7 @@ const ApplicantDetailsContent = () => {
                   <select
                     value={applicant.fee_status || 'Pending'}
                     onChange={(e) => handleUpdateFeeStatus(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
                   >
                     <option value="Pending">Pending</option>
                     <option value="Paid">Paid</option>
@@ -343,7 +343,7 @@ const ApplicantDetailsPage = () => {
   return (
     <Suspense fallback={
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Preparing candidate profile...</span>
       </div>
     }>

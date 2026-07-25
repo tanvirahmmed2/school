@@ -93,7 +93,7 @@ const AchievementDetailPage = () => {
 
           <div className="p-6 md:p-10 space-y-6">
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider w-fit">
+              <div className="flex items-center gap-2 text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-wider w-fit">
                 <FiAward className="text-sm" /> Campus Milestone
               </div>
               <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">

@@ -79,7 +79,7 @@ const MaterialsPageContent = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -90,11 +90,11 @@ const MaterialsPageContent = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Study Materials</h1>
-          <p className="text-slate-500 text-sm font-medium">Distribute PDFs, slides, and reference links for <span className="text-indigo-600 font-bold">{subjectName}</span>.</p>
+          <p className="text-slate-500 text-sm font-medium">Distribute PDFs, slides, and reference links for <span className="text-primary font-bold">{subjectName}</span>.</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm w-fit"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors shadow-sm w-fit"
         >
           <FiPlus className="text-sm" />
           <span>{showAddForm ? 'View Materials' : 'Share Material'}</span>
@@ -112,7 +112,7 @@ const MaterialsPageContent = () => {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Lecture Slides - Week 1"
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -123,7 +123,7 @@ const MaterialsPageContent = () => {
                 value={formData.file_url}
                 onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
                 placeholder="e.g. https://drive.google.com/..."
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -138,7 +138,7 @@ const MaterialsPageContent = () => {
 
             <button
               type="submit"
-              className="mt-4 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-colors"
+              className="mt-4 w-full py-3 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-bold transition-colors"
             >
               Post Material
             </button>
@@ -162,7 +162,7 @@ const MaterialsPageContent = () => {
                   className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between hover:shadow-md transition-shadow duration-200"
                 >
                   <div>
-                    <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl w-fit mb-4">
+                    <div className="p-3 bg-primary-light text-primary rounded-2xl w-fit mb-4">
                       <FiFile className="text-xl" />
                     </div>
                     <h3 className="font-bold text-slate-800 text-base mb-1">{mat.title}</h3>
@@ -177,7 +177,7 @@ const MaterialsPageContent = () => {
                       href={mat.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-xs font-bold transition-colors"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-light hover:bg-primary-light text-primary rounded-xl text-xs font-bold transition-colors"
                     >
                       <FiLink />
                       <span>Access File / Link</span>
@@ -197,7 +197,7 @@ const MaterialsPage = () => {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     }>
       <MaterialsPageContent />

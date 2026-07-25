@@ -113,7 +113,7 @@ const TeacherClubNoticePage = () => {
       <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 max-w-3xl">
         <div className="space-y-1 border-b border-slate-100 pb-4">
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <FiInfo className="text-indigo-600" /> Club Notice Board (Members Only)
+            <FiInfo className="text-primary" /> Club Notice Board (Members Only)
           </h2>
           <p className="text-xs text-slate-500">
             Write or edit notice information for <span className="font-semibold text-slate-700">{currentClub?.name}</span>. Notices are strictly private to club members, moderators, and admins.

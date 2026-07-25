@@ -98,7 +98,7 @@ const EditRecognitionPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -108,7 +108,7 @@ const EditRecognitionPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -127,7 +127,7 @@ const EditRecognitionPage = () => {
       {/* Form */}
       <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
         <h2 className="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
-          <FiAward className="text-sky-600 text-xl" /> Recognition Entry Details
+          <FiAward className="text-primary text-xl" /> Recognition Entry Details
         </h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -143,7 +143,7 @@ const EditRecognitionPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Best Student of the Year"
-                className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
 
@@ -158,7 +158,7 @@ const EditRecognitionPage = () => {
                 value={formData.awarded_by}
                 onChange={handleChange}
                 placeholder="e.g. National Education Board"
-                className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
 
@@ -172,7 +172,7 @@ const EditRecognitionPage = () => {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
 
@@ -185,7 +185,7 @@ const EditRecognitionPage = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+                className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
               />
               {imagePreview && (
                 <div className="w-24 h-24 relative rounded-xl overflow-hidden border border-slate-100 mt-1">
@@ -217,7 +217,7 @@ const EditRecognitionPage = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs disabled:opacity-50 transition-colors"
             >
               {submitting ? (
                 <>

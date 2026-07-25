@@ -28,7 +28,7 @@ const SubjectsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -57,7 +57,7 @@ const SubjectsPage = () => {
               className="bg-white border border-slate-100 hover:border-slate-200 hover:shadow-md transition-all duration-200 rounded-3xl p-6 flex flex-col justify-between"
             >
               <div>
-                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl w-fit mb-4">
+                <div className="p-3 bg-primary-light text-primary rounded-xl w-fit mb-4">
                   <FiBook className="text-xl" />
                 </div>
                 <h3 className="font-bold text-slate-800 text-base mb-1">{sub.subject_name}</h3>
@@ -74,19 +74,19 @@ const SubjectsPage = () => {
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   <a
                     href={`/teacher/lessons?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex flex-col items-center justify-center p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors text-center text-[10px] font-bold"
+                    className="flex flex-col items-center justify-center p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors text-center text-[10px] font-bold"
                   >
                     Lessons
                   </a>
                   <a
                     href={`/teacher/materials?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex flex-col items-center justify-center p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-colors text-center text-[10px] font-bold"
+                    className="flex flex-col items-center justify-center p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors text-center text-[10px] font-bold"
                   >
                     Materials
                   </a>
                   <a
                     href={`/teacher/assignments?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex flex-col items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors text-center text-[10px] font-bold"
+                    className="flex flex-col items-center justify-center p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors text-center text-[10px] font-bold"
                   >
                     Assignments
                   </a>

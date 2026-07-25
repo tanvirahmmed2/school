@@ -35,7 +35,7 @@ const ResultsPortalPage = () => {
                   <input
                     type="text"
                     placeholder="e.g. STU-10254"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -43,7 +43,7 @@ const ResultsPortalPage = () => {
                   <input
                     type="text"
                     placeholder="e.g. Spring 2026"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 </div>
               </form>

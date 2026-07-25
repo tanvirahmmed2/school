@@ -29,7 +29,7 @@ const ClassesPage = () => {
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Academic Programs
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -56,13 +56,13 @@ const ClassesPage = () => {
             {classes.map((cls) => (
               <div
                 key={cls.id}
-                className="bg-white rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md transition-all duration-200 p-6 flex flex-col justify-between group"
+                className="bg-white rounded-2xl border border-slate-100 hover:border-primary-light hover:shadow-md transition-all duration-200 p-6 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 text-xl font-bold mb-4 group-hover:scale-105 transition-transform duration-200">
+                  <div className="w-12 h-12 rounded-xl bg-primary-light flex items-center justify-center text-primary text-xl font-bold mb-4 group-hover:scale-105 transition-transform duration-200">
                     <FiLayers />
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-sky-600 transition-colors">
+                  <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-primary transition-colors">
                     {cls.name}
                   </h3>
                   
@@ -73,7 +73,7 @@ const ClassesPage = () => {
                 <div className="mt-6 pt-4 border-t border-slate-50">
                   <Link
                     href={`/classes/${cls.code || cls.id || cls}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-850 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-sky-850 transition-colors"
                   >
                     <span>View Curriculum</span>
                     <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />

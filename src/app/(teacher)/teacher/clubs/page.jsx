@@ -95,7 +95,7 @@ const TeacherClubsOverviewPage = () => {
         <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-1 shadow-xs">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Members</span>
           <p className="text-2xl font-black text-slate-900">{memberCount}</p>
-          <p className="text-xs text-indigo-600 font-semibold">{moderatorCount} Designated Moderators</p>
+          <p className="text-xs text-primary font-semibold">{moderatorCount} Designated Moderators</p>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-1 shadow-xs">
@@ -119,10 +119,10 @@ const TeacherClubsOverviewPage = () => {
         {/* 1. Notice Info Card */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-xs group">
           <div className="space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 text-lg group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-primary-light border border-primary-light flex items-center justify-center text-primary text-lg group-hover:scale-105 transition-transform">
               <FiInfo />
             </div>
-            <h3 className="font-bold text-slate-900 text-base group-hover:text-indigo-600 transition-colors">
+            <h3 className="font-bold text-slate-900 text-base group-hover:text-primary transition-colors">
               Notice Information
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
@@ -131,7 +131,7 @@ const TeacherClubsOverviewPage = () => {
           </div>
           <Link
             href="/teacher/clubs/notice"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 pt-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary pt-2"
           >
             <span>Edit Notice Info</span>
             <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
@@ -141,10 +141,10 @@ const TeacherClubsOverviewPage = () => {
         {/* 2. Members & Roles Card */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-xs group">
           <div className="space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 text-lg group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-primary-light border border-primary-light flex items-center justify-center text-primary text-lg group-hover:scale-105 transition-transform">
               <FiUsers />
             </div>
-            <h3 className="font-bold text-slate-900 text-base group-hover:text-sky-600 transition-colors">
+            <h3 className="font-bold text-slate-900 text-base group-hover:text-primary transition-colors">
               Members &amp; Roles
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
@@ -153,7 +153,7 @@ const TeacherClubsOverviewPage = () => {
           </div>
           <Link
             href="/teacher/clubs/members"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-800 pt-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary pt-2"
           >
             <span>Manage Roster &amp; Roles</span>
             <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
@@ -163,10 +163,10 @@ const TeacherClubsOverviewPage = () => {
         {/* 3. Club News Card */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 transition-all shadow-xs group">
           <div className="space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 text-lg group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-primary-light border border-primary-light flex items-center justify-center text-primary text-lg group-hover:scale-105 transition-transform">
               <FiFileText />
             </div>
-            <h3 className="font-bold text-slate-900 text-base group-hover:text-emerald-600 transition-colors">
+            <h3 className="font-bold text-slate-900 text-base group-hover:text-primary transition-colors">
               Club News &amp; Updates
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
@@ -175,7 +175,7 @@ const TeacherClubsOverviewPage = () => {
           </div>
           <Link
             href="/teacher/clubs/news"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-800 pt-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary pt-2"
           >
             <span>Publish &amp; Manage News</span>
             <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" />
@@ -193,7 +193,7 @@ const TeacherClubsOverviewPage = () => {
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
               <FiUsers /> Members Preview
             </h3>
-            <Link href="/teacher/clubs/members" className="text-xs font-bold text-indigo-600 hover:underline">
+            <Link href="/teacher/clubs/members" className="text-xs font-bold text-primary hover:underline">
               View All ({memberCount})
             </Link>
           </div>
@@ -206,7 +206,7 @@ const TeacherClubsOverviewPage = () => {
                   <p className="text-[10px] text-slate-500 font-mono">Reg: {m.registration_number}</p>
                 </div>
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                  m.role === 'moderator' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-700'
+                  m.role === 'moderator' ? 'bg-primary-light text-primary' : 'bg-slate-200 text-slate-700'
                 }`}>
                   {m.role === 'moderator' ? 'Moderator' : 'Member'}
                 </span>
@@ -224,7 +224,7 @@ const TeacherClubsOverviewPage = () => {
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
               <FiFileText /> Recent News Posts
             </h3>
-            <Link href="/teacher/clubs/news" className="text-xs font-bold text-indigo-600 hover:underline">
+            <Link href="/teacher/clubs/news" className="text-xs font-bold text-primary hover:underline">
               Manage News ({newsList.length})
             </Link>
           </div>

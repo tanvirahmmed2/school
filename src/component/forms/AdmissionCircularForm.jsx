@@ -67,7 +67,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           placeholder="e.g. Session 2026-27 Intake"
           value={form.title}
           onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
-          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -77,7 +77,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           required
           value={form.class_id}
           onChange={(e) => setForm((p) => ({ ...p, class_id: e.target.value }))}
-          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
         >
           <option value="">Select class...</option>
           {classes.map((cls) => (
@@ -94,7 +94,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
             placeholder="e.g. 5"
             value={form.min_age}
             onChange={(e) => setForm((p) => ({ ...p, min_age: e.target.value }))}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -105,7 +105,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
             placeholder="e.g. 8"
             value={form.max_age}
             onChange={(e) => setForm((p) => ({ ...p, max_age: e.target.value }))}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
           />
         </div>
       </div>
@@ -117,7 +117,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           placeholder="e.g. BR-DRIVE-2026"
           value={form.birth_regi_number}
           onChange={(e) => setForm((p) => ({ ...p, birth_regi_number: e.target.value }))}
-          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -129,7 +129,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
             required
             value={form.admission_start_date}
             onChange={(e) => setForm((p) => ({ ...p, admission_start_date: e.target.value }))}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -140,7 +140,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
             required
             value={form.finish_date}
             onChange={(e) => setForm((p) => ({ ...p, finish_date: e.target.value }))}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
           />
         </div>
       </div>
@@ -151,7 +151,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           type="date"
           value={form.result_date}
           onChange={(e) => setForm((p) => ({ ...p, result_date: e.target.value }))}
-          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -164,7 +164,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           placeholder="e.g. 100.00"
           value={form.fees}
           onChange={(e) => setForm((p) => ({ ...p, fees: e.target.value }))}
-          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -188,7 +188,7 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
         <button
           type="submit"
           disabled={submitting}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
+          className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
         >
           {submitting ? 'Saving...' : initialData ? 'Save Changes' : 'Create Circular'}
         </button>

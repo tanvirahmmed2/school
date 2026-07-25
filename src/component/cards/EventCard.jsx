@@ -17,7 +17,7 @@ const EventCard = ({ event, href, className = '' }) => {
 
   const card = (
     <div
-      className={`bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-[0_8px_30px_rgba(16,185,129,0.08)] hover:border-emerald-200 transition-all duration-250 flex flex-col sm:flex-row group h-full ${className}`}
+      className={`bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-primary transition-all duration-250 flex flex-col sm:flex-row group h-full ${className}`}
     >
       {/* Cover Image or Calendar Badge */}
       {image ? (
@@ -28,15 +28,15 @@ const EventCard = ({ event, href, className = '' }) => {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           {dateObj && (
-            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-white/50 text-emerald-700 px-2.5 py-1 rounded-xl flex flex-col items-center justify-center font-bold text-xs shadow-xs">
+            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-primary-light text-primary px-2.5 py-1 rounded-xl flex flex-col items-center justify-center font-bold text-xs shadow-xs">
               <span className="text-sm font-black leading-none">{day}</span>
               <span className="text-[9px] uppercase tracking-wider">{month}</span>
             </div>
           )}
         </div>
       ) : (
-        <div className="w-full sm:w-40 bg-gradient-to-br from-emerald-50 to-teal-50 flex sm:flex-col items-center justify-center p-4 shrink-0 relative border-b sm:border-b-0 sm:border-r border-slate-100">
-          <div className="w-14 h-14 bg-white border border-emerald-100 text-emerald-600 rounded-2xl flex flex-col items-center justify-center shadow-xs">
+        <div className="w-full sm:w-40 bg-primary-light flex sm:flex-col items-center justify-center p-4 shrink-0 relative border-b sm:border-b-0 sm:border-r border-slate-100">
+          <div className="w-14 h-14 bg-white border border-primary-light text-primary rounded-2xl flex flex-col items-center justify-center shadow-xs">
             <span className="text-lg font-black leading-none">{day}</span>
             <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">{month}</span>
           </div>
@@ -49,19 +49,19 @@ const EventCard = ({ event, href, className = '' }) => {
           <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             {time && (
               <span className="flex items-center gap-1">
-                <FiClock className="text-xs text-emerald-500 shrink-0" />
+                <FiClock className="text-xs text-primary shrink-0" />
                 {time}
               </span>
             )}
             {location && (
               <span className="flex items-center gap-1">
-                <FiMapPin className="text-xs text-emerald-500 shrink-0" />
+                <FiMapPin className="text-xs text-primary shrink-0" />
                 {location}
               </span>
             )}
           </div>
 
-          <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-emerald-600 transition-colors">
+          <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
             {title}
           </h3>
 
@@ -72,7 +72,7 @@ const EventCard = ({ event, href, className = '' }) => {
           )}
         </div>
 
-        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700">
+        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-primary">
           <span>View Details</span>
           <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
         </div>

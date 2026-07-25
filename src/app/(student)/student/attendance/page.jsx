@@ -28,7 +28,7 @@ const AttendancePage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -43,8 +43,8 @@ const AttendancePage = () => {
   const rate = total > 0 ? Math.round(((present + late) / total) * 100) : 100;
 
   const cards = [
-    { label: 'Attendance Rate', value: `${rate}%`, color: 'text-blue-600 bg-blue-50 border-blue-100', icon: FiActivity },
-    { label: 'Present Days', value: present, color: 'text-emerald-600 bg-emerald-50 border-emerald-100', icon: FiCheckCircle },
+    { label: 'Attendance Rate', value: `${rate}%`, color: 'text-primary bg-primary-light border-primary-light', icon: FiActivity },
+    { label: 'Present Days', value: present, color: 'text-primary bg-primary-light border-primary-light', icon: FiCheckCircle },
     { label: 'Absent Days', value: absent, color: 'text-rose-600 bg-rose-50 border-rose-100', icon: FiXCircle },
     { label: 'Late Entries', value: late, color: 'text-amber-600 bg-amber-50 border-amber-100', icon: FiClock }
   ];
@@ -52,7 +52,7 @@ const AttendancePage = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Present':
-        return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">Present</span>;
+        return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">Present</span>;
       case 'Absent':
         return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">Absent</span>;
       case 'Late':

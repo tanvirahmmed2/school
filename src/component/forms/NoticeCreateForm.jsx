@@ -39,7 +39,7 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
         <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-          <FiPlusCircle className="text-sky-655 text-sky-600" /> Publish Notice Details
+          <FiPlusCircle className="text-primary" /> Publish Notice Details
         </h2>
       </div>
 
@@ -51,7 +51,7 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
           placeholder="e.g. Revised Midterm Exam Routine 2026"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+          className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -63,7 +63,7 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
           placeholder="e.g. https://drive.google.com/..."
           value={link}
           onChange={(e) => setLink(e.target.value)}
-          className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+          className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -73,7 +73,7 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
           id="isPinned"
           checked={isPinned}
           onChange={(e) => setIsPinned(e.target.checked)}
-          className="w-4 h-4 text-sky-655 text-sky-600 border-slate-300 rounded focus:ring-sky-500"
+          className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
         />
         <label htmlFor="isPinned" className="text-xs font-bold text-slate-550 select-none cursor-pointer">
           Pin this notice to the top of notice board
@@ -93,7 +93,7 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer"
+          className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-sm font-semibold transition-all cursor-pointer"
         >
           {submitting ? 'Publishing...' : 'Publish Notice'}
         </button>

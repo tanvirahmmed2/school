@@ -155,13 +155,13 @@ const StudentClubsDashboardPage = () => {
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-slate-900">{currentClub?.name}</h1>
             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-              isModerator ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700'
+              isModerator ? 'bg-primary-light text-primary' : 'bg-slate-100 text-slate-700'
             }`}>
               {isModerator ? 'Club Moderator' : 'Club Member'}
             </span>
           </div>
           {currentClub?.motto && (
-            <p className="text-xs italic text-indigo-600 font-medium mt-0.5">"{currentClub.motto}"</p>
+            <p className="text-xs italic text-primary font-medium mt-0.5">"{currentClub.motto}"</p>
           )}
         </div>
 
@@ -186,7 +186,7 @@ const StudentClubsDashboardPage = () => {
           {/* Member Notice Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-2">
             <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-              <FiInfo className="text-indigo-600" /> Club Notice &amp; Announcements
+              <FiInfo className="text-primary" /> Club Notice &amp; Announcements
             </h2>
             {currentClub?.notice_info ? (
               <div

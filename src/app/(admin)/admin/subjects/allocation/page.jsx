@@ -144,7 +144,7 @@ const AdminClassSubjectsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiBook className="text-blue-600" /> Subject Allocations
+            <FiBook className="text-primary" /> Subject Allocations
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Map subjects to academic classes to configure the school curriculum.
@@ -156,7 +156,7 @@ const AdminClassSubjectsPage = () => {
             setShowAddForm(!showAddForm);
             setEditingAssignment(null);
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer shadow-xs"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer shadow-xs"
         >
           {showAddForm ? (
             <>
@@ -173,7 +173,7 @@ const AdminClassSubjectsPage = () => {
       {showAddForm && (
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
           <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-            <FiPlus className="text-blue-600" /> Allocate Subject to Class
+            <FiPlus className="text-primary" /> Allocate Subject to Class
           </h2>
           <form onSubmit={handleCreateAssignment} className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-1.5">
@@ -183,7 +183,7 @@ const AdminClassSubjectsPage = () => {
                 value={classId}
                 onChange={(e) => setClassId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
               >
                 <option value="">Select class...</option>
                 {classes.map((cls) => (
@@ -199,7 +199,7 @@ const AdminClassSubjectsPage = () => {
                 value={subjectId}
                 onChange={(e) => setSubjectId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
               >
                 <option value="">Select subject...</option>
                 {subjects.map((sub) => (
@@ -219,7 +219,7 @@ const AdminClassSubjectsPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold cursor-pointer disabled:opacity-50"
+                className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold cursor-pointer disabled:opacity-50"
               >
                 Link Subject
               </button>
@@ -229,7 +229,7 @@ const AdminClassSubjectsPage = () => {
       )}
 
       {editingAssignment && (
-        <div className="w-full bg-white border border-blue-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(59,130,246,0.02)]">
+        <div className="w-full bg-white border border-primary-light rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(59,130,246,0.02)]">
           <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
             <FiEdit2 className="text-blue-650" /> Edit Subject Allocation
           </h2>
@@ -241,7 +241,7 @@ const AdminClassSubjectsPage = () => {
                 value={editClassId}
                 onChange={(e) => setEditClassId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
               >
                 <option value="">Select class...</option>
                 {classes.map((cls) => (
@@ -257,7 +257,7 @@ const AdminClassSubjectsPage = () => {
                 value={editSubjectId}
                 onChange={(e) => setEditSubjectId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
               >
                 <option value="">Select subject...</option>
                 {subjects.map((sub) => (
@@ -277,7 +277,7 @@ const AdminClassSubjectsPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold cursor-pointer disabled:opacity-50"
+                className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold cursor-pointer disabled:opacity-50"
               >
                 Save Changes
               </button>
@@ -321,7 +321,7 @@ const AdminClassSubjectsPage = () => {
                 {assignments.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                         <FiLayers className="text-xs" />
                         {item.class_name}
                       </span>
@@ -340,7 +340,7 @@ const AdminClassSubjectsPage = () => {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleStartEdit(item)}
-                          className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-650 text-blue-600 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 bg-primary-light hover:bg-primary-light text-blue-650 text-primary rounded-xl transition-colors cursor-pointer"
                           title="Edit Allocation"
                         >
                           <FiEdit2 className="text-xs" />

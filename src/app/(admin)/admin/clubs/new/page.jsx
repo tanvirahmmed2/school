@@ -132,7 +132,7 @@ const AdminClubsNewPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiActivity className="text-blue-600" /> Student Clubs &amp; Societies
+          <FiActivity className="text-primary" /> Student Clubs &amp; Societies
         </h1>
         <p className="text-sm text-slate-500">
           Create, edit, or remove school club registries, mottos, and co-curricular programs.
@@ -144,7 +144,7 @@ const AdminClubsNewPage = () => {
         {/* Form panel */}
         <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
           <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-            <FiPlus className="text-blue-600" /> 
+            <FiPlus className="text-primary" /> 
             {editId ? 'Modify Club Profile' : 'Register New Club'}
           </h2>
 
@@ -160,7 +160,7 @@ const AdminClubsNewPage = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -174,7 +174,7 @@ const AdminClubsNewPage = () => {
                 value={motto}
                 onChange={(e) => setMotto(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -200,7 +200,7 @@ const AdminClubsNewPage = () => {
                   accept="image/*"
                   disabled={submitting}
                   onChange={handleImageChange}
-                  className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full"
+                  className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer w-full"
                 />
                 {imagePreview && (
                   <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
@@ -231,7 +231,7 @@ const AdminClubsNewPage = () => {
                 type="submit"
                 disabled={submitting}
                 className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                  editId ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-blue-600 hover:bg-blue-700 w-full'
+                  editId ? 'bg-primary hover:bg-primary-dark' : 'bg-primary hover:bg-primary-dark w-full'
                 } ${editId && 'w-1/2'} disabled:opacity-50`}
               >
                 {submitting ? (
@@ -256,7 +256,7 @@ const AdminClubsNewPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading clubs list...</span>
             </div>
           ) : clubs.length === 0 ? (
@@ -286,7 +286,7 @@ const AdminClubsNewPage = () => {
                             {club.image ? (
                               <img src={club.image} alt={club.name} className="w-full h-full object-cover" />
                             ) : (
-                              <span className="text-blue-600 font-bold text-xs">
+                              <span className="text-primary font-bold text-xs">
                                 {club.name.substring(0, 2).toUpperCase()}
                               </span>
                             )}
@@ -304,7 +304,7 @@ const AdminClubsNewPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(club)}
-                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
                           title="Edit & Update Club info"
                         >
                           <FiEdit className="text-sm" />

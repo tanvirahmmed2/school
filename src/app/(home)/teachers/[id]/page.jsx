@@ -81,18 +81,18 @@ const TeacherDetailPage = () => {
                     <img src={teacher.image} alt={teacher.name} className="w-full h-full object-cover" />
                   </div>
                 ) : (
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-sky-200 to-indigo-100 text-sky-750 flex items-center justify-center text-3xl font-black mb-4">
+                  <div className="w-24 h-24 rounded-full bg-primaryr from-sky-200 to-indigo-100 text-sky-750 flex items-center justify-center text-3xl font-black mb-4">
                     {getInitials(teacher.name)}
                   </div>
                 )}
                 <h3 className="font-extrabold text-slate-900 text-base">{teacher.name}</h3>
                 <div className="flex flex-col items-center gap-1.5 mt-1.5">
-                  <span className="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded uppercase tracking-wider">
+                  <span className="text-xs font-bold text-primary bg-primary-light px-2.5 py-0.5 rounded uppercase tracking-wider">
                     {teacher.designation || 'Faculty Member'}
                   </span>
                   <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider ${
                     teacher.is_permanent 
-                      ? 'bg-blue-50 text-blue-600 border border-blue-100/50' 
+                      ? 'bg-primary-light text-primary border border-primary-light/50' 
                       : 'bg-amber-50 text-amber-600 border border-amber-100/50'
                   }`}>
                     {teacher.is_permanent ? 'Permanent Staff' : 'Temporary / Contract'}
@@ -115,7 +115,7 @@ const TeacherDetailPage = () => {
 
               {/* Right Content section */}
               <div className="w-full md:w-2/3 flex flex-col gap-6">
-                <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest w-fit">
+                <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest w-fit">
                   Faculty Profile
                 </span>
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
@@ -125,7 +125,7 @@ const TeacherDetailPage = () => {
                 {/* Qualifications List */}
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                    <FiBookOpen className="text-lg text-sky-600" />
+                    <FiBookOpen className="text-lg text-primary" />
                     <h3 className="font-extrabold text-slate-800 text-sm md:text-base">Degrees & Qualifications</h3>
                   </div>
 
@@ -143,11 +143,11 @@ const TeacherDetailPage = () => {
                             <div className="flex items-center gap-2 mt-1.5">
                               <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-605 text-slate-500 rounded-full">Graduation: {q.passing_year}</span>
                               {q.result && (
-                                <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full">{q.result}</span>
+                                <span className="text-[10px] font-bold px-2 py-0.5 bg-primary-light text-primary rounded-full">{q.result}</span>
                               )}
                             </div>
                           </div>
-                          <div className="p-2 bg-sky-50 text-sky-600 rounded-xl">
+                          <div className="p-2 bg-primary-light text-primary rounded-xl">
                             <FiAward className="text-lg" />
                           </div>
                         </div>

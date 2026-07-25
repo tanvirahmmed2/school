@@ -27,7 +27,7 @@ const SalaryHistoryPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -38,7 +38,7 @@ const SalaryHistoryPage = () => {
   const totalPending = salaries.filter((s) => s.status !== 'Paid').length;
 
   const stats = [
-    { label: 'Total Earnings Credited', value: `৳${totalEarned.toFixed(2)}`, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', icon: FiCheck },
+    { label: 'Total Earnings Credited', value: `৳${totalEarned.toFixed(2)}`, color: 'bg-primary-light text-primary border-primary-light', icon: FiCheck },
     { label: 'Pending Credits', value: totalPending, color: totalPending > 0 ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-slate-50 text-slate-500 border-slate-100', icon: FiClock }
   ];
 
@@ -71,7 +71,7 @@ const SalaryHistoryPage = () => {
       {/* Salary history Log */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
         <h2 className="text-base font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiDollarSign className="text-indigo-600" /> Salary History
+          <FiDollarSign className="text-primary" /> Salary History
         </h2>
 
         {salaries.length === 0 ? (
@@ -99,7 +99,7 @@ const SalaryHistoryPage = () => {
                       </td>
                       <td className="py-4">
                         {salary.status === 'Paid' ? (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100"><FiCheck /> Paid</span>
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Paid</span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100"><FiClock /> Pending</span>
                         )}

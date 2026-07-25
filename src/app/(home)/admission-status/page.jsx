@@ -41,7 +41,7 @@ const AdmissionStatusPage = () => {
     switch (status) {
       case 'Accepted':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
             <FiCheckCircle /> Selected / Accepted
           </span>
         );
@@ -53,7 +53,7 @@ const AdmissionStatusPage = () => {
         );
       case 'Under Review':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
             <FiClock /> Under Review
           </span>
         );
@@ -87,7 +87,7 @@ const AdmissionStatusPage = () => {
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
-          <FiAward className="text-sky-600 animate-pulse" /> Admission Status & Results
+          <FiAward className="text-primary animate-pulse" /> Admission Status & Results
         </h1>
         <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
           Look up your admission intake application status, verification reviews, and final results index.
@@ -104,13 +104,13 @@ const AdmissionStatusPage = () => {
               placeholder="Enter Application ID or Email Address"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/10 transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-2xl text-sm font-bold shadow-md shadow-sky-500/10 hover:shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60"
+            className="px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-2xl text-sm font-bold shadow-md shadow-sky-500/10 hover:shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60"
           >
             {loading ? 'Searching...' : 'Lookup Status'}
           </button>
@@ -119,7 +119,7 @@ const AdmissionStatusPage = () => {
 
       {loading ? (
         <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-          <div className="w-10 h-10 border-3 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
           <span className="text-xs font-semibold text-slate-400">Verifying registry file...</span>
         </div>
       ) : application ? (
@@ -128,7 +128,7 @@ const AdmissionStatusPage = () => {
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-50 pb-5 gap-4">
               <div>
-                <span className="text-[10px] font-bold text-sky-600 uppercase tracking-widest block mb-1">
+                <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">
                   Circular: {application.circular_name || 'General Admission'}
                 </span>
                 <h2 className="text-xl font-black text-slate-800">{application.candidate_name}</h2>
@@ -143,7 +143,7 @@ const AdmissionStatusPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 font-semibold">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Class</span>
-                <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 bg-sky-50 border border-sky-100 px-2.5 py-1 rounded-full">
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-1 rounded-full">
                   <FiLayers className="text-sky-400 text-xs" />
                   {application.class_name}
                 </span>
@@ -168,22 +168,22 @@ const AdmissionStatusPage = () => {
               {application.is_result_published ? (
                 <div>
                   {application.application_status === 'Accepted' ? (
-                    <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-2xl flex flex-col gap-3">
-                      <div className="flex items-center gap-2 text-emerald-700 font-extrabold">
+                    <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-3">
+                      <div className="flex items-center gap-2 text-primary font-extrabold">
                         <FiCheckCircle className="text-xl" />
                         <span>Congratulations! Admission Selected</span>
                       </div>
-                      <p className="text-xs text-emerald-800 leading-relaxed font-semibold">
+                      <p className="text-xs text-primary leading-relaxed font-semibold">
                         Your application for Class {application.class_name} has been approved. Below are your assigned academic credentials:
                       </p>
                       <div className="grid grid-cols-2 gap-4 mt-2 max-w-sm text-xs font-bold">
-                        <div className="bg-white border border-emerald-100 p-3 rounded-xl">
+                        <div className="bg-white border border-primary-light p-3 rounded-xl">
                           <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Class Section</span>
                           <span className="text-slate-800 text-sm font-extrabold">{application.section_name || 'Assigning...'}</span>
                         </div>
-                        <div className="bg-white border border-emerald-100 p-3 rounded-xl">
+                        <div className="bg-white border border-primary-light p-3 rounded-xl">
                           <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Roll Number</span>
-                          <span className="text-sky-600 text-sm font-extrabold">{application.roll_number || 'Assigning...'}</span>
+                          <span className="text-primary text-sm font-extrabold">{application.roll_number || 'Assigning...'}</span>
                         </div>
                       </div>
                     </div>
@@ -210,12 +210,12 @@ const AdmissionStatusPage = () => {
                   )}
                 </div>
               ) : (
-                <div className="p-6 bg-blue-50 border border-blue-100 rounded-2xl flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-blue-700 font-extrabold">
-                    <FiFileText className="text-xl text-blue-500" />
+                <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-primary font-extrabold">
+                    <FiFileText className="text-xl text-primary" />
                     <span>Admissions Results Pending</span>
                   </div>
-                  <p className="text-xs text-blue-800 leading-relaxed font-medium">
+                  <p className="text-xs text-primary leading-relaxed font-medium">
                     The admissions circular selection results for class {application.class_name} have not been published by the administration yet. Please check back later once official notifications are issued on the Notice Board.
                   </p>
                 </div>

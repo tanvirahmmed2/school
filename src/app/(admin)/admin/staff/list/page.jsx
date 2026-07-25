@@ -143,7 +143,7 @@ const AdminStaffListPage = () => {
       case 'cashier':
         return 'bg-amber-50 text-amber-600 border border-amber-100';
       case 'registrar':
-        return 'bg-sky-50 text-sky-600 border border-sky-100';
+        return 'bg-primary-light text-primary border border-primary-light';
       default:
         return 'bg-slate-50 text-slate-655 border border-slate-200';
     }
@@ -166,7 +166,7 @@ const AdminStaffListPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiUsers className="text-blue-600" /> Staff Registry
+            <FiUsers className="text-primary" /> Staff Registry
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Pre-register, delete, and control portal statuses of cashier, registrar, and general support staff.
@@ -176,7 +176,7 @@ const AdminStaffListPage = () => {
         <div>
           <Link
             href="/admin/staff/new"
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-xs font-semibold cursor-pointer shadow-xs transition-colors"
           >
             <FiPlus /> New Staff Member
           </Link>
@@ -187,7 +187,7 @@ const AdminStaffListPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading staff records...</span>
           </div>
         ) : staffList.length === 0 ? (
@@ -243,8 +243,8 @@ const AdminStaffListPage = () => {
                             onClick={() => handleToggleStatus(staff)}
                             className={`px-3 py-1 text-[10px] font-bold rounded-lg transition-colors cursor-pointer ${
                               staff.is_active
-                                ? 'bg-green-50 text-green-600 hover:bg-green-100'
-                                : 'bg-red-50 text-red-600 hover:bg-red-100'
+                                ? 'bg-primary-light text-primary hover:bg-primary-light'
+                                : 'bg-rose-50 text-rose-600 hover:bg-rose-100'
                             }`}
                           >
                             {staff.is_active ? 'Active' : 'Suspended'}
@@ -263,7 +263,7 @@ const AdminStaffListPage = () => {
                           <button
                             disabled={resendingId === staff.id}
                             onClick={() => handleResendVerification(staff)}
-                            className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all cursor-pointer inline-flex items-center gap-1 text-xs font-bold"
+                            className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-all cursor-pointer inline-flex items-center gap-1 text-xs font-bold"
                             title="Resend verification link"
                           >
                             <FiSend className={resendingId === staff.id ? 'animate-spin' : ''} />
@@ -272,14 +272,14 @@ const AdminStaffListPage = () => {
                         )}
                         <button
                           onClick={() => handleOpenEdit(staff)}
-                          className="p-2 hover:bg-indigo-50 text-indigo-600 rounded-xl transition-all cursor-pointer"
+                          className="p-2 hover:bg-primary-light text-primary rounded-xl transition-all cursor-pointer"
                           title="Edit staff member details"
                         >
                           <FiEdit3 className="text-sm" />
                         </button>
                         <button
                           onClick={() => handleDeleteStaff(staff.id, staff.name)}
-                          className="p-2 hover:bg-red-50 text-red-500 hover:text-red-700 rounded-xl transition-all cursor-pointer"
+                          className="p-2 hover:bg-rose-50 text-rose-500 hover:text-rose-700 rounded-xl transition-all cursor-pointer"
                           title="Delete staff account"
                         >
                           <FiTrash2 className="text-sm" />
@@ -309,7 +309,7 @@ const AdminStaffListPage = () => {
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
                 />
               </div>
 
@@ -320,7 +320,7 @@ const AdminStaffListPage = () => {
                   required
                   value={editNumber}
                   onChange={(e) => setEditNumber(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
                 />
               </div>
 
@@ -330,7 +330,7 @@ const AdminStaffListPage = () => {
                   <select
                     value={editRole}
                     onChange={(e) => setEditRole(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
                   >
                     <option value="staff">General Staff</option>
                     <option value="cashier">Cashier</option>
@@ -343,7 +343,7 @@ const AdminStaffListPage = () => {
                   <select
                     value={editGradeId}
                     onChange={(e) => setEditGradeId(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
                   >
                     <option value="">Unassigned</option>
                     {payScales.map((scale) => (
@@ -361,7 +361,7 @@ const AdminStaffListPage = () => {
                   rows={2}
                   value={editAddress}
                   onChange={(e) => setEditAddress(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all resize-none"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all resize-none"
                 />
               </div>
 
@@ -371,7 +371,7 @@ const AdminStaffListPage = () => {
                   id="editActive"
                   checked={editActive}
                   onChange={(e) => setEditActive(e.target.checked)}
-                  className="w-4 h-4 rounded text-blue-600 border-slate-350 focus:ring-blue-500/20"
+                  className="w-4 h-4 rounded text-primary border-slate-350 focus:ring-primary"
                 />
                 <label htmlFor="editActive" className="text-xs font-semibold text-slate-655 select-none cursor-pointer">
                   Account is Active (Un-check to suspend)
@@ -390,7 +390,7 @@ const AdminStaffListPage = () => {
                 <button
                   type="submit"
                   disabled={submittingEdit}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition-colors disabled:opacity-60 cursor-pointer"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-xs font-semibold transition-colors disabled:opacity-60 cursor-pointer"
                 >
                   {submittingEdit ? 'Saving...' : 'Save Changes'}
                 </button>

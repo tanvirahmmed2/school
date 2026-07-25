@@ -20,7 +20,7 @@ const About = () => {
 
             <div className="flex flex-col gap-3 mt-2">
               <div className="flex gap-2.5 items-start">
-                <FiCheckCircle className="text-sky-500 w-5 h-5 shrink-0 mt-0.5" />
+                <FiCheckCircle className="text-primary w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold text-slate-800 text-sm">Distinguished Global Faculty</p>
                   <p className="text-slate-500 text-xs mt-0.5">Learn from certified instructors and industry professionals with years of field experience.</p>
@@ -28,7 +28,7 @@ const About = () => {
               </div>
 
               <div className="flex gap-2.5 items-start">
-                <FiCheckCircle className="text-sky-500 w-5 h-5 shrink-0 mt-0.5" />
+                <FiCheckCircle className="text-primary w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold text-slate-800 text-sm">Comprehensive Curriculums</p>
                   <p className="text-slate-500 text-xs mt-0.5">Academic plans aligned with standard college frameworks and digital advancements.</p>
@@ -36,7 +36,7 @@ const About = () => {
               </div>
 
               <div className="flex gap-2.5 items-start">
-                <FiCheckCircle className="text-sky-500 w-5 h-5 shrink-0 mt-0.5" />
+                <FiCheckCircle className="text-primary w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold text-slate-800 text-sm">State-of-the-art Campus & Hostel Systems</p>
                   <p className="text-slate-500 text-xs mt-0.5">Modern class environments, scientific labs, and well-managed residential properties.</p>
@@ -48,7 +48,7 @@ const About = () => {
           {/* Right Cards column */}
           <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl flex flex-col gap-3">
-              <div className="w-10 h-10 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center font-bold">
+              <div className="w-10 h-10 bg-primary-light text-primary rounded-xl flex items-center justify-center font-bold">
                 <FiBook />
               </div>
               <h3 className="font-bold text-slate-800 text-sm">Modern Classrooms</h3>
@@ -58,7 +58,7 @@ const About = () => {
             </div>
 
             <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl flex flex-col gap-3">
-              <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold">
+              <div className="w-10 h-10 bg-primary-light text-primary rounded-xl flex items-center justify-center font-bold">
                 <FiAward />
               </div>
               <h3 className="font-bold text-slate-800 text-sm">Research Labs</h3>

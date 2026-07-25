@@ -214,7 +214,7 @@ const InventoryPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiShoppingBag className="text-blue-600 animate-pulse" /> Asset Inventory & Supplier Ledger
+            <FiShoppingBag className="text-primary animate-pulse" /> Asset Inventory & Supplier Ledger
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Manage inventory item stocks, suppliers directories, purchases orders logging, and track audit stock trails.
@@ -224,7 +224,7 @@ const InventoryPage = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setShowLogPurchase(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-xs"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-xs"
           >
             <FiPlus /> Log Purchase PO
           </button>
@@ -236,7 +236,7 @@ const InventoryPage = () => {
           </button>
           <button
             onClick={() => setShowAddSupplier(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-xs"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-xs"
           >
             <FiPlus /> Add Supplier
           </button>
@@ -255,7 +255,7 @@ const InventoryPage = () => {
           onClick={() => setActiveTab('items')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'items'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -265,7 +265,7 @@ const InventoryPage = () => {
           onClick={() => setActiveTab('suppliers')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'suppliers'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -275,7 +275,7 @@ const InventoryPage = () => {
           onClick={() => setActiveTab('purchases')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'purchases'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -285,7 +285,7 @@ const InventoryPage = () => {
           onClick={() => setActiveTab('movements')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'movements'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -295,7 +295,7 @@ const InventoryPage = () => {
 
       {loading ? (
         <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           <span className="text-sm font-semibold text-slate-400">Loading inventory data...</span>
         </div>
       ) : (
@@ -339,7 +339,7 @@ const InventoryPage = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">
+                            <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded">
                               {it.code}
                             </span>
                           </td>
@@ -447,7 +447,7 @@ const InventoryPage = () => {
                       {purchases.map((p) => (
                         <tr key={p.id} className="hover:bg-slate-50/30 transition-colors">
                           <td className="px-6 py-4">
-                            <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">
+                            <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded">
                               {p.purchase_number}
                             </span>
                           </td>
@@ -465,7 +465,7 @@ const InventoryPage = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4 text-xs text-slate-800 font-bold">৳{parseFloat(p.total_amount).toFixed(2)}</td>
-                          <td className="px-6 py-4 text-right text-xs text-emerald-600 font-bold">৳{parseFloat(p.paid_amount).toFixed(2)}</td>
+                          <td className="px-6 py-4 text-right text-xs text-primary font-bold">৳{parseFloat(p.paid_amount).toFixed(2)}</td>
                           <td className="px-6 py-4">
                             <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
                               p.payment_status === 'Paid'
@@ -530,7 +530,7 @@ const InventoryPage = () => {
                             <span className={`inline-flex items-center text-xs font-bold px-2 py-0.5 rounded ${
                               m.movement_type === 'Purchase'
                                 ? 'text-green-600 bg-green-50'
-                                : 'text-blue-600 bg-blue-50'
+                                : 'text-primary bg-primary-light'
                             }`}>
                               {m.movement_type}
                             </span>
@@ -567,7 +567,7 @@ const InventoryPage = () => {
                   placeholder="e.g. Acme Stationeries"
                   value={supplierForm.name}
                   onChange={(e) => setSupplierForm((p) => ({ ...p, name: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -579,7 +579,7 @@ const InventoryPage = () => {
                     placeholder="e.g. John Doe"
                     value={supplierForm.contact_name}
                     onChange={(e) => setSupplierForm((p) => ({ ...p, contact_name: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
 
@@ -590,7 +590,7 @@ const InventoryPage = () => {
                     placeholder="+1 555-920-2212"
                     value={supplierForm.phone}
                     onChange={(e) => setSupplierForm((p) => ({ ...p, phone: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
               </div>
@@ -602,7 +602,7 @@ const InventoryPage = () => {
                   placeholder="sales@acme.com"
                   value={supplierForm.email}
                   onChange={(e) => setSupplierForm((p) => ({ ...p, email: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -613,7 +613,7 @@ const InventoryPage = () => {
                   value={supplierForm.address}
                   onChange={(e) => setSupplierForm((p) => ({ ...p, address: e.target.value }))}
                   rows={2.5}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
                 />
               </div>
 
@@ -628,7 +628,7 @@ const InventoryPage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
                 >
                   Add Supplier
                 </button>
@@ -648,7 +648,7 @@ const InventoryPage = () => {
                 <select
                   value={itemForm.category_id}
                   onChange={(e) => setItemForm((p) => ({ ...p, category_id: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="">Select a category...</option>
                   {categories.map((c) => (
@@ -664,7 +664,7 @@ const InventoryPage = () => {
                   placeholder="e.g. Marker Pen Black"
                   value={itemForm.name}
                   onChange={(e) => setItemForm((p) => ({ ...p, name: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -676,7 +676,7 @@ const InventoryPage = () => {
                     placeholder="e.g. ITEM-MARK-BLK"
                     value={itemForm.code}
                     onChange={(e) => setItemForm((p) => ({ ...p, code: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
 
@@ -687,7 +687,7 @@ const InventoryPage = () => {
                     placeholder="e.g. Pcs, Box, Pack"
                     value={itemForm.unit}
                     onChange={(e) => setItemForm((p) => ({ ...p, unit: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
               </div>
@@ -699,7 +699,7 @@ const InventoryPage = () => {
                   value={itemForm.description}
                   onChange={(e) => setItemForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2.5}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
                 />
               </div>
 
@@ -736,7 +736,7 @@ const InventoryPage = () => {
                   placeholder="e.g. Office Supplies, Electronics"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, name: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -747,7 +747,7 @@ const InventoryPage = () => {
                   value={categoryForm.description}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2.5}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
                 />
               </div>
 
@@ -783,7 +783,7 @@ const InventoryPage = () => {
                   <select
                     value={purchaseForm.supplier_id}
                     onChange={(e) => setPurchaseForm((p) => ({ ...p, supplier_id: e.target.value }))}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
                   >
                     <option value="">Select supplier...</option>
                     {suppliers.map((s) => (
@@ -798,7 +798,7 @@ const InventoryPage = () => {
                     type="date"
                     value={purchaseForm.purchase_date}
                     onChange={(e) => setPurchaseForm((p) => ({ ...p, purchase_date: e.target.value }))}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
               </div>
@@ -810,7 +810,7 @@ const InventoryPage = () => {
                   <button
                     type="button"
                     onClick={handleAddPurchaseLine}
-                    className="text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded cursor-pointer"
+                    className="text-[10px] font-bold text-primary bg-primary-light hover:bg-primary-light px-2 py-0.5 rounded cursor-pointer"
                   >
                     + Add Item Row
                   </button>
@@ -876,7 +876,7 @@ const InventoryPage = () => {
                     placeholder="Total Paid Out"
                     value={purchaseForm.paid_amount}
                     onChange={(e) => setPurchaseForm((p) => ({ ...p, paid_amount: e.target.value }))}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
 
@@ -887,7 +887,7 @@ const InventoryPage = () => {
                     placeholder="e.g. Inv #8839"
                     value={purchaseForm.remarks}
                     onChange={(e) => setPurchaseForm((p) => ({ ...p, remarks: e.target.value }))}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
               </div>
@@ -903,7 +903,7 @@ const InventoryPage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
                 >
                   Log Purchase Order
                 </button>

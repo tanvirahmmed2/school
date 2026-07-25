@@ -33,7 +33,7 @@ const ClubNewsDetailPage = () => {
     return (
       <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-slate-500 text-xs font-semibold">Loading club news article...</p>
         </div>
       </div>
@@ -49,7 +49,7 @@ const ClubNewsDetailPage = () => {
           <p className="text-slate-500 text-xs">The club announcement or news article could not be found.</p>
           <Link
             href="/clubs"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl transition-all"
           >
             <FiArrowLeft /> Back to Clubs
           </Link>
@@ -77,7 +77,7 @@ const ClubNewsDetailPage = () => {
           {clubNews.club_slug && (
             <Link
               href={`/clubs/${clubNews.club_slug}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold text-xs rounded-xl transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light text-primary hover:bg-primary-light font-bold text-xs rounded-xl transition-colors"
             >
               <FiUsers />
               <span>Visit {clubNews.club_name || 'Club'} Page</span>
@@ -100,12 +100,12 @@ const ClubNewsDetailPage = () => {
           <div className="p-6 md:p-10 space-y-6">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5">
                   <FiUsers /> {clubNews.club_name || 'Club Announcement'}
                 </span>
                 {newsDate && (
                   <span className="flex items-center gap-1 text-xs font-semibold text-slate-400">
-                    <FiCalendar className="text-emerald-600" />
+                    <FiCalendar className="text-primary" />
                     {newsDate.toLocaleDateString(undefined, { dateStyle: 'long' })}
                   </span>
                 )}

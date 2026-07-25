@@ -112,11 +112,11 @@ const NewsListPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 border border-sky-100 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight flex items-center gap-2">
-            <FiFileText className="text-sky-600" /> Published Campus News
+            <FiFileText className="text-primary" /> Published Campus News
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             Manage institutional announcements, news stories, press releases, and generated URL slugs.
@@ -124,7 +124,7 @@ const NewsListPage = () => {
         </div>
         <Link
           href="/admin/news/new"
-          className="inline-flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xs transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xs transition-colors cursor-pointer"
         >
           <FiPlus className="text-sm" />
           <span>Write New Article</span>
@@ -135,7 +135,7 @@ const NewsListPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="p-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-xs font-semibold text-slate-400">Loading published news...</span>
           </div>
         ) : news.length > 0 ? (
@@ -176,7 +176,7 @@ const NewsListPage = () => {
                     {/* Date */}
                     <td className="p-4 whitespace-nowrap text-slate-500 font-semibold">
                       <span className="inline-flex items-center gap-1.5 text-xs">
-                        <FiCalendar className="text-sky-500" />
+                        <FiCalendar className="text-primary" />
                         {new Date(item.created_at).toLocaleDateString(undefined, {
                           year: 'numeric',
                           month: 'short',
@@ -191,14 +191,14 @@ const NewsListPage = () => {
                         <Link
                           href="/news"
                           target="_blank"
-                          className="p-2 text-sky-600 hover:bg-sky-50 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 text-primary hover:bg-primary-light rounded-xl transition-colors cursor-pointer"
                           title="View public news page"
                         >
                           <FiExternalLink className="text-sm" />
                         </Link>
                         <button
                           onClick={() => handleOpenEdit(item)}
-                          className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 text-primary hover:bg-primary-light rounded-xl transition-colors cursor-pointer"
                           title="Edit news article"
                         >
                           <FiEdit3 className="text-sm" />
@@ -236,7 +236,7 @@ const NewsListPage = () => {
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl animate-scale-up max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <FiEdit3 className="text-sky-600" /> Edit News Article
+                <FiEdit3 className="text-primary" /> Edit News Article
               </h2>
               <button
                 onClick={() => setEditingItem(null)}
@@ -258,7 +258,7 @@ const NewsListPage = () => {
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   placeholder="e.g. FIT Annual Convocation 2026"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 transition-all font-medium"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all font-medium"
                 />
               </div>
 
@@ -276,7 +276,7 @@ const NewsListPage = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+                  className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
                 />
               </div>
 
@@ -291,7 +291,7 @@ const NewsListPage = () => {
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
                   placeholder="Write complete article details..."
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 transition-all resize-none font-medium"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all resize-none font-medium"
                 />
               </div>
 
@@ -308,7 +308,7 @@ const NewsListPage = () => {
                 <button
                   type="submit"
                   disabled={savingEdit}
-                  className="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-60 cursor-pointer flex items-center gap-1.5"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-60 cursor-pointer flex items-center gap-1.5"
                 >
                   <FiCheck className="text-sm" />
                   <span>{savingEdit ? 'Saving...' : 'Save Changes'}</span>

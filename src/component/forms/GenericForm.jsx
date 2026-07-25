@@ -14,7 +14,7 @@ const GenericForm = ({
   readOnlySection,
   extraLink,
   gridClass = 'grid grid-cols-1 md:grid-cols-2 gap-5',
-  focusClass = 'focus:border-indigo-500 focus:ring-indigo-500/5',
+  focusClass = 'focus:border-primary focus:ring-primary/5',
 }) => {
   return (
     <form onSubmit={onSubmit} className="w-full flex flex-col gap-5">
@@ -116,7 +116,7 @@ const GenericForm = ({
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
+          className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
         >
           {submitting ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

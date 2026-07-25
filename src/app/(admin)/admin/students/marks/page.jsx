@@ -114,7 +114,7 @@ const StudentMarksPage = () => {
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiAward className="text-blue-600" /> Enter Student Marks
+          <FiAward className="text-primary" /> Enter Student Marks
         </h1>
         <p className="text-sm text-slate-500">
           Select exam and class filters to enter and register subject scores.
@@ -131,7 +131,7 @@ const StudentMarksPage = () => {
             <select
               value={selectedExam}
               onChange={(e) => setSelectedExam(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50"
             >
               <option value="">-- Choose Exam --</option>
               {exams.map(e => (
@@ -150,7 +150,7 @@ const StudentMarksPage = () => {
                 setSelectedClass(e.target.value);
                 setSelectedSection('');
               }}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50"
             >
               <option value="">-- Choose Class --</option>
               {classes.map(c => (
@@ -167,7 +167,7 @@ const StudentMarksPage = () => {
               value={selectedSection}
               onChange={(e) => setSelectedSection(e.target.value)}
               disabled={!selectedClass}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 disabled:opacity-50 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary disabled:opacity-50 bg-slate-50"
             >
               <option value="">All Sections</option>
               {filteredSections.map(s => (
@@ -183,7 +183,7 @@ const StudentMarksPage = () => {
             <select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50"
             >
               <option value="">-- Choose Subject --</option>
               {subjects.map(s => (
@@ -197,7 +197,7 @@ const StudentMarksPage = () => {
           <button
             onClick={handleLoadMarksSheet}
             disabled={loadingMarks}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-transform duration-150 cursor-pointer disabled:opacity-50"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-transform duration-150 cursor-pointer disabled:opacity-50"
           >
             {loadingMarks ? (
               <FiRefreshCw className="animate-spin text-sm" />
@@ -217,7 +217,7 @@ const StudentMarksPage = () => {
               <h2 className="text-sm font-bold text-slate-800">
                 Grade Sheet ({marksList.length} Students)
               </h2>
-              <span className="text-[11px] bg-blue-50 text-blue-600 font-bold px-2 py-0.5 rounded-full">
+              <span className="text-[11px] bg-primary-light text-primary font-bold px-2 py-0.5 rounded-full">
                 Marks Entry Form
               </span>
             </div>
@@ -248,7 +248,7 @@ const StudentMarksPage = () => {
                           placeholder="0.00"
                           value={item.marks_obtained}
                           onChange={(e) => handleMarkChange(item.student_id, 'marks_obtained', e.target.value)}
-                          className="w-28 px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                          className="w-28 px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
                         />
                       </td>
                       <td className="px-6 py-2">
@@ -259,7 +259,7 @@ const StudentMarksPage = () => {
                           required
                           value={item.total_marks}
                           onChange={(e) => handleMarkChange(item.student_id, 'total_marks', e.target.value)}
-                          className="w-28 px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                          className="w-28 px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
                         />
                       </td>
                       <td className="px-6 py-2">
@@ -268,7 +268,7 @@ const StudentMarksPage = () => {
                           placeholder="remarks (optional)"
                           value={item.remarks}
                           onChange={(e) => handleMarkChange(item.student_id, 'remarks', e.target.value)}
-                          className="w-full max-w-xs px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                          className="w-full max-w-xs px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
                         />
                       </td>
                     </tr>
@@ -281,7 +281,7 @@ const StudentMarksPage = () => {
               <button
                 type="submit"
                 disabled={savingMarks}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-transform active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-transform active:scale-[0.98] cursor-pointer disabled:opacity-50"
               >
                 {savingMarks ? (
                   <>

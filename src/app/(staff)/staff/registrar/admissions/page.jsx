@@ -63,11 +63,11 @@ const AdmissionsPage = () => {
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       {/* Header */}
       <div>
-        <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+        <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
           Registrar Panel
         </span>
         <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-sky-600" /> Student Admission Applications
+          <FiUsers className="text-primary" /> Student Admission Applications
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Review, verify, and approve pending applicant admissions. Approved profiles automatically register as students.
@@ -80,7 +80,7 @@ const AdmissionsPage = () => {
           onClick={() => setActiveTab('pending')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'pending'
-              ? 'border-sky-600 text-sky-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
@@ -90,7 +90,7 @@ const AdmissionsPage = () => {
           onClick={() => setActiveTab('archive')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'archive'
-              ? 'border-sky-600 text-sky-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
@@ -102,7 +102,7 @@ const AdmissionsPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading admissions...</span>
           </div>
         ) : activeTab === 'pending' ? (
@@ -147,7 +147,7 @@ const AdmissionsPage = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                             <FiLayers className="text-xs text-sky-400" />
                             Class: {adm.class_name}
                           </span>
@@ -182,7 +182,7 @@ const AdmissionsPage = () => {
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/staff/registrar/admissions/applicant?id=${adm.id}`}
-                            className="p-2 bg-sky-50 hover:bg-sky-100 text-sky-600 rounded-xl transition-all"
+                            className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-all"
                             title="Preview Applicant Info"
                           >
                             <FiSearch className="text-sm" />
@@ -279,7 +279,7 @@ const AdmissionsPage = () => {
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/staff/registrar/admissions/applicant?id=${adm.id}`}
-                        className="inline-flex items-center gap-1 text-sky-600 hover:text-sky-700 text-xs font-bold"
+                        className="inline-flex items-center gap-1 text-primary hover:text-primary text-xs font-bold"
                       >
                         <span>View Details</span>
                         <FiChevronRight />

@@ -55,7 +55,7 @@ const NewCircularPage = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[40vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-xs font-semibold text-slate-400">Loading form criteria...</span>
       </div>
     );

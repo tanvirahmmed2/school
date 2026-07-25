@@ -65,7 +65,7 @@ const AdminStaffLeavesPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiCalendar className="text-sky-600 animate-pulse" /> Staff Leave Approvals
+          <FiCalendar className="text-primary animate-pulse" /> Staff Leave Approvals
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Review, approve, and archive leave requests submitted by operational and registry staff.
@@ -78,7 +78,7 @@ const AdminStaffLeavesPage = () => {
           onClick={() => setActiveTab('pending')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'pending'
-              ? 'border-sky-600 text-sky-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
@@ -88,7 +88,7 @@ const AdminStaffLeavesPage = () => {
           onClick={() => setActiveTab('archive')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'archive'
-              ? 'border-sky-600 text-sky-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
@@ -100,7 +100,7 @@ const AdminStaffLeavesPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading leave requests...</span>
           </div>
         ) : activeTab === 'pending' ? (
@@ -129,7 +129,7 @@ const AdminStaffLeavesPage = () => {
                     <tr key={lv.id} className="hover:bg-slate-50/30 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-sky-50 flex items-center justify-center text-sky-600 border border-sky-100">
+                          <div className="w-9 h-9 rounded-full bg-primary-light flex items-center justify-center text-primary border border-primary-light">
                             <FiUser />
                           </div>
                           <div>

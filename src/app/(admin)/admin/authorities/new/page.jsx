@@ -84,7 +84,7 @@ export default function NewAuthorityPage() {
       <div>
         <Link 
           href="/admin/authorities/list"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-wider"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-wider"
         >
           <FiArrowLeft className="text-sm" /> Back to Board List
         </Link>
@@ -93,7 +93,7 @@ export default function NewAuthorityPage() {
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUserPlus className="text-blue-600" /> Onboard New Board Member
+          <FiUserPlus className="text-primary" /> Onboard New Board Member
         </h1>
         <p className="text-sm text-slate-500 font-medium">
           Pre-register leadership designations, contact info, bios, and upload profiles to Cloudinary.
@@ -141,7 +141,7 @@ export default function NewAuthorityPage() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Dr. Alexander Fontana"
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 font-medium"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary font-medium"
                 required
               />
             </div>
@@ -155,7 +155,7 @@ export default function NewAuthorityPage() {
                 name="designation"
                 value={formData.designation}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 font-semibold"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary font-semibold"
                 required
               >
                 {designations && designations.length > 0 ? (
@@ -187,7 +187,7 @@ export default function NewAuthorityPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="e.g. alexander@fontana.edu"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50 font-medium"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50 font-medium"
                 />
               </div>
             </div>
@@ -205,7 +205,7 @@ export default function NewAuthorityPage() {
                   value={formData.contact}
                   onChange={handleChange}
                   placeholder="e.g. +1 (555) 019-2834"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50 font-medium"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50 font-medium"
                 />
               </div>
             </div>
@@ -225,7 +225,7 @@ export default function NewAuthorityPage() {
               onChange={handleChange}
               rows={4}
               placeholder="Provide a brief overview of professional accolades, governance history, or board experience..."
-              className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 resize-none font-medium leading-relaxed"
+              className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary resize-none font-medium leading-relaxed"
             />
           </div>
         </div>
@@ -235,7 +235,7 @@ export default function NewAuthorityPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-[0_4px_12px_rgba(37,99,235,0.2)] flex items-center gap-2 cursor-pointer"
+            className="px-6 py-3 bg-primary hover:bg-primary-dark disabled:bg-blue-400 text-white rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-[0_4px_12px_rgba(37,99,235,0.2)] flex items-center gap-2 cursor-pointer"
           >
             {loading ? (
               <>

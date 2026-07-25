@@ -28,7 +28,7 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -48,14 +48,14 @@ const ProfilePage = () => {
 
       {/* Header Profile Card */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-        <div className="w-24 h-24 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-4xl font-extrabold shadow-sm">
+        <div className="w-24 h-24 rounded-full bg-primary-light border border-primary-light text-primary flex items-center justify-center text-4xl font-extrabold shadow-sm">
           {profile?.name ? profile.name.charAt(0).toUpperCase() : 'S'}
         </div>
         <div className="text-center md:text-left flex-1">
           <h2 className="text-xl font-bold text-slate-800 mb-1">{profile?.name}</h2>
           <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Registration Number: {profile?.registration_number}</p>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active Student
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Active Student
           </span>
         </div>
       </div>
@@ -65,7 +65,7 @@ const ProfilePage = () => {
         {/* Personal Details */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
           <h3 className="font-bold text-slate-800 text-base flex items-center gap-2 border-b border-slate-100 pb-3 mb-1">
-            <FiUser className="text-blue-600" /> Personal Details
+            <FiUser className="text-primary" /> Personal Details
           </h3>
 
           <div className="flex flex-col gap-4">
@@ -114,7 +114,7 @@ const ProfilePage = () => {
         {/* Academic Details */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
           <h3 className="font-bold text-slate-800 text-base flex items-center gap-2 border-b border-slate-100 pb-3 mb-1">
-            <FiBookOpen className="text-blue-600" /> Academic Details
+            <FiBookOpen className="text-primary" /> Academic Details
           </h3>
 
           <div className="flex flex-col gap-4">

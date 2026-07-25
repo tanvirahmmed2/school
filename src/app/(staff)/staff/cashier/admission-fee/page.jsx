@@ -132,7 +132,7 @@ const AdmissionFeeDesk = () => {
   if (loading) {
     return (
       <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading admissions billing...</span>
       </div>
     );
@@ -181,7 +181,7 @@ const AdmissionFeeDesk = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-emerald-600" /> Admission Fees Desk
+          <FiUsers className="text-primary" /> Admission Fees Desk
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Review candidate registration fee collection status, update payments, and manage admissions billing ledger.
@@ -202,11 +202,11 @@ const AdmissionFeeDesk = () => {
 
         <div className="bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block mb-1">Total Fees Collected</span>
-            <span className="text-2xl font-black text-emerald-600">৳{paidFeesAmount.toFixed(2)}</span>
+            <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">Total Fees Collected</span>
+            <span className="text-2xl font-black text-primary">৳{paidFeesAmount.toFixed(2)}</span>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-            <FiCheck className="text-emerald-600 text-lg" />
+          <div className="w-12 h-12 rounded-2xl bg-primary-light border border-primary-light flex items-center justify-center">
+            <FiCheck className="text-primary text-lg" />
           </div>
         </div>
 
@@ -226,7 +226,7 @@ const AdmissionFeeDesk = () => {
         <form onSubmit={handleCollectAdmissionPayment} className="bg-white border border-slate-100 p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-5 animate-fade-down">
           <div>
             <h2 className="text-base font-bold text-slate-850 flex items-center gap-1.5">
-              <FiCreditCard className="text-emerald-600" /> Collect Admission Fee
+              <FiCreditCard className="text-primary" /> Collect Admission Fee
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
               Log admission fee cash/online payment collection for applicant <strong>{collectingPaymentAdm.applicant_name}</strong>.
@@ -242,7 +242,7 @@ const AdmissionFeeDesk = () => {
                 required
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value)}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -251,7 +251,7 @@ const AdmissionFeeDesk = () => {
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500 cursor-pointer"
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary cursor-pointer"
               >
                 <option value="Cash">Cash Desk</option>
                 <option value="bKash">bKash Merchant</option>
@@ -268,7 +268,7 @@ const AdmissionFeeDesk = () => {
                 placeholder="e.g. TXN9201"
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -279,7 +279,7 @@ const AdmissionFeeDesk = () => {
                 placeholder="e.g. Admission Desk receipt"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
           </div>
@@ -295,7 +295,7 @@ const AdmissionFeeDesk = () => {
             <button
               type="submit"
               disabled={submittingPayment}
-              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 disabled:opacity-60"
+              className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 disabled:opacity-60"
             >
               {submittingPayment ? 'Processing Payment...' : 'Confirm Receipt Payment'}
             </button>
@@ -313,7 +313,7 @@ const AdmissionFeeDesk = () => {
             placeholder="Search by candidate name, email, or phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-emerald-500"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -391,7 +391,7 @@ const AdmissionFeeDesk = () => {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full ${
                           normalizedStatus === 'paid' 
-                            ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                            ? 'bg-primary-light text-primary border border-primary-light'
                             : normalizedStatus === 'cancelled'
                             ? 'bg-red-50 text-red-600 border border-red-100'
                             : 'bg-amber-50 text-amber-600 border border-amber-100'
@@ -416,7 +416,7 @@ const AdmissionFeeDesk = () => {
                               setPaymentAmount(parseFloat(adm.admission_fees_amount || adm.fee_amount || 0).toFixed(2));
                             }}
                             disabled={updatingId === adm.id}
-                            className="text-xs font-bold text-emerald-650 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1"
+                            className="text-xs font-bold text-emerald-650 hover:text-primary bg-primary-light hover:bg-primary-light px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1"
                           >
                             <FiCreditCard className="text-xs" /> Record Pay
                           </button>

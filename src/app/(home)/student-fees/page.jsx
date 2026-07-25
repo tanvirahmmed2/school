@@ -53,7 +53,7 @@ const PublicMonthlyFeesPage = () => {
     <div className="w-full min-h-[80vh] py-12 px-4 md:px-8 mx-auto flex flex-col gap-10 animate-fade-up">
       {/* Hero Header */}
       <div className="text-center flex flex-col gap-3">
-        <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 bg-sky-50 border border-sky-100 px-3 py-1 rounded-full w-fit mx-auto">
+        <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-full w-fit mx-auto">
           FIT Academic Portal
         </span>
         <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
@@ -85,7 +85,7 @@ const PublicMonthlyFeesPage = () => {
                 <div key={idx} className="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl flex flex-col gap-2">
                   <span className="text-sm font-bold text-slate-800">{level.title}</span>
                   <p className="text-xs text-slate-500 leading-relaxed font-medium">{level.description}</p>
-                  <span className="text-[10px] text-sky-600 font-bold uppercase tracking-wider mt-1 block">
+                  <span className="text-[10px] text-primary font-bold uppercase tracking-wider mt-1 block">
                     Curriculum: {level.curriculum}
                   </span>
                 </div>
@@ -96,7 +96,7 @@ const PublicMonthlyFeesPage = () => {
           {/* Institutional Highlights */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm text-center flex flex-col items-center gap-2.5">
-              <div className="p-3 bg-sky-50 text-sky-500 rounded-2xl border border-sky-100">
+              <div className="p-3 bg-primary-light text-primary rounded-2xl border border-primary-light">
                 <FiUsers className="text-xl" />
               </div>
               <span className="text-xs font-black text-slate-800">Qualified Educators</span>
@@ -104,7 +104,7 @@ const PublicMonthlyFeesPage = () => {
             </div>
 
             <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm text-center flex flex-col items-center gap-2.5">
-              <div className="p-3 bg-emerald-50 text-emerald-500 rounded-2xl border border-emerald-100">
+              <div className="p-3 bg-primary-light text-primary rounded-2xl border border-primary-light">
                 <FiCpu className="text-xl" />
               </div>
               <span className="text-xs font-black text-slate-800">Smart Smart Labs</span>
@@ -134,7 +134,7 @@ const PublicMonthlyFeesPage = () => {
 
             {loading ? (
               <div className="w-full py-8 flex flex-col items-center justify-center gap-3">
-                <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-[10px] text-slate-450 font-semibold">Fetching rates...</span>
               </div>
             ) : fees.length === 0 ? (
@@ -147,7 +147,7 @@ const PublicMonthlyFeesPage = () => {
                 {fees.map((fee) => (
                   <div key={fee.class_name} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0 last:pb-0">
                     <div className="flex items-center gap-2 font-bold text-slate-700 text-xs">
-                      <FiLayers className="text-sky-500 text-sm" />
+                      <FiLayers className="text-primary text-sm" />
                       {fee.class_name}
                     </div>
                     <span className="text-xs font-extrabold text-slate-900">

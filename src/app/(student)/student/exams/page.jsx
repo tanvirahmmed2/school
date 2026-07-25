@@ -28,7 +28,7 @@ const ExamsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -76,7 +76,7 @@ const ExamsPage = () => {
                   <div className="flex flex-wrap items-center gap-3 mt-1.5">
                     <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Term: {group.term}</p>
                     {group.schedules[0]?.exam_fee !== undefined && parseFloat(group.schedules[0].exam_fee) > 0 && (
-                      <span className="font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full text-[10px]">
+                      <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full text-[10px]">
                         Fee: {parseFloat(group.schedules[0].exam_fee).toFixed(2)} BDT
                       </span>
                     )}
@@ -84,7 +84,7 @@ const ExamsPage = () => {
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                   group.status === 'Active' 
-                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                    ? 'bg-primary-light text-primary border border-primary-light'
                     : 'bg-slate-50 text-slate-500 border border-slate-100'
                 }`}>
                   {group.status}

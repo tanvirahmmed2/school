@@ -231,7 +231,7 @@ const AdminStudentListsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiUsers className="text-blue-600" /> Student Account Registry
+            <FiUsers className="text-primary" /> Student Account Registry
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Pre-create accounts, filter lists by class/section, and manage student details.
@@ -243,7 +243,7 @@ const AdminStudentListsPage = () => {
             setShowPreCreate(!showPreCreate);
             setEditingStudent(null);
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showPreCreate ? (
             <>
@@ -266,7 +266,7 @@ const AdminStudentListsPage = () => {
           <select
             value={filterClassId}
             onChange={(e) => setFilterClassId(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 cursor-pointer"
+            className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none transition-all duration-200 focus:bg-white focus:border-primary bg-slate-50 cursor-pointer"
           >
             <option value="">All Academic Classes...</option>
             {classes.map((cls) => (
@@ -285,7 +285,7 @@ const AdminStudentListsPage = () => {
             value={filterSectionId}
             onChange={(e) => setFilterSectionId(e.target.value)}
             disabled={!filterClassId}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50 cursor-pointer disabled:opacity-60"
+            className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none transition-all duration-200 focus:bg-white focus:border-primary bg-slate-50 cursor-pointer disabled:opacity-60"
           >
             <option value="">All Sections...</option>
             {sections.map((sec) => (
@@ -315,7 +315,7 @@ const AdminStudentListsPage = () => {
                 value={preRegNo}
                 onChange={(e) => setPreRegNo(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -328,7 +328,7 @@ const AdminStudentListsPage = () => {
                 value={preClassId}
                 onChange={(e) => setPreClassId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
               >
                 <option value="">Select class...</option>
                 {classes.map((cls) => (
@@ -347,7 +347,7 @@ const AdminStudentListsPage = () => {
                 value={preSectionId}
                 onChange={(e) => setPreSectionId(e.target.value)}
                 disabled={submitting || !preClassId}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary disabled:opacity-60"
               >
                 <option value="">Select section...</option>
                 {preSectionsList.map((sec) => (
@@ -368,7 +368,7 @@ const AdminStudentListsPage = () => {
                 value={preRoll}
                 onChange={(e) => setPreRoll(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -383,7 +383,7 @@ const AdminStudentListsPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer"
+                className="px-5 py-2 bg-primary hover:bg-primary-dark text-secondary text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer"
               >
                 {submitting ? 'Pre-creating...' : 'Save Account'}
               </button>
@@ -422,7 +422,7 @@ const AdminStudentListsPage = () => {
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500 focus:ring-4"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -436,7 +436,7 @@ const AdminStudentListsPage = () => {
                   value={editEmail}
                   onChange={(e) => setEditEmail(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500 focus:ring-4"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
             </div>
@@ -451,7 +451,7 @@ const AdminStudentListsPage = () => {
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-555"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -464,7 +464,7 @@ const AdminStudentListsPage = () => {
                   value={editClassId}
                   onChange={(e) => setEditClassId(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 >
                   {classes.map((cls) => (
                     <option key={cls.id} value={cls.id}>
@@ -482,7 +482,7 @@ const AdminStudentListsPage = () => {
                   value={editSectionId}
                   onChange={(e) => setEditSectionId(e.target.value)}
                   disabled={submitting || !editClassId}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="">No section (Unallocated)...</option>
                   {editSectionsList.map((sec) => (
@@ -502,7 +502,7 @@ const AdminStudentListsPage = () => {
                   value={editBirthCert}
                   onChange={(e) => setEditBirthCert(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -514,7 +514,7 @@ const AdminStudentListsPage = () => {
                   value={editGender}
                   onChange={(e) => setEditGender(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500 cursor-pointer"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary cursor-pointer"
                 >
                   <option value="">-- Select --</option>
                   <option value="Male">Male</option>
@@ -532,7 +532,7 @@ const AdminStudentListsPage = () => {
                   value={editRoll}
                   onChange={(e) => setEditRoll(e.target.value)}
                   disabled={submitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
             </div>
@@ -545,7 +545,7 @@ const AdminStudentListsPage = () => {
                 checked={editActive}
                 onChange={(e) => setEditActive(e.target.checked)}
                 disabled={submitting}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer"
+                className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary cursor-pointer"
               />
               <label htmlFor="editActive" className="text-sm font-semibold text-slate-700 cursor-pointer">
                 Is Active (Student account is allowed system access)
@@ -563,7 +563,7 @@ const AdminStudentListsPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer"
+                className="px-5 py-2 bg-primary hover:bg-primary-dark text-secondary text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer"
               >
                 {submitting ? 'Updating...' : 'Update Student'}
               </button>
@@ -582,7 +582,7 @@ const AdminStudentListsPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading student roster...</span>
           </div>
         ) : students.length === 0 ? (
@@ -623,7 +623,7 @@ const AdminStudentListsPage = () => {
                   <tr key={std.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex flex-col gap-1.5">
-                        <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-xl w-fit">
+                        <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-xl w-fit">
                           {std.registration_number}
                         </span>
                         {std.roll && (
@@ -636,7 +636,7 @@ const AdminStudentListsPage = () => {
 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center font-bold text-sm">
+                        <div className="w-9 h-9 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center font-bold text-sm">
                           {(std.name || 'Unset').substring(0, 2).toUpperCase()}
                         </div>
                         <div>
@@ -645,7 +645,7 @@ const AdminStudentListsPage = () => {
                             {std.gender && (
                               <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded-md ${
                                 std.gender === 'Male'
-                                  ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                  ? 'bg-primary-light text-primary border border-primary-light'
                                   : std.gender === 'Female'
                                   ? 'bg-pink-50 text-pink-600 border border-pink-100'
                                   : 'bg-slate-100 text-slate-600'
@@ -671,7 +671,7 @@ const AdminStudentListsPage = () => {
 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${std.is_registered 
-                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
+                        ? 'bg-primary-light text-primary border border-primary-light' 
                         : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
                         {std.is_registered ? 'Setup Completed' : 'Pending Student Setup'}
                       </span>
@@ -679,8 +679,8 @@ const AdminStudentListsPage = () => {
 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${std.is_active 
-                        ? 'bg-green-50 text-green-600' 
-                        : 'bg-red-50 text-red-600'}`}>
+                        ? 'bg-primary-light text-primary border border-primary-light' 
+                        : 'bg-rose-50 text-rose-600'}`}>
                         {std.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
@@ -688,14 +688,14 @@ const AdminStudentListsPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleStartEdit(std)}
-                        className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Edit Student Allocation"
                       >
                         <FiEdit2 className="text-sm" />
                       </button>
                       <button
                         onClick={() => handleDeleteStudent(std.id, std.registration_number)}
-                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Delete Student"
                       >
                         <FiTrash2 className="text-sm" />

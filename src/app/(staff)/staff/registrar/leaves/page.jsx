@@ -80,7 +80,7 @@ const StaffLeavesPage = () => {
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiCalendar className="text-sky-600 animate-pulse" /> Leave Desk
+          <FiCalendar className="text-primary animate-pulse" /> Leave Desk
         </h1>
         <p className="text-sm text-slate-500">
           File new leave applications and track active approval logs or past leaves status.
@@ -92,7 +92,7 @@ const StaffLeavesPage = () => {
         {/* Application Form */}
         <div className="xl:col-span-2 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.02)]">
           <h2 className="text-sm font-bold text-slate-850 border-b border-slate-100 pb-3 flex items-center gap-1.5 mb-5">
-            <FiPlus className="text-sky-600" /> Apply For Leave
+            <FiPlus className="text-primary" /> Apply For Leave
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -103,7 +103,7 @@ const StaffLeavesPage = () => {
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
               >
                 <option value="Casual Leave">Casual Leave</option>
                 <option value="Sick Leave">Sick Leave</option>
@@ -122,7 +122,7 @@ const StaffLeavesPage = () => {
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
                   required
                 />
               </div>
@@ -135,7 +135,7 @@ const StaffLeavesPage = () => {
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
                   required
                 />
               </div>
@@ -150,7 +150,7 @@ const StaffLeavesPage = () => {
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={4}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500 resize-none"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary resize-none"
                 required
               ></textarea>
             </div>
@@ -158,7 +158,7 @@ const StaffLeavesPage = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 w-full flex items-center justify-center gap-2 py-3 bg-linear-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 disabled:opacity-60 text-white text-xs font-bold rounded-xl shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
+              className="mt-2 w-full flex items-center justify-center gap-2 py-3 bg-linear-to-r bg-primary text-secondary hover:from-sky-600 hover:to-cyan-600 disabled:opacity-60 text-white text-xs font-bold rounded-xl shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
             >
               <span>{submitting ? 'Submitting...' : 'Submit Leave Request'}</span>
             </button>
@@ -173,7 +173,7 @@ const StaffLeavesPage = () => {
 
           {loading ? (
             <div className="w-full py-20 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading leave requests...</span>
             </div>
           ) : leaves.length === 0 ? (
@@ -197,7 +197,7 @@ const StaffLeavesPage = () => {
                         {item.type}
                       </span>
                       <span className={`px-2 py-0.5 text-[9px] font-extrabold rounded-full border ${
-                        item.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                        item.status === 'Approved' ? 'bg-primary-light text-primary border-primary-light' :
                         item.status === 'Rejected' ? 'bg-red-50 text-red-655 border-red-100' :
                         'bg-amber-50 text-amber-600 border-amber-100'
                       }`}>

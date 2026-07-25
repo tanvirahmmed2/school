@@ -10,7 +10,7 @@ const ClassroomFacilities = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-655 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest text-sky-600">
+          <span className="text-xs font-bold text-sky-655 bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest text-primary">
             Study Blocks
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -24,7 +24,7 @@ const ClassroomFacilities = () => {
         {/* Content Box */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col gap-6 text-xs sm:text-sm text-slate-600 leading-relaxed">
           <div className="flex gap-4 sm:gap-6 items-start">
-            <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-primary-light border border-primary-light text-primary flex items-center justify-center shrink-0">
               <FiPlay className="text-lg" />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -44,7 +44,7 @@ const ClassroomFacilities = () => {
           </div>
 
           <div className="flex gap-4 sm:gap-6 items-start border-t border-slate-100 pt-6">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-primary-light border border-primary-light text-primary flex items-center justify-center shrink-0">
               <FiWind className="text-lg" />
             </div>
             <div className="flex flex-col gap-1.5">

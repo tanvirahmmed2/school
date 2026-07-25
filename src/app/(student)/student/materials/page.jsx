@@ -35,7 +35,7 @@ const StudentMaterialsPageContent = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -45,7 +45,7 @@ const StudentMaterialsPageContent = () => {
       {/* Title */}
       <div>
         <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Study Materials</h1>
-        <p className="text-slate-500 text-sm font-medium">Access shared resources, lecture guides, slides, and files for <span className="text-blue-600 font-bold">{subjectName}</span>.</p>
+        <p className="text-slate-500 text-sm font-medium">Access shared resources, lecture guides, slides, and files for <span className="text-primary font-bold">{subjectName}</span>.</p>
       </div>
 
       {materials.length === 0 ? (
@@ -64,7 +64,7 @@ const StudentMaterialsPageContent = () => {
               className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between hover:shadow-md transition-shadow duration-200"
             >
               <div>
-                <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl w-fit mb-4">
+                <div className="p-3 bg-primary-light text-primary rounded-2xl w-fit mb-4">
                   <FiFile className="text-xl" />
                 </div>
                 <h3 className="font-bold text-slate-800 text-base mb-1">{mat.title}</h3>
@@ -79,7 +79,7 @@ const StudentMaterialsPageContent = () => {
                   href={mat.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-light hover:bg-primary-light text-primary rounded-xl text-xs font-bold transition-colors cursor-pointer"
                 >
                   <FiLink />
                   <span>Access File / Link</span>
@@ -97,7 +97,7 @@ const StudentMaterialsPage = () => {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     }>
       <StudentMaterialsPageContent />

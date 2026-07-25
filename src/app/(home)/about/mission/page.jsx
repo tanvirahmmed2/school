@@ -19,19 +19,19 @@ const MissionPage = () => {
       title: 'Practical Curriculum Integration',
       desc: 'Merging classroom theories with immediate laboratory projects. Students learn algorithms by writing real-world systems, and analyze market management through simulations.',
       icon: FiBookOpen,
-      color: 'text-sky-600 bg-sky-50 border-sky-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Holistic Extracurricular Activities',
       desc: 'FIT coordinates active tech clubs, sports tournaments, and cultural events. These activities cultivate leadership, team coordination, and emotional resilience.',
       icon: FiActivity,
-      color: 'text-emerald-600 bg-emerald-50 border-emerald-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Digital Registrar Efficiency',
       desc: 'All processes, including admissions, class schedules, term marks registry, and fee payments, are managed digitally, ensuring zero data loss and absolute transparency.',
       icon: FiTrendingUp,
-      color: 'text-indigo-600 bg-indigo-50 border-indigo-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     }
   ];
 
@@ -57,7 +57,7 @@ const MissionPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
-            <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 border border-sky-100">
+            <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center shrink-0 border border-primary-light">
               <FiGlobe className="text-xl" />
             </div>
             <div className="flex flex-col gap-2">

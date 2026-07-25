@@ -118,7 +118,7 @@ const AdmissionsPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiUsers className="text-blue-600 animate-pulse" /> Student Admission Applications
+            <FiUsers className="text-primary animate-pulse" /> Student Admission Applications
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Review, multi-select, and approve pending applicant admissions.
@@ -127,7 +127,7 @@ const AdmissionsPage = () => {
 
         <Link
           href="/admin/students/admissions/circulars"
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded-xl text-xs transition-colors self-start md:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary-light hover:bg-primary-light text-primary font-bold rounded-xl text-xs transition-colors self-start md:self-auto"
         >
           <FiLayers />
           <span>Manage Circulars</span>
@@ -144,7 +144,7 @@ const AdmissionsPage = () => {
             }}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
               activeTab === 'pending'
-                ? 'border-blue-600 text-blue-600'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -157,7 +157,7 @@ const AdmissionsPage = () => {
             }}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
               activeTab === 'archive'
-                ? 'border-blue-600 text-blue-600'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -191,7 +191,7 @@ const AdmissionsPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading admissions...</span>
           </div>
         ) : activeTab === 'pending' ? (
@@ -216,7 +216,7 @@ const AdmissionsPage = () => {
                           selectedIds.length === pendingAdmissions.length
                         }
                         onChange={handleSelectAll}
-                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        className="rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                       />
                     </th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Applicant / Receipt</th>
@@ -235,7 +235,7 @@ const AdmissionsPage = () => {
                       <tr
                         key={adm.id}
                         className={`transition-colors ${
-                          isSelected ? 'bg-blue-50/40' : 'hover:bg-slate-50/30'
+                          isSelected ? 'bg-primary-light/40' : 'hover:bg-slate-50/30'
                         }`}
                       >
                         <td className="px-4 py-4 text-center">
@@ -243,13 +243,13 @@ const AdmissionsPage = () => {
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => handleSelectOne(adm.id)}
-                            className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                            className="rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                           />
                         </td>
                         <td className="px-6 py-4">
                           <div>
                             <p className="text-sm font-bold text-slate-800">{adm.applicant_name}</p>
-                            <p className="text-[10px] text-blue-600 font-mono font-bold mt-0.5">
+                            <p className="text-[10px] text-primary font-mono font-bold mt-0.5">
                               APP-1000{adm.id}
                             </p>
                             <span className="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5 mt-1">
@@ -265,7 +265,7 @@ const AdmissionsPage = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div>
-                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                               <FiLayers className="text-xs text-blue-400" />
                               Class: {adm.class_name}
                             </span>
@@ -291,7 +291,7 @@ const AdmissionsPage = () => {
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                             hasDocuments
-                              ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                              ? 'bg-primary-light text-primary border-primary-light'
                               : 'bg-slate-50 text-slate-400 border-slate-200'
                           }`}>
                             {hasDocuments ? <FiCheckCircle /> : <FiClock />}
@@ -302,7 +302,7 @@ const AdmissionsPage = () => {
                           <div className="flex items-center justify-end gap-2">
                             <Link
                               href={`/admin/students/admissions/applicant?id=${adm.id}`}
-                              className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all"
+                              className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-all"
                               title="Preview Applicant Info"
                             >
                               <FiSearch className="text-sm" />
@@ -397,7 +397,7 @@ const AdmissionsPage = () => {
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/admin/students/admissions/applicant?id=${adm.id}`}
-                        className="inline-flex p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all"
+                        className="inline-flex p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-all"
                         title="Preview Applicant Info"
                       >
                         <FiSearch className="text-sm" />

@@ -53,7 +53,7 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiFolderPlus className="text-blue-600" /> Add New Section
+        <FiFolderPlus className="text-primary" /> Add New Section
       </h2>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -66,7 +66,7 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
             value={classId}
             onChange={(e) => setClassId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-555 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-555 focus:ring-4 focus:ring-primary/5 bg-slate-50"
           >
             <option value="">Select a class...</option>
             {classes.map((cls) => (
@@ -88,7 +88,7 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-555/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-blue-555/5 bg-slate-50"
           />
         </div>
 
@@ -102,7 +102,7 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-555/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-blue-555/5 bg-slate-50"
           />
         </div>
 
@@ -116,7 +116,7 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
             value={roomNumber}
             onChange={(e) => setRoomNumber(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
           />
         </div>
 
@@ -131,7 +131,7 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
           >
             {submitting ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

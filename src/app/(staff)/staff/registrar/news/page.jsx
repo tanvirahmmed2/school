@@ -52,7 +52,7 @@ const RegistrarNewsPage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Registrar Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -65,7 +65,7 @@ const RegistrarNewsPage = () => {
 
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showAddForm ? (
             <>
@@ -93,7 +93,7 @@ const RegistrarNewsPage = () => {
         <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
           {loading ? (
             <div className="p-12 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-xs font-semibold text-slate-400">Loading published news...</span>
             </div>
           ) : news.length > 0 ? (
@@ -142,7 +142,7 @@ const RegistrarNewsPage = () => {
                           <Link
                             href={`/news/${item.slug}`}
                             target="_blank"
-                            className="inline-flex items-center gap-1 text-sky-600 hover:text-sky-850 text-[11px] font-bold"
+                            className="inline-flex items-center gap-1 text-primary hover:text-sky-850 text-[11px] font-bold"
                           >
                             <span>View</span>
                             <FiExternalLink />

@@ -64,7 +64,7 @@ const AdminEventParticipantsPage = () => {
               </div>
             )}
             <div className="space-y-2 flex-1">
-              <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full w-fit">
+              <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full w-fit">
                 Event Participants Overview
               </span>
               <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -72,15 +72,15 @@ const AdminEventParticipantsPage = () => {
               </h1>
               <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 pt-1">
                 <span className="flex items-center gap-1.5">
-                  <FiCalendar className="text-emerald-600" />
+                  <FiCalendar className="text-primary" />
                   {new Date(event.event_date).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <FiMapPin className="text-emerald-600" />
+                  <FiMapPin className="text-primary" />
                   {event.location}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <FiUsers className="text-emerald-600" />
+                  <FiUsers className="text-primary" />
                   {participants.length} Registered Students
                 </span>
               </div>
@@ -121,10 +121,10 @@ const AdminEventParticipantsPage = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                   {filteredParticipants.map((p, idx) => (
-                    <tr key={p.id || idx} className="hover:bg-emerald-50/30 transition-colors">
+                    <tr key={p.id || idx} className="hover:bg-primary-light/30 transition-colors">
                       <td className="px-6 py-4 font-bold text-slate-400">{idx + 1}</td>
                       <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">
-                        <FiUserCheck className="text-emerald-600 text-sm" />
+                        <FiUserCheck className="text-primary text-sm" />
                         <span>{p.name}</span>
                       </td>
                       <td className="px-6 py-4">

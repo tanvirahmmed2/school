@@ -109,7 +109,7 @@ const CandidateUploadPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -120,7 +120,7 @@ const CandidateUploadPage = () => {
         <FiAlertCircle className="text-4xl text-amber-500 mb-3" />
         <h2 className="text-xl font-bold text-slate-800">Application Record Not Found</h2>
         <p className="text-sm text-slate-500 mt-1">The link may be invalid or expired.</p>
-        <Link href="/" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-sky-600">
+        <Link href="/" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-primary">
           <FiArrowLeft /> Return to Home
         </Link>
       </div>
@@ -140,7 +140,7 @@ const CandidateUploadPage = () => {
         <div className="bg-white rounded-3xl border border-slate-100 p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
           {/* Header */}
           <div className="text-center mb-8 border-b border-slate-100 pb-6">
-            <span className="inline-block text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest mb-2">
+            <span className="inline-block text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest mb-2">
               Applicant Portal
             </span>
             <h1 className="text-2xl font-black text-slate-900 tracking-tight">
@@ -155,7 +155,7 @@ const CandidateUploadPage = () => {
           <div className="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <p className="text-xs text-slate-400 font-medium">Applicant Number</p>
-              <p className="text-base font-extrabold text-sky-600 font-mono">APP-1000{applicant.id}</p>
+              <p className="text-base font-extrabold text-primary font-mono">APP-1000{applicant.id}</p>
               <p className="text-xs font-bold text-slate-800 mt-1">{applicant.applicant_name}</p>
             </div>
             <div className="text-right sm:text-right text-xs">
@@ -270,7 +270,7 @@ const CandidateUploadPage = () => {
               <button
                 type="submit"
                 disabled={uploading}
-                className="w-full mt-2 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl text-xs shadow-xs transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full mt-2 py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl text-xs shadow-xs transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {uploading ? (
                   <>

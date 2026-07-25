@@ -39,7 +39,7 @@ const TeacherHomePage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-primary rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -57,7 +57,7 @@ const TeacherHomePage = () => {
       value: stats?.subjectsCount || 0,
       subText: 'Classes teaching this term',
       icon: FiBookOpen,
-      color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+      color: 'bg-primary-light text-primary border-primary-light',
       link: '/teacher/subjects'
     },
     {
@@ -65,7 +65,7 @@ const TeacherHomePage = () => {
       value: stats?.studentsCount || 0,
       subText: 'Registered class students',
       icon: FiUser,
-      color: 'bg-sky-50 text-sky-600 border-sky-100',
+      color: 'bg-primary-light text-primary border-primary-light',
       link: '/teacher/subjects'
     },
     {
@@ -81,7 +81,7 @@ const TeacherHomePage = () => {
       value: `৳${(stats?.salaryReceived || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subText: 'Total credited amount',
       icon: FiDollarSign,
-      color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+      color: 'bg-primary-light text-primary border-primary-light',
       link: '/teacher/salary'
     }
   ];
@@ -89,23 +89,23 @@ const TeacherHomePage = () => {
   return (
     <div className="flex flex-col gap-8 w-full mx-auto">
       
-      <div className="bg-linear-to-r from-indigo-600 to-violet-700 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-indigo-500/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-primary text-secondary rounded-3xl p-6 md:p-10 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
             {welcomeMessage()}, {profile?.name || 'Teacher'}!
           </h1>
-          <p className="text-indigo-100 text-sm md:text-base font-medium max-w-xl">
+          <p className="text-secondary/90 text-sm md:text-base font-medium max-w-xl">
             Welcome to your portal. Check schedules, track student attendance, and evaluate marks with ease.
           </p>
         </div>
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-50 border border-white/15">
-          <span className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest block mb-1">
+          <span className="text-[10px] font-bold text-secondary/80 uppercase tracking-widest block mb-1">
             Teacher Credentials
           </span>
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-bold text-white">Designation: {profile?.designation || 'N/A'}</span>
-            <span className="text-xs font-semibold text-indigo-100">Email: {profile?.email}</span>
-            <span className="text-xs font-semibold text-indigo-100">Number: {profile?.number}</span>
+            <span className="text-sm font-bold text-secondary">Designation: {profile?.designation || 'N/A'}</span>
+            <span className="text-xs font-semibold text-secondary/90">Email: {profile?.email}</span>
+            <span className="text-xs font-semibold text-secondary/90">Number: {profile?.number}</span>
           </div>
         </div>
       </div>
@@ -140,14 +140,14 @@ const TeacherHomePage = () => {
       {/* Quick Access / Shortcuts */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
         <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiActivity className="text-indigo-650 text-indigo-600" /> Dashboard Shortcuts
+          <FiActivity className="text-primary" /> Dashboard Shortcuts
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link 
             href="/teacher/schedule"
             className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
           >
-            <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600">
+            <div className="p-3 bg-primary-light rounded-xl text-primary">
               <FiClock className="text-xl" />
             </div>
             <div>
@@ -160,7 +160,7 @@ const TeacherHomePage = () => {
             href="/teacher/attendance"
             className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
           >
-            <div className="p-3 bg-sky-50 rounded-xl text-sky-600">
+            <div className="p-3 bg-primary-light rounded-xl text-primary">
               <FiCalendar className="text-xl" />
             </div>
             <div>
@@ -173,7 +173,7 @@ const TeacherHomePage = () => {
             href="/teacher/marks"
             className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
           >
-            <div className="p-3 bg-purple-50 rounded-xl text-purple-600">
+            <div className="p-3 bg-primary-light rounded-xl text-primary">
               <FiAward className="text-xl" />
             </div>
             <div>

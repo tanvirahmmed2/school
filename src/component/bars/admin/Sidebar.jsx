@@ -149,7 +149,7 @@ const Sidebar = () => {
     { label: 'Hostel Fees', href: '/admin/hostels/fees', icon: FiDollarSign },
   ];
 
-  const groupHeaderStyle = "text-[10px] font-bold text-emerald-100 uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-90 mt-2";
+  const groupHeaderStyle = "text-[10px] font-bold text-secondary uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-90 mt-2";
 
   const CollapsibleGroup = ({ label, icon: CategoryIcon, isOpen, setIsOpen, prefix, links }) => (
     <div className="flex flex-col gap-1">
@@ -157,8 +157,8 @@ const Sidebar = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
           pathname.startsWith(prefix)
-            ? 'bg-emerald-600 text-white font-bold'
-            : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+            ? 'bg-primary text-white font-bold'
+            : 'text-white/90 hover:bg-primary-dark hover:text-white'
         }`}
       >
         <div className="flex items-center gap-3">
@@ -185,8 +185,8 @@ const Sidebar = () => {
                 onClick={() => setAdminSidebar(false)}
                 className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
                   isActive
-                    ? 'text-white font-bold bg-emerald-600'
-                    : 'text-white/80 hover:text-white hover:bg-emerald-600/50'
+                    ? 'text-white font-bold bg-primary-dark'
+                    : 'text-white/80 hover:text-white hover:bg-primary-dark/60'
                 }`}
               >
                 <Icon className="text-sm text-white" />
@@ -212,8 +212,8 @@ const Sidebar = () => {
             onClick={() => setAdminSidebar(false)}
             className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 relative ${
               isActive
-                ? 'bg-emerald-600 text-white font-bold pl-2.5'
-                : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                ? 'bg-primary-dark text-white font-bold pl-2.5'
+                : 'text-white/90 hover:bg-primary-dark hover:text-white'
             }`}
           >
             <Icon className="text-base text-white" />
@@ -235,7 +235,7 @@ const Sidebar = () => {
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-emerald-500 text-white z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-300 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-primary text-secondary z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-300 ease-in-out md:translate-x-0 overflow-y-auto ${
           adminSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -299,7 +299,7 @@ const Sidebar = () => {
           <Link
             href="/"
             onClick={() => setAdminSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-dark hover:bg-primary-dark text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

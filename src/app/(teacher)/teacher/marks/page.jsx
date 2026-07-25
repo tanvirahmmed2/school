@@ -167,7 +167,7 @@ const MarksEntryPage = () => {
             value={examId}
             onChange={(e) => setExamId(e.target.value)}
             disabled={loadingDropdowns}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
           >
             <option value="">-- Choose Exam --</option>
             {exams.map((e) => (
@@ -185,7 +185,7 @@ const MarksEntryPage = () => {
               setSubjectId('');
             }}
             disabled={loadingDropdowns}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
           >
             <option value="">-- Choose Class --</option>
             {classes.map((c) => (
@@ -200,7 +200,7 @@ const MarksEntryPage = () => {
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
             disabled={!classId}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
           >
             <option value="">-- All Sections --</option>
             {sections.map((s) => (
@@ -215,7 +215,7 @@ const MarksEntryPage = () => {
             value={subjectId}
             onChange={(e) => setSubjectId(e.target.value)}
             disabled={!classId}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
           >
             <option value="">-- Choose Subject --</option>
             {filteredSubjects.map((s) => (
@@ -227,7 +227,7 @@ const MarksEntryPage = () => {
         <button
           onClick={handleLoadStudents}
           disabled={!examId || !classId || !subjectId || loadingStudents}
-          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer h-[46px]"
+          className="px-6 py-3 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer h-[46px]"
         >
           {loadingStudents ? 'Loading...' : 'Load Students'}
         </button>
@@ -249,7 +249,7 @@ const MarksEntryPage = () => {
             <button
               onClick={handleSaveMarks}
               disabled={saving}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
             >
               <FiSave className="text-sm" />
               <span>{saving ? 'Saving...' : 'Save Marks'}</span>
@@ -280,7 +280,7 @@ const MarksEntryPage = () => {
                         value={s.marks_obtained !== null && s.marks_obtained !== undefined ? s.marks_obtained : ''}
                         onChange={(e) => handleMarkChange(s.student_id, e.target.value)}
                         placeholder="e.g. 85"
-                        className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+                        className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-700 outline-none focus:border-primary transition-colors"
                       />
                     </td>
                     <td className="py-4 text-center">
@@ -290,7 +290,7 @@ const MarksEntryPage = () => {
                         value={s.total_marks !== null && s.total_marks !== undefined ? s.total_marks : 100}
                         onChange={(e) => handleTotalMarkChange(s.student_id, e.target.value)}
                         placeholder="e.g. 100"
-                        className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-400 outline-none focus:border-indigo-500 transition-colors"
+                        className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-400 outline-none focus:border-primary transition-colors"
                       />
                     </td>
                     <td className="py-4">
@@ -299,7 +299,7 @@ const MarksEntryPage = () => {
                         value={s.remarks || ''}
                         onChange={(e) => handleRemarksChange(s.student_id, e.target.value)}
                         placeholder="e.g. Excellent work"
-                        className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+                        className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                       />
                     </td>
                   </tr>

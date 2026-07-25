@@ -25,7 +25,7 @@ const CollaborationsPage = () => {
   }, []);
 
   const gradients = [
-    'from-purple-500 to-indigo-600',
+    'bg-primary text-secondary',
     'from-blue-500 to-sky-650',
     'from-orange-500 to-amber-600',
     'from-emerald-500 to-teal-650',
@@ -36,7 +36,7 @@ const CollaborationsPage = () => {
       <div className="mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Global Network
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -50,7 +50,7 @@ const CollaborationsPage = () => {
         {/* Dynamic Partner Grid */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-xs font-semibold text-slate-400">Loading collaborations...</span>
           </div>
         ) : partners.length > 0 ? (
@@ -60,10 +60,10 @@ const CollaborationsPage = () => {
               return (
                 <div
                   key={partner.id}
-                  className="bg-white rounded-3xl border border-slate-100 hover:border-sky-100 hover:shadow-lg transition-all duration-300 p-8 flex flex-col justify-between group relative overflow-hidden"
+                  className="bg-white rounded-3xl border border-slate-100 hover:border-primary-light hover:shadow-lg transition-all duration-300 p-8 flex flex-col justify-between group relative overflow-hidden"
                 >
                   {/* Visual gradient accent on hover */}
-                  <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${color} opacity-80`}></div>
+                  <div className={`absolute top-0 left-0 w-2 h-full bg-primary ${color} opacity-80`}></div>
 
                   <div className="flex gap-5 items-start pl-2">
                     {partner.logo ? (
@@ -71,7 +71,7 @@ const CollaborationsPage = () => {
                         <img src={partner.logo} alt={partner.institution_name} className="max-w-full max-h-full object-contain" />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                      <div className="w-16 h-16 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-2xl shrink-0 shadow-inner group-hover:scale-105 transition-transform">
                         <FiBriefcase />
                       </div>
                     )}
@@ -79,7 +79,7 @@ const CollaborationsPage = () => {
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                         Academic Partner
                       </span>
-                      <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-sky-600 transition-colors">
+                      <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-primary transition-colors">
                         {partner.institution_name}
                       </h3>
                       
@@ -106,13 +106,13 @@ const CollaborationsPage = () => {
         )}
 
         {/* Global Network Section */}
-        <div className="bg-gradient-to-tr from-slate-900 to-sky-950 text-white rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 relative overflow-hidden shadow-xl">
+        <div className="bg-primaryr from-slate-900 to-sky-950 text-white rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 relative overflow-hidden shadow-xl">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent"></div>
           <div className="flex flex-col gap-3 relative z-10">
             <h2 className="text-xl md:text-2xl font-black tracking-tight">
               Interested in Partnering with FIT?
             </h2>
-            <p className="text-sky-200 text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
+            <p className="text-secondary text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
               We are constantly seeking innovative researchers, corporate trainers, and universities to join our collaborative networks. Contact our external relations office to initiate joint ventures.
             </p>
           </div>

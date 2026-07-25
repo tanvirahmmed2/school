@@ -121,7 +121,7 @@ export default function AuthoritiesListPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-            <FiUsers className="text-blue-600" /> Governing Board Registry
+            <FiUsers className="text-primary" /> Governing Board Registry
           </h1>
           <p className="text-sm text-slate-500 font-medium">
             Manage institutional administration members, bios, contact details, and qualifications.
@@ -130,7 +130,7 @@ export default function AuthoritiesListPage() {
         <div>
           <Link
             href="/admin/authorities/new"
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-[0_4px_12px_rgba(37,99,235,0.15)] flex items-center gap-2"
+            className="px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-[0_4px_12px_rgba(37,99,235,0.15)] flex items-center gap-2"
           >
             <FiPlus className="text-sm" /> Add Member
           </Link>
@@ -140,7 +140,7 @@ export default function AuthoritiesListPage() {
       {/* Grid Roster */}
       {loading ? (
         <div className="w-full py-20 flex flex-col items-center justify-center gap-3 bg-white border border-slate-100 rounded-3xl">
-          <div className="w-10 h-10 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           <span className="text-sm font-semibold text-slate-400">Loading roster files...</span>
         </div>
       ) : members.length === 0 ? (
@@ -151,7 +151,7 @@ export default function AuthoritiesListPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {members.map(m => (
-            <div key={m.id} className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col h-full hover:border-blue-200 transition-all duration-200 group">
+            <div key={m.id} className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col h-full hover:border-primary-light transition-all duration-200 group">
               {/* Photo & Identity */}
               <div className="p-6 pb-4 flex items-center gap-4 border-b border-slate-50">
                 <div className="w-16 h-16 rounded-full overflow-hidden border border-slate-150 bg-slate-50 shrink-0 shadow-sm flex items-center justify-center text-slate-400">
@@ -162,7 +162,7 @@ export default function AuthoritiesListPage() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-slate-800 text-sm truncate group-hover:text-blue-600 transition-colors">{m.name}</h3>
+                  <h3 className="font-bold text-slate-800 text-sm truncate group-hover:text-primary transition-colors">{m.name}</h3>
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100/50 mt-1 capitalize">
                     {m.designation_title || DESIGNATION_LABELS[m.designation] || m.designation}
                   </span>
@@ -261,7 +261,7 @@ export default function AuthoritiesListPage() {
                       name="name"
                       value={editingMember.name}
                       onChange={handleEditChange}
-                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-primary outline-none"
                       required
                     />
                   </div>
@@ -273,7 +273,7 @@ export default function AuthoritiesListPage() {
                       name="designation"
                       value={editingMember.designation_id || editingMember.designation}
                       onChange={handleEditChange}
-                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 outline-none font-semibold"
+                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-primary outline-none font-semibold"
                       required
                     >
                       {designations && designations.length > 0 ? (
@@ -296,7 +296,7 @@ export default function AuthoritiesListPage() {
                       name="email"
                       value={editingMember.email || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-primary outline-none"
                     />
                   </div>
 
@@ -308,7 +308,7 @@ export default function AuthoritiesListPage() {
                       name="contact"
                       value={editingMember.contact || ''}
                       onChange={handleEditChange}
-                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-primary outline-none"
                     />
                   </div>
                 </div>
@@ -322,7 +322,7 @@ export default function AuthoritiesListPage() {
                   value={editingMember.bio || ''}
                   onChange={handleEditChange}
                   rows={3}
-                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 outline-none resize-none"
+                  className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm text-slate-800 focus:border-primary outline-none resize-none"
                 />
               </div>
 
@@ -338,7 +338,7 @@ export default function AuthoritiesListPage() {
                 <button
                   type="submit"
                   disabled={saveLoading}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:bg-blue-400 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-sm"
                 >
                   {saveLoading ? (
                     <>

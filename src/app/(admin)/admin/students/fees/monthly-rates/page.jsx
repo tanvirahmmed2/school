@@ -110,7 +110,7 @@ const MonthlyRatesPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-          <FiDollarSign className="text-blue-600" /> Class Tuition Fee Rates
+          <FiDollarSign className="text-primary" /> Class Tuition Fee Rates
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Configure the base monthly tuition fee amount assigned to students of each academic class level.
@@ -122,7 +122,7 @@ const MonthlyRatesPage = () => {
         <div className="md:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] overflow-hidden">
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-xs font-semibold text-slate-400">Loading classes rates...</span>
             </div>
           ) : (
@@ -139,7 +139,7 @@ const MonthlyRatesPage = () => {
                   {fees.map((item) => (
                     <tr key={item.class_id} className="hover:bg-slate-50/40 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                           <FiLayers className="text-blue-400 text-xs" />
                           {item.class_name}
                         </span>
@@ -206,7 +206,7 @@ const MonthlyRatesPage = () => {
                     placeholder="e.g. 1500.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
 
@@ -221,7 +221,7 @@ const MonthlyRatesPage = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all cursor-pointer disabled:opacity-60"
+                    className="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-bold rounded-xl transition-all cursor-pointer disabled:opacity-60"
                   >
                     {submitting ? 'Saving...' : 'Save Rate'}
                   </button>

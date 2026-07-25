@@ -73,7 +73,7 @@ const EventDetailPage = () => {
     return (
       <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-slate-500 text-xs font-semibold">Loading event details...</p>
         </div>
       </div>
@@ -89,7 +89,7 @@ const EventDetailPage = () => {
           <p className="text-slate-500 text-xs">The requested event could not be found or has been removed.</p>
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl transition-all"
           >
             <FiArrowLeft /> Back to Events
           </Link>
@@ -128,7 +128,7 @@ const EventDetailPage = () => {
 
           <div className="p-6 md:p-10 space-y-6">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider w-fit">
+              <div className="flex items-center gap-2 text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-wider w-fit">
                 <FiCalendar /> Institutional Event
               </div>
 
@@ -139,15 +139,15 @@ const EventDetailPage = () => {
               {/* Event Metadata Banner */}
               <div className="flex flex-wrap gap-6 items-center bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs font-bold text-slate-700">
                 <span className="flex items-center gap-2">
-                  <FiCalendar className="text-emerald-600 text-base" />
+                  <FiCalendar className="text-primary text-base" />
                   {eventDate.toLocaleDateString(undefined, { dateStyle: 'full' })}
                 </span>
                 <span className="flex items-center gap-2">
-                  <FiClock className="text-emerald-600 text-base" />
+                  <FiClock className="text-primary text-base" />
                   {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
                 </span>
                 <span className="flex items-center gap-2">
-                  <FiMapPin className="text-emerald-600 text-base" />
+                  <FiMapPin className="text-primary text-base" />
                   {event.location}
                 </span>
               </div>
@@ -160,7 +160,7 @@ const EventDetailPage = () => {
 
             {/* Student Participation CTA */}
             {isStudentUser && (
-              <div className="p-6 bg-emerald-50/60 border border-emerald-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
+              <div className="p-6 bg-primary-light/60 border border-primary-light rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
                 <div>
                   <h3 className="font-bold text-slate-900 text-sm">
                     {isJoined ? 'You are registered for this event!' : 'Interested in participating?'}
@@ -175,7 +175,7 @@ const EventDetailPage = () => {
                   className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isJoined
                       ? 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'
-                      : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
+                      : 'bg-primary hover:bg-primary-dark text-white shadow-sm'
                   } disabled:opacity-50`}
                 >
                   {actionLoading ? (

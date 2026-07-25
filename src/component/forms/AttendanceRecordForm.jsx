@@ -208,15 +208,15 @@ const AttendanceRecordForm = () => {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
           />
         </div>
 
         {/* Day badge */}
         {dayName && (
-          <div className="flex items-center gap-2 px-4 py-3 bg-indigo-50 border border-indigo-100 rounded-2xl shrink-0">
-            <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Day</span>
-            <span className="text-sm font-extrabold text-indigo-700">{dayName}</span>
+          <div className="flex items-center gap-2 px-4 py-3 bg-primary-light border border-primary-light rounded-2xl shrink-0">
+            <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Day</span>
+            <span className="text-sm font-extrabold text-primary">{dayName}</span>
           </div>
         )}
 
@@ -229,7 +229,7 @@ const AttendanceRecordForm = () => {
             value={selectedSlot ? slotKey(selectedSlot) : ''}
             onChange={handleSlotChange}
             disabled={loadingSlots || slots.length === 0}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors disabled:opacity-60"
+            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors disabled:opacity-60"
           >
             <option value="">
               {loadingSlots
@@ -255,7 +255,7 @@ const AttendanceRecordForm = () => {
         <button
           onClick={handleLoadSheet}
           disabled={!selectedSlot || loadingStudents}
-          className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white disabled:bg-slate-100 disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer whitespace-nowrap"
+          className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-dark text-secondary disabled:bg-slate-100 disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md transition-all cursor-pointer whitespace-nowrap"
         >
           <FiRefreshCw className={`text-sm ${loadingStudents ? 'animate-spin' : ''}`} />
           <span>{loadingStudents ? 'Loading...' : 'Load Sheet'}</span>
@@ -265,7 +265,7 @@ const AttendanceRecordForm = () => {
       {/* Selected slot info */}
       {selectedSlot && (
         <div className="flex flex-wrap gap-2.5 -mt-4">
-          <span className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-[11px] font-bold rounded-xl border border-indigo-100">
+          <span className="px-3 py-1.5 bg-primary-light text-primary text-[11px] font-bold rounded-xl border border-primary-light">
             📚 {selectedSlot.subject_name} ({selectedSlot.subject_code})
           </span>
           <span className="px-3 py-1.5 bg-slate-50 text-slate-600 text-[11px] font-bold rounded-xl border border-slate-100">
@@ -283,10 +283,10 @@ const AttendanceRecordForm = () => {
 
       {/* Save Result Banner */}
       {saveResult?.success && (
-        <div className="flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-          <FiCheckCircle className="text-emerald-600 text-xl shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-4 bg-primary-light border border-primary-light rounded-2xl">
+          <FiCheckCircle className="text-primary text-xl shrink-0 mt-0.5" />
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-bold text-emerald-800">{saveResult.message}</span>
+            <span className="text-sm font-bold text-primary">{saveResult.message}</span>
             {saveResult.data?.errors?.length > 0 && (
               <ul className="mt-1 flex flex-col gap-0.5">
                 {saveResult.data.errors.map((e, i) => (
@@ -307,7 +307,7 @@ const AttendanceRecordForm = () => {
           <h3 className="font-bold text-slate-800 text-base mb-1">No Attendance Sheet Loaded</h3>
           <p className="text-slate-400 text-xs font-medium max-w-xs">
             Select a date and one of your scheduled period slots, then click{' '}
-            <span className="font-bold text-indigo-600">Load Sheet</span> to start marking attendance.
+            <span className="font-bold text-primary">Load Sheet</span> to start marking attendance.
           </p>
         </div>
       ) : (
@@ -319,7 +319,7 @@ const AttendanceRecordForm = () => {
                 Roll Call — {students.length} Students
               </h2>
               <div className="flex gap-2 mt-1.5 flex-wrap">
-                <span className="text-[11px] font-bold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg border border-emerald-100">
+                <span className="text-[11px] font-bold px-2.5 py-1 bg-primary-light text-primary rounded-lg border border-primary-light">
                   ✓ Present: {presentCount}
                 </span>
                 <span className="text-[11px] font-bold px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg border border-rose-100">
@@ -340,7 +340,7 @@ const AttendanceRecordForm = () => {
                   onClick={() => markAll(s)}
                   className={`px-3 py-1.5 border rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     s === 'Present'
-                      ? 'border-emerald-200 text-emerald-600 hover:bg-emerald-50'
+                      ? 'border-primary-light text-primary hover:bg-primary-light'
                       : s === 'Absent'
                       ? 'border-rose-200 text-rose-600 hover:bg-rose-50'
                       : 'border-amber-200 text-amber-600 hover:bg-amber-50'
@@ -352,7 +352,7 @@ const AttendanceRecordForm = () => {
               <button
                 onClick={handleSaveAttendance}
                 disabled={saving}
-                className="flex items-center gap-1.5 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
+                className="flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-secondary disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md cursor-pointer"
               >
                 <FiSave className="text-sm" />
                 <span>{saving ? 'Saving...' : 'Save Attendance'}</span>
@@ -393,12 +393,12 @@ const AttendanceRecordForm = () => {
                           if (isSelected) {
                             if (status === 'Present')
                               theme =
-                                'bg-emerald-600 border-emerald-600 text-white shadow-sm shadow-emerald-200';
+                                'bg-primary border-primary text-secondary shadow-xs';
                             if (status === 'Absent')
-                              theme = 'bg-rose-600 border-rose-600 text-white shadow-sm shadow-rose-200';
+                              theme = 'bg-rose-600 border-rose-600 text-white shadow-xs';
                             if (status === 'Late')
                               theme =
-                                'bg-amber-500 border-amber-500 text-white shadow-sm shadow-amber-200';
+                                'bg-amber-500 border-amber-500 text-white shadow-xs';
                           }
                           return (
                             <button
@@ -418,7 +418,7 @@ const AttendanceRecordForm = () => {
                         value={student.remarks || ''}
                         onChange={(e) => handleRemarksChange(student.student_id, e.target.value)}
                         placeholder="Optional note..."
-                        className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+                        className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                       />
                     </td>
                   </tr>
@@ -432,7 +432,7 @@ const AttendanceRecordForm = () => {
             <button
               onClick={handleSaveAttendance}
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
+              className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-secondary disabled:text-slate-400 rounded-2xl text-sm font-bold transition-all shadow-md cursor-pointer"
             >
               <FiSave className="text-sm" />
               <span>{saving ? 'Saving...' : 'Save All Attendance Records'}</span>

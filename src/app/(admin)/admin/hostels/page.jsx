@@ -208,7 +208,7 @@ const AdminHostelsPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiHome className="text-sky-600" /> Hostels & Residential Housing
+          <FiHome className="text-primary" /> Hostels & Residential Housing
         </h1>
         <p className="text-sm text-slate-500">
           Manage campus hostels, residential infrastructure, and assign faculty provosts.
@@ -221,7 +221,7 @@ const AdminHostelsPage = () => {
           onClick={() => setActiveTab('hostels')}
           className={`px-5 py-2.5 font-semibold text-sm transition-all border-b-2 cursor-pointer ${
             activeTab === 'hostels'
-              ? 'border-sky-600 text-sky-655 text-sky-600 font-bold'
+              ? 'border-primary text-sky-655 text-primary font-bold'
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
@@ -231,7 +231,7 @@ const AdminHostelsPage = () => {
           onClick={() => setActiveTab('provosts')}
           className={`px-5 py-2.5 font-semibold text-sm transition-all border-b-2 cursor-pointer ${
             activeTab === 'provosts'
-              ? 'border-sky-600 text-sky-655 text-sky-600 font-bold'
+              ? 'border-primary text-sky-655 text-primary font-bold'
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
@@ -244,7 +244,7 @@ const AdminHostelsPage = () => {
           {/* Hostel Form */}
           <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
             <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <FiPlus className="text-sky-600" /> 
+              <FiPlus className="text-primary" /> 
               {editId ? 'Modify Hostel Details' : 'Register New Hostel'}
             </h2>
 
@@ -260,7 +260,7 @@ const AdminHostelsPage = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -275,7 +275,7 @@ const AdminHostelsPage = () => {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -289,7 +289,7 @@ const AdminHostelsPage = () => {
                   value={totalRoom}
                   onChange={(e) => setTotalRoom(e.target.value)}
                   disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -301,7 +301,7 @@ const AdminHostelsPage = () => {
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="Male">Male Only</option>
                   <option value="Female">Female Only</option>
@@ -330,7 +330,7 @@ const AdminHostelsPage = () => {
                     accept="image/*"
                     disabled={submittingHostel}
                     onChange={handleImageChange}
-                    className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer w-full"
+                    className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer w-full"
                   />
                   {imagePreview && (
                     <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
@@ -361,7 +361,7 @@ const AdminHostelsPage = () => {
                   type="submit"
                   disabled={submittingHostel}
                   className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                    editId ? 'bg-sky-600 hover:bg-sky-750 w-1/2 bg-sky-600' : 'bg-sky-650 hover:bg-sky-700 w-full bg-sky-600'
+                    editId ? 'bg-primary hover:bg-sky-750 w-1/2 bg-primary' : 'bg-sky-650 hover:bg-primary-dark w-full bg-primary'
                   } disabled:opacity-50`}
                 >
                   {submittingHostel ? (
@@ -386,7 +386,7 @@ const AdminHostelsPage = () => {
 
             {loadingHostels ? (
               <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-                <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-sm font-semibold text-slate-400">Loading hostels registry...</span>
               </div>
             ) : hostels.length === 0 ? (
@@ -428,7 +428,7 @@ const AdminHostelsPage = () => {
                                 <span>{hostel.name}</span>
                                 <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded-md ${
                                   hostel.gender === 'Male'
-                                    ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                    ? 'bg-primary-light text-primary border border-primary-light'
                                     : hostel.gender === 'Female'
                                     ? 'bg-pink-50 text-pink-600 border border-pink-100'
                                     : 'bg-slate-100 text-slate-655 text-slate-600'
@@ -452,7 +452,7 @@ const AdminHostelsPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                           <button
                             onClick={() => handleEditClick(hostel)}
-                            className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors cursor-pointer"
+                            className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
                             title="Edit Hostel"
                           >
                             <FiEdit className="text-sm" />
@@ -478,7 +478,7 @@ const AdminHostelsPage = () => {
           {/* Provost Assignment Form */}
           <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
             <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <FiPlus className="text-sky-600" /> Assign Provost
+              <FiPlus className="text-primary" /> Assign Provost
             </h2>
 
             <form onSubmit={handleProvostSubmit} className="flex flex-col gap-4">
@@ -491,7 +491,7 @@ const AdminHostelsPage = () => {
                   value={selectedHostelId}
                   onChange={(e) => setSelectedHostelId(e.target.value)}
                   disabled={submittingProvost}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="">-- Choose Hostel --</option>
                   {hostels.map(h => (
@@ -509,7 +509,7 @@ const AdminHostelsPage = () => {
                   value={selectedTeacherId}
                   onChange={(e) => setSelectedTeacherId(e.target.value)}
                   disabled={submittingProvost}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="">-- Choose Faculty Member --</option>
                   {teachers.map(t => (
@@ -521,7 +521,7 @@ const AdminHostelsPage = () => {
               <button
                 type="submit"
                 disabled={submittingProvost}
-                className="py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer bg-sky-600 hover:bg-sky-700 w-full disabled:opacity-50 mt-2"
+                className="py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer bg-primary hover:bg-primary-dark w-full disabled:opacity-50 mt-2"
               >
                 {submittingProvost ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -542,7 +542,7 @@ const AdminHostelsPage = () => {
 
             {loadingProvosts ? (
               <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-                <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-sm font-semibold text-slate-400">Loading provost mappings...</span>
               </div>
             ) : provosts.length === 0 ? (

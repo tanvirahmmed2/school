@@ -38,7 +38,7 @@ const RecognitionDetailPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50/50">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -53,7 +53,7 @@ const RecognitionDetailPage = () => {
         <p className="text-slate-500 text-sm mt-2">This recognition may have been removed or the link is invalid.</p>
         <Link
           href="/"
-          className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-sky-600 hover:text-sky-800 transition-colors"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-primary transition-colors"
         >
           <FiArrowLeft />
           Back to Home
@@ -86,7 +86,7 @@ const RecognitionDetailPage = () => {
               />
             </div>
           ) : (
-            <div className="w-full h-48 bg-gradient-to-br from-amber-50 to-sky-50 flex items-center justify-center">
+            <div className="w-full h-48 bg-primaryr from-amber-50 to-sky-50 flex items-center justify-center">
               <FiAward className="text-6xl text-amber-300" />
             </div>
           )}
@@ -106,11 +106,11 @@ const RecognitionDetailPage = () => {
             {/* Meta */}
             <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 mb-6">
               <span className="flex items-center gap-1.5">
-                <FiUser className="text-sky-500" />
+                <FiUser className="text-primary" />
                 Awarded by <strong className="text-slate-700 ml-1">{recognition.awarded_by}</strong>
               </span>
               <span className="flex items-center gap-1.5">
-                <FiCalendar className="text-sky-500" />
+                <FiCalendar className="text-primary" />
                 {new Date(recognition.date).toLocaleDateString(undefined, {
                   year: 'numeric',
                   month: 'long',

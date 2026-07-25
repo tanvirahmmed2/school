@@ -154,11 +154,11 @@ const RegistrarClassRoutinePage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Registrar Panel
           </span>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2 mt-2">
-            <FiClock className="text-blue-600" /> Class Routine Management
+            <FiClock className="text-primary" /> Class Routine Management
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Configure weekday timetable routine schedules for classes and sections.
@@ -170,7 +170,7 @@ const RegistrarClassRoutinePage = () => {
             setShowAddForm(!showAddForm);
             setEditingRoutine(null);
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showAddForm ? (
             <>
@@ -196,7 +196,7 @@ const RegistrarClassRoutinePage = () => {
               onClick={() => handleToggleDayStatus(day.id, day.status)}
               className={`px-4 py-2 text-xs font-semibold rounded-xl border transition-all duration-200 cursor-pointer ${
                 day.status === 'on'
-                  ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-100'
+                  ? 'bg-primary-light hover:bg-primary-light text-primary border-primary-light'
                   : 'bg-rose-50 hover:bg-rose-100 text-rose-700 border-rose-100 line-through'
               }`}
             >
@@ -215,7 +215,7 @@ const RegistrarClassRoutinePage = () => {
           <select
             value={selectedClassId}
             onChange={(e) => setSelectedClassId(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 cursor-pointer"
           >
             <option value="">Select a class...</option>
             {classes.map((cls) => (
@@ -234,7 +234,7 @@ const RegistrarClassRoutinePage = () => {
             value={selectedSectionId}
             onChange={(e) => setSelectedSectionId(e.target.value)}
             disabled={!selectedClassId}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer disabled:opacity-60"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 cursor-pointer disabled:opacity-60"
           >
             <option value="">All Sections / Class-Wide</option>
             {sections.map((sec) => (
@@ -286,7 +286,7 @@ const RegistrarClassRoutinePage = () => {
           </div>
         ) : loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading schedule routines...</span>
           </div>
         ) : routines.length === 0 ? (
@@ -308,7 +308,7 @@ const RegistrarClassRoutinePage = () => {
                 <div key={day.id} className="flex flex-col md:flex-row gap-4 border-b border-slate-100/70 pb-5 last:border-0 last:pb-0">
                   {/* Day column label */}
                   <div className="w-full md:w-32 flex-shrink-0 flex flex-col gap-1 justify-center">
-                    <span className={`inline-flex items-center justify-center px-3 py-1.5 font-bold text-sm rounded-xl ${isOff ? 'bg-slate-100 text-slate-400 line-through' : 'bg-blue-50 text-blue-600'}`}>
+                    <span className={`inline-flex items-center justify-center px-3 py-1.5 font-bold text-sm rounded-xl ${isOff ? 'bg-slate-100 text-slate-400 line-through' : 'bg-primary-light text-primary'}`}>
                       {day.name}
                     </span>
                     {isOff && (
@@ -332,7 +332,7 @@ const RegistrarClassRoutinePage = () => {
                           <div className="absolute top-3 right-3 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                             <button
                               onClick={() => handleStartEdit(slot)}
-                              className="p-1.5 bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-100 rounded-lg shadow-xs transition-colors duration-150 cursor-pointer"
+                              className="p-1.5 bg-white hover:bg-primary-light text-slate-500 hover:text-primary border border-slate-100 rounded-lg shadow-xs transition-colors duration-150 cursor-pointer"
                               title="Edit Slot"
                             >
                               <FiEdit2 className="text-xs" />
@@ -349,13 +349,13 @@ const RegistrarClassRoutinePage = () => {
                           <div>
                             {/* Subject Code & Name */}
                             <div className="flex flex-wrap items-center gap-1.5">
-                              <span className="text-[10px] font-bold text-blue-600 bg-blue-50/50 border border-blue-100 px-2 py-0.5 rounded-md">
+                              <span className="text-[10px] font-bold text-primary bg-primary-light/50 border border-primary-light px-2 py-0.5 rounded-md">
                                 {slot.subject_code}
                               </span>
                               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
                                 slot.section_name 
-                                  ? 'text-purple-600 bg-purple-50/50 border-purple-100' 
-                                  : 'text-emerald-600 bg-emerald-50/50 border-emerald-100'
+                                  ? 'text-primary bg-primary-light/50 border-primary-light' 
+                                  : 'text-primary bg-primary-light/50 border-primary-light'
                               }`}>
                                 {slot.section_name ? `Sec ${slot.section_name}` : 'Class-Wide'}
                               </span>

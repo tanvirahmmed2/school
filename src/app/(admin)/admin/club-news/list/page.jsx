@@ -30,7 +30,7 @@ const ClubNewsListPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -39,7 +39,7 @@ const ClubNewsListPage = () => {
         </div>
         <Link
           href="/admin/club-news/new"
-          className="inline-flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs transition-colors"
+          className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs transition-colors"
         >
           <FiPlus />
           <span>Write Club News</span>
@@ -50,7 +50,7 @@ const ClubNewsListPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-xs font-semibold text-slate-400">Loading club announcements...</span>
           </div>
         ) : clubNews.length > 0 ? (
@@ -79,7 +79,7 @@ const ClubNewsListPage = () => {
                       )}
                     </td>
                     <td className="p-4">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-sky-600 bg-sky-50 px-2 py-0.5 rounded uppercase tracking-wider">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-primary bg-primary-light px-2 py-0.5 rounded uppercase tracking-wider">
                         <FiUsers className="text-xs" />
                         {item.club_name}
                       </span>

@@ -7,7 +7,7 @@ import { FiCalendar, FiSearch, FiLayers, FiChevronDown, FiRefreshCw } from 'reac
 const statusBadge = (status) => {
   if (status === 'Present')
     return (
-      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+      <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
         Present
       </span>
     );
@@ -152,7 +152,7 @@ const AttendanceViewPage = () => {
               type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
             />
           </div>
 
@@ -162,7 +162,7 @@ const AttendanceViewPage = () => {
             <select
               value={filterClassId}
               onChange={(e) => setFilterClassId(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
             >
               <option value="">— All Classes —</option>
               {classOptions.map((c) => (
@@ -177,7 +177,7 @@ const AttendanceViewPage = () => {
             <select
               value={filterSubjectId}
               onChange={(e) => setFilterSubjectId(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
             >
               <option value="">— All Subjects —</option>
               {subjectOptions.map((s) => (
@@ -192,7 +192,7 @@ const AttendanceViewPage = () => {
             <select
               value={filterPeriodId}
               onChange={(e) => setFilterPeriodId(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
             >
               <option value="">— All Periods —</option>
               {periodOptions.map((p) => (
@@ -206,7 +206,7 @@ const AttendanceViewPage = () => {
           <button
             onClick={fetchRecords}
             disabled={loading}
-            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 disabled:text-slate-400 text-white rounded-2xl text-xs font-bold shadow-md shadow-indigo-500/10 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 disabled:text-slate-400 text-white rounded-2xl text-xs font-bold shadow-md shadow-indigo-500/10 transition-all cursor-pointer"
           >
             <FiSearch className={`text-sm ${loading ? 'animate-spin' : ''}`} />
             <span>{loading ? 'Searching...' : 'Search Records'}</span>
@@ -234,9 +234,9 @@ const AttendanceViewPage = () => {
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total</p>
             <p className="text-2xl font-black text-slate-800">{records.length}</p>
           </div>
-          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-center">
-            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">Present</p>
-            <p className="text-2xl font-black text-emerald-700">{presentCount}</p>
+          <div className="bg-primary-light border border-primary-light rounded-2xl p-4 text-center">
+            <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Present</p>
+            <p className="text-2xl font-black text-primary">{presentCount}</p>
           </div>
           <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-center">
             <p className="text-[10px] font-bold text-rose-500 uppercase tracking-wider mb-1">Absent</p>
@@ -249,7 +249,7 @@ const AttendanceViewPage = () => {
       {loading ? (
         <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center">
           <div className="inline-flex flex-col items-center gap-3">
-            <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
             <p className="text-sm font-semibold text-slate-500">Loading records...</p>
           </div>
         </div>
@@ -261,7 +261,7 @@ const AttendanceViewPage = () => {
           <h3 className="font-bold text-slate-800 text-base mb-1">No Records Found</h3>
           <p className="text-slate-400 text-xs font-medium max-w-xs">
             No attendance records match your filters. Try adjusting or clearing them, or go to{' '}
-            <a href="/teacher/attendance/record" className="text-indigo-600 font-bold hover:underline">
+            <a href="/teacher/attendance/record" className="text-primary font-bold hover:underline">
               Record Attendance
             </a>{' '}
             to add some.
@@ -283,7 +283,7 @@ const AttendanceViewPage = () => {
                     <p className="text-[11px] text-slate-400 font-medium mt-0.5">{dayRecords.length} records</p>
                   </div>
                   <div className="flex gap-2">
-                    <span className="text-[11px] font-bold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg border border-emerald-100">
+                    <span className="text-[11px] font-bold px-2.5 py-1 bg-primary-light text-primary rounded-lg border border-primary-light">
                       ✓ {dayRecords.filter((r) => r.status === 'Present').length}
                     </span>
                     <span className="text-[11px] font-bold px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg border border-rose-100">

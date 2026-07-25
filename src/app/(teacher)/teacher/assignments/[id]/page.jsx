@@ -78,7 +78,7 @@ const SubmissionGradingPageContent = ({ params }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -127,10 +127,10 @@ const SubmissionGradingPageContent = ({ params }) => {
                       <span
                         className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                           sub.status === 'Graded'
-                            ? 'bg-emerald-50 text-emerald-600'
+                            ? 'bg-primary-light text-primary'
                             : sub.status === 'Late'
                             ? 'bg-amber-50 text-amber-600'
-                            : 'bg-indigo-50 text-indigo-600'
+                            : 'bg-primary-light text-primary'
                         }`}
                       >
                         {sub.status}
@@ -150,7 +150,7 @@ const SubmissionGradingPageContent = ({ params }) => {
                         href={sub.file_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-xs font-bold text-indigo-600 hover:underline w-fit"
+                        className="flex items-center gap-2 text-xs font-bold text-primary hover:underline w-fit"
                       >
                         <FiLink />
                         <span>Attached Solution file / link</span>
@@ -162,10 +162,10 @@ const SubmissionGradingPageContent = ({ params }) => {
                     </div>
 
                     {sub.status === 'Graded' && (
-                      <div className="mt-2 p-4 bg-emerald-50/30 border border-emerald-100/30 rounded-2xl">
+                      <div className="mt-2 p-4 bg-primary-light/30 border border-primary-light/30 rounded-2xl">
                         <div className="flex justify-between items-center mb-1">
                           <span className="text-xs font-bold text-slate-800">Grade details</span>
-                          <span className="text-xs font-extrabold text-emerald-600">Obtained: {sub.marks_obtained}</span>
+                          <span className="text-xs font-extrabold text-primary">Obtained: {sub.marks_obtained}</span>
                         </div>
                         {sub.remarks && (
                           <div className="text-slate-500 text-[11px] font-medium italic mt-1">
@@ -183,7 +183,7 @@ const SubmissionGradingPageContent = ({ params }) => {
                           remarks: sub.remarks || ''
                         });
                       }}
-                      className="mt-3 flex items-center justify-center gap-1.5 w-fit px-4 py-2 border border-indigo-100 text-indigo-650 hover:bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                      className="mt-3 flex items-center justify-center gap-1.5 w-fit px-4 py-2 border border-primary-light text-indigo-650 hover:bg-primary-light text-primary rounded-xl text-xs font-bold transition-all cursor-pointer"
                     >
                       <FiEdit3 />
                       <span>{sub.status === 'Graded' ? 'Edit Grades' : 'Grade Submission'}</span>
@@ -212,7 +212,7 @@ const SubmissionGradingPageContent = ({ params }) => {
                     value={gradeForm.marks_obtained}
                     onChange={(e) => setGradeForm({ ...gradeForm, marks_obtained: e.target.value })}
                     placeholder="e.g. 92.5"
-                    className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                    className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
 
@@ -235,7 +235,7 @@ const SubmissionGradingPageContent = ({ params }) => {
                   </button>
                   <button
                     type="submit"
-                    className="py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer text-center"
+                    className="py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors cursor-pointer text-center"
                   >
                     Save Grade
                   </button>
@@ -257,7 +257,7 @@ const SubmissionGradingPage = (props) => {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     }>
       <SubmissionGradingPageContent {...props} />

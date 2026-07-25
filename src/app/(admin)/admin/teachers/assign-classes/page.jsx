@@ -115,7 +115,7 @@ const AdminAssignClassesPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiAward className="text-blue-600" /> Teacher & Class Assignments
+            <FiAward className="text-primary" /> Teacher & Class Assignments
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Assign teachers to subject routines or designate homeroom Class Teachers.
@@ -124,7 +124,7 @@ const AdminAssignClassesPage = () => {
 
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showAddForm ? (
             <>
@@ -144,7 +144,7 @@ const AdminAssignClassesPage = () => {
           onClick={() => { setActiveTab('subjects'); setShowAddForm(false); }}
           className={`pb-3 text-sm font-bold border-b-2 transition-all duration-150 cursor-pointer ${
             activeTab === 'subjects'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
@@ -154,7 +154,7 @@ const AdminAssignClassesPage = () => {
           onClick={() => { setActiveTab('classes'); setShowAddForm(false); }}
           className={`pb-3 text-sm font-bold border-b-2 transition-all duration-150 cursor-pointer ${
             activeTab === 'classes'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-655'
           }`}
         >
@@ -191,7 +191,7 @@ const AdminAssignClassesPage = () => {
       <div className="w-full bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading assignments...</span>
           </div>
         ) : activeTab === 'subjects' ? (
@@ -227,7 +227,7 @@ const AdminAssignClassesPage = () => {
                     {assignments.map((assign) => (
                       <tr key={assign.id} className="hover:bg-slate-50/30 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                             <FiLayers className="text-xs text-blue-400" />
                             {assign.class_name}
                           </span>
@@ -236,7 +236,7 @@ const AdminAssignClassesPage = () => {
                           <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
                             <FiGrid className="text-slate-400" />
                             {assign.section_name || (
-                              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-full">
+                              <span className="text-[10px] font-bold text-primary bg-primary-light border border-primary-light px-1.5 py-0.5 rounded-full">
                                 All Sections
                               </span>
                             )}
@@ -314,7 +314,7 @@ const AdminAssignClassesPage = () => {
                     {classTeacherAssignments.map((assign) => (
                       <tr key={assign.id} className="hover:bg-slate-50/30 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                             <FiLayers className="text-xs text-blue-400" />
                             {assign.class_name}
                           </span>

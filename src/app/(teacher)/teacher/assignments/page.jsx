@@ -84,7 +84,7 @@ const TeacherAssignmentsPageContent = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -95,11 +95,11 @@ const TeacherAssignmentsPageContent = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Class Assignments</h1>
-          <p className="text-slate-500 text-sm font-medium">Post homework tasks and review submissions for <span className="text-indigo-600 font-bold">{subjectName}</span>.</p>
+          <p className="text-slate-500 text-sm font-medium">Post homework tasks and review submissions for <span className="text-primary font-bold">{subjectName}</span>.</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm w-fit"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors shadow-sm w-fit"
         >
           <FiPlus className="text-sm" />
           <span>{showAddForm ? 'View Assignments' : 'Post Assignment'}</span>
@@ -117,7 +117,7 @@ const TeacherAssignmentsPageContent = () => {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Midterm Homework 1"
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -137,7 +137,7 @@ const TeacherAssignmentsPageContent = () => {
                   type="datetime-local"
                   value={formData.due_date}
                   onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -147,7 +147,7 @@ const TeacherAssignmentsPageContent = () => {
                   type="number"
                   value={formData.max_marks}
                   onChange={(e) => setFormData({ ...formData, max_marks: parseInt(e.target.value, 10) })}
-                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
             </div>
@@ -159,13 +159,13 @@ const TeacherAssignmentsPageContent = () => {
                 value={formData.file_url}
                 onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
                 placeholder="e.g. Google Drive/OneDrive PDF URL link"
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
 
             <button
               type="submit"
-              className="mt-4 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-colors"
+              className="mt-4 w-full py-3 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-bold transition-colors"
             >
               Post Assignment
             </button>
@@ -198,7 +198,7 @@ const TeacherAssignmentsPageContent = () => {
                       </span>
                     </div>
                     <h3 className="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
-                      <FiBookOpen className="text-indigo-500" />
+                      <FiBookOpen className="text-primary" />
                       {assignment.title}
                     </h3>
                     <p className="text-slate-500 text-xs font-medium leading-relaxed mb-4 whitespace-pre-line">
@@ -209,7 +209,7 @@ const TeacherAssignmentsPageContent = () => {
                         href={assignment.file_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-bold text-indigo-650 text-indigo-600 hover:underline block mb-4"
+                        className="text-xs font-bold text-indigo-650 text-primary hover:underline block mb-4"
                       >
                         Attachment Link
                       </a>
@@ -218,7 +218,7 @@ const TeacherAssignmentsPageContent = () => {
                   <div className="border-t border-slate-100 pt-4 mt-2">
                     <Link
                       href={`/teacher/assignments/${assignment.id}?title=${encodeURIComponent(assignment.title)}`}
-                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-650 text-indigo-600 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-light hover:bg-primary-light text-indigo-650 text-primary rounded-xl text-xs font-bold transition-colors cursor-pointer"
                     >
                       <FiEye />
                       <span>Review Submissions</span>
@@ -238,7 +238,7 @@ const TeacherAssignmentsPage = () => {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     }>
       <TeacherAssignmentsPageContent />

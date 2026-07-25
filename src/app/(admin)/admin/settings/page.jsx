@@ -78,7 +78,7 @@ const SettingsPage = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[50vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading configurations...</span>
       </div>
     );
@@ -89,7 +89,7 @@ const SettingsPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiSettings className="text-emerald-600 animate-spin-slow" /> Website Settings & Branding
+          <FiSettings className="text-primary animate-spin-slow" /> Website Settings & Branding
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Configure site identity, contact information, global headers, metadata, and social media handles.
@@ -104,7 +104,7 @@ const SettingsPage = () => {
             {/* School / Organization Information */}
             <div className="flex flex-col gap-4">
               <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
-                <FiGlobe className="text-emerald-600" /> General Identity
+                <FiGlobe className="text-primary" /> General Identity
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -116,7 +116,7 @@ const SettingsPage = () => {
                     value={settings.site_title || ''}
                     onChange={handleChange}
                     placeholder="e.g. Fontana Institute of Technology"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -130,7 +130,7 @@ const SettingsPage = () => {
                       value={settings.logo_id || ''}
                       onChange={handleChange}
                       placeholder="e.g. logo_brand_v1"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
@@ -140,7 +140,7 @@ const SettingsPage = () => {
             {/* Contact Details */}
             <div className="flex flex-col gap-4 pt-2">
               <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
-                <FiPhone className="text-emerald-600" /> Official Contact Information
+                <FiPhone className="text-primary" /> Official Contact Information
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -154,7 +154,7 @@ const SettingsPage = () => {
                       value={settings.contact_phone || ''}
                       onChange={handleChange}
                       placeholder="+880 180 500 03886"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
@@ -169,7 +169,7 @@ const SettingsPage = () => {
                       value={settings.contact_email || ''}
                       onChange={handleChange}
                       placeholder="support@disibin.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
@@ -185,7 +185,7 @@ const SettingsPage = () => {
                     value={settings.address || ''}
                     onChange={handleChange}
                     placeholder="Campus Road, Section 4, Dhaka, Bangladesh"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors resize-none"
                   />
                 </div>
               </div>
@@ -194,7 +194,7 @@ const SettingsPage = () => {
             {/* Social Media Links */}
             <div className="flex flex-col gap-4 pt-2">
               <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
-                <FiGlobe className="text-emerald-600" /> Social Media Links
+                <FiGlobe className="text-primary" /> Social Media Links
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -206,7 +206,7 @@ const SettingsPage = () => {
                     value={settings.facebook_url || ''}
                     onChange={handleChange}
                     placeholder="https://facebook.com/your-school"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -218,7 +218,7 @@ const SettingsPage = () => {
                     value={settings.twitter_url || ''}
                     onChange={handleChange}
                     placeholder="https://twitter.com/your-school"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -230,7 +230,7 @@ const SettingsPage = () => {
                     value={settings.instagram_url || ''}
                     onChange={handleChange}
                     placeholder="https://instagram.com/your-school"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -242,7 +242,7 @@ const SettingsPage = () => {
                     value={settings.youtube_url || ''}
                     onChange={handleChange}
                     placeholder="https://youtube.com/c/your-school"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -253,7 +253,7 @@ const SettingsPage = () => {
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+            className="w-full py-3.5 bg-primary hover:bg-primary-dark text-secondary font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
           >
             {saving ? (
               <>

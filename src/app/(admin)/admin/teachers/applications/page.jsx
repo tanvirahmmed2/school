@@ -41,7 +41,7 @@ const AdminApplicationsPage = () => {
       {/* Top Header Section */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiFileText className="text-blue-600" /> Applications Drawer
+          <FiFileText className="text-primary" /> Applications Drawer
         </h1>
         <p className="text-sm text-slate-500">
           Review, approve, or reject teacher job requests or leave applications.
@@ -58,7 +58,7 @@ const AdminApplicationsPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading applications...</span>
           </div>
         ) : applications.length === 0 ? (
@@ -94,7 +94,7 @@ const AdminApplicationsPage = () => {
                       <td className="px-6 py-4 text-xs text-slate-600 max-w-[200px] truncate" title={app.reason}>{app.reason}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          app.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' :
+                          app.status === 'Approved' ? 'bg-primary-light text-primary' :
                           app.status === 'Pending' ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'
                         }`}>
                           {app.status}
@@ -105,7 +105,7 @@ const AdminApplicationsPage = () => {
                           <div className="inline-flex gap-1.5">
                             <button 
                               onClick={() => handleUpdateStatus(app.id, 'Approved')}
-                              className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center"
+                              className="p-1.5 bg-primary-light hover:bg-primary-light text-primary rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center"
                               title="Approve Application"
                             >
                               <FiCheck className="text-sm" />

@@ -28,7 +28,7 @@ const StaffDashboard = () => {
   if (loading) {
     return (
       <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading portal dashboard...</span>
       </div>
     );
@@ -48,7 +48,7 @@ const StaffDashboard = () => {
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       {/* Welcome Banner */}
-      <div className="p-6 bg-linear-to-r from-sky-600 to-cyan-600 rounded-3xl text-white shadow-md shadow-sky-500/10 relative overflow-hidden">
+      <div className="p-6 bg-linear-to-r bg-primary text-secondary rounded-3xl text-white shadow-md shadow-sky-500/10 relative overflow-hidden">
         <div className="absolute right-[-10%] top-[-20%] w-[40%] aspect-square rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
         
         <span className="text-[10px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase tracking-wider">
@@ -89,8 +89,8 @@ const StaffDashboard = () => {
           <h2 className="text-base font-bold text-slate-700">Registry Operations</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <div className="p-6 bg-white border border-slate-100 rounded-3xl shadow-xs flex flex-col gap-3">
-              <div className="w-10 h-10 bg-sky-50 rounded-2xl flex items-center justify-center border border-sky-100">
-                <FiUsers className="text-sky-600 text-lg" />
+              <div className="w-10 h-10 bg-primary-light rounded-2xl flex items-center justify-center border border-primary-light">
+                <FiUsers className="text-primary text-lg" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-slate-800">Admissions Desk</h3>
@@ -98,7 +98,7 @@ const StaffDashboard = () => {
               </div>
               <Link
                 href="/staff/registrar/admissions"
-                className="mt-2 text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1"
+                className="mt-2 text-xs font-bold text-primary hover:text-primary flex items-center gap-1"
               >
                 Open admissions &rarr;
               </Link>

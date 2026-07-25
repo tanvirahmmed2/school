@@ -27,9 +27,9 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
   return (
     <Link href={targetHref} className="block group h-full">
       <div
-        className={`bg-white items-center justify-center rounded-2xl p-1 border border-slate-100 shadow-xs  transition-all duration-300 flex flex-col h-full ${className}`}
+        className={`bg-white items-center justify-center rounded-2xl p-1 border border-slate-100 shadow-xs transition-all duration-300 flex flex-col h-full ${className}`}
       >
-        <div className="w-full aspect-square  rounded-xl overflow-hidden bg-slate-100 relative shrink-0">
+        <div className="w-full aspect-square rounded-xl overflow-hidden bg-slate-100 relative shrink-0">
           {coverImage ? (
             <Image width={500} height={500}
               src={coverImage}
@@ -37,11 +37,11 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-linear-to-br from-amber-50 via-amber-100/40 to-sky-50 flex flex-col items-center justify-center gap-1.5 p-3 text-center">
-              <div className="w-10 h-10 rounded-xl bg-white/90 shadow-xs border border-amber-200/60 flex items-center justify-center text-amber-500 text-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="w-full h-full bg-primary-light flex flex-col items-center justify-center gap-1.5 p-3 text-center">
+              <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-primary-light flex items-center justify-center text-primary text-lg group-hover:scale-110 transition-transform duration-300">
                 <FiAward />
               </div>
-              <span className="text-[9px] font-bold text-amber-700/80 uppercase tracking-wider">
+              <span className="text-[9px] font-bold text-primary uppercase tracking-wider">
                 Honour &amp; Award
               </span>
             </div>
@@ -51,13 +51,13 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
 
         <div className="pt-3 px-0.5 flex flex-col items-center justify-center flex-1 gap-1.5">
           
-          <h3 className="font-extrabold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-amber-600 transition-colors line-clamp-2">
+          <h3 className="font-extrabold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {cardTitle}
           </h3>
 
           {awardedBy && (
             <div className="flex items-center gap-1.5 text-[11px] text-slate-600 font-medium mt-auto pt-1">
-              <FiUser className="text-amber-500 text-xs shrink-0" />
+              <FiUser className="text-primary text-xs shrink-0" />
               <span className="truncate">
                 <span className="text-slate-400">By: </span>
                 <strong className="text-slate-700 font-bold">{awardedBy}</strong>
@@ -68,7 +68,7 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
           <div className="pt-2 border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-medium">
             {formattedDate ? (
               <span className="flex items-center gap-1">
-                <FiCalendar className="text-amber-500 shrink-0 text-[11px]" />
+                <FiCalendar className="text-primary shrink-0 text-[11px]" />
                 <span>{formattedDate}</span>
               </span>
             ) : (

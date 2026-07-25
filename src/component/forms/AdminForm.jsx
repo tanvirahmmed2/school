@@ -101,7 +101,7 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
-        <Icon className="text-sky-600 text-xl" /> {title}
+        <Icon className="text-primary text-xl" /> {title}
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -126,7 +126,7 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
                     name={field.name}
                     value={formData[field.name] || ''}
                     onChange={handleChange}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   >
                     <option value="" disabled>{field.placeholder || 'Select option'}</option>
                     {field.options && field.options.map(opt => (
@@ -142,7 +142,7 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
                       accept="image/*"
                       name={field.name}
                       onChange={handleFileChange}
-                      className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+                      className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
                     />
                     {formData[field.name] && (
                       <div className="w-24 h-24 relative rounded-xl overflow-hidden border border-slate-100 mt-1">
@@ -161,7 +161,7 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
                     value={formData[field.name] || ''}
                     onChange={handleChange}
                     placeholder={field.placeholder}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 )}
               </div>
@@ -182,7 +182,7 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs disabled:opacity-50 transition-colors"
+            className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs disabled:opacity-50 transition-colors"
           >
             {submitting ? (
               <>

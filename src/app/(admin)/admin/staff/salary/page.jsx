@@ -117,7 +117,7 @@ const AdminStaffSalaryPage = () => {
       {/* Top Header Section */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiDollarSign className="text-blue-600" /> Staff Payroll & Salaries (BDT)
+          <FiDollarSign className="text-primary" /> Staff Payroll & Salaries (BDT)
         </h1>
         <p className="text-sm text-slate-500">
           Track salary pay slips, manage grade-wise staff salary scales, and set allowances.
@@ -130,7 +130,7 @@ const AdminStaffSalaryPage = () => {
           onClick={() => setActiveTab('payroll')}
           className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'payroll'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -140,7 +140,7 @@ const AdminStaffSalaryPage = () => {
           onClick={() => setActiveTab('grades')}
           className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
             activeTab === 'grades'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -159,7 +159,7 @@ const AdminStaffSalaryPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading payroll...</span>
             </div>
           ) : salaries.length === 0 ? (
@@ -197,7 +197,7 @@ const AdminStaffSalaryPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          salary.status === 'Paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                          salary.status === 'Paid' ? 'bg-primary-light text-primary' : 'bg-amber-50 text-amber-600'
                         }`}>
                           {salary.status}
                         </span>
@@ -227,7 +227,7 @@ const AdminStaffSalaryPage = () => {
 
             {loading ? (
               <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-                <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-sm font-semibold text-slate-400">Loading scales...</span>
               </div>
             ) : payScales.length === 0 ? (
@@ -262,7 +262,7 @@ const AdminStaffSalaryPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-1.5">
                           <button
                             onClick={() => handleEditClick(scale)}
-                            className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors cursor-pointer inline-flex items-center justify-center"
+                            className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer inline-flex items-center justify-center"
                             title="Edit Pay Grade"
                           >
                             <FiEdit3 className="text-sm" />
@@ -287,7 +287,7 @@ const AdminStaffSalaryPage = () => {
           <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.02)] h-fit flex flex-col gap-5">
             <div>
               <h2 className="text-base font-bold text-slate-800 flex items-center gap-1.5">
-                <FiPlus className="text-blue-600" /> {editingScale ? 'Update Salary Grade' : 'Create Salary Grade'}
+                <FiPlus className="text-primary" /> {editingScale ? 'Update Salary Grade' : 'Create Salary Grade'}
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
                 Define basic salaries and default allowances for staff employee grades.
@@ -306,7 +306,7 @@ const AdminStaffSalaryPage = () => {
                   value={gradeName}
                   onChange={(e) => setGradeName(e.target.value)}
                   disabled={submittingGrade}
-                  className="w-full px-3.5 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -322,7 +322,7 @@ const AdminStaffSalaryPage = () => {
                   value={basicSalary}
                   onChange={(e) => setBasicSalary(e.target.value)}
                   disabled={submittingGrade}
-                  className="w-full px-3.5 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -338,7 +338,7 @@ const AdminStaffSalaryPage = () => {
                   value={allowance}
                   onChange={(e) => setAllowance(e.target.value)}
                   disabled={submittingGrade}
-                  className="w-full px-3.5 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -356,7 +356,7 @@ const AdminStaffSalaryPage = () => {
                 <button
                   type="submit"
                   disabled={submittingGrade}
-                  className={`py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-60 ${editingScale ? 'w-1/2' : 'w-full'}`}
+                  className={`py-2.5 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-60 ${editingScale ? 'w-1/2' : 'w-full'}`}
                 >
                   {submittingGrade ? 'Saving...' : editingScale ? 'Save Changes' : 'Register Pay Scale Grade'}
                 </button>

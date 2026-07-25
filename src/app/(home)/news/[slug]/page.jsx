@@ -45,7 +45,7 @@ const NewsDetailPage = () => {
     return (
       <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-slate-500 text-xs font-semibold">Loading news article...</p>
         </div>
       </div>
@@ -61,7 +61,7 @@ const NewsDetailPage = () => {
           <p className="text-slate-500 text-xs">The news article you are looking for may have been removed or updated.</p>
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl transition-all"
           >
             <FiArrowLeft /> Back to News Feeds
           </Link>
@@ -101,12 +101,12 @@ const NewsDetailPage = () => {
           <div className="p-6  space-y-6">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">
+                <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-wider">
                   Campus News
                 </span>
                 {newsDate && (
                   <span className="flex items-center gap-1 text-xs font-semibold text-slate-400">
-                    <FiCalendar className="text-emerald-600" />
+                    <FiCalendar className="text-primary" />
                     {newsDate.toLocaleDateString(undefined, { dateStyle: 'long' })}
                   </span>
                 )}
@@ -131,17 +131,17 @@ const NewsDetailPage = () => {
                 <Link
                   key={item.id}
                   href={`/news/${item.slug || item.id}`}
-                  className="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-sm transition-all group flex flex-col justify-between"
+                  className="bg-white p-4 rounded-2xl border border-slate-100 hover:border-primary-light hover:shadow-sm transition-all group flex flex-col justify-between"
                 >
                   <div className="space-y-2">
-                    <h3 className="font-bold text-sm text-slate-900 group-hover:text-emerald-600 transition-colors line-clamp-2">
+                    <h3 className="font-bold text-sm text-slate-900 group-hover:text-primary transition-colors line-clamp-2">
                       {item.title}
                     </h3>
                     <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                       {item.content}
                     </p>
                   </div>
-                  <span className="text-[11px] font-semibold text-emerald-600 mt-3 block">
+                  <span className="text-[11px] font-semibold text-primary mt-3 block">
                     Read Article &rarr;
                   </span>
                 </Link>

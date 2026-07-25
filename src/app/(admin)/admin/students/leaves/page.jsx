@@ -63,7 +63,7 @@ const LeavesPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiCalendar className="text-blue-600 animate-pulse" /> Student Leave Approvals
+          <FiCalendar className="text-primary animate-pulse" /> Student Leave Approvals
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Review, approve, and track academic leave applications submitted by students.
@@ -76,7 +76,7 @@ const LeavesPage = () => {
           onClick={() => setActiveTab('pending')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'pending'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -86,7 +86,7 @@ const LeavesPage = () => {
           onClick={() => setActiveTab('archive')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'archive'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -98,7 +98,7 @@ const LeavesPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading leave requests...</span>
           </div>
         ) : activeTab === 'pending' ? (

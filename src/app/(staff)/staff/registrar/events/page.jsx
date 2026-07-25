@@ -55,7 +55,7 @@ const RegistrarEventsPage = () => {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit mb-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit mb-2">
               <FiCalendar /> Registrar Desk
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -75,7 +75,7 @@ const RegistrarEventsPage = () => {
             </Link>
             <Link
               href="/staff/registrar/events/new"
-              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all cursor-pointer"
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl shadow-sm transition-all cursor-pointer"
             >
               <FiPlus className="text-base" />
               <span>Create Event</span>
@@ -111,7 +111,7 @@ const RegistrarEventsPage = () => {
             {filteredEvents.map((item) => {
               const d = new Date(item.event_date);
               return (
-                <div key={item.id} className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden flex flex-col justify-between hover:border-emerald-200 transition-all group">
+                <div key={item.id} className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden flex flex-col justify-between hover:border-primary-light transition-all group">
                   {/* Poster Image */}
                   <div className="relative w-full h-48 bg-slate-100 overflow-hidden">
                     {item.image ? (
@@ -126,7 +126,7 @@ const RegistrarEventsPage = () => {
                         <span className="text-xs font-semibold mt-1">No Image Poster</span>
                       </div>
                     )}
-                    <div className="absolute top-3 left-3 bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
+                    <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
                       <FiCalendar />
                       <span>{d.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                     </div>
@@ -134,7 +134,7 @@ const RegistrarEventsPage = () => {
 
                   {/* Body Content */}
                   <div className="p-5 flex flex-col gap-3 flex-1">
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-slate-600 text-xs line-clamp-3 leading-relaxed">
@@ -143,11 +143,11 @@ const RegistrarEventsPage = () => {
 
                     <div className="flex flex-wrap gap-3 items-center text-xs font-semibold text-slate-500 mt-auto pt-2 border-t border-slate-100">
                       <span className="flex items-center gap-1">
-                        <FiMapPin className="text-emerald-600" />
+                        <FiMapPin className="text-primary" />
                         {item.location}
                       </span>
                       <span className="flex items-center gap-1">
-                        <FiClock className="text-emerald-600" />
+                        <FiClock className="text-primary" />
                         {d.toLocaleTimeString(undefined, { timeStyle: 'short' })}
                       </span>
                     </div>
@@ -157,7 +157,7 @@ const RegistrarEventsPage = () => {
                   <div className="p-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between gap-2">
                     <Link
                       href={`/staff/registrar/events/participants?eventId=${item.id}`}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-light hover:bg-primary-light text-primary text-xs font-bold rounded-lg transition-colors"
                     >
                       <FiEye />
                       <span>View</span>
@@ -193,7 +193,7 @@ const RegistrarEventsPage = () => {
             </p>
             <Link
               href="/staff/registrar/events/new"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl shadow-sm transition-all"
             >
               <FiPlus />
               <span>Create New Event</span>

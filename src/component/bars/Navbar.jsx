@@ -17,7 +17,7 @@ const Navbar = () => {
   const dropdownTriggerStyle = () => `px-3 w-full h-10 flex items-center justify-center transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 text-white hover:text-white rounded-lg`;
 
   return (
-    <nav className="relative w-full bg-emerald-500 text-white flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
+    <nav className="relative w-full bg-primary text-secondary flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
       <section className="w-full flex flex-row items-center justify-between h-14 md:h-16">
         <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight">
           {schoolName}
@@ -25,15 +25,15 @@ const Navbar = () => {
 
         <section className="hidden md:flex flex-row items-center justify-end gap-5">
           <div className="w-auto flex flex-row items-center justify-center gap-4 text-sm font-semibold">
-            <Link href={'/apply'} className="transition-colors text-white hover:text-emerald-100">
+            <Link href={'/apply'} className="transition-colors text-white hover:text-secondary">
               Apply
             </Link>
-            <Link href={'/auth/student'} className="transition-colors text-white hover:text-emerald-100">
+            <Link href={'/auth/student'} className="transition-colors text-white hover:text-secondary">
               Student Portal
             </Link>
             <Link
               href={'/auth/access'}
-              className="text-emerald-600 transition-all bg-white hover:bg-emerald-50 hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs"
+              className="text-primary transition-all bg-white hover:bg-primary-light hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs"
             >
               Login
             </Link>
@@ -57,10 +57,10 @@ const Navbar = () => {
           <Link href={'/authorities'} className={dropdownTriggerStyle()}>
             Authorities
           </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-emerald-100">
+          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
             {designations && designations.length > 0 ? (
               designations.map((d) => (
-                <Link href={`/authorities/${d.slug}`} key={d.id} className="px-4 w-full py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">
+                <Link href={`/authorities/${d.slug}`} key={d.id} className="px-4 w-full py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">
                   {d.title}
                 </Link>
               ))
@@ -74,11 +74,11 @@ const Navbar = () => {
           <Link href={'/about'} className={dropdownTriggerStyle()}>
             About
           </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-emerald-100">
-            <Link href={'/about/campus'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">My Campus</Link>
-            <Link href={'/about/mission'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">Mission</Link>
-            <Link href={'/about/vision'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">Vision</Link>
-            <Link href={'/about/history'} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">History</Link>
+          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
+            <Link href={'/about/campus'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">My Campus</Link>
+            <Link href={'/about/mission'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">Mission</Link>
+            <Link href={'/about/vision'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">Vision</Link>
+            <Link href={'/about/history'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">History</Link>
           </div>
         </div>
 
@@ -86,10 +86,10 @@ const Navbar = () => {
           <Link href={'/classes'} className={dropdownTriggerStyle()}>
             Classes
           </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-emerald-100">
+          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
             {classes && classes.length > 0 ? (
               classes.map((c) => (
-                <Link href={`/classes/${c.code || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">
+                <Link href={`/classes/${c.code || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">
                   {c.name || c}
                 </Link>
               ))
@@ -103,10 +103,10 @@ const Navbar = () => {
           <Link href={'/clubs'} className={dropdownTriggerStyle()}>
             Clubs
           </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-emerald-100">
+          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
             {clubs && clubs.length > 0 ? (
               clubs.map((c) => (
-                <Link href={`/clubs/${c.slug || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-xs font-semibold text-left">
+                <Link href={`/clubs/${c.slug || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">
                   {c.name || c}
                 </Link>
               ))

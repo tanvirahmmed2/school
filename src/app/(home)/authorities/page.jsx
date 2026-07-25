@@ -40,7 +40,7 @@ const AuthoritiesPage = () => {
           </div>
         ) : (
           <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mx-auto text-2xl">
+            <div className="w-16 h-16 rounded-full bg-primary-light text-primary border border-primary-light flex items-center justify-center mx-auto text-2xl">
               <FiUsers />
             </div>
             <div className="space-y-1">

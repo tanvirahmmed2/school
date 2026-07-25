@@ -46,7 +46,6 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
 
       toast.success(response.data.message || 'Staff profile placeholder created successfully!');
       const createdEmail = email.trim();
-      setGradeName ? setGradeName('') : null; // ignore or reset locally
       setName('');
       setEmail('');
       setNumber('');
@@ -63,23 +62,23 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiUserPlus className="text-blue-600" /> Pre-create Staff Profile
+        <FiUserPlus className="text-primary" /> Pre-create Staff Profile
       </h2>
 
       {/* Verification link sent notice */}
       {verificationSentTo && (
-        <div className="mb-5 flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-            <FiMail className="text-emerald-600 text-sm" />
+        <div className="mb-5 flex items-start gap-3 p-4 bg-primary-light border border-primary-light rounded-2xl">
+          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+            <FiMail className="text-primary text-sm" />
           </div>
           <div>
-            <p className="text-sm font-bold text-emerald-700">Verification Link Sent!</p>
-            <p className="text-xs text-emerald-600 mt-0.5 leading-relaxed">
+            <p className="text-sm font-bold text-primary">Verification Link Sent!</p>
+            <p className="text-xs text-primary mt-0.5 leading-relaxed">
               A secure setup verification link has been emailed to <strong>{verificationSentTo}</strong>. The staff member must click this link within 72 hours to complete their profile registration.
             </p>
             <button
               onClick={() => { setVerificationSentTo(''); if (onSuccess) onSuccess(); }}
-              className="mt-2 text-[11px] font-bold text-emerald-600 hover:text-emerald-700 underline cursor-pointer"
+              className="mt-2 text-[11px] font-bold text-primary underline cursor-pointer"
             >
               Dismiss
             </button>
@@ -98,7 +97,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             placeholder="e.g. Michael Smith"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
           />
         </div>
 
@@ -112,7 +111,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             placeholder="e.g. michael.smith@school.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
           />
         </div>
 
@@ -126,7 +125,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             placeholder="e.g. 555-0150"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
           />
         </div>
 
@@ -138,7 +137,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             required
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
           >
             <option value="staff">General Staff</option>
             <option value="cashier">Cashier (Finance Desk)</option>
@@ -153,7 +152,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           <select
             value={gradeId}
             onChange={(e) => setGradeId(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-55 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition-all"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
           >
             <option value="">Unassigned</option>
             {payScales.map((scale) => (
@@ -165,17 +164,19 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
         </div>
 
         <div className="flex items-center justify-end gap-3 mt-4 md:col-span-2 border-t border-slate-50 pt-5">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-5 py-2.5 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer"
-          >
-            Cancel
-          </button>
+          {onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-5 py-2.5 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+          )}
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition-colors disabled:opacity-60 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-xs font-semibold transition-colors disabled:opacity-60 cursor-pointer shadow-xs"
           >
             {submitting ? 'Creating...' : 'Register Staff Account'}
           </button>

@@ -218,12 +218,12 @@ const AdminHostelFeesPage = () => {
               </div>
 
               {foundStudent && (
-                <div className="mt-2 p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-between animate-fade-in">
+                <div className="mt-2 p-3 bg-primary-light border border-primary-light rounded-xl flex items-center justify-between animate-fade-in">
                   <div className="flex flex-col">
-                    <span className="text-xs font-bold text-emerald-800">{foundStudent.name}</span>
-                    <span className="text-[10px] text-emerald-600 font-semibold">{foundStudent.registration_number}</span>
+                    <span className="text-xs font-bold text-primary">{foundStudent.name}</span>
+                    <span className="text-[10px] text-primary font-semibold">{foundStudent.registration_number}</span>
                   </div>
-                  <FiCheck className="text-emerald-600 font-bold" />
+                  <FiCheck className="text-primary font-bold" />
                 </div>
               )}
             </div>
@@ -393,7 +393,7 @@ const AdminHostelFeesPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-[10px] font-bold rounded-lg ${
                           fee.status === 'Paid'
-                            ? 'bg-emerald-50 text-emerald-600'
+                            ? 'bg-primary-light text-primary'
                             : fee.status === 'Partially Paid'
                             ? 'bg-amber-50 text-amber-600'
                             : 'bg-red-50 text-red-600'
@@ -405,7 +405,7 @@ const AdminHostelFeesPage = () => {
                         {fee.status !== 'Paid' && (
                           <button
                             onClick={() => handleMarkAsPaid(fee)}
-                            className="p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors cursor-pointer"
+                            className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
                             title="Mark as Paid"
                           >
                             <FiCheckCircle className="text-sm" />
@@ -413,7 +413,7 @@ const AdminHostelFeesPage = () => {
                         )}
                         <button
                           onClick={() => handleEditClick(fee)}
-                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
                           title="Edit Invoice"
                         >
                           <FiEdit3 className="text-sm" />

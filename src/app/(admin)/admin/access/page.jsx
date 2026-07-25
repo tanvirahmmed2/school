@@ -59,7 +59,7 @@ const AdminAccessPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiShield className="text-blue-600" /> Access Management
+            <FiShield className="text-primary" /> Access Management
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Manage administrative personnel accounts and roles below.
@@ -68,7 +68,7 @@ const AdminAccessPage = () => {
 
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showAddForm ? (
             <>
@@ -103,7 +103,7 @@ const AdminAccessPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading administrators...</span>
           </div>
         ) : admins.length === 0 ? (
@@ -138,12 +138,12 @@ const AdminAccessPage = () => {
                   <tr key={admin.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center">
+                        <div className="w-9 h-9 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center">
                           <FiUser className="text-base" />
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{admin.name}</p>
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full mt-0.5">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary-light px-1.5 py-0.5 rounded-full mt-0.5">
                             Admin ID: {admin.id}
                           </span>
                         </div>

@@ -87,7 +87,7 @@ const ParticipantsContent = () => {
         {/* Page Header */}
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit mb-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit mb-2">
               <FiUsers /> Admin Registry
             </div>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -100,7 +100,7 @@ const ParticipantsContent = () => {
 
           {/* Event Selector Dropdown */}
           <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
-            <FiFilter className="text-emerald-600 ml-2" />
+            <FiFilter className="text-primary ml-2" />
             <select
               value={selectedEventId}
               onChange={(e) => setSelectedEventId(e.target.value)}
@@ -128,13 +128,13 @@ const ParticipantsContent = () => {
               <h3 className="text-lg font-bold text-slate-900">{selectedEvent.title}</h3>
               <p className="text-slate-500 text-xs line-clamp-2">{selectedEvent.description}</p>
               <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 pt-1">
-                <span className="flex items-center gap-1 text-emerald-600">
+                <span className="flex items-center gap-1 text-primary">
                   <FiCalendar /> {new Date(selectedEvent.event_date).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                 </span>
-                <span className="flex items-center gap-1 text-emerald-600">
+                <span className="flex items-center gap-1 text-primary">
                   <FiMapPin /> {selectedEvent.location}
                 </span>
-                <span className="flex items-center gap-1 text-emerald-600 font-bold">
+                <span className="flex items-center gap-1 text-primary font-bold">
                   <FiUsers /> {participants.length} Total Registered
                 </span>
               </div>
@@ -175,10 +175,10 @@ const ParticipantsContent = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                   {filteredParticipants.map((p, idx) => (
-                    <tr key={p.id || idx} className="hover:bg-emerald-50/30 transition-colors">
+                    <tr key={p.id || idx} className="hover:bg-primary-light/30 transition-colors">
                       <td className="px-6 py-4 font-bold text-slate-400">{idx + 1}</td>
                       <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">
-                        <FiUserCheck className="text-emerald-600 text-sm" />
+                        <FiUserCheck className="text-primary text-sm" />
                         <span>{p.name}</span>
                       </td>
                       <td className="px-6 py-4">

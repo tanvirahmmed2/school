@@ -173,7 +173,7 @@ const TeacherClubNewsPage = () => {
         <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
           <div className="flex justify-between items-center border-b border-slate-100 pb-3">
             <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-              <FiFileText className="text-indigo-600" /> {editingNewsId ? 'Edit News Post' : 'Publish New Article'}
+              <FiFileText className="text-primary" /> {editingNewsId ? 'Edit News Post' : 'Publish New Article'}
             </h2>
             {editingNewsId && (
               <button

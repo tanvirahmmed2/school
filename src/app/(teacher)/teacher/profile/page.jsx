@@ -164,7 +164,7 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -183,7 +183,7 @@ const ProfilePage = () => {
           {profile?.image ? (
             <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-4xl font-extrabold">
+            <div className="w-full h-full bg-primary-light text-primary flex items-center justify-center text-4xl font-extrabold">
               {profile?.name ? profile.name.charAt(0).toUpperCase() : 'T'}
             </div>
           )}
@@ -196,12 +196,12 @@ const ProfilePage = () => {
           <h2 className="text-xl font-bold text-slate-800 mb-1">{profile?.name}</h2>
           <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">Teacher ID: #{profile?.id}</p>
           <div className="flex flex-wrap justify-center md:justify-start items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active Instructor
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Active Instructor
             </span>
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
               profile?.is_permanent 
-                ? 'bg-blue-50 text-blue-600 border border-blue-100' 
+                ? 'bg-primary-light text-primary border border-primary-light' 
                 : 'bg-amber-50 text-amber-600 border border-amber-100'
             }`}>
               {profile?.is_permanent ? 'Permanent Staff' : 'Temporary / Contract'}
@@ -217,7 +217,7 @@ const ProfilePage = () => {
           <form onSubmit={handleSaveDetails} className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)] animate-fade-down">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-1">
               <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
-                <FiUser className="text-indigo-600" /> Edit Contact Details
+                <FiUser className="text-primary" /> Edit Contact Details
               </h3>
               <button
                 type="button"
@@ -241,7 +241,7 @@ const ProfilePage = () => {
                   type="text"
                   value={profileData.number}
                   onChange={(e) => setProfileData({ ...profileData, number: e.target.value })}
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   placeholder="e.g. +880 180..."
                 />
               </div>
@@ -258,7 +258,7 @@ const ProfilePage = () => {
               <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-sm"
                 >
                   Save Details
                 </button>
@@ -269,7 +269,7 @@ const ProfilePage = () => {
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-1">
               <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
-                <FiUser className="text-indigo-600" /> Contact Details
+                <FiUser className="text-primary" /> Contact Details
               </h3>
               <button
                 onClick={() => setIsEditing(true)}
@@ -316,7 +316,7 @@ const ProfilePage = () => {
         {/* Academic Details */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
           <h3 className="font-bold text-slate-800 text-base flex items-center gap-2 border-b border-slate-100 pb-3 mb-1">
-            <FiBookOpen className="text-indigo-600" /> Academic details
+            <FiBookOpen className="text-primary" /> Academic details
           </h3>
 
           <div className="flex flex-col gap-4">
@@ -347,7 +347,7 @@ const ProfilePage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.015)]">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-1">
           <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
-            <FiAward className="text-indigo-600" /> Academic Qualifications
+            <FiAward className="text-primary" /> Academic Qualifications
           </h3>
           {!showForm && (
             <button
@@ -356,7 +356,7 @@ const ProfilePage = () => {
                 setFormData({ degree: '', institution: '', passing_year: '', result: '' });
                 setShowForm(true);
               }}
-              className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+              className="px-3.5 py-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
             >
               <FiPlus /> Add Degree
             </button>
@@ -391,7 +391,7 @@ const ProfilePage = () => {
                   value={formData.degree}
                   onChange={handleInputChange}
                   placeholder="e.g. Bachelor of Science in Electrical Engineering"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   required
                 />
               </div>
@@ -404,7 +404,7 @@ const ProfilePage = () => {
                   value={formData.institution}
                   onChange={handleInputChange}
                   placeholder="e.g. Massachusetts Institute of Technology"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   required
                 />
               </div>
@@ -417,7 +417,7 @@ const ProfilePage = () => {
                   value={formData.passing_year}
                   onChange={handleInputChange}
                   placeholder="e.g. 2016"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   required
                 />
               </div>
@@ -430,7 +430,7 @@ const ProfilePage = () => {
                   value={formData.result}
                   onChange={handleInputChange}
                   placeholder="e.g. CGPA 3.84"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-indigo-500 bg-white font-semibold"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                 />
               </div>
             </div>
@@ -439,7 +439,7 @@ const ProfilePage = () => {
               <button
                 type="submit"
                 disabled={formLoading}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1 shadow-sm"
+                className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:bg-indigo-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1 shadow-sm"
               >
                 {formLoading ? 'Saving...' : editId ? 'Save Changes' : 'Save Degree'}
               </button>
@@ -462,7 +462,7 @@ const ProfilePage = () => {
                   <div className="flex items-center gap-2 mt-1.5">
                     <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">Graduation: {q.passing_year}</span>
                     {q.result && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full">{q.result}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 bg-primary-light text-primary rounded-full">{q.result}</span>
                     )}
                   </div>
                 </div>
@@ -478,7 +478,7 @@ const ProfilePage = () => {
                       });
                       setShowForm(true);
                     }}
-                    className="p-2 hover:bg-slate-50 hover:text-indigo-600 rounded-lg text-slate-400 cursor-pointer animate-fade-in"
+                    className="p-2 hover:bg-slate-50 hover:text-primary rounded-lg text-slate-400 cursor-pointer animate-fade-in"
                   >
                     <FiEdit2 className="text-sm" />
                   </button>

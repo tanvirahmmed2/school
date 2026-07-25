@@ -132,7 +132,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
   if (fetchingData) {
     return (
       <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading form parameters...</span>
       </div>
     );
@@ -141,7 +141,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-b border-slate-50 pb-4">
-        <FiCalendar className="text-blue-600" /> {examId ? 'Edit Exam Routine' : 'Create New Exam Routine'}
+        <FiCalendar className="text-primary" /> {examId ? 'Edit Exam Routine' : 'Create New Exam Routine'}
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
@@ -159,7 +159,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             />
           </div>
 
@@ -173,7 +173,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={term}
               onChange={(e) => setTerm(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             />
           </div>
 
@@ -185,7 +185,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 cursor-pointer"
             >
               <option value="upcoming">Upcoming Exam</option>
               <option value="current">Current Active Exam</option>
@@ -202,7 +202,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={classId}
               onChange={(e) => setClassId(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 cursor-pointer"
             >
               <option value="">Select class...</option>
               {classes.map((cls) => (
@@ -225,7 +225,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={examFee}
               onChange={(e) => setExamFee(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4"
             />
           </div>
 
@@ -239,7 +239,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             />
           </div>
 
@@ -253,7 +253,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               disabled={loading}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             />
           </div>
         </div>
@@ -268,7 +268,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
             <button
               type="button"
               onClick={handleAddSchedule}
-              className="inline-flex items-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer"
             >
               <FiPlus /> Add Subject Schedule
             </button>
@@ -401,7 +401,7 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
           <button
             type="submit"
             disabled={loading}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

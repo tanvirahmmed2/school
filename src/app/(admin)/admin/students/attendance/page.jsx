@@ -163,7 +163,7 @@ const AdminStudentAttendancePage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiCalendar className="text-blue-600" /> Student Attendance Registry
+          <FiCalendar className="text-primary" /> Student Attendance Registry
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Perform bulk daily attendance logs for students matching class/section structures.
@@ -179,7 +179,7 @@ const AdminStudentAttendancePage = () => {
           <select
             value={selectedClassId}
             onChange={(e) => setSelectedClassId(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
           >
             <option value="">Select a class...</option>
             {classes.map((cls) => (
@@ -198,7 +198,7 @@ const AdminStudentAttendancePage = () => {
             value={selectedSectionId}
             onChange={(e) => setSelectedSectionId(e.target.value)}
             disabled={!selectedClassId}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 disabled:opacity-60 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary disabled:opacity-60 bg-slate-50"
           >
             <option value="">Select a section...</option>
             {sections.map((sec) => (
@@ -216,7 +216,7 @@ const AdminStudentAttendancePage = () => {
           <select
             value={selectedSubjectId}
             onChange={(e) => setSelectedSubjectId(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary bg-slate-50"
           >
             <option value="">Select subject...</option>
             {subjects.map((sub) => (
@@ -234,7 +234,7 @@ const AdminStudentAttendancePage = () => {
           <select
             value={selectedPeriodId}
             onChange={(e) => setSelectedPeriodId(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary bg-slate-50"
           >
             <option value="">Select period...</option>
             {periods.map((p) => (
@@ -253,7 +253,7 @@ const AdminStudentAttendancePage = () => {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
           />
         </div>
       </div>
@@ -300,7 +300,7 @@ const AdminStudentAttendancePage = () => {
           </div>
         ) : loadingSheet ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading attendance logs...</span>
           </div>
         ) : students.length === 0 ? (
@@ -335,7 +335,7 @@ const AdminStudentAttendancePage = () => {
                   {students.map((std) => (
                     <tr key={std.student_id} className="hover:bg-slate-50/20 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-xl">
+                        <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-xl">
                           {std.registration_number}
                         </span>
                       </td>
@@ -373,7 +373,7 @@ const AdminStudentAttendancePage = () => {
                           placeholder="Add remark notes..."
                           value={std.remarks}
                           onChange={(e) => handleRemarksChange(std.student_id, e.target.value)}
-                          className="w-full max-w-72 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                          className="w-full max-w-72 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 outline-none focus:bg-white focus:border-primary transition-colors"
                         />
                       </td>
                     </tr>
@@ -391,7 +391,7 @@ const AdminStudentAttendancePage = () => {
               <button
                 onClick={handleSubmitAttendance}
                 disabled={submitting}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer flex items-center gap-2"
+                className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer flex items-center gap-2"
               >
                 {submitting ? (
                   <>

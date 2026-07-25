@@ -39,7 +39,7 @@ const AdmissionPage = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Admissions Desk
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -53,12 +53,12 @@ const AdmissionPage = () => {
         {/* Dynamic circular drives listings */}
         <div className="mb-12">
           <h2 className="text-base font-bold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Active Circular Intakes
+            <span className="w-2.5 h-2.5 rounded-full bg-primary"></span> Active Circular Intakes
           </h2>
 
           {loading ? (
             <div className="w-full py-12 flex justify-center">
-              <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : circulars.length === 0 ? (
             <div className="bg-white border border-slate-100 rounded-3xl p-8 text-center shadow-xs">
@@ -69,9 +69,9 @@ const AdmissionPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {circulars.map((c) => (
-                <div key={c.id} className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-sky-100 transition-all flex flex-col justify-between gap-4">
+                <div key={c.id} className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-primary-light transition-all flex flex-col justify-between gap-4">
                   <div className="flex flex-col gap-2">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded-full w-max">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light px-2.5 py-0.5 rounded-full w-max">
                       <FiLayers /> Class: {c.class_name}
                     </span>
                     <h3 className="text-base font-bold text-slate-900 leading-snug mt-1">{c.title}</h3>
@@ -87,9 +87,9 @@ const AdmissionPage = () => {
                         </div>
                       ) : null}
                       {c.fees !== undefined && c.fees !== null && (
-                        <div className="flex items-center gap-1.5 text-blue-600">
-                          <FiDollarSign className="text-blue-500" />
-                          <span>Admission Fee: <strong className="text-blue-700">BDT {parseFloat(c.fees).toFixed(2)}</strong></span>
+                        <div className="flex items-center gap-1.5 text-primary">
+                          <FiDollarSign className="text-primary" />
+                          <span>Admission Fee: <strong className="text-primary">BDT {parseFloat(c.fees).toFixed(2)}</strong></span>
                         </div>
                       )}
                     </div>

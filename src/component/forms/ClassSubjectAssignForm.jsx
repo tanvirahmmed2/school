@@ -102,7 +102,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiFolderPlus className="text-blue-600" /> Assign Subject Teacher
+        <FiFolderPlus className="text-primary" /> Assign Subject Teacher
       </h2>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5">
@@ -115,7 +115,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={classId}
             onChange={(e) => setClassId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           >
             <option value="">Select a class...</option>
             {classes.map((cls) => (
@@ -135,7 +135,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={classSubjectId}
             onChange={(e) => setClassSubjectId(e.target.value)}
             disabled={submitting || !classId}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 disabled:opacity-60"
           >
             <option value="">Select a subject...</option>
             {filteredClassSubjects.map((cs) => (
@@ -155,7 +155,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
             disabled={submitting || !classId}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 disabled:opacity-60"
           >
             <option value="">All Sections (class-wide)</option>
             {filteredSections.map((sec) => (
@@ -175,7 +175,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={teacherId}
             onChange={(e) => setTeacherId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           >
             <option value="">Assign a teacher...</option>
             {teachers.map((teach) => (
@@ -197,7 +197,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={academicYear}
             onChange={(e) => setAcademicYear(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -212,7 +212,7 @@ const ClassSubjectAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
           >
             {submitting ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

@@ -15,7 +15,7 @@ export default function NewHistoryPage() {
       <div>
         <Link 
           href="/admin/history"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-wider"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-wider"
         >
           <FiArrowLeft className="text-sm" /> Back to History List
         </Link>
@@ -24,7 +24,7 @@ export default function NewHistoryPage() {
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-          <FiPlusCircle className="text-indigo-600" /> Create Historical Milestone
+          <FiPlusCircle className="text-primary" /> Create Historical Milestone
         </h1>
         <p className="text-sm text-slate-500 font-medium">
           Add a new timeline milestone to the institutional history records.

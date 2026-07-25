@@ -28,7 +28,7 @@ const FeesPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -51,15 +51,15 @@ const FeesPage = () => {
 
   const stats = [
     { label: 'Outstanding Balance', value: `৳${totalOutstanding.toFixed(2)}`, color: totalOutstanding > 0 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-slate-50 text-slate-500 border-slate-100', icon: FiClock },
-    { label: 'Total Paid Fees', value: `৳${totalPaid.toFixed(2)}`, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', icon: FiCheck }
+    { label: 'Total Paid Fees', value: `৳${totalPaid.toFixed(2)}`, color: 'bg-primary-light text-primary border-primary-light', icon: FiCheck }
   ];
 
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Paid':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100"><FiCheck /> Paid</span>;
+        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Paid</span>;
       case 'Partially Paid':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">Partially Paid</span>;
+        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">Partially Paid</span>;
       case 'Unpaid':
       default:
         return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100"><FiClock /> Unpaid</span>;
@@ -95,7 +95,7 @@ const FeesPage = () => {
       {/* Tuition Fees List */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
         <h2 className="text-base font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiDollarSign className="text-blue-600" /> Tuition & Fees Log
+          <FiDollarSign className="text-primary" /> Tuition & Fees Log
         </h2>
 
         {fees.length === 0 ? (
@@ -141,7 +141,7 @@ const FeesPage = () => {
       {/* Fines List */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
         <h2 className="text-base font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiInfo className="text-blue-600" /> Penalties & Fines
+          <FiInfo className="text-primary" /> Penalties & Fines
         </h2>
 
         {fines.length === 0 ? (

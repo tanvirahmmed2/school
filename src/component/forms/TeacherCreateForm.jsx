@@ -66,23 +66,23 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   return (
     <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiUserPlus className="text-blue-600" /> Pre-create Teacher Profile
+        <FiUserPlus className="text-primary" /> Pre-create Teacher Profile
       </h2>
 
       {/* Verification link sent notice */}
       {verificationSentTo && (
-        <div className="mb-5 flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-            <FiMail className="text-emerald-600 text-sm" />
+        <div className="mb-5 flex items-start gap-3 p-4 bg-primary-light border border-primary-light rounded-2xl">
+          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+            <FiMail className="text-primary text-sm" />
           </div>
           <div>
-            <p className="text-sm font-bold text-emerald-700">Verification Link Sent!</p>
-            <p className="text-xs text-emerald-600 mt-0.5 leading-relaxed">
+            <p className="text-sm font-bold text-primary">Verification Link Sent!</p>
+            <p className="text-xs text-primary mt-0.5 leading-relaxed">
               A secure verification link has been emailed to <strong>{verificationSentTo}</strong>. The teacher must click this link within 72 hours to complete profile setup.
             </p>
             <button
               onClick={() => { setVerificationSentTo(''); if (onSuccess) onSuccess(); }}
-              className="mt-2 text-[11px] font-bold text-emerald-600 hover:text-emerald-700 underline cursor-pointer"
+              className="mt-2 text-[11px] font-bold text-primary underline cursor-pointer"
             >
               Dismiss
             </button>
@@ -102,7 +102,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -117,7 +117,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -132,7 +132,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -147,7 +147,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={designation}
             onChange={(e) => setDesignation(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -160,7 +160,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             value={gradeId}
             onChange={(e) => setGradeId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 cursor-pointer"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary cursor-pointer"
           >
             <option value="">Unassigned (No Pay Scale Grade)</option>
             {payScales.map((scale) => (
@@ -179,7 +179,7 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
             checked={isPermanent}
             onChange={(e) => setIsPermanent(e.target.checked)}
             disabled={submitting}
-            className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer"
+            className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary cursor-pointer"
           />
           <label htmlFor="isPermanent" className="text-sm font-semibold text-slate-700 cursor-pointer">
             Permanent Position (Indicates if this teacher is a permanent staff member)
@@ -187,17 +187,19 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
         </div>
 
         <div className="flex justify-end gap-3 md:col-span-2 mt-4 pt-3 border-t border-slate-100">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-colors duration-150 cursor-pointer"
-          >
-            Cancel
-          </button>
+          {onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-colors duration-150 cursor-pointer"
+            >
+              Cancel
+            </button>
+          )}
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-xs"
           >
             {submitting ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

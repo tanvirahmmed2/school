@@ -40,7 +40,7 @@ const StudentHomePage = () => {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
         <div className="relative flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-primary-light border-t-primary rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -59,7 +59,7 @@ const StudentHomePage = () => {
       value: stats?.subjectsCount || 0,
       subText: 'Enrolled in current term',
       icon: FiBookOpen,
-      color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+      color: 'bg-primary-light text-primary border-primary-light',
       link: '/student/subjects'
     },
     {
@@ -67,7 +67,7 @@ const StudentHomePage = () => {
       value: `${stats?.attendanceRate || 100}%`,
       subText: `${stats?.presentAttendanceDays || 0}/${stats?.totalAttendanceDays || 0} class days logged`,
       icon: FiActivity,
-      color: stats?.attendanceRate < 75 ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100',
+      color: stats?.attendanceRate < 75 ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-primary-light text-primary border-primary-light',
       link: '/student/attendance'
     },
     {
@@ -83,7 +83,7 @@ const StudentHomePage = () => {
       value: stats?.clubsCount || 0,
       subText: 'Active memberships',
       icon: FiUsers,
-      color: 'bg-sky-50 text-sky-600 border-sky-100',
+      color: 'bg-primary-light text-primary border-primary-light',
       link: '/student/clubs'
     }
   ];
@@ -91,23 +91,23 @@ const StudentHomePage = () => {
   return (
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-blue-500/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-primary text-secondary rounded-3xl p-6 md:p-10 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
             {welcomeMessage()}, {profile?.name || 'Student'}!
           </h1>
-          <p className="text-blue-100 text-sm md:text-base font-medium max-w-xl">
+          <p className="text-secondary/90 text-sm md:text-base font-medium max-w-xl">
             Welcome back to your academic hub. Keep track of your routines, progress, and assignments right here.
           </p>
         </div>
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-[200px] border border-white/15">
-          <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest block mb-1">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-50 border border-white/15">
+          <span className="text-[10px] font-bold text-secondary/80 uppercase tracking-widest block mb-1">
             Academic Information
           </span>
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-bold text-white">Class: {profile?.class_name || 'N/A'}</span>
-            <span className="text-xs font-semibold text-blue-100">Section: {profile?.section_name || 'N/A'}</span>
-            <span className="text-xs font-semibold text-blue-100">Reg No: {profile?.registration_number}</span>
+            <span className="text-sm font-bold text-secondary">Class: {profile?.class_name || 'N/A'}</span>
+            <span className="text-xs font-semibold text-secondary/90">Section: {profile?.section_name || 'N/A'}</span>
+            <span className="text-xs font-semibold text-secondary/90">Reg No: {profile?.registration_number}</span>
           </div>
         </div>
       </div>
@@ -142,14 +142,14 @@ const StudentHomePage = () => {
       {/* Quick Access / Shortcuts */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
         <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiUser className="text-blue-600" /> Quick Actions
+          <FiUser className="text-primary" /> Quick Actions
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link 
             href="/student/routine"
             className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
           >
-            <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600">
+            <div className="p-3 bg-primary-light rounded-xl text-primary">
               <FiClock className="text-xl" />
             </div>
             <div>
@@ -162,7 +162,7 @@ const StudentHomePage = () => {
             href="/student/results"
             className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
           >
-            <div className="p-3 bg-purple-50 rounded-xl text-purple-600">
+            <div className="p-3 bg-primary-light rounded-xl text-primary">
               <FiAward className="text-xl" />
             </div>
             <div>
@@ -175,7 +175,7 @@ const StudentHomePage = () => {
             href="/student/profile"
             className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
           >
-            <div className="p-3 bg-sky-50 rounded-xl text-sky-600">
+            <div className="p-3 bg-primary-light rounded-xl text-primary">
               <FiUser className="text-xl" />
             </div>
             <div>

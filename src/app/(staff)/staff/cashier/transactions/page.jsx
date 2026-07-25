@@ -118,7 +118,7 @@ const CashierTransactionsPage = () => {
                         {new Date(trans.payment_date).toLocaleDateString()}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-bold text-emerald-600 text-right">
+                    <td className="px-6 py-4 text-sm font-bold text-primary text-right">
                       ${Number(trans.amount).toFixed(2)}
                     </td>
                   </tr>

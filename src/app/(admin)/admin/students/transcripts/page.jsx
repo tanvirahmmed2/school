@@ -94,7 +94,7 @@ const StudentTranscriptsPage = () => {
       {/* Top Header - Hidden on print */}
       <div className="flex flex-col gap-1 print:hidden">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiFileText className="text-blue-600" /> Student Transcript Cards
+          <FiFileText className="text-primary" /> Student Transcript Cards
         </h1>
         <p className="text-sm text-slate-500">
           Compile and download official academic transcript sheets per student.
@@ -111,7 +111,7 @@ const StudentTranscriptsPage = () => {
             <select
               value={transExam}
               onChange={(e) => setTransExam(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-55 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-55 bg-slate-50"
             >
               <option value="">-- Choose Exam --</option>
               {exams.map(e => (
@@ -131,7 +131,7 @@ const StudentTranscriptsPage = () => {
                 setTransSection('');
                 setTransStudent('');
               }}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50"
             >
               <option value="">-- Choose Class --</option>
               {classes.map(c => (
@@ -151,7 +151,7 @@ const StudentTranscriptsPage = () => {
                 setTransStudent('');
               }}
               disabled={!transClass}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 disabled:opacity-50 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary disabled:opacity-50 bg-slate-50"
             >
               <option value="">All Sections</option>
               {filteredSections.map(s => (
@@ -168,7 +168,7 @@ const StudentTranscriptsPage = () => {
               value={transStudent}
               onChange={(e) => setTransStudent(e.target.value)}
               disabled={students.length === 0}
-              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 disabled:opacity-50 bg-slate-50"
+              className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary disabled:opacity-50 bg-slate-50"
             >
               <option value="">-- Choose Student --</option>
               {students.map(s => (
@@ -182,7 +182,7 @@ const StudentTranscriptsPage = () => {
           <button
             onClick={handleLoadTranscript}
             disabled={loadingTranscript}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-transform duration-150 cursor-pointer disabled:opacity-50"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-transform duration-150 cursor-pointer disabled:opacity-50"
           >
             {loadingTranscript ? (
               <FiEye className="animate-spin text-sm" />
@@ -209,7 +209,7 @@ const StudentTranscriptsPage = () => {
 
           <div className="w-full max-w-2xl mx-auto bg-white border border-slate-200 rounded-[32px] p-8 md:p-12 shadow-[0_15px_50px_rgba(0,0,0,0.04)] print:border-none print:shadow-none print:p-4">
             <div className="flex flex-col items-center justify-center text-center pb-6 border-b-2 border-slate-100">
-              <div className="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mb-3">
+              <div className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center font-bold text-2xl mb-3">
                 FIT
               </div>
               <h2 className="text-xl font-black text-slate-850 tracking-tight">FUTURE INSTITUTE OF TECHNOLOGY</h2>
@@ -277,13 +277,13 @@ const StudentTranscriptsPage = () => {
               </div>
               <div className="text-center border-x border-slate-200">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">GPA Achieved</span>
-                <p className="text-lg font-black text-blue-600 mt-0.5">
+                <p className="text-lg font-black text-primary mt-0.5">
                   {parseFloat(transcriptData.overallResult.gpa || 0).toFixed(2)}
                 </p>
               </div>
               <div className="text-center">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Overall Grade</span>
-                <p className="text-lg font-black text-emerald-600 mt-0.5">
+                <p className="text-lg font-black text-primary mt-0.5">
                   {transcriptData.overallResult.grade || 'Pending'}
                 </p>
               </div>

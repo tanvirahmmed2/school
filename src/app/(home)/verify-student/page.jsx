@@ -44,7 +44,7 @@ const VerifyStudentPage = () => {
         
         {/* Header Title */}
         <div className="text-center">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Verification Registry
           </span>
           <h1 className="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
@@ -69,12 +69,12 @@ const VerifyStudentPage = () => {
                   placeholder="e.g. 2026-9001"
                   value={regNumber}
                   onChange={(e) => setRegNumber(e.target.value)}
-                  className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:bg-white focus:border-sky-500 transition-all text-slate-700"
+                  className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:bg-white focus:border-primary transition-all text-slate-700"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-2xl text-xs font-bold transition-all shadow-md cursor-pointer disabled:opacity-60 flex items-center gap-1.5 shrink-0"
+                  className="px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-2xl text-xs font-bold transition-all shadow-md cursor-pointer disabled:opacity-60 flex items-center gap-1.5 shrink-0"
                 >
                   {loading ? 'Searching...' : 'Verify'}
                 </button>
@@ -107,7 +107,7 @@ const VerifyStudentPage = () => {
                 {/* Details Block */}
                 <div className="flex-1 flex flex-col gap-3.5 text-center sm:text-left">
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-light text-primary border border-primary-light rounded-full text-[10px] font-bold">
                       <FiCheckCircle /> Verified Identity
                     </span>
                   </div>

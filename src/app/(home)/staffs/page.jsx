@@ -31,7 +31,7 @@ export default function PublicStaffPage() {
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
         {/* Header */}
         <div className="text-center">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest inline-flex items-center gap-1.5 border border-sky-100">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest inline-flex items-center gap-1.5 border border-primary-light">
             <FiBriefcase className="text-xs" /> Support & Administration
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">

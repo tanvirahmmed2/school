@@ -35,7 +35,7 @@ const RoutinePage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -62,7 +62,7 @@ const RoutinePage = () => {
               onClick={() => setActiveTab(day)}
               className={`px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold transition-all duration-150 cursor-pointer ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10'
+                  ? 'bg-primary text-white shadow-md shadow-blue-500/10'
                   : 'bg-white border border-slate-100 text-slate-600 hover:border-slate-200 hover:text-slate-800'
               }`}
             >
@@ -89,7 +89,7 @@ const RoutinePage = () => {
               className="bg-white border border-slate-100 hover:border-slate-200 hover:shadow-md transition-all duration-200 rounded-2xl p-6 flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full w-fit mb-4">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary-light px-2.5 py-1 rounded-full w-fit mb-4">
                   <FiClock />
                   <span>{item.start_time} - {item.end_time}</span>
                 </div>

@@ -4,32 +4,32 @@ import React, { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-hot-toast';
 import {
   FiCalendar, FiClock, FiInfo, FiUploadCloud, FiFileText,
-  FiDownload, FiBook, FiLayers
+  FiDownload, FiBook, FiLayers, FiCheck, FiAlertCircle
 } from 'react-icons/fi';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const ExcelAttendanceForm = () => {
-  // ── Step 1: Date ─────────────────────────────────────────────────────────
+  // Step 1: Date
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [dayName, setDayName] = useState('');
 
-  // ── Step 2: Dropdowns ────────────────────────────────────────────────────
-  const [assignments, setAssignments] = useState([]); // teacher's scheduled class/section/subject combos for the day
-  const [periods, setPeriods] = useState([]);          // all academic periods from the system
+  // Step 2: Dropdowns
+  const [assignments, setAssignments] = useState([]);
+  const [periods, setPeriods] = useState([]);
   const [loadingDropdowns, setLoadingDropdowns] = useState(false);
   const [dropdownError, setDropdownError] = useState('');
 
   // Unique classes derived from assignments
   const [classOptions, setClassOptions] = useState([]);
-  const [selectedClassKey, setSelectedClassKey] = useState(''); // "classId|sectionId"
+  const [selectedClassKey, setSelectedClassKey] = useState('');
   const [selectedPeriodId, setSelectedPeriodId] = useState('');
 
-  // ── Step 3: Download ─────────────────────────────────────────────────────
+  // Step 3: Download
   const [xlsxLoaded, setXlsxLoaded] = useState(false);
   const [downloadingList, setDownloadingList] = useState(false);
 
-  // ── Step 4: Upload ───────────────────────────────────────────────────────
+  // Step 4: Upload
   const [fileName, setFileName] = useState('');
   const [parsedRecords, setParsedRecords] = useState([]);
   const [dragActive, setDragActive] = useState(false);
@@ -37,7 +37,7 @@ const ExcelAttendanceForm = () => {
   const [saving, setSaving] = useState(false);
   const [importSummary, setImportSummary] = useState(null);
 
-  // ── Load SheetJS ─────────────────────────────────────────────────────────
+  // Load SheetJS
   useEffect(() => {
     if (typeof window !== 'undefined' && window.XLSX) {
       setXlsxLoaded(true);
@@ -51,7 +51,7 @@ const ExcelAttendanceForm = () => {
     document.head.appendChild(script);
   }, []);
 
-  // ── When date changes: derive day name + fetch dropdowns ─────────────────
+  // When date changes
   useEffect(() => {
     if (!date) {
       setDayName('');
@@ -65,10 +65,8 @@ const ExcelAttendanceForm = () => {
     setDayName(name);
     resetSelections();
     fetchDropdowns(date);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  // Derive unique class options from assignments
   useEffect(() => {
     const seen = new Set();
     const options = [];
@@ -192,7 +190,6 @@ const ExcelAttendanceForm = () => {
     }
   };
 
-  // ── Parse uploaded file ───────────────────────────────────────────────────
   const processFile = (file) => {
     if (!file) return;
     const ext = file.name.split('.').pop().toLowerCase();
@@ -280,7 +277,6 @@ const ExcelAttendanceForm = () => {
     if (e.target.files?.[0]) processFile(e.target.files[0]);
   };
 
-  // ── Submit parsed records ─────────────────────────────────────────────────
   const handleSaveAttendance = async () => {
     if (!canProceed) {
       toast.error('Please select date, class and period first.');
@@ -291,7 +287,6 @@ const ExcelAttendanceForm = () => {
       return;
     }
 
-    // Determine subject — use first matching subject for selected class
     const subject = subjectsForClass[0];
     if (!subject) {
       toast.error('No subject found for the selected class. Contact the admin.');
@@ -341,7 +336,7 @@ const ExcelAttendanceForm = () => {
     if (s === '0' || s === 'absent' || s === 'a')
       return <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600">Absent</span>;
     if (s === '1' || s === 'present' || s === 'p')
-      return <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600">Present</span>;
+      return <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">Present</span>;
     if (s === 'late' || s === 'l')
       return <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-600">Late</span>;
     return <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-50 text-slate-500">{status}</span>;
@@ -350,7 +345,7 @@ const ExcelAttendanceForm = () => {
   return (
     <div className="flex flex-col gap-8 w-full">
 
-      {/* ── STEP 1 + 2: Date + Class + Period ────────────────────────────── */}
+      {/* STEP 1 + 2: Date + Class + Period */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col gap-5">
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Step 1 — Set Date &amp; Period</p>
 
@@ -365,7 +360,7 @@ const ExcelAttendanceForm = () => {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
             />
           </div>
 
@@ -374,7 +369,7 @@ const ExcelAttendanceForm = () => {
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <FiBook className="text-xs" /> Class
               {dayName && (
-                <span className="ml-auto px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[10px] font-extrabold rounded-lg border border-indigo-100">
+                <span className="ml-auto px-2 py-0.5 bg-primary-light text-primary text-[10px] font-extrabold rounded-lg border border-primary-light">
                   {dayName}
                 </span>
               )}
@@ -389,7 +384,7 @@ const ExcelAttendanceForm = () => {
                 setImportSummary(null);
               }}
               disabled={loadingDropdowns || classOptions.length === 0}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors disabled:opacity-60"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors disabled:opacity-60"
             >
               <option value="">
                 {loadingDropdowns
@@ -411,7 +406,7 @@ const ExcelAttendanceForm = () => {
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <FiClock className="text-xs" /> Period
               {!loadingDropdowns && periods.length > 0 && (
-                <span className="ml-auto px-2 py-0.5 bg-indigo-50 text-indigo-650 text-[10px] font-extrabold rounded-lg border border-indigo-100">
+                <span className="ml-auto px-2 py-0.5 bg-primary-light text-primary text-[10px] font-extrabold rounded-lg border border-primary-light">
                   {periods.length} system periods
                 </span>
               )}
@@ -425,7 +420,7 @@ const ExcelAttendanceForm = () => {
                 setImportSummary(null);
               }}
               disabled={loadingDropdowns || periods.length === 0}
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors disabled:opacity-60"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors disabled:opacity-60"
             >
               <option value="">
                 {loadingDropdowns
@@ -452,11 +447,11 @@ const ExcelAttendanceForm = () => {
         )}
       </div>
 
-      {/* ── Info badges ────────────────────────────────────────────────────── */}
+      {/* Info badges */}
       {canProceed && (
         <div className="flex flex-wrap gap-2.5 -mt-4">
           {selectedClassObj && (
-            <span className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-[11px] font-bold rounded-xl border border-indigo-100">
+            <span className="px-3 py-1.5 bg-primary-light text-primary text-[11px] font-bold rounded-xl border border-primary-light">
               🏫 Class {selectedClassObj.class_name}{selectedClassObj.section_name ? ` · Sec ${selectedClassObj.section_name}` : ''}
             </span>
           )}
@@ -474,7 +469,7 @@ const ExcelAttendanceForm = () => {
         </div>
       )}
 
-      {/* ── STEP 2: Download + Upload ─────────────────────────────────────── */}
+      {/* STEP 2: Download + Upload */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {/* Left: instructions + dropzone */}
@@ -484,7 +479,7 @@ const ExcelAttendanceForm = () => {
           <button
             onClick={handleDownloadStudentList}
             disabled={!canProceed || downloadingList}
-            className="flex items-center justify-center gap-2 w-full px-5 py-4 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-100 disabled:text-slate-400 text-white rounded-2xl text-sm font-bold shadow-md transition-all cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full px-5 py-4 bg-primary hover:bg-primary-dark disabled:bg-slate-100 disabled:text-slate-400 text-secondary rounded-2xl text-sm font-bold shadow-md transition-all cursor-pointer"
           >
             <FiDownload className="text-base" />
             <span>{downloadingList ? 'Downloading...' : 'Download Student List (.xlsx)'}</span>
@@ -498,7 +493,7 @@ const ExcelAttendanceForm = () => {
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
             className={`flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-3xl cursor-pointer transition-all duration-200 min-h-[200px] text-center bg-white ${
-              dragActive ? 'border-indigo-500 bg-indigo-50/20' : 'border-slate-200 hover:border-slate-300'
+              dragActive ? 'border-primary bg-primary-light/20' : 'border-slate-200 hover:border-slate-300'
             }`}
           >
             <input
@@ -508,7 +503,7 @@ const ExcelAttendanceForm = () => {
               accept=".xlsx,.xls,.csv"
               className="hidden"
             />
-            <div className="p-4 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-2xl mb-4">
+            <div className="p-4 bg-primary-light border border-primary-light text-primary rounded-2xl mb-4">
               <FiUploadCloud className="text-3xl" />
             </div>
             <h3 className="font-bold text-slate-800 text-sm mb-1">
@@ -555,7 +550,7 @@ const ExcelAttendanceForm = () => {
                 <button
                   onClick={handleSaveAttendance}
                   disabled={saving || !canProceed}
-                  className="flex items-center gap-1.5 px-5 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
+                  className="flex items-center gap-1.5 px-5 py-3 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-secondary disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md cursor-pointer"
                 >
                   <FiCheck className="text-sm" />
                   <span>{saving ? 'Registering...' : 'Register Attendance'}</span>
@@ -604,12 +599,12 @@ const ExcelAttendanceForm = () => {
           {importSummary && (
             <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
               <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-4">
-                <FiCheck className="text-emerald-500 text-lg" /> Upload Execution Summary
+                <FiCheck className="text-primary text-lg" /> Upload Execution Summary
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-center">
-                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block mb-1">Imported</span>
-                  <span className="text-2xl font-black text-emerald-700">{importSummary.successCount}</span>
+                <div className="p-4 bg-primary-light rounded-2xl border border-primary-light text-center">
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-wider block mb-1">Imported</span>
+                  <span className="text-2xl font-black text-primary">{importSummary.successCount}</span>
                 </div>
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Warnings</span>
@@ -634,7 +629,7 @@ const ExcelAttendanceForm = () => {
 
               {importSummary.savedRecords?.length > 0 && (
                 <div className="flex flex-col gap-2">
-                  <h4 className="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold text-primary flex items-center gap-1.5">
                     <FiLayers className="text-sm" /> Registered Students
                   </h4>
                   <div className="overflow-x-auto w-full max-h-[220px]">

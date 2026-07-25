@@ -18,14 +18,14 @@ const FacilitiesPage = () => {
       desc: 'Explore classrooms featuring smart interactive projectors, comfortable seating layouts, and sound dampening systems.',
       href: '/facilities/classrooms',
       icon: FiBookOpen,
-      color: 'text-sky-600 bg-sky-50'
+      color: 'text-primary bg-primary-light'
     },
     {
       title: 'Athletic Sports Grounds',
       desc: 'FIT maintains a major outdoor sports field, athletic running tracks, and dynamic indoor gyms for students.',
       href: '/about/campus',
       icon: FiActivity,
-      color: 'text-emerald-600 bg-emerald-50'
+      color: 'text-primary bg-primary-light'
     }
   ];
 
@@ -34,7 +34,7 @@ const FacilitiesPage = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-655 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest text-sky-600">
+          <span className="text-xs font-bold text-sky-655 bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest text-primary">
             FIT Facilities
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -67,7 +67,7 @@ const FacilitiesPage = () => {
                 </div>
                 <Link
                   href={card.href}
-                  className="mt-auto text-[10px] font-bold text-sky-600 uppercase tracking-wider flex items-center gap-1 hover:text-sky-800"
+                  className="mt-auto text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1 hover:text-primary"
                 >
                   <span>Explore facility</span>
                   <FiArrowRight />

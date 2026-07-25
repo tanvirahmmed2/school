@@ -85,7 +85,7 @@ const ApplicantDetailsContent = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading applicant details...</span>
       </div>
     );
@@ -132,7 +132,7 @@ const ApplicantDetailsContent = () => {
 
             <div>
               <h2 className="text-lg font-black text-slate-900 tracking-tight">{applicant.applicant_name}</h2>
-              <span className="inline-flex items-center gap-1 text-[10px] font-black text-sky-600 bg-sky-50 px-2 py-0.5 rounded uppercase tracking-wider mt-1">
+              <span className="inline-flex items-center gap-1 text-[10px] font-black text-primary bg-primary-light px-2 py-0.5 rounded uppercase tracking-wider mt-1">
                 Class: {applicant.class_name}
               </span>
             </div>
@@ -320,7 +320,7 @@ const ApplicantDetailsPage = () => {
   return (
     <Suspense fallback={
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Initializing...</span>
       </div>
     }>

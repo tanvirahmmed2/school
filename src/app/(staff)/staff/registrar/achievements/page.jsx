@@ -35,7 +35,7 @@ const RegistrarAchievementPage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-100">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
             Registrar Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -48,7 +48,7 @@ const RegistrarAchievementPage = () => {
 
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showAddForm ? (
             <>
@@ -64,7 +64,7 @@ const RegistrarAchievementPage = () => {
 
       {/* Inline Create Form */}
       {showAddForm && (
-        <div className="bg-white border border-emerald-100 rounded-2xl p-6 shadow-xs">
+        <div className="bg-white border border-primary-light rounded-2xl p-6 shadow-xs">
           <AchievementCreateForm
             onSuccess={() => {
               setShowAddForm(false);
@@ -78,7 +78,7 @@ const RegistrarAchievementPage = () => {
       {/* List */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : achievements.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -89,7 +89,7 @@ const RegistrarAchievementPage = () => {
             return (
               <div
                 key={item.id}
-                className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-xs hover:border-emerald-200 hover:shadow-md transition-all flex flex-col justify-between group"
+                className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-xs hover:border-primary-light hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 {coverImage ? (
                   <div className="w-full h-44 bg-slate-100 overflow-hidden relative">
@@ -100,7 +100,7 @@ const RegistrarAchievementPage = () => {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-32 bg-emerald-50 flex items-center justify-center text-emerald-500">
+                  <div className="w-full h-32 bg-primary-light flex items-center justify-center text-primary">
                     <FiAward className="text-4xl" />
                   </div>
                 )}
@@ -108,12 +108,12 @@ const RegistrarAchievementPage = () => {
                 <div className="p-5 flex flex-col gap-2 flex-1">
                   {itemDate && (
                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                      <FiCalendar className="text-xs text-emerald-500" />
+                      <FiCalendar className="text-xs text-primary" />
                       <span>{itemDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                     </div>
                   )}
 
-                  <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-emerald-600 transition-colors">
+                  <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
 
@@ -126,7 +126,7 @@ const RegistrarAchievementPage = () => {
                   <Link
                     href={`/achievements/${item.slug || item.id}`}
                     target="_blank"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-700"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-primary"
                   >
                     <span>View Public Page</span>
                     <FiExternalLink />

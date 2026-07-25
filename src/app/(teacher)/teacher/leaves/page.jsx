@@ -79,7 +79,7 @@ const LeavesPage = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Approved':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100"><FiCheck /> Approved</span>;
+        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Approved</span>;
       case 'Rejected':
         return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100"><FiX /> Rejected</span>;
       case 'Pending':
@@ -91,7 +91,7 @@ const LeavesPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -106,7 +106,7 @@ const LeavesPage = () => {
         </div>
         <button
           onClick={() => setShowApplyModal(true)}
-          className="flex items-center justify-center gap-1.5 px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer w-fit"
+          className="flex items-center justify-center gap-1.5 px-5 py-3 bg-primary hover:bg-primary-dark text-white rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer w-fit"
         >
           <FiPlus className="text-lg" />
           <span>Apply Leave</span>
@@ -119,7 +119,7 @@ const LeavesPage = () => {
           <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-xl flex flex-col gap-6 animate-fade-down duration-200">
             <div className="flex justify-between items-center border-b border-slate-100 pb-4">
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <FiFileText className="text-indigo-600" /> New Leave Application
+                <FiFileText className="text-primary" /> New Leave Application
               </h2>
               <button
                 onClick={() => setShowApplyModal(false)}
@@ -135,7 +135,7 @@ const LeavesPage = () => {
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value)}
-                  className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                   required
                 >
                   <option value="">-- Choose Type --</option>
@@ -153,7 +153,7 @@ const LeavesPage = () => {
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                     required
                   />
                 </div>
@@ -163,7 +163,7 @@ const LeavesPage = () => {
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors"
+                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                     required
                   />
                 </div>
@@ -181,7 +181,7 @@ const LeavesPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer mt-2"
+                className="w-full py-3.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer mt-2"
               >
                 {submitting ? 'Submitting...' : 'Submit Application'}
               </button>

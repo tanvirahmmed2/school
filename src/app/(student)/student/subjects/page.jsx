@@ -28,7 +28,7 @@ const SubjectsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -57,7 +57,7 @@ const SubjectsPage = () => {
               className="bg-white border border-slate-100 hover:border-slate-200 hover:shadow-md transition-all duration-200 rounded-2xl p-6 flex flex-col justify-between"
             >
               <div>
-                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl w-fit mb-4">
+                <div className="p-3 bg-primary-light text-primary rounded-xl w-fit mb-4">
                   <FiBook className="text-xl" />
                 </div>
                 <h3 className="font-bold text-slate-800 text-base mb-1">{sub.subject_name}</h3>
@@ -92,13 +92,13 @@ const SubjectsPage = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href={`/student/materials?class_subject_id=${sub.class_subject_id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex items-center justify-center py-2 bg-blue-50 hover:bg-blue-100 text-blue-650 text-blue-600 rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
+                    className="flex items-center justify-center py-2 bg-primary-light hover:bg-primary-light text-blue-650 text-primary rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
                   >
                     Study Materials
                   </a>
                   <a
                     href={`/student/assignments?class_subject_id=${sub.class_subject_id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex items-center justify-center py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-650 text-emerald-600 rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
+                    className="flex items-center justify-center py-2 bg-primary-light hover:bg-primary-light text-emerald-650 text-primary rounded-xl text-xs font-bold transition-colors text-center cursor-pointer"
                   >
                     Assignments
                   </a>

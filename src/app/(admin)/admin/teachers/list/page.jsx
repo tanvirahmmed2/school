@@ -152,7 +152,7 @@ const AdminTeachersListPage = () => {
       {/* Top Header Section */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-blue-600" /> Teachers Registry
+          <FiUsers className="text-primary" /> Teachers Registry
         </h1>
         <p className="text-sm text-slate-500">
           View all registered teacher profiles, manage statuses, or remove records.
@@ -169,7 +169,7 @@ const AdminTeachersListPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading registry...</span>
           </div>
         ) : teachers.length === 0 ? (
@@ -216,7 +216,7 @@ const AdminTeachersListPage = () => {
                   <tr key={teacher.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl flex items-center justify-center">
+                        <div className="w-9 h-9 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center">
                           <FiUser className="text-base" />
                         </div>
                         <div>
@@ -245,7 +245,7 @@ const AdminTeachersListPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${teacher.is_registered 
-                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
+                        ? 'bg-primary-light text-primary border border-primary-light' 
                         : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
                         {teacher.is_registered ? 'Setup Completed' : 'Pending Register'}
                       </span>
@@ -255,7 +255,7 @@ const AdminTeachersListPage = () => {
                         onClick={() => handleTogglePermanent(teacher)}
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
                           teacher.is_permanent
-                            ? 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                            ? 'bg-primary-light text-primary hover:bg-primary-light'
                             : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
                         }`}
                         title="Click to toggle employment status"
@@ -275,7 +275,7 @@ const AdminTeachersListPage = () => {
                       <select
                         value={teacher.grade_id || ''}
                         onChange={(e) => handleUpdateGrade(teacher, e.target.value)}
-                        className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 cursor-pointer"
+                        className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none transition-all duration-200 focus:bg-white focus:border-primary cursor-pointer"
                       >
                         <option value="">Unassigned</option>
                         {payScales.map((scale) => (
@@ -290,7 +290,7 @@ const AdminTeachersListPage = () => {
                         onClick={() => handleToggleStatus(teacher)}
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
                           teacher.is_active
-                            ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                            ? 'bg-primary-light text-primary hover:bg-primary-light'
                             : 'bg-rose-50 text-rose-600 hover:bg-rose-100'
                         }`}
                         title="Click to toggle active status"
@@ -312,7 +312,7 @@ const AdminTeachersListPage = () => {
                         <button
                           onClick={() => handleResendVerification(teacher)}
                           disabled={resendingId === teacher.id}
-                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer disabled:opacity-50"
+                          className="p-2 bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer disabled:opacity-50"
                           title={`Resend verification link to ${teacher.email}`}
                         >
                           {resendingId === teacher.id ? (
@@ -324,7 +324,7 @@ const AdminTeachersListPage = () => {
                       )}
                       <button
                         onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
-                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Remove Teacher"
                       >
                         <FiTrash2 className="text-sm" />

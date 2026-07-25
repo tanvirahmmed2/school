@@ -45,7 +45,7 @@ const StaffLogin = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-50">
       {/* Background blobs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-sky-500/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-primary/5 blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-cyan-500/5 blur-[100px] pointer-events-none"></div>
 
       <div className="w-full max-w-110 animate-fade-up z-10">
@@ -68,7 +68,7 @@ const StaffLogin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
 
@@ -80,7 +80,7 @@ const StaffLogin = () => {
                 </label>
                 <Link
                   href="/auth/access/staff/recovery"
-                  className="text-xs font-medium text-sky-600 hover:text-sky-700 transition-colors"
+                  className="text-xs font-medium text-primary hover:text-primary transition-colors"
                 >
                   Forgot Password?
                 </Link>
@@ -92,7 +92,7 @@ const StaffLogin = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10"
+                className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
 
@@ -100,7 +100,7 @@ const StaffLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -114,7 +114,7 @@ const StaffLogin = () => {
             {/* Registration setup link */}
             <div className="text-center text-xs font-semibold text-slate-400 mt-2">
               First time logging in?{' '}
-              <Link href="/auth/access/staff/register" className="text-sky-600 hover:text-sky-700 transition-colors underline">
+              <Link href="/auth/access/staff/register" className="text-primary hover:text-primary transition-colors underline">
                 Setup your account here
               </Link>
             </div>

@@ -39,7 +39,7 @@ const Recognition = () => {
     return (
       <section className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="mx-auto flex justify-center py-8">
-          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       </section>
     );
@@ -66,14 +66,14 @@ const Recognition = () => {
             <button
               onClick={() => handleScroll('left')}
               aria-label="Previous recognitions"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-primary hover:border-emerald-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
             >
               <FiChevronLeft className="text-lg" />
             </button>
             <button
               onClick={() => handleScroll('right')}
               aria-label="Next recognitions"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-primary hover:border-emerald-300 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer"
             >
               <FiChevronRight className="text-lg" />
             </button>

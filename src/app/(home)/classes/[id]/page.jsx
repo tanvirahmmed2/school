@@ -140,7 +140,7 @@ const ClassDetailsPage = () => {
 
             <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.01)] flex flex-col gap-5">
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 border-b border-slate-50 pb-4">
-                <FiBookOpen className="text-blue-600 text-xl" /> Course Objectives & Information
+                <FiBookOpen className="text-primary text-xl" /> Course Objectives & Information
               </h2>
               <div className="text-sm text-slate-600 leading-relaxed font-semibold">
                 {selectedClass.description ? (

@@ -19,7 +19,7 @@ const VisionPage = () => {
       title: 'Academic Excellence',
       desc: 'We enforce high curriculum standards, invite leading tech executives to audit courses, and structure grading registers to encourage pure technical mastery.',
       icon: FiBookOpen,
-      color: 'text-sky-600 bg-sky-50 border-sky-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Ethical Responsibility',
@@ -31,7 +31,7 @@ const VisionPage = () => {
       title: 'Sustainable Innovation',
       desc: 'Fostering practical solutions. Our students build microgrid software, solar charging models, and clean tech architectures in our hardware engineering labs.',
       icon: FiCpu,
-      color: 'text-emerald-600 bg-emerald-50 border-emerald-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Global Inclusivity',
@@ -58,7 +58,7 @@ const VisionPage = () => {
         <div className="relative bg-slate-900 text-white rounded-3xl p-8 overflow-hidden shadow-md border border-slate-800 flex flex-col gap-4">
           <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-slate-900 to-sky-950/80 z-0" />
           <div className="relative z-10 flex flex-col sm:flex-row gap-6 items-start">
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-400/20 text-sky-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-sky-400/20 text-sky-400 flex items-center justify-center shrink-0">
               <FiTarget className="text-xl" />
             </div>
             <div className="flex flex-col gap-2">

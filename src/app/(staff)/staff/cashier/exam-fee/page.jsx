@@ -299,9 +299,9 @@ const CashierExamFeePage = () => {
                       <span className="text-xs font-bold text-slate-800 truncate max-w-[70%]">{exam.name}</span>
                       <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${
                         exam.status === 'current'
-                          ? 'bg-emerald-50 text-emerald-600'
+                          ? 'bg-primary-light text-primary'
                           : exam.status === 'upcoming'
-                          ? 'bg-sky-50 text-sky-600'
+                          ? 'bg-primary-light text-primary'
                           : 'bg-slate-100 text-slate-500'
                       }`}>
                         {exam.status}
@@ -310,7 +310,7 @@ const CashierExamFeePage = () => {
                     <span className="text-[10px] text-slate-450 font-semibold">{exam.class_name} &bull; Term: {exam.term || 'N/A'}</span>
                     <div className="flex items-center justify-between mt-1 text-[10px]">
                       <span className="text-slate-400">Fee: <strong className="text-slate-700">৳{parseFloat(exam.exam_fee || 0).toFixed(2)}</strong></span>
-                      <span className="text-blue-600 font-bold hover:underline">View Invoices &rarr;</span>
+                      <span className="text-primary font-bold hover:underline">View Invoices &rarr;</span>
                     </div>
                   </div>
                 ))
@@ -364,13 +364,13 @@ const CashierExamFeePage = () => {
                             </td>
                             <td className="px-5 py-3 text-xs text-slate-600 font-semibold">{fee.title}</td>
                             <td className="px-5 py-3 text-xs font-bold text-slate-850 text-right">৳{parseFloat(fee.amount).toFixed(2)}</td>
-                            <td className="px-5 py-3 text-xs font-bold text-emerald-600 text-right">৳{parseFloat(fee.paid_amount || 0).toFixed(2)}</td>
+                            <td className="px-5 py-3 text-xs font-bold text-primary text-right">৳{parseFloat(fee.paid_amount || 0).toFixed(2)}</td>
                             <td className="px-5 py-3">
                               <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                                 isPaid
-                                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                                  ? 'bg-primary-light text-primary border border-primary-light'
                                   : fee.status === 'Partially Paid'
-                                  ? 'bg-sky-50 text-sky-600 border border-sky-100'
+                                  ? 'bg-primary-light text-primary border border-primary-light'
                                   : 'bg-red-50 text-red-655 text-red-600 border border-red-100'
                               }`}>
                                 {fee.status}

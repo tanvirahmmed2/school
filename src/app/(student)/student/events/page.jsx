@@ -71,7 +71,7 @@ const StudentEventsPage = () => {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Page Header */}
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
-          <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit">
+          <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit">
             Student Portal
           </span>
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
@@ -133,13 +133,13 @@ const StudentEventsPage = () => {
                       </div>
                     )}
 
-                    <div className="absolute top-3 left-3 bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
+                    <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
                       <FiCalendar />
                       <span>{eventDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                     </div>
 
                     {isJoined && (
-                      <div className="absolute top-3 right-3 bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1">
+                      <div className="absolute top-3 right-3 bg-primary text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1">
                         <FiCheckCircle />
                         <span>Registered</span>
                       </div>
@@ -148,7 +148,7 @@ const StudentEventsPage = () => {
 
                   {/* Details */}
                   <div className="p-6 flex flex-col gap-3 flex-1">
-                    <h2 className="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
+                    <h2 className="text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
                       {item.title}
                     </h2>
                     <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
@@ -157,11 +157,11 @@ const StudentEventsPage = () => {
 
                     <div className="flex flex-wrap gap-4 items-center border-t border-slate-100 pt-4 mt-auto text-xs text-slate-500 font-semibold">
                       <span className="flex items-center gap-1.5">
-                        <FiMapPin className="text-emerald-600 text-sm" />
+                        <FiMapPin className="text-primary text-sm" />
                         {item.location}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <FiClock className="text-emerald-600 text-sm" />
+                        <FiClock className="text-primary text-sm" />
                         {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
                       </span>
                     </div>
@@ -179,7 +179,7 @@ const StudentEventsPage = () => {
                       className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         isJoined
                           ? 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'
-                          : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
+                          : 'bg-primary hover:bg-primary-dark text-white shadow-sm'
                       } disabled:opacity-50`}
                     >
                       {actionLoading === item.id ? (

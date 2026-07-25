@@ -23,7 +23,7 @@ const Life = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
           <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-4">
-            <div className="w-12 h-12 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+            <div className="w-12 h-12 bg-primary-light text-primary rounded-xl flex items-center justify-center text-xl shrink-0">
               <FiCompass />
             </div>
             <div>
@@ -32,7 +32,7 @@ const Life = () => {
                 Connect with peers in our coding club, debate assemblies, research organizations, and athletic events to develop team leadership qualities.
               </p>
             </div>
-            <Link href="/clubs" className="mt-auto text-xs font-bold text-sky-600 hover:text-sky-850 transition-colors">
+            <Link href="/clubs" className="mt-auto text-xs font-bold text-primary hover:text-sky-850 transition-colors">
               Explore Clubs →
             </Link>
           </div>

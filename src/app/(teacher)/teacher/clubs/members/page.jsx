@@ -172,7 +172,7 @@ const TeacherClubMembersPage = () => {
         <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
           <div className="border-b border-slate-100 pb-3">
             <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-              <FiUserPlus className="text-indigo-600" /> Add Student Member
+              <FiUserPlus className="text-primary" /> Add Student Member
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">Assign a student as Member or Moderator.</p>
           </div>
@@ -282,7 +282,7 @@ const TeacherClubMembersPage = () => {
                         value={m.role}
                         onChange={(e) => handleRoleChange(m.student_id, e.target.value, m.designation)}
                         className={`px-2 py-1 rounded-lg text-[11px] font-bold border border-slate-200 cursor-pointer ${
-                          m.role === 'moderator' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-100 text-slate-700'
+                          m.role === 'moderator' ? 'bg-primary-light text-primary' : 'bg-slate-100 text-slate-700'
                         }`}
                       >
                         <option value="member">Member</option>

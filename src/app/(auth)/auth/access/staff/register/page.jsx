@@ -92,7 +92,7 @@ const StaffRegistration = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-50">
       {/* Background blobs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-sky-500/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-primary/5 blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-cyan-500/5 blur-[100px] pointer-events-none"></div>
 
       <div className="w-full max-w-140 animate-fade-up z-10">
@@ -109,12 +109,12 @@ const StaffRegistration = () => {
           {step === 1 ? (
             <form onSubmit={handleVerifyEmail} className="w-full max-w-110 mx-auto flex flex-col gap-5">
               {/* Primary flow notice */}
-              <div className="flex items-start gap-3 p-3.5 bg-sky-50 border border-sky-100 rounded-2xl">
-                <div className="w-7 h-7 rounded-full bg-sky-100 flex items-center justify-center shrink-0 mt-0.5">
-                  <FiMail className="text-sky-600 text-xs" />
+              <div className="flex items-start gap-3 p-3.5 bg-primary-light border border-primary-light rounded-2xl">
+                <div className="w-7 h-7 rounded-full bg-primary-light flex items-center justify-center shrink-0 mt-0.5">
+                  <FiMail className="text-primary text-xs" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-sky-700">Check Your Email First</p>
+                  <p className="text-xs font-bold text-primary">Check Your Email First</p>
                   <p className="text-[11px] text-sky-655 mt-0.5 leading-relaxed">
                     The administration sent a verification link to your email. Use that link to set up your profile securely. This form is a manual fallback.
                   </p>
@@ -133,7 +133,7 @@ const StaffRegistration = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-primary focus:ring-4 focus:ring-primary/10"
                 />
               </div>
 
@@ -141,7 +141,7 @@ const StaffRegistration = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -186,7 +186,7 @@ const StaffRegistration = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   disabled={loading}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 resize-none"
                 />
               </div>
 
@@ -202,7 +202,7 @@ const StaffRegistration = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
                 />
               </div>
 
@@ -210,7 +210,7 @@ const StaffRegistration = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -227,7 +227,7 @@ const StaffRegistration = () => {
         <div className="w-full text-center mt-6">
           <Link
             href="/auth/access/staff/login"
-            className="text-xs font-semibold text-sky-555 hover:text-sky-600 transition-colors py-1.5 px-3 rounded-full hover:bg-sky-50 text-sky-650 text-sky-600"
+            className="text-xs font-semibold text-sky-555 hover:text-primary transition-colors py-1.5 px-3 rounded-full hover:bg-primary-light text-sky-650 text-primary"
           >
             Back to Staff Login
           </Link>

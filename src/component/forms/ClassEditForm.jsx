@@ -44,9 +44,9 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="w-full bg-white border border-blue-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(59,130,246,0.02)] animate-fade-up">
+    <div className="w-full bg-white border border-primary-light rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(59,130,246,0.02)] animate-fade-up">
       <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <FiEdit2 className="text-blue-600" /> Edit Class: {cls.name}
+        <FiEdit2 className="text-primary" /> Edit Class: {cls.name}
       </h2>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -60,7 +60,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={updating}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
           />
         </div>
 
@@ -74,7 +74,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
             value={numericName}
             onChange={(e) => setNumericName(e.target.value)}
             disabled={updating}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
           />
         </div>
 
@@ -88,7 +88,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             disabled={updating}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
           />
         </div>
 
@@ -102,7 +102,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
             value={maxSeats}
             onChange={(e) => setMaxSeats(e.target.value)}
             disabled={updating}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
           />
         </div>
 
@@ -129,7 +129,7 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
           <button
             type="submit"
             disabled={updating}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
           >
             {updating ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

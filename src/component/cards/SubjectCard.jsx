@@ -21,7 +21,7 @@ const SubjectCard = ({ subject, onEdit, onDelete, className = '' }) => {
             {onEdit && (
               <button
                 onClick={() => onEdit(subject)}
-                className="p-1.5 bg-slate-50 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 bg-slate-50 hover:bg-primary-light text-slate-400 hover:text-primary rounded-lg transition-colors cursor-pointer"
                 title="Edit Subject"
               >
                 <FiEdit className="text-xs" />

@@ -148,7 +148,7 @@ const AdminHostelAllocationsPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-sky-655 text-sky-600" /> Room Allocation Registry
+          <FiUsers className="text-sky-655 text-primary" /> Room Allocation Registry
         </h1>
         <p className="text-sm text-slate-500">
           Assign students to hostel rooms, verify occupancies, and process checkout vacations.
@@ -160,7 +160,7 @@ const AdminHostelAllocationsPage = () => {
         <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-5">
           <div>
             <h2 className="text-base font-bold text-slate-800 mb-1 flex items-center gap-2">
-              <FiPlus className="text-sky-600" /> Allocate Space
+              <FiPlus className="text-primary" /> Allocate Space
             </h2>
             <p className="text-[11px] text-slate-450 text-slate-400">
               Verify the student registration number first, then select an available room.
@@ -178,13 +178,13 @@ const AdminHostelAllocationsPage = () => {
                 placeholder="e.g. REG-10293"
                 value={searchRegNo}
                 onChange={(e) => setSearchRegNo(e.target.value)}
-                className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-sky-500"
+                className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-primary"
               />
               <button
                 type="button"
                 onClick={handleSearchStudent}
                 disabled={searchingStudent}
-                className="p-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl transition-colors cursor-pointer"
+                className="p-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl transition-colors cursor-pointer"
                 title="Search student registration"
               >
                 {searchingStudent ? (
@@ -197,14 +197,14 @@ const AdminHostelAllocationsPage = () => {
 
             {/* Found student confirmation */}
             {foundStudent && (
-              <div className="mt-2 p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-between">
+              <div className="mt-2 p-3 bg-primary-light border border-primary-light rounded-xl flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold text-emerald-800">{foundStudent.name || 'Unnamed Student'}</span>
-                  <span className="text-[10px] text-emerald-600 font-semibold">
+                  <span className="text-xs font-bold text-primary">{foundStudent.name || 'Unnamed Student'}</span>
+                  <span className="text-[10px] text-primary font-semibold">
                     {foundStudent.class_name || 'Class N/A'} • Gender: {foundStudent.gender || 'Unspecified'}
                   </span>
                 </div>
-                <FiCheck className="text-emerald-600 font-bold" />
+                <FiCheck className="text-primary font-bold" />
               </div>
             )}
           </div>
@@ -220,7 +220,7 @@ const AdminHostelAllocationsPage = () => {
                 value={roomId}
                 onChange={(e) => setRoomId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               >
                 <option value="">-- Choose Room --</option>
                 {rooms.map(r => (
@@ -241,14 +241,14 @@ const AdminHostelAllocationsPage = () => {
                 value={allocatedAt}
                 onChange={(e) => setAllocatedAt(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting || !foundStudent}
-              className="py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer bg-sky-650 hover:bg-sky-700 w-full disabled:opacity-50 disabled:bg-slate-300 disabled:cursor-not-allowed mt-2 bg-sky-600"
+              className="py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer bg-sky-650 hover:bg-primary-dark w-full disabled:opacity-50 disabled:bg-slate-300 disabled:cursor-not-allowed mt-2 bg-primary"
             >
               {submitting ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -269,7 +269,7 @@ const AdminHostelAllocationsPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading allocation registry...</span>
             </div>
           ) : allocations.length === 0 ? (
@@ -318,7 +318,7 @@ const AdminHostelAllocationsPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-[10px] font-bold rounded-lg ${
                           alloc.status === 'Active'
-                            ? 'bg-emerald-50 text-emerald-600'
+                            ? 'bg-primary-light text-primary'
                             : 'bg-slate-100 text-slate-500'
                         }`}>
                           {alloc.status}

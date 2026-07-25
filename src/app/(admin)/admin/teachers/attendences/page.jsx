@@ -29,7 +29,7 @@ const AdminAttendancesPage = () => {
       {/* Top Header Section */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiCalendar className="text-blue-600" /> Attendance Registry
+          <FiCalendar className="text-primary" /> Attendance Registry
         </h1>
         <p className="text-sm text-slate-500">
           Track and log teacher daily check-in timings and leaves.
@@ -54,7 +54,7 @@ const AdminAttendancesPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading attendance...</span>
           </div>
         ) : attendances.length === 0 ? (
@@ -87,7 +87,7 @@ const AdminAttendancesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-600">{record.check_out}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                        record.status === 'Present' ? 'bg-emerald-50 text-emerald-600' :
+                        record.status === 'Present' ? 'bg-primary-light text-primary' :
                         record.status === 'Late' ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'
                       }`}>
                         {record.status}

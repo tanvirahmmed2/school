@@ -80,7 +80,7 @@ export default function AdminHistoryPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-            <FiClock className="text-indigo-600" /> Institutional History Milestones
+            <FiClock className="text-primary" /> Institutional History Milestones
           </h1>
           <p className="text-xs text-slate-500 font-medium">
             Manage institutional timeline events, major founding achievements, and historical growth records.
@@ -88,7 +88,7 @@ export default function AdminHistoryPage() {
         </div>
         <Link
           href="/admin/history/new"
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-md shadow-indigo-200 cursor-pointer shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-md shadow-indigo-200 cursor-pointer shrink-0"
         >
           <FiPlus className="text-base" /> Create History
         </Link>
@@ -97,7 +97,7 @@ export default function AdminHistoryPage() {
       {/* List Container */}
       {loading ? (
         <div className="bg-white border border-slate-100 rounded-3xl p-12 flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-xs font-bold text-slate-500">Loading history records...</p>
         </div>
       ) : histories.length === 0 ? (
@@ -109,7 +109,7 @@ export default function AdminHistoryPage() {
           </p>
           <Link
             href="/admin/history/new"
-            className="mt-2 px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors inline-flex items-center gap-1.5"
+            className="mt-2 px-4 py-2 bg-primary text-white text-xs font-bold rounded-xl hover:bg-primary-dark transition-colors inline-flex items-center gap-1.5"
           >
             <FiPlus /> Add First Record
           </Link>
@@ -123,7 +123,7 @@ export default function AdminHistoryPage() {
             >
               <div className="flex flex-col gap-2 max-w-3xl">
                 <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-black rounded-lg">
+                  <span className="px-3 py-1 bg-primary-light border border-primary-light text-primary text-xs font-black rounded-lg">
                     {formatDate(item.date)}
                   </span>
                   <h2 className="text-base font-bold text-slate-800">{item.title}</h2>
@@ -135,7 +135,7 @@ export default function AdminHistoryPage() {
 
                 {item.infor && (
                   <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg w-fit">
-                    <FiInfo className="text-indigo-500 shrink-0" />
+                    <FiInfo className="text-primary shrink-0" />
                     <span>{item.infor}</span>
                   </div>
                 )}
@@ -145,7 +145,7 @@ export default function AdminHistoryPage() {
               <div className="flex items-center gap-2 shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
                 <button
                   onClick={() => setEditingItem(item)}
-                  className="px-3.5 py-2 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-3.5 py-2 bg-slate-100 hover:bg-primary-light hover:text-primary text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <FiEdit3 /> Edit
                 </button>

@@ -13,7 +13,7 @@ const NewsCard = ({ news, href, className = '' }) => {
 
   const card = (
     <div
-      className={`bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-[0_8px_30px_rgba(14,165,233,0.08)] hover:border-sky-200 transition-all duration-250 flex flex-col group h-full ${className}`}
+      className={`bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-primary transition-all duration-250 flex flex-col group h-full ${className}`}
     >
       {/* Cover Image */}
       {image ? (
@@ -25,20 +25,20 @@ const NewsCard = ({ news, href, className = '' }) => {
           />
         </div>
       ) : (
-        <div className="w-full h-48 bg-linear-to-br from-sky-50 to-indigo-50 flex items-center justify-center shrink-0 relative">
-          <FiFileText className="text-5xl text-sky-200" />
+        <div className="w-full h-48 bg-primary-light flex items-center justify-center shrink-0 relative">
+          <FiFileText className="text-5xl text-primary opacity-60" />
         </div>
       )}
 
       <div className="p-5 flex flex-col gap-3 flex-1">
         {newsDate && (
           <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-            <FiCalendar className="text-xs shrink-0 text-sky-500" />
+            <FiCalendar className="text-xs shrink-0 text-primary" />
             <span>{newsDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
           </div>
         )}
 
-        <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sky-600 transition-colors">
+        <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
           {title}
         </h3>
 
@@ -46,7 +46,7 @@ const NewsCard = ({ news, href, className = '' }) => {
           {content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()}
         </p>
 
-        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700">
+        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-primary">
           <span>Read Article</span>
           <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
         </div>

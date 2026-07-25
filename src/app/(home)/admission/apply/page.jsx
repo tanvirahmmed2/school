@@ -119,7 +119,7 @@ const ApplyFormContent = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Preparing application form...</span>
       </div>
     );
@@ -148,7 +148,7 @@ const ApplyFormContent = () => {
           <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
             <div>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Applicant Number</p>
-              <p className="text-xl font-black text-sky-600 font-mono mt-0.5">{receiptData.applicantNumber}</p>
+              <p className="text-xl font-black text-primary font-mono mt-0.5">{receiptData.applicantNumber}</p>
             </div>
             <button
               onClick={copyReceiptNumber}
@@ -178,7 +178,7 @@ const ApplyFormContent = () => {
 
         <Link
           href="/admission"
-          className="inline-flex items-center justify-center gap-1.5 w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl transition-colors shadow-xs"
+          className="inline-flex items-center justify-center gap-1.5 w-full py-3 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl transition-colors shadow-xs"
         >
           <FiArrowLeft /> Return to Admission Home
         </Link>
@@ -189,7 +189,7 @@ const ApplyFormContent = () => {
   return (
     <div className="w-full max-w-2xl mx-auto bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+        <div className="w-11 h-11 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-xl">
           <FiFileText />
         </div>
         <div>
@@ -216,7 +216,7 @@ const ApplyPage = () => {
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Fontana Enrollment Portal
           </span>
           <h1 className="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
@@ -226,7 +226,7 @@ const ApplyPage = () => {
 
         <Suspense fallback={
           <div className="w-full min-h-[40vh] flex items-center justify-center">
-            <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           </div>
         }>
           <ApplyFormContent />

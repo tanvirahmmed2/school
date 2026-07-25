@@ -54,7 +54,7 @@ const StudentResultsPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiAward className="text-blue-600" /> Publish Exam Results
+          <FiAward className="text-primary" /> Publish Exam Results
         </h1>
         <p className="text-sm text-slate-500">
           Select an exam term to run grading compilations and toggle student results availability.
@@ -79,7 +79,7 @@ const StudentResultsPage = () => {
 
         {loadingExams && exams.length === 0 ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading publications...</span>
           </div>
         ) : exams.length === 0 ? (
@@ -118,7 +118,7 @@ const StudentResultsPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${
                           ex.is_published 
-                            ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
+                            ? 'bg-primary-light text-primary border border-primary-light' 
                             : 'bg-rose-50 text-rose-600 border border-rose-100'
                         }`}>
                           {ex.is_published ? 'Released / Published' : 'Draft / Unpublished'}
@@ -131,7 +131,7 @@ const StudentResultsPage = () => {
                           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold cursor-pointer transition-colors duration-150 ${
                             ex.is_published
                               ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
-                              : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                              : 'bg-primary-light text-primary hover:bg-primary-light'
                           }`}
                         >
                           {ex.is_published ? (

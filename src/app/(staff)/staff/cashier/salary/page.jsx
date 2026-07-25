@@ -78,7 +78,7 @@ const CashierPayrollPage = () => {
   if (loading && !role) {
     return (
       <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading payroll history...</span>
       </div>
     );
@@ -113,7 +113,7 @@ const CashierPayrollPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiDollarSign className="text-indigo-650 text-indigo-600 animate-bounce" /> Payroll Ledger
+          <FiDollarSign className="text-indigo-650 text-primary animate-bounce" /> Payroll Ledger
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Review employee salary pay slips, verify month basic salaries, and record bank/cash transfers.
@@ -126,7 +126,7 @@ const CashierPayrollPage = () => {
           onClick={() => setActiveTab('teacher')}
           className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === 'teacher'
-              ? 'border-indigo-600 text-indigo-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -136,7 +136,7 @@ const CashierPayrollPage = () => {
           onClick={() => setActiveTab('staff')}
           className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === 'staff'
-              ? 'border-indigo-600 text-indigo-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -153,7 +153,7 @@ const CashierPayrollPage = () => {
             placeholder={`Search by ${activeTab} name or month...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-indigo-500"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-primary"
           />
         </div>
       </div>
@@ -205,7 +205,7 @@ const CashierPayrollPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-extrabold text-slate-800 text-right">৳{netPaid.toLocaleString()}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          isPaid ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                          isPaid ? 'bg-primary-light text-primary' : 'bg-amber-50 text-amber-600'
                         }`}>
                           {isPaid ? <FiCheck /> : <FiClock />}
                           {s.status}
@@ -216,7 +216,7 @@ const CashierPayrollPage = () => {
                           <button
                             onClick={() => handlePaySalary(s.id)}
                             disabled={updatingId === s.id}
-                            className="text-xs font-bold text-indigo-650 text-indigo-650 text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1"
+                            className="text-xs font-bold text-indigo-650 text-indigo-650 text-primary hover:text-primary bg-primary-light hover:bg-primary-light px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1"
                           >
                             <FiCreditCard className="text-xs" /> Pay salary
                           </button>

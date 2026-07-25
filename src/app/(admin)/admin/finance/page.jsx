@@ -196,7 +196,7 @@ const FinancePage = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[50vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading ledger files...</span>
       </div>
     );
@@ -208,7 +208,7 @@ const FinancePage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiDollarSign className="text-blue-600" /> General Finance & Audit Ledger
+            <FiDollarSign className="text-primary" /> General Finance & Audit Ledger
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Categorized inflow tracking, organizational outflow logging, and unified transaction sheets.
@@ -218,7 +218,7 @@ const FinancePage = () => {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={() => setShowLogIncome(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer transition-colors shadow-xs"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer transition-colors shadow-xs"
           >
             <FiPlus /> Log Income
           </button>
@@ -240,7 +240,7 @@ const FinancePage = () => {
       {/* Summary Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex items-center gap-4">
-          <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-primary-light text-primary rounded-2xl flex items-center justify-center">
             <FiTrendingUp className="text-xl" />
           </div>
           <div>
@@ -260,12 +260,12 @@ const FinancePage = () => {
         </div>
 
         <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${netBalance >= 0 ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-600'}`}>
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${netBalance >= 0 ? 'bg-primary-light text-primary' : 'bg-red-50 text-red-600'}`}>
             <FiDollarSign className="text-xl" />
           </div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Net Treasury Balance</p>
-            <h3 className={`text-xl font-bold mt-0.5 ${netBalance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+            <h3 className={`text-xl font-bold mt-0.5 ${netBalance >= 0 ? 'text-primary' : 'text-red-600'}`}>
               ৳{netBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </h3>
           </div>
@@ -278,7 +278,7 @@ const FinancePage = () => {
           onClick={() => setActiveTab('transactions')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'transactions'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -288,7 +288,7 @@ const FinancePage = () => {
           onClick={() => setActiveTab('incomes')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'incomes'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -298,7 +298,7 @@ const FinancePage = () => {
           onClick={() => setActiveTab('expenses')}
           className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'expenses'
-              ? 'border-blue-600 text-blue-600'
+              ? 'border-primary text-primary'
               : 'border-transparent text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -339,7 +339,7 @@ const FinancePage = () => {
                   {transactions.map((txn) => (
                     <tr key={txn.id} className="hover:bg-slate-50/30 transition-colors">
                       <td className="px-6 py-4">
-                        <span className="text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
+                        <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
                           {txn.transaction_number}
                         </span>
                       </td>
@@ -361,14 +361,14 @@ const FinancePage = () => {
                       <td className="px-6 py-4">
                         <span className={`text-xs font-bold ${
                           txn.transaction_type === 'Credit'
-                            ? 'text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full'
+                            ? 'text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full'
                             : 'text-rose-600 bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full'
                         }`}>
                           {txn.transaction_type === 'Credit' ? 'Inflow (+)' : 'Outflow (-)'}
                         </span>
                       </td>
                       <td className={`px-6 py-4 text-right font-bold text-sm ${
-                        txn.transaction_type === 'Credit' ? 'text-emerald-600' : 'text-rose-600'
+                        txn.transaction_type === 'Credit' ? 'text-primary' : 'text-rose-600'
                       }`}>
                         ৳{parseFloat(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
@@ -384,7 +384,7 @@ const FinancePage = () => {
       {activeTab === 'incomes' && (
         <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
           <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-2">
-            <FiTrendingUp className="text-emerald-500" />
+            <FiTrendingUp className="text-primary" />
             <h2 className="text-base font-bold text-slate-800">Income Inflow Registers</h2>
           </div>
 
@@ -430,7 +430,7 @@ const FinancePage = () => {
                       <td className="px-6 py-4 text-xs text-slate-600">
                         {inc.received_by || 'Unknown'}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm font-bold text-emerald-600">
+                      <td className="px-6 py-4 text-right text-sm font-bold text-primary">
                         +৳{parseFloat(inc.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
@@ -514,7 +514,7 @@ const FinancePage = () => {
                 <select
                   value={expenseForm.category_id}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, category_id: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="">Select a category...</option>
                   {categories.expenseCategories.map((c) => (
@@ -530,7 +530,7 @@ const FinancePage = () => {
                   placeholder="e.g. Electricity Bill June"
                   value={expenseForm.title}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, title: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -543,7 +543,7 @@ const FinancePage = () => {
                     placeholder="120.00"
                     value={expenseForm.amount}
                     onChange={(e) => setExpenseForm((p) => ({ ...p, amount: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
 
@@ -553,7 +553,7 @@ const FinancePage = () => {
                     type="date"
                     value={expenseForm.expense_date}
                     onChange={(e) => setExpenseForm((p) => ({ ...p, expense_date: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
               </div>
@@ -565,7 +565,7 @@ const FinancePage = () => {
                   placeholder="Admin Office / Accounts Manager"
                   value={expenseForm.paid_by}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, paid_by: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -576,7 +576,7 @@ const FinancePage = () => {
                   value={expenseForm.description}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
                 />
               </div>
 
@@ -611,7 +611,7 @@ const FinancePage = () => {
                 <select
                   value={incomeForm.category_id}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, category_id: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="">Select a category...</option>
                   {categories.incomeCategories.map((c) => (
@@ -627,7 +627,7 @@ const FinancePage = () => {
                   placeholder="e.g. Government Grant 2026"
                   value={incomeForm.title}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, title: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -640,7 +640,7 @@ const FinancePage = () => {
                     placeholder="1200.00"
                     value={incomeForm.amount}
                     onChange={(e) => setIncomeForm((p) => ({ ...p, amount: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
 
@@ -650,7 +650,7 @@ const FinancePage = () => {
                     type="date"
                     value={incomeForm.income_date}
                     onChange={(e) => setIncomeForm((p) => ({ ...p, income_date: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                   />
                 </div>
               </div>
@@ -662,7 +662,7 @@ const FinancePage = () => {
                   placeholder="Principal Office"
                   value={incomeForm.received_by}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, received_by: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -673,7 +673,7 @@ const FinancePage = () => {
                   value={incomeForm.description}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
                 />
               </div>
 
@@ -688,7 +688,7 @@ const FinancePage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
                 >
                   Log Income
                 </button>
@@ -710,7 +710,7 @@ const FinancePage = () => {
                   placeholder="e.g. Utility Bills, Donations"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, name: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 />
               </div>
 
@@ -719,7 +719,7 @@ const FinancePage = () => {
                 <select
                   value={categoryForm.type}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, type: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
                 >
                   <option value="Expense">Expense Outflow</option>
                   <option value="Income">Income Inflow</option>
@@ -733,7 +733,7 @@ const FinancePage = () => {
                   value={categoryForm.description}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
                 />
               </div>
 

@@ -66,7 +66,7 @@ const AdmissionApplyForm = ({
           <FiLayers /> Target Admission Circular *
         </label>
         {admissionIdParam && selectedCircular ? (
-          <div className="w-full px-4 py-3 bg-sky-50/50 border border-sky-100 rounded-xl text-sm text-sky-950 font-bold">
+          <div className="w-full px-4 py-3 bg-primary-light/50 border border-primary-light rounded-xl text-sm text-sky-950 font-bold">
             {selectedCircular.title} (Class: {selectedCircular.class_name})
           </div>
         ) : (
@@ -74,7 +74,7 @@ const AdmissionApplyForm = ({
             required
             value={selectedCircular ? selectedCircular.id : ''}
             onChange={(e) => onCircularChange(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 cursor-pointer"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary cursor-pointer"
           >
             <option value="">Choose an open circular drive...</option>
             {circulars.map((c) => (
@@ -91,7 +91,7 @@ const AdmissionApplyForm = ({
               {selectedCircular.max_age !== null && <div>• Max Age: <strong>{selectedCircular.max_age} years</strong></div>}
               <div>• Deadline: <strong>{new Date(selectedCircular.finish_date).toLocaleDateString()}</strong></div>
               {selectedCircular.fees !== undefined && selectedCircular.fees !== null && (
-                <div>• Admission Fee: <strong className="text-blue-600 font-bold">BDT {parseFloat(selectedCircular.fees).toFixed(2)}</strong></div>
+                <div>• Admission Fee: <strong className="text-primary font-bold">BDT {parseFloat(selectedCircular.fees).toFixed(2)}</strong></div>
               )}
             </div>
             {selectedCircular.description && (
@@ -121,7 +121,7 @@ const AdmissionApplyForm = ({
               placeholder="e.g. Jane Doe"
               value={form.applicant_name}
               onChange={(e) => setForm((p) => ({ ...p, applicant_name: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
 
@@ -134,7 +134,7 @@ const AdmissionApplyForm = ({
               required
               value={form.date_of_birth}
               onChange={(e) => setForm((p) => ({ ...p, date_of_birth: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
 
@@ -148,7 +148,7 @@ const AdmissionApplyForm = ({
               placeholder="Birth Certificate Number"
               value={form.birth_regi_number}
               onChange={(e) => setForm((p) => ({ ...p, birth_regi_number: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
 
@@ -157,7 +157,7 @@ const AdmissionApplyForm = ({
             <select
               value={form.gender}
               onChange={(e) => setForm((p) => ({ ...p, gender: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 cursor-pointer"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary cursor-pointer"
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -175,7 +175,7 @@ const AdmissionApplyForm = ({
               placeholder="candidate@example.com"
               value={form.email}
               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
 
@@ -189,7 +189,7 @@ const AdmissionApplyForm = ({
               placeholder="+1 (555) 000-0000"
               value={form.phone}
               onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
         </div>
@@ -204,7 +204,7 @@ const AdmissionApplyForm = ({
               placeholder="e.g. Fontana Elementary School"
               value={form.previous_school}
               onChange={(e) => setForm((p) => ({ ...p, previous_school: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
 
@@ -218,7 +218,7 @@ const AdmissionApplyForm = ({
               placeholder="House no, Street Name, City, Zip Code"
               value={form.address}
               onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500 resize-none"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
             />
           </div>
         </div>
@@ -238,7 +238,7 @@ const AdmissionApplyForm = ({
               placeholder="Guardian full name"
               value={form.guardian_name}
               onChange={(e) => setForm((p) => ({ ...p, guardian_name: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
 
@@ -252,7 +252,7 @@ const AdmissionApplyForm = ({
               placeholder="Guardian contact phone number"
               value={form.guardian_phone}
               onChange={(e) => setForm((p) => ({ ...p, guardian_phone: e.target.value }))}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-sky-500"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
             />
           </div>
         </div>
@@ -262,7 +262,7 @@ const AdmissionApplyForm = ({
       <div className="border-t border-slate-50 pt-4 mt-2">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">3. Candidate Documents (Optional)</h3>
-          <span className="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded-full">
+          <span className="text-[10px] font-semibold text-primary bg-primary-light px-2.5 py-0.5 rounded-full">
             Can upload now or via email link after fee payment
           </span>
         </div>
@@ -292,7 +292,7 @@ const AdmissionApplyForm = ({
                 name="image"
                 accept="image/jpeg,image/png"
                 onChange={handleFileChange}
-                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
               />
             </div>
           </div>
@@ -321,7 +321,7 @@ const AdmissionApplyForm = ({
                 name="signature"
                 accept="image/jpeg,image/png"
                 onChange={handleFileChange}
-                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer"
+                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
               />
             </div>
           </div>
@@ -340,7 +340,7 @@ const AdmissionApplyForm = ({
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm disabled:opacity-60 flex items-center gap-1.5"
+          className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm disabled:opacity-60 flex items-center gap-1.5"
         >
           {submitting ? 'Submitting Application...' : 'Submit Application & Get Receipt'}
         </button>

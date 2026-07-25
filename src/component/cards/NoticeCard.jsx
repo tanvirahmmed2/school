@@ -13,16 +13,16 @@ const NoticeCard = ({ notice, className = '' }) => {
     <div
       className={`bg-white rounded-2xl border p-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-all duration-200 ${
         is_pinned
-          ? 'border-amber-200 shadow-xs bg-amber-50/20 hover:border-amber-300'
-          : 'border-slate-100 hover:border-sky-200 hover:shadow-xs'
+          ? 'border-primary-light shadow-xs bg-primary-light/40 hover:border-primary'
+          : 'border-slate-100 hover:border-primary hover:shadow-xs'
       } ${className}`}
     >
       <div className="flex gap-3.5 items-start">
         <div
           className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
             is_pinned
-              ? 'bg-amber-100 text-amber-600 border border-amber-200'
-              : 'bg-sky-50 text-sky-600 border border-sky-100'
+              ? 'bg-primary text-secondary border border-primary-light'
+              : 'bg-primary-light text-primary border border-primary-light'
           }`}
         >
           {is_pinned ? <FiInfo className="text-lg" /> : <FiBookOpen className="text-lg" />}
@@ -34,7 +34,7 @@ const NoticeCard = ({ notice, className = '' }) => {
               {title}
             </h3>
             {is_pinned && (
-              <span className="text-[9px] font-black text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
+              <span className="text-[9px] font-black text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
                 Pinned
               </span>
             )}
@@ -54,8 +54,8 @@ const NoticeCard = ({ notice, className = '' }) => {
           rel="noopener noreferrer"
           className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs transition-all shrink-0 cursor-pointer ${
             is_pinned
-              ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'
-              : 'bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-100 hover:border-sky-200'
+              ? 'bg-primary hover:bg-primary-dark text-secondary shadow-xs'
+              : 'bg-primary-light hover:bg-primary-light text-primary border border-primary-light'
           }`}
         >
           <span>View Document</span>

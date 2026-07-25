@@ -81,7 +81,7 @@ const LessonsPageContent = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -92,11 +92,11 @@ const LessonsPageContent = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Lesson Planner</h1>
-          <p className="text-slate-500 text-sm font-medium">Manage and structure your curriculum plans for <span className="text-indigo-600 font-bold">{subjectName}</span>.</p>
+          <p className="text-slate-500 text-sm font-medium">Manage and structure your curriculum plans for <span className="text-primary font-bold">{subjectName}</span>.</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm w-fit"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors shadow-sm w-fit"
         >
           <FiPlus className="text-sm" />
           <span>{showAddForm ? 'View Lessons' : 'Add Lesson Plan'}</span>
@@ -114,7 +114,7 @@ const LessonsPageContent = () => {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Introduction to Derivatives"
-                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -134,7 +134,7 @@ const LessonsPageContent = () => {
                   type="date"
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600"
+                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -143,7 +143,7 @@ const LessonsPageContent = () => {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-indigo-600 bg-white"
+                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary bg-white"
                 >
                   <option value="Draft">Draft</option>
                   <option value="Approved">Approved</option>
@@ -154,7 +154,7 @@ const LessonsPageContent = () => {
 
             <button
               type="submit"
-              className="mt-4 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-colors"
+              className="mt-4 w-full py-3 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-bold transition-colors"
             >
               Submit Lesson Plan
             </button>
@@ -185,9 +185,9 @@ const LessonsPageContent = () => {
                       <span
                         className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                           lesson.status === 'Completed'
-                            ? 'bg-emerald-50 text-emerald-600'
+                            ? 'bg-primary-light text-primary'
                             : lesson.status === 'Approved'
-                            ? 'bg-blue-50 text-blue-600'
+                            ? 'bg-primary-light text-primary'
                             : 'bg-slate-100 text-slate-650 text-slate-600'
                         }`}
                       >
@@ -195,7 +195,7 @@ const LessonsPageContent = () => {
                       </span>
                     </div>
                     <h3 className="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
-                      <FiBookOpen className="text-indigo-500" />
+                      <FiBookOpen className="text-primary" />
                       {lesson.title}
                     </h3>
                     <p className="text-slate-500 text-xs font-medium leading-relaxed mb-4 whitespace-pre-line">
@@ -216,7 +216,7 @@ const LessonsPage = () => {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-600 rounded-full animate-spin"></div>
       </div>
     }>
       <LessonsPageContent />

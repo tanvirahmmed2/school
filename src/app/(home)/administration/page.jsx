@@ -53,15 +53,15 @@ const AdministrationPage = () => {
           <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
         </div>
       ) : (
-        <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-sky-50 to-indigo-50 text-sky-650 flex items-center justify-center text-lg font-bold shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-200">
+        <div className="w-14 h-14 rounded-full bg-primaryr from-sky-50 to-indigo-50 text-sky-650 flex items-center justify-center text-lg font-bold shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-200">
           {getInitials(member.name)}
         </div>
       )}
       <div className="flex flex-col gap-0.5 min-w-0">
-        <h3 className="font-extrabold text-slate-900 text-sm md:text-base group-hover:text-sky-600 transition-colors truncate">
+        <h3 className="font-extrabold text-slate-900 text-sm md:text-base group-hover:text-primary transition-colors truncate">
           {member.name}
         </h3>
-        <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-2 py-0.5 rounded w-fit uppercase tracking-wider">
+        <span className="text-[10px] font-bold text-primary bg-primary-light px-2 py-0.5 rounded w-fit uppercase tracking-wider">
           {DESIGNATION_LABELS[member.designation] || member.designation}
         </span>
         <div className="flex flex-col gap-0.5 text-[11px] text-slate-500 font-semibold mt-2">
@@ -77,7 +77,7 @@ const AdministrationPage = () => {
       <div className="mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             FIT Administration
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -106,7 +106,7 @@ const AdministrationPage = () => {
             {executives.length > 0 && (
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-                  <FiUsers className="text-xl text-sky-600" />
+                  <FiUsers className="text-xl text-primary" />
                   <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Executive Board & Leadership</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -119,7 +119,7 @@ const AdministrationPage = () => {
             {councilMembers.length > 0 && (
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-                  <FiUsers className="text-xl text-sky-600" />
+                  <FiUsers className="text-xl text-primary" />
                   <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Academic Senate & Council</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -132,7 +132,7 @@ const AdministrationPage = () => {
             {supportStaff.length > 0 && (
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-                  <FiUsers className="text-xl text-sky-600" />
+                  <FiUsers className="text-xl text-primary" />
                   <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Administrative Support Teams</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

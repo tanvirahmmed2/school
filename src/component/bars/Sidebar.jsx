@@ -34,7 +34,7 @@ const Sidebar = () => {
       />
 
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-emerald-500 text-white z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
+        className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-primary text-secondary z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
           sidebar ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -49,7 +49,7 @@ const Sidebar = () => {
             </Link>
             <button
               onClick={closeSidebar}
-              className="p-1.5 rounded-lg text-white hover:bg-emerald-600 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-white hover:bg-primary-dark transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <FiX className="text-xl" />
@@ -62,8 +62,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiHome className="text-base text-white" />
@@ -76,8 +76,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/events')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiCalendar className="text-base text-white" />
@@ -90,8 +90,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/notices')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <MdOutlineAnnouncement className="text-base text-white" />
@@ -104,8 +104,8 @@ const Sidebar = () => {
                 onClick={() => toggleSection('about')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'about'
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                    ? 'bg-primary-dark text-white'
+                    : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -120,13 +120,13 @@ const Sidebar = () => {
               </button>
               {openSection === 'about' && (
                 <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1">
-                  <Link href="/about" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
+                  <Link href="/about" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     About Overview
                   </Link>
-                  <Link href="/about/mission-vission" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
+                  <Link href="/about/mission-vission" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     Mission & Vision
                   </Link>
-                  <Link href="/about/campus-details" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
+                  <Link href="/about/campus-details" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     Campus Details
                   </Link>
                 </div>
@@ -139,8 +139,8 @@ const Sidebar = () => {
                 onClick={() => toggleSection('authorities')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'authorities'
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                    ? 'bg-primary-dark text-white'
+                    : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -158,7 +158,7 @@ const Sidebar = () => {
                   <Link
                     href="/authorities"
                     onClick={closeSidebar}
-                    className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors font-bold"
+                    className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors font-bold"
                   >
                     All Authorities
                   </Link>
@@ -168,7 +168,7 @@ const Sidebar = () => {
                         key={d.id || d.slug}
                         href={`/authorities/${d.slug}`}
                         onClick={closeSidebar}
-                        className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors"
+                        className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors"
                       >
                         {d.title}
                       </Link>
@@ -186,8 +186,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/administration')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiBookOpen className="text-base text-white" />
@@ -200,8 +200,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/programs')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiGrid className="text-base text-white" />
@@ -214,8 +214,8 @@ const Sidebar = () => {
                 onClick={() => toggleSection('classes')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'classes'
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                    ? 'bg-primary-dark text-white'
+                    : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -236,7 +236,7 @@ const Sidebar = () => {
                         key={c.id || c.code}
                         href={`/classes/${c.code || c.id}`}
                         onClick={closeSidebar}
-                        className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors"
+                        className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors"
                       >
                         {c.name}
                       </Link>
@@ -254,8 +254,8 @@ const Sidebar = () => {
                 onClick={() => toggleSection('facilities')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'facilities'
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                    ? 'bg-primary-dark text-white'
+                    : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -270,13 +270,13 @@ const Sidebar = () => {
               </button>
               {openSection === 'facilities' && (
                 <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1">
-                  <Link href="/facilities" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
+                  <Link href="/facilities" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     Facilities Overview
                   </Link>
-                  <Link href="/facilities/classrooms" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
+                  <Link href="/facilities/classrooms" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     Classrooms
                   </Link>
-                  <Link href="/facilities/hostels" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors">
+                  <Link href="/facilities/hostels" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     Hostels
                   </Link>
                 </div>
@@ -289,8 +289,8 @@ const Sidebar = () => {
                 onClick={() => toggleSection('clubs')}
                 className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                   openSection === 'clubs'
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                    ? 'bg-primary-dark text-white'
+                    : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -311,7 +311,7 @@ const Sidebar = () => {
                         key={c.id || c.slug}
                         href={`/clubs/${c.slug || c.id}`}
                         onClick={closeSidebar}
-                        className="text-xs text-white/90 hover:bg-emerald-600/50 hover:text-white py-1 px-2 rounded transition-colors"
+                        className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors"
                       >
                         {c.name}
                       </Link>
@@ -329,8 +329,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/news')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiInfo className="text-base text-white" />
@@ -343,8 +343,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/staffs')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiBookOpen className="text-base text-white" />
@@ -357,8 +357,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/result')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiGrid className="text-base text-white" />
@@ -371,8 +371,8 @@ const Sidebar = () => {
               onClick={closeSidebar}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive('/contact')
-                  ? 'bg-emerald-600 text-white font-bold'
-                  : 'text-white/90 hover:bg-emerald-600 hover:text-white'
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
               }`}
             >
               <FiMail className="text-base text-white" />
@@ -386,14 +386,14 @@ const Sidebar = () => {
           <Link
             href="/auth/student"
             onClick={closeSidebar}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-white/30 text-white hover:bg-emerald-600 font-bold text-sm transition-colors"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-white/30 text-white hover:bg-primary-dark font-bold text-sm transition-colors"
           >
             <span>Student Portal</span>
           </Link>
           <Link
             href="/auth/access"
             onClick={closeSidebar}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-white/15 hover:bg-emerald-600 text-white font-bold text-sm transition-colors"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-white/15 hover:bg-primary-dark text-white font-bold text-sm transition-colors"
           >
             <FiLogIn />
             <span>Login</span>
@@ -401,7 +401,7 @@ const Sidebar = () => {
           <Link
             href="/auth/student/registration"
             onClick={closeSidebar}
-            className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-sm shadow-md transition-all"
+            className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl bg-white text-primary hover:bg-primary-light font-bold text-sm shadow-md transition-all"
           >
             <span>Apply Now</span>
             <FiArrowRight />

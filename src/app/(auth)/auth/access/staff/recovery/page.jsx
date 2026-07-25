@@ -83,8 +83,8 @@ const RecoveryInner = () => {
   if (success) {
     return (
       <div className="w-full flex flex-col items-center gap-5 text-center py-6 animate-fade-up">
-        <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-          <FiCheckCircle className="text-emerald-500 text-2xl" />
+        <div className="w-16 h-16 rounded-full bg-primary-light border border-primary-light flex items-center justify-center">
+          <FiCheckCircle className="text-primary text-2xl" />
         </div>
         <div>
           <h2 className="text-lg font-bold text-slate-800">Success!</h2>
@@ -112,7 +112,7 @@ const RecoveryInner = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -130,7 +130,7 @@ const RecoveryInner = () => {
             className={`w-full px-3.5 py-2.5 bg-slate-50 border rounded-xl text-sm text-slate-900 outline-none transition-all ${
               confirmPassword && password !== confirmPassword 
                 ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10' 
-                : 'border-slate-200 focus:border-sky-500 focus:ring-sky-500/5'
+                : 'border-slate-200 focus:border-primary focus:ring-primary/5'
             }`}
           />
         </div>
@@ -138,7 +138,7 @@ const RecoveryInner = () => {
         <button
           type="submit"
           disabled={loading || (confirmPassword !== '' && password !== confirmPassword)}
-          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-1"
+          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-1"
         >
           {loading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -163,14 +163,14 @@ const RecoveryInner = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
-          className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10"
+          className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
         />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+        className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
       >
         {loading ? (
           <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -188,12 +188,12 @@ const StaffRecoveryPage = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900 relative px-4 py-12 overflow-hidden bg-slate-55 bg-slate-50">
       {/* Background blobs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-sky-500/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-primary/5 blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-cyan-500/5 blur-[100px] pointer-events-none"></div>
 
       <div className="w-full max-w-[500px] animate-fade-up z-10">
         <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-sky-600 flex items-center justify-center mb-4 shadow-[0_10px_30px_rgba(2,132,199,0.3)]">
+          <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-4 shadow-[0_10px_30px_rgba(2,132,199,0.3)]">
             <FiKey className="text-white text-xl" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Password Recovery</h1>
@@ -205,7 +205,7 @@ const StaffRecoveryPage = () => {
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)]">
           <Suspense fallback={
             <div className="w-full flex flex-col items-center justify-center gap-5 min-h-[200px]">
-              <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <p className="text-sm text-slate-400">Loading...</p>
             </div>
           }>
@@ -216,7 +216,7 @@ const StaffRecoveryPage = () => {
         <div className="w-full text-center mt-6">
           <Link
             href="/auth/access/staff/login"
-            className="text-xs font-semibold hover:text-sky-605 transition-colors py-1.5 px-3 rounded-full hover:bg-sky-50 text-sky-600"
+            className="text-xs font-semibold hover:text-sky-605 transition-colors py-1.5 px-3 rounded-full hover:bg-primary-light text-primary"
           >
             Back to Staff Login
           </Link>

@@ -40,7 +40,7 @@ const News = () => {
 
         {loading ? (
           <div className="w-full py-12 flex justify-center">
-            <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         ) : newsList.length === 0 ? (
           <div className="w-full py-12 bg-white rounded-2xl border border-slate-100 flex flex-col items-center justify-center text-center p-6">
@@ -60,7 +60,7 @@ const News = () => {
         <div className="text-center mt-10">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-secondary text-xs font-bold transition-all shadow-xs hover:shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-dark text-secondary text-xs font-bold transition-all shadow-xs hover:shadow-md"
           >
             <span>View All News</span>
             <FiArrowRight className="text-sm" />

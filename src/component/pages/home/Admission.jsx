@@ -35,7 +35,7 @@ const Admission = () => {
           <div className="shrink-0 z-10 flex flex-col sm:flex-row gap-4 w-full md:w-auto justify-center">
             <Link
               href="/auth/student/registration"
-              className="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl text-xs transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-secondary font-bold px-6 py-3 rounded-xl text-xs transition-colors cursor-pointer"
             >
               <span>Complete Setup</span>
               <FiArrowRight />

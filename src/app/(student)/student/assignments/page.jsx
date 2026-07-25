@@ -98,7 +98,7 @@ const StudentAssignmentsPageContent = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -108,7 +108,7 @@ const StudentAssignmentsPageContent = () => {
       {/* Title */}
       <div>
         <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Class Assignments</h1>
-        <p className="text-slate-500 text-sm font-medium">View active coursework, task due dates, and track your grading status for <span className="text-blue-600 font-bold">{subjectName}</span>.</p>
+        <p className="text-slate-500 text-sm font-medium">View active coursework, task due dates, and track your grading status for <span className="text-primary font-bold">{subjectName}</span>.</p>
       </div>
 
       {assignments.length === 0 ? (
@@ -141,7 +141,7 @@ const StudentAssignmentsPageContent = () => {
                   </div>
 
                   <h3 className="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
-                    <FiBookOpen className="text-blue-500" />
+                    <FiBookOpen className="text-primary" />
                     {assignment.title}
                   </h3>
                   <p className="text-slate-500 text-xs font-medium leading-relaxed mb-4 whitespace-pre-line">
@@ -153,7 +153,7 @@ const StudentAssignmentsPageContent = () => {
                       href={assignment.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-bold text-blue-600 hover:underline block mb-4"
+                      className="text-xs font-bold text-primary hover:underline block mb-4"
                     >
                       Attached Document
                     </a>
@@ -165,10 +165,10 @@ const StudentAssignmentsPageContent = () => {
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">My Submission</span>
                         <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
                           submission.status === 'Graded'
-                            ? 'bg-emerald-50 text-emerald-600'
+                            ? 'bg-primary-light text-primary'
                             : submission.status === 'Late'
                             ? 'bg-amber-50 text-amber-600'
-                            : 'bg-blue-50 text-blue-650'
+                            : 'bg-primary-light text-blue-650'
                         }`}>
                           {submission.status}
                         </span>
@@ -178,7 +178,7 @@ const StudentAssignmentsPageContent = () => {
                         <div className="flex flex-col gap-1 text-xs">
                           <div className="flex justify-between font-bold text-slate-700">
                             <span>Score:</span>
-                            <span className="text-emerald-600">{submission.marks_obtained} / {assignment.max_marks}</span>
+                            <span className="text-primary">{submission.marks_obtained} / {assignment.max_marks}</span>
                           </div>
                           {submission.remarks && (
                             <p className="text-slate-500 font-medium italic text-[11px] mt-1">"{submission.remarks}"</p>
@@ -202,7 +202,7 @@ const StudentAssignmentsPageContent = () => {
                   ) : (
                     <button
                       onClick={() => handleOpenSubmit(assignment)}
-                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-light hover:bg-primary-light text-primary rounded-xl text-xs font-bold transition-colors cursor-pointer"
                     >
                       <FiUploadCloud />
                       <span>{submission ? 'Resubmit Assignment' : 'Submit Assignment'}</span>
@@ -230,7 +230,7 @@ const StudentAssignmentsPageContent = () => {
                   value={formData.submission_text}
                   onChange={(e) => setFormData({ ...formData, submission_text: e.target.value })}
                   placeholder="Type your notes, solution summary, or explanations here..."
-                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-blue-600 resize-none"
+                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary resize-none"
                 />
               </div>
 
@@ -241,7 +241,7 @@ const StudentAssignmentsPageContent = () => {
                   value={formData.file_url}
                   onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
                   placeholder="e.g. https://drive.google.com/your-submission-file"
-                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-blue-600"
+                  className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -255,7 +255,7 @@ const StudentAssignmentsPageContent = () => {
                 </button>
                 <button
                   type="submit"
-                  className="py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-colors cursor-pointer text-center"
+                  className="py-3 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-bold transition-colors cursor-pointer text-center"
                 >
                   Submit
                 </button>
@@ -272,7 +272,7 @@ const StudentAssignmentsPage = () => {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     }>
       <StudentAssignmentsPageContent />

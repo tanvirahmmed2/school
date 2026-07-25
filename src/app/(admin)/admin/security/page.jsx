@@ -40,7 +40,7 @@ const SecurityAuditPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiShield className="text-blue-600 animate-pulse" /> Security Access & Authentication Log
+          <FiShield className="text-primary animate-pulse" /> Security Access & Authentication Log
         </h1>
         <p className="text-sm text-slate-500 mt-1">
           Monitor system login events, audit failures, and verify user agent details for admins, teachers, students, and guardians.
@@ -56,7 +56,7 @@ const SecurityAuditPage = () => {
           <select
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
           >
             <option value="">All Roles...</option>
             <option value="admin">Administrator</option>
@@ -74,7 +74,7 @@ const SecurityAuditPage = () => {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
           >
             <option value="">All Statuses...</option>
             <option value="Success">Success Inflow</option>
@@ -101,7 +101,7 @@ const SecurityAuditPage = () => {
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading audit history...</span>
           </div>
         ) : filteredLogs.length === 0 ? (
@@ -131,7 +131,7 @@ const SecurityAuditPage = () => {
                     <td className="px-6 py-4">
                       <div>
                         <p className="text-sm font-bold text-slate-800">User #{log.user_id}</p>
-                        <span className="inline-flex items-center text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full mt-0.5 uppercase">
+                        <span className="inline-flex items-center text-[10px] font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full mt-0.5 uppercase">
                           {log.user_role}
                         </span>
                       </div>

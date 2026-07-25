@@ -118,7 +118,7 @@ const AchievementListPage = () => {
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
         <div>
-          <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-100">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
             Recorded Records
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -131,7 +131,7 @@ const AchievementListPage = () => {
 
         <Link
           href="/admin/achievements/new"
-          className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs transition-all cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs transition-all cursor-pointer"
         >
           <FiPlus className="text-sm" />
           <span>Record New Achievement</span>
@@ -158,7 +158,7 @@ const AchievementListPage = () => {
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-xs hover:border-emerald-200 hover:shadow-md transition-all flex flex-col justify-between group"
+                className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-xs hover:border-primary-light hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 {/* Cover Image */}
                 {item.image_url ? (
@@ -179,12 +179,12 @@ const AchievementListPage = () => {
                 <div className="p-5 flex flex-col gap-2 flex-1">
                   {itemDate && (
                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                      <FiCalendar className="text-xs text-emerald-500" />
+                      <FiCalendar className="text-xs text-primary" />
                       <span>{itemDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                     </div>
                   )}
 
-                  <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-emerald-600 transition-colors">
+                  <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
 
@@ -198,7 +198,7 @@ const AchievementListPage = () => {
                   <Link
                     href={`/achievements/${item.slug || item.id}`}
                     target="_blank"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 hover:text-emerald-700"
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary"
                   >
                     <span>View Page</span>
                     <FiExternalLink />
@@ -207,7 +207,7 @@ const AchievementListPage = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleOpenEdit(item)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-primary-light transition-colors cursor-pointer"
                       title="Edit Achievement"
                     >
                       <FiEdit3 className="text-sm" />
@@ -236,7 +236,7 @@ const AchievementListPage = () => {
           </p>
           <Link
             href="/admin/achievements/new"
-            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
           >
             <FiPlus /> Record Achievement
           </Link>
@@ -267,7 +267,7 @@ const AchievementListPage = () => {
                   required
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -280,7 +280,7 @@ const AchievementListPage = () => {
                   required
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -292,7 +292,7 @@ const AchievementListPage = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
+                  className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
                 />
                 {imagePreview && (
                   <div className="mt-3 relative w-full h-32 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
@@ -312,7 +312,7 @@ const AchievementListPage = () => {
                 <button
                   type="submit"
                   disabled={savingEdit}
-                  className="flex items-center gap-1.5 px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
                 >
                   <FiCheck />
                   <span>{savingEdit ? 'Saving...' : 'Save Changes'}</span>

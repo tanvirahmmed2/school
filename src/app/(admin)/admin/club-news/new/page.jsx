@@ -63,7 +63,7 @@ const CreateClubNewsPage = () => {
   if (loadingClubs) {
     return (
       <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 flex items-center justify-center gap-3">
-        <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-xs font-semibold text-slate-400">Loading active clubs...</span>
       </div>
     );
@@ -74,7 +74,7 @@ const CreateClubNewsPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">

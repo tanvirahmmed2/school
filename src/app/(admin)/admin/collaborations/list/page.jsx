@@ -60,7 +60,7 @@ const CollaborationsListPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
@@ -69,7 +69,7 @@ const CollaborationsListPage = () => {
         </div>
         <Link
           href="/admin/collaborations/new"
-          className="inline-flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs transition-colors"
+          className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs transition-colors"
         >
           <FiPlus />
           <span>Add New Collaboration</span>
@@ -80,7 +80,7 @@ const CollaborationsListPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-xs font-semibold text-slate-400">Loading collaborations...</span>
           </div>
         ) : collaborations.length > 0 ? (
@@ -113,7 +113,7 @@ const CollaborationsListPage = () => {
                     {/* Name */}
                     <td className="p-4">
                       <div className="flex items-center gap-2">
-                        <FiBriefcase className="text-sky-500 flex-shrink-0" />
+                        <FiBriefcase className="text-primary flex-shrink-0" />
                         <span className="font-extrabold text-slate-900">{item.institution_name}</span>
                       </div>
                     </td>
@@ -130,7 +130,7 @@ const CollaborationsListPage = () => {
                       <div className="flex items-center gap-3 justify-end">
                         <Link
                           href={`/admin/collaborations/${item.id}/edit`}
-                          className="inline-flex items-center gap-1 text-sky-600 hover:text-sky-800 text-[11px] font-bold transition-colors"
+                          className="inline-flex items-center gap-1 text-primary hover:text-primary text-[11px] font-bold transition-colors"
                         >
                           <FiEdit2 />
                           <span>Edit</span>
@@ -165,7 +165,7 @@ const CollaborationsListPage = () => {
             </p>
             <Link
               href="/admin/collaborations/new"
-              className="inline-flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs transition-colors mt-4"
+              className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs transition-colors mt-4"
             >
               <FiPlus />
               <span>Add First Collaboration</span>

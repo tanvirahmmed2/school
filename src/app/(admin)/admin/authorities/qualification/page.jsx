@@ -137,7 +137,7 @@ export default function AuthorityQualificationsPage() {
       <div>
         <Link
           href="/admin/authorities/list"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-wider"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-wider"
         >
           <FiArrowLeft className="text-sm" /> Back to Board list
         </Link>
@@ -146,7 +146,7 @@ export default function AuthorityQualificationsPage() {
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-          <FiAward className="text-blue-600" /> Manage Board Qualifications
+          <FiAward className="text-primary" /> Manage Board Qualifications
         </h1>
         <p className="text-sm text-slate-500 font-medium">
           Add or edit official degrees, academic certifications, and honors for board directors.
@@ -169,7 +169,7 @@ export default function AuthorityQualificationsPage() {
                     setSelectedMemberId(e.target.value);
                     router.replace(`/admin/authorities/qualification?id=${e.target.value}`);
                   }}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:border-blue-500 outline-none mt-1.5 font-semibold"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:border-primary outline-none mt-1.5 font-semibold"
                 >
                   <option value="">-- Choose Member --</option>
                   {members.map(m => (
@@ -206,7 +206,7 @@ export default function AuthorityQualificationsPage() {
               {/* Form Block */}
               <div className="bg-white border border-slate-100 rounded-3xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-4">
                 <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-50 pb-3">
-                  <FiAward className="text-blue-600" /> {editMode ? 'Edit Qualification' : 'Add New Qualification'}
+                  <FiAward className="text-primary" /> {editMode ? 'Edit Qualification' : 'Add New Qualification'}
                 </h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
                   {/* Degree Name */}
@@ -218,7 +218,7 @@ export default function AuthorityQualificationsPage() {
                       value={formData.degree}
                       onChange={handleInputChange}
                       placeholder="e.g. Master of Business Administration (MBA)"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
                   </div>
@@ -232,7 +232,7 @@ export default function AuthorityQualificationsPage() {
                       value={formData.institution}
                       onChange={handleInputChange}
                       placeholder="e.g. Harvard University"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
                   </div>
@@ -246,7 +246,7 @@ export default function AuthorityQualificationsPage() {
                       value={formData.passing_year}
                       onChange={handleInputChange}
                       placeholder="e.g. 2018"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
                   </div>
@@ -260,7 +260,7 @@ export default function AuthorityQualificationsPage() {
                       value={formData.result}
                       onChange={handleInputChange}
                       placeholder="e.g. GPA 3.92 / First Class"
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-blue-500 outline-none"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                     />
                   </div>
 
@@ -278,7 +278,7 @@ export default function AuthorityQualificationsPage() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:bg-blue-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       {editMode ? (
                         <>
@@ -302,7 +302,7 @@ export default function AuthorityQualificationsPage() {
 
                 {loading && qualifications.length === 0 ? (
                   <div className="py-12 flex justify-center items-center">
-                    <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                   </div>
                 ) : qualifications.length === 0 ? (
                   <div className="py-12 text-center text-xs text-slate-400 font-medium">
@@ -318,14 +318,14 @@ export default function AuthorityQualificationsPage() {
                           <div className="flex items-center gap-2 mt-1.5">
                             <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">Graduation: {q.passing_year}</span>
                             {q.result && (
-                              <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">{q.result}</span>
+                              <span className="text-[10px] font-bold px-2 py-0.5 bg-primary-light text-primary rounded-full">{q.result}</span>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleEditClick(q)}
-                            className="p-2 hover:bg-slate-50 hover:text-blue-600 rounded-lg text-slate-400 cursor-pointer"
+                            className="p-2 hover:bg-slate-50 hover:text-primary rounded-lg text-slate-400 cursor-pointer"
                           >
                             <FiEdit2 className="text-sm" />
                           </button>

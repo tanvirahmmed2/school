@@ -85,11 +85,11 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
         <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
           {initialData?.id ? (
             <>
-              <FiClock className="text-indigo-600" /> Edit History Milestone
+              <FiClock className="text-primary" /> Edit History Milestone
             </>
           ) : (
             <>
-              <FiPlusCircle className="text-indigo-600" /> Add History Milestone
+              <FiPlusCircle className="text-primary" /> Add History Milestone
             </>
           )}
         </h2>
@@ -102,7 +102,7 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="flex flex-col gap-1.5 sm:col-span-1">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiCalendar className="text-indigo-500" /> Milestone Date *
+            <FiCalendar className="text-primary" /> Milestone Date *
           </label>
           <input
             type="date"
@@ -110,13 +110,13 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-indigo-500 font-semibold transition-colors"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary font-semibold transition-colors"
           />
         </div>
 
         <div className="flex flex-col gap-1.5 sm:col-span-2">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiBookOpen className="text-indigo-500" /> Milestone Title *
+            <FiBookOpen className="text-primary" /> Milestone Title *
           </label>
           <input
             type="text"
@@ -125,7 +125,7 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-indigo-500 font-medium transition-colors"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary font-medium transition-colors"
           />
         </div>
       </div>
@@ -133,7 +133,7 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
       {/* Description using TiptapEditor */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-          <FiBookOpen className="text-indigo-500" /> Description Details *
+          <FiBookOpen className="text-primary" /> Description Details *
         </label>
         <TiptapEditor
           value={description}
@@ -145,7 +145,7 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
       {/* Information (infor) */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-          <FiInfo className="text-indigo-500" /> Additional Info / Highlights (infor)
+          <FiInfo className="text-primary" /> Additional Info / Highlights (infor)
         </label>
         <textarea
           rows={3}
@@ -153,7 +153,7 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
           value={infor}
           onChange={(e) => setInfor(e.target.value)}
           disabled={submitting}
-          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-indigo-500 leading-relaxed font-medium transition-colors resize-none"
+          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary leading-relaxed font-medium transition-colors resize-none"
         />
       </div>
 
@@ -182,7 +182,7 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+          className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
         >
           {submitting ? (
             <>

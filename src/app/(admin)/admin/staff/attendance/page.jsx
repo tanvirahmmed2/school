@@ -101,7 +101,7 @@ const AdminStaffAttendancePage = () => {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-sky-500"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -120,7 +120,7 @@ const AdminStaffAttendancePage = () => {
             type="button"
             onClick={handleSubmitAttendance}
             disabled={loading || submitting || staffAttendance.length === 0}
-            className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 disabled:opacity-60 text-white text-xs font-bold rounded-xl shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all hover:-translate-y-0.5 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r bg-primary text-secondary hover:from-sky-600 hover:to-cyan-600 disabled:opacity-60 text-white text-xs font-bold rounded-xl shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all hover:-translate-y-0.5 cursor-pointer"
           >
             <FiSave className="text-sm" />
             <span>{submitting ? 'Saving...' : 'Save Attendance'}</span>
@@ -132,7 +132,7 @@ const AdminStaffAttendancePage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-20 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading staff attendance roster...</span>
           </div>
         ) : staffAttendance.length === 0 ? (
@@ -177,7 +177,7 @@ const AdminStaffAttendancePage = () => {
                           placeholder="e.g. 09:00:00"
                           value={item.check_in || ''}
                           onChange={(e) => handleTimeChange(item.staff_id, 'check_in', e.target.value)}
-                          className="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white focus:border-sky-500"
+                          className="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white focus:border-primary"
                         />
                       </div>
                     </td>
@@ -189,7 +189,7 @@ const AdminStaffAttendancePage = () => {
                           placeholder="e.g. 17:00:00"
                           value={item.check_out || ''}
                           onChange={(e) => handleTimeChange(item.staff_id, 'check_out', e.target.value)}
-                          className="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white focus:border-sky-500"
+                          className="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white focus:border-primary"
                         />
                       </div>
                     </td>
@@ -203,12 +203,12 @@ const AdminStaffAttendancePage = () => {
                             className={`px-2.5 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
                               (item.status || 'Present') === statusOption
                                 ? statusOption === 'Present'
-                                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                                  ? 'bg-primary-light text-primary border border-primary-light'
                                   : statusOption === 'Late'
                                   ? 'bg-amber-50 text-amber-600 border border-amber-200'
                                   : statusOption === 'Absent'
                                   ? 'bg-red-50 text-red-600 border border-red-200'
-                                  : 'bg-indigo-50 text-indigo-600 border border-indigo-200'
+                                  : 'bg-primary-light text-primary border border-primary-light'
                                 : 'bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 border border-slate-200/50'
                             }`}
                           >

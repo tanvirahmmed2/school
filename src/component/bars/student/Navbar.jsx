@@ -8,8 +8,7 @@ import { Context } from '@/component/helper/Context';
 
 const Navbar = () => {
   const router = useRouter();
-  const { studentSidebar, setStudentSidebar, themeColor } = useContext(Context);
-  const mainColor = themeColor || '#059669';
+  const { studentSidebar, setStudentSidebar } = useContext(Context);
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +60,7 @@ const Navbar = () => {
 
         {/* Logo/Brand */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white font-bold text-lg">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-secondary font-bold text-lg">
             S
           </div>
           <span className="font-bold text-slate-800 text-sm md:text-base hidden sm:inline-block">
@@ -84,7 +83,7 @@ const Navbar = () => {
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold transition-colors duration-150 cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-semibold transition-colors duration-150 cursor-pointer"
         >
           <FiLogOut className="text-sm" />
           <span className="hidden sm:inline">Logout</span>

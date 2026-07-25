@@ -55,7 +55,7 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div>
         <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-          <FiPlusCircle className="text-sky-600" /> Write News Article
+          <FiPlusCircle className="text-primary" /> Write News Article
         </h2>
       </div>
 
@@ -68,7 +68,7 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
             placeholder="e.g. FIT Annual Convocation 2026"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -79,7 +79,7 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
             placeholder="e.g. annual-convocation-2026"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
           />
         </div>
       </div>
@@ -90,7 +90,7 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
           type="file"
           accept="image/*"
           onChange={handleFileChange}
-          className="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none cursor-pointer file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-55 file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
+          className="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none cursor-pointer file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light"
         />
       </div>
 
@@ -102,7 +102,7 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
           placeholder="Write the complete news article details here..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-sky-500"
+          className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
         />
       </div>
 
@@ -119,7 +119,7 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer disabled:opacity-60"
+          className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-sm font-semibold transition-all cursor-pointer disabled:opacity-60"
         >
           {submitting ? 'Publishing...' : 'Publish Article'}
         </button>

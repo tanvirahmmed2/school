@@ -65,15 +65,15 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
       <div className="max-w-6xl mx-auto space-y-8">
         
         <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 overflow-x-auto py-1">
-          <Link href="/" className="hover:text-emerald-600 transition-colors">
+          <Link href="/" className="hover:text-primary transition-colors">
             Home
           </Link>
           <FiChevronRight className="text-slate-400 shrink-0" />
-          <Link href="/authorities" className="hover:text-emerald-600 transition-colors">
+          <Link href="/authorities" className="hover:text-primary transition-colors">
             Authorities
           </Link>
           <FiChevronRight className="text-slate-400 shrink-0" />
-          <span className="text-emerald-700 font-bold truncate">{displayTitle}</span>
+          <span className="text-primary font-bold truncate">{displayTitle}</span>
         </nav>
 
        
@@ -108,7 +108,7 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
             </div>
           ) : authorities.length === 0 ? (
             <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mx-auto text-2xl">
+              <div className="w-16 h-16 rounded-full bg-primary-light text-primary border border-primary-light flex items-center justify-center mx-auto text-2xl">
                 <FiUsers />
               </div>
               <div className="space-y-1">
@@ -119,7 +119,7 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
               </div>
               <Link
                 href="/authorities"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition-all shadow-sm"
               >
                 Browse All Authorities
               </Link>

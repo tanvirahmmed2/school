@@ -139,7 +139,7 @@ const CircularsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiLayers className="text-blue-600" /> Admission Circulars
+            <FiLayers className="text-primary" /> Admission Circulars
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Setup and manage requirements, age brackets, timelines, and publishes for student intakes.
@@ -149,7 +149,7 @@ const CircularsPage = () => {
         <div>
           <Link
             href="/admin/students/admissions/circulars/new"
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold cursor-pointer shadow-xs transition-colors"
           >
             <FiPlus /> New Circular Drive
           </Link>
@@ -160,7 +160,7 @@ const CircularsPage = () => {
       <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading circulars...</span>
           </div>
         ) : circulars.length === 0 ? (
@@ -200,7 +200,7 @@ const CircularsPage = () => {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-xs font-bold text-blue-600">
+                    <td className="px-6 py-4 text-xs font-bold text-primary">
                       Class: {c.class_name}
                     </td>
                     <td className="px-6 py-4 text-xs font-extrabold text-slate-750">
@@ -235,7 +235,7 @@ const CircularsPage = () => {
                           <button
                             disabled={publishingId !== null}
                             onClick={() => handlePublishResults(c.id)}
-                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold"
+                            className="px-2.5 py-1 bg-primary-light hover:bg-primary-light text-primary rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold"
                             title="Publish Results"
                           >
                             <FiCheckCircle />

@@ -128,7 +128,7 @@ const AdminClubsAssignPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-blue-600" /> Assign Club Roles & Members
+          <FiUsers className="text-primary" /> Assign Club Roles & Members
         </h1>
         <p className="text-sm text-slate-5050 text-slate-500">
           Select a club to assign teachers as Admins and students as Members.
@@ -144,7 +144,7 @@ const AdminClubsAssignPage = () => {
           <select
             value={selectedClub}
             onChange={(e) => setSelectedClub(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-blue-500 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50"
           >
             <option value="">-- Choose Club --</option>
             {clubs.map(c => (
@@ -158,7 +158,7 @@ const AdminClubsAssignPage = () => {
         <form onSubmit={handleSaveAssignments} className="w-full flex flex-col gap-6">
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3 bg-white rounded-3xl border border-slate-100">
-              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading assignments...</span>
             </div>
           ) : (
@@ -168,7 +168,7 @@ const AdminClubsAssignPage = () => {
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
                 <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
                   <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
-                    <FiShield className="text-blue-600" /> Club Admins (Teachers)
+                    <FiShield className="text-primary" /> Club Admins (Teachers)
                   </h3>
                   <div className="relative">
                     <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
@@ -177,7 +177,7 @@ const AdminClubsAssignPage = () => {
                       placeholder="Search teachers..."
                       value={searchTeacher}
                       onChange={(e) => setSearchTeacher(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-blue-500"
+                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-primary"
                     />
                   </div>
                 </div>
@@ -189,7 +189,7 @@ const AdminClubsAssignPage = () => {
                         key={t.id} 
                         className={`flex flex-col gap-1.5 p-3 rounded-xl border text-xs font-semibold transition-all duration-150 ${
                           isChecked 
-                            ? 'bg-blue-50/50 border-blue-200 text-blue-850' 
+                            ? 'bg-primary-light/50 border-primary-light text-blue-850' 
                             : 'bg-white border-slate-100 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
@@ -198,7 +198,7 @@ const AdminClubsAssignPage = () => {
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => handleToggleAdmin(t.id)}
-                            className="w-4 h-4 rounded text-blue-600 border-slate-300 outline-none cursor-pointer"
+                            className="w-4 h-4 rounded text-primary border-slate-300 outline-none cursor-pointer"
                           />
                           <div className="flex flex-col">
                             <span className="font-extrabold">{t.name}</span>
@@ -212,7 +212,7 @@ const AdminClubsAssignPage = () => {
                             placeholder="Designation (e.g. Advisor, President)"
                             value={selectedAdmins.find(item => item.teacher_id === t.id)?.designation || ''}
                             onChange={(e) => handleDesignationChange(t.id, e.target.value)}
-                            className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs outline-none focus:border-blue-500 bg-white text-slate-800 mt-1 font-normal"
+                            className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs outline-none focus:border-primary bg-white text-slate-800 mt-1 font-normal"
                           />
                         )}
                       </div>
@@ -229,7 +229,7 @@ const AdminClubsAssignPage = () => {
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
                 <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
                   <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
-                    <FiUsers className="text-emerald-600" /> Club Members (Students)
+                    <FiUsers className="text-primary" /> Club Members (Students)
                   </h3>
                   <div className="relative">
                     <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
@@ -238,7 +238,7 @@ const AdminClubsAssignPage = () => {
                       placeholder="Search students (name or Reg ID)..."
                       value={searchStudent}
                       onChange={(e) => setSearchStudent(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-blue-500"
+                      className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-primary"
                     />
                   </div>
                 </div>
@@ -250,7 +250,7 @@ const AdminClubsAssignPage = () => {
                         key={st.id} 
                         className={`flex items-center gap-3 p-3 rounded-xl border text-xs font-semibold cursor-pointer transition-all duration-155 ${
                           isChecked 
-                            ? 'bg-emerald-50/50 border-emerald-200 text-emerald-800' 
+                            ? 'bg-primary-light/50 border-primary-light text-primary' 
                             : 'bg-white border-slate-100 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
@@ -258,7 +258,7 @@ const AdminClubsAssignPage = () => {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleToggleMember(st.id)}
-                          className="w-4 h-4 rounded text-emerald-600 border-slate-350 outline-none"
+                          className="w-4 h-4 rounded text-primary border-slate-350 outline-none"
                         />
                         <div className="flex flex-col">
                           <span className="font-extrabold">{st.name}</span>
@@ -281,7 +281,7 @@ const AdminClubsAssignPage = () => {
               <button
                 type="submit"
                 disabled={saving}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-transform duration-150 cursor-pointer disabled:opacity-50"
+                className="px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-transform duration-150 cursor-pointer disabled:opacity-50"
               >
                 {saving ? (
                   <>

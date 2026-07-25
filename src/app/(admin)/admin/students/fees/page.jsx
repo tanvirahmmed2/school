@@ -242,7 +242,7 @@ const AdminStudentFeesPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiDollarSign className="text-blue-600" /> Student Financial Ledgers
+            <FiDollarSign className="text-primary" /> Student Financial Ledgers
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Bill students class-wide, review fees registries, log payments, and apply fines.
@@ -255,7 +255,7 @@ const AdminStudentFeesPage = () => {
             setRecordingPaymentFee(null);
             setApplyingFineStudent(null);
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
         >
           {showAddInvoice ? (
             <>
@@ -281,7 +281,7 @@ const AdminStudentFeesPage = () => {
               setFilterClassId(e.target.value);
               setFilterStudentId('');
             }}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 cursor-pointer"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary cursor-pointer"
           >
             <option value="">All Classes...</option>
             {classes.map((c) => (
@@ -302,7 +302,7 @@ const AdminStudentFeesPage = () => {
               setFilterStudentId(e.target.value);
               setFilterClassId('');
             }}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-blue-500 cursor-pointer"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary cursor-pointer"
           >
             <option value="">All Students...</option>
             {students.map((s) => (
@@ -329,7 +329,7 @@ const AdminStudentFeesPage = () => {
                 placeholder="e.g. Tuition Fee January 2026"
                 value={invTitle}
                 onChange={(e) => setInvTitle(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -342,7 +342,7 @@ const AdminStudentFeesPage = () => {
                 placeholder="e.g. 150.00"
                 value={invAmount}
                 onChange={(e) => setInvAmount(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -353,7 +353,7 @@ const AdminStudentFeesPage = () => {
                 required
                 value={invDueDate}
                 onChange={(e) => setInvDueDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -401,7 +401,7 @@ const AdminStudentFeesPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer"
+                className="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer"
               >
                 {submitting ? 'Generating...' : 'Issue Invoice'}
               </button>
@@ -430,7 +430,7 @@ const AdminStudentFeesPage = () => {
                 placeholder="e.g. 50.00"
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-909 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-909 outline-none focus:bg-white focus:border-primary"
               />
             </div>
             <div className="flex items-center gap-3">
@@ -444,7 +444,7 @@ const AdminStudentFeesPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl cursor-pointer"
+                className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl cursor-pointer"
               >
                 {submitting ? 'Recording...' : 'Record Payment'}
               </button>
@@ -471,7 +471,7 @@ const AdminStudentFeesPage = () => {
                 placeholder="e.g. Late Library Return Fine"
                 value={fineTitle}
                 onChange={(e) => setFineTitle(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -484,7 +484,7 @@ const AdminStudentFeesPage = () => {
                 placeholder="e.g. 10.00"
                 value={fineAmount}
                 onChange={(e) => setFineAmount(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -517,7 +517,7 @@ const AdminStudentFeesPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl cursor-pointer"
+                className="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl cursor-pointer"
               >
                 {submitting ? 'Applying...' : 'Apply Fine'}
               </button>
@@ -539,7 +539,7 @@ const AdminStudentFeesPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading fees log...</span>
             </div>
           ) : fees.length === 0 ? (
@@ -600,7 +600,7 @@ const AdminStudentFeesPage = () => {
                           fee.status === 'Paid' 
                             ? 'bg-green-50 text-green-600' 
                             : fee.status === 'Partially Paid' 
-                            ? 'bg-indigo-50 text-indigo-600' 
+                            ? 'bg-primary-light text-primary' 
                             : 'bg-red-50 text-red-600'
                         }`}>
                           {fee.status}
@@ -614,7 +614,7 @@ const AdminStudentFeesPage = () => {
                               setRecordingPaymentFee(fee);
                               setApplyingFineStudent(null);
                             }}
-                            className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-100 rounded-lg text-xs font-bold transition-all duration-150 cursor-pointer"
+                            className="p-1.5 bg-primary-light hover:bg-primary-light text-primary border border-primary-light rounded-lg text-xs font-bold transition-all duration-150 cursor-pointer"
                             title="Collect Payment"
                           >
                             Collect
@@ -649,7 +649,7 @@ const AdminStudentFeesPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : fines.length === 0 ? (
             <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
@@ -678,7 +678,7 @@ const AdminStudentFeesPage = () => {
                     <span className="font-bold text-red-500">৳{fine.amount}</span>
                     <button
                       onClick={() => handleToggleFineStatus(fine.id, fine.status)}
-                      className="text-[10px] font-bold text-blue-500 hover:text-blue-600 transition-colors underline cursor-pointer"
+                      className="text-[10px] font-bold text-primary hover:text-primary transition-colors underline cursor-pointer"
                     >
                       Mark as {fine.status === 'Paid' ? 'Unpaid' : 'Paid'}
                     </button>

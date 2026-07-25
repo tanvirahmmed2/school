@@ -183,7 +183,7 @@ export default function DesignationsManagementPage() {
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-xs">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-xl shrink-0 shadow-xs">
             <FiAward />
           </div>
           <div className="flex flex-col gap-0.5">
@@ -213,7 +213,7 @@ export default function DesignationsManagementPage() {
               setNewDescription('');
               setIsSlugUserEdited(false);
             }}
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-[0_4px_12px_rgba(37,99,235,0.15)] flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-[0_4px_12px_rgba(37,99,235,0.15)] flex items-center gap-2 cursor-pointer"
           >
             <FiPlus className="text-sm" /> Add Designation
           </button>
@@ -240,7 +240,7 @@ export default function DesignationsManagementPage() {
               placeholder="Search by designation title, slug, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              className="w-full pl-11 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             />
             {searchQuery && (
               <button
@@ -258,7 +258,7 @@ export default function DesignationsManagementPage() {
       <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-xs">
         {loading ? (
           <div className="w-full py-20 flex flex-col items-center justify-center gap-3">
-            <div className="w-10 h-10 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-sm font-semibold text-slate-400">Loading designations list...</span>
           </div>
         ) : filteredDesignations.length === 0 ? (
@@ -291,7 +291,7 @@ export default function DesignationsManagementPage() {
                     <td className="py-4 px-6 text-slate-400 font-mono text-xs">{index + 1}</td>
                     <td className="py-4 px-6 font-bold text-slate-800">
                       <div className="flex items-center gap-2">
-                        <FiAward className="text-blue-600 shrink-0 text-base" />
+                        <FiAward className="text-primary shrink-0 text-base" />
                         <span>{des.title}</span>
                       </div>
                     </td>
@@ -307,7 +307,7 @@ export default function DesignationsManagementPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleOpenEdit(des)}
-                          className="p-2 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 rounded-xl transition-all cursor-pointer"
+                          className="p-2 bg-slate-100 hover:bg-primary-light hover:text-primary text-slate-600 rounded-xl transition-all cursor-pointer"
                           title="Edit Designation"
                         >
                           <FiEdit2 className="text-sm" />
@@ -336,7 +336,7 @@ export default function DesignationsManagementPage() {
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
             <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-primary-light text-primary flex items-center justify-center">
                   <FiPlus className="text-lg" />
                 </div>
                 <h3 className="font-extrabold text-slate-800 text-lg">Add New Designation</h3>
@@ -360,7 +360,7 @@ export default function DesignationsManagementPage() {
                   placeholder="e.g. Executive Director, Principal"
                   value={newTitle}
                   onChange={handleCreateTitleChange}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
               </div>
 
@@ -375,7 +375,7 @@ export default function DesignationsManagementPage() {
                   placeholder="e.g. executive-director"
                   value={newSlug}
                   onChange={handleCreateSlugChange}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
               </div>
 
@@ -386,7 +386,7 @@ export default function DesignationsManagementPage() {
                   placeholder="Brief role description or details..."
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                 />
               </div>
 
@@ -401,7 +401,7 @@ export default function DesignationsManagementPage() {
                 <button
                   type="submit"
                   disabled={createLoading}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {createLoading ? (
                     <>
@@ -448,7 +448,7 @@ export default function DesignationsManagementPage() {
                   placeholder="e.g. Executive Director"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
               </div>
 
@@ -462,7 +462,7 @@ export default function DesignationsManagementPage() {
                   placeholder="e.g. executive-director"
                   value={editSlug}
                   onChange={(e) => setEditSlug(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
               </div>
 
@@ -473,7 +473,7 @@ export default function DesignationsManagementPage() {
                   placeholder="Brief role description or details..."
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                 />
               </div>
 
@@ -488,7 +488,7 @@ export default function DesignationsManagementPage() {
                 <button
                   type="submit"
                   disabled={updateLoading}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {updateLoading ? (
                     <>

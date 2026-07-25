@@ -34,7 +34,7 @@ const ResultsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary-light border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -71,12 +71,12 @@ const ResultsPage = () => {
                 onClick={() => setSelectedExamId(res.exam_id)}
                 className={`w-full text-left p-5 rounded-2xl border transition-all duration-150 cursor-pointer ${
                   selectedExamId === res.exam_id
-                    ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/10'
+                    ? 'bg-primary border-primary text-white shadow-lg shadow-blue-500/10'
                     : 'bg-white border-slate-100 text-slate-700 hover:border-slate-200'
                 }`}
               >
                 <h3 className="font-bold text-sm mb-1">{res.exam_name}</h3>
-                <p className={`text-xs font-semibold ${selectedExamId === res.exam_id ? 'text-blue-100' : 'text-slate-400'}`}>
+                <p className={`text-xs font-semibold ${selectedExamId === res.exam_id ? 'text-secondary' : 'text-slate-400'}`}>
                   GPA: {res.gpa} • Grade: {res.grade}
                 </p>
               </button>
@@ -109,7 +109,7 @@ const ResultsPage = () => {
                 {/* Marks breakdown table */}
                 <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
                   <h3 className="text-sm font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <FiBook className="text-blue-600" /> Subject-wise Score Breakdown
+                    <FiBook className="text-primary" /> Subject-wise Score Breakdown
                   </h3>
 
                   {filteredMarks.length === 0 ? (
@@ -143,7 +143,7 @@ const ResultsPage = () => {
                                 <td className="py-4 text-center">
                                   <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold ${
                                     percent >= 40 
-                                      ? 'bg-emerald-50 text-emerald-600'
+                                      ? 'bg-primary-light text-primary'
                                       : 'bg-rose-50 text-rose-600'
                                   }`}>
                                     {percent}%

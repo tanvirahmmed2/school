@@ -105,10 +105,10 @@ const VerifyInner = () => {
     return (
       <div className="w-full flex flex-col items-center justify-center gap-5 min-h-[280px]">
         <div className="relative w-16 h-16">
-          <div className="absolute inset-0 rounded-full border-4 border-indigo-100"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-primary-light"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <FiShield className="text-indigo-500 text-xl" />
+            <FiShield className="text-primary text-xl" />
           </div>
         </div>
         <div className="text-center">
@@ -127,13 +127,13 @@ const VerifyInner = () => {
       <div className="w-full flex flex-col items-center gap-6 text-center">
         <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
           isExpired ? 'bg-amber-50 border border-amber-100' : 
-          isUsed ? 'bg-blue-50 border border-blue-100' :
+          isUsed ? 'bg-primary-light border border-primary-light' :
           'bg-red-50 border border-red-100'
         }`}>
           {isExpired ? (
             <FiClock className="text-amber-500 text-2xl" />
           ) : isUsed ? (
-            <FiCheckCircle className="text-blue-500 text-2xl" />
+            <FiCheckCircle className="text-primary text-2xl" />
           ) : (
             <FiAlertTriangle className="text-red-500 text-2xl" />
           )}
@@ -141,7 +141,7 @@ const VerifyInner = () => {
 
         <div>
           <h2 className={`text-lg font-bold ${
-            isExpired ? 'text-amber-700' : isUsed ? 'text-blue-700' : 'text-red-700'
+            isExpired ? 'text-amber-700' : isUsed ? 'text-primary' : 'text-red-700'
           }`}>
             {isExpired ? 'Verification Link Expired' : isUsed ? 'Account Already Set Up' : 'Invalid Verification Link'}
           </h2>
@@ -152,7 +152,7 @@ const VerifyInner = () => {
           {isUsed ? (
             <Link
               href="/auth/access/teacher/login"
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-all"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-5 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl transition-all"
             >
               Go to Login <FiArrowRight />
             </Link>
@@ -169,27 +169,27 @@ const VerifyInner = () => {
   if (status === 'success') {
     return (
       <div className="w-full flex flex-col items-center gap-6 text-center">
-        <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-          <FiCheckCircle className="text-emerald-500 text-2xl" />
+        <div className="w-16 h-16 rounded-full bg-primary-light border border-primary-light flex items-center justify-center">
+          <FiCheckCircle className="text-primary text-2xl" />
         </div>
         <div>
           <h2 className="text-lg font-bold text-slate-800">Account Setup Complete!</h2>
           <p className="text-sm text-slate-500 mt-2">Redirecting you to the Teacher Login page…</p>
         </div>
-        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <div className="flex items-center gap-3 p-3.5 bg-emerald-50 border border-emerald-100 rounded-2xl">
-        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-          <FiCheckCircle className="text-emerald-600 text-sm" />
+      <div className="flex items-center gap-3 p-3.5 bg-primary-light border border-primary-light rounded-2xl">
+        <div className="w-8 h-8 rounded-full bg-primary-light flex items-center justify-center shrink-0">
+          <FiCheckCircle className="text-primary text-sm" />
         </div>
         <div>
-          <p className="text-xs font-bold text-emerald-700">Identity Verified</p>
-          <p className="text-[11px] text-emerald-600">
+          <p className="text-xs font-bold text-primary">Identity Verified</p>
+          <p className="text-[11px] text-primary">
             Welcome, <strong>{teacher?.name}</strong>. Complete your credentials details below.
           </p>
         </div>
@@ -226,7 +226,7 @@ const VerifyInner = () => {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 resize-none"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 resize-none"
           />
         </div>
 
@@ -241,7 +241,7 @@ const VerifyInner = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -259,7 +259,7 @@ const VerifyInner = () => {
             className={`w-full px-3.5 py-2.5 bg-slate-55 border rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:ring-4 ${
               confirmPassword && password !== confirmPassword 
                 ? 'border-red-300 focus:border-red-400 focus:ring-red-400/10' 
-                : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/5'
+                : 'border-slate-200 focus:border-primary focus:ring-primary/5'
             }`}
           />
           {confirmPassword && password !== confirmPassword && (
@@ -270,7 +270,7 @@ const VerifyInner = () => {
         <button
           type="submit"
           disabled={submitting || (confirmPassword !== '' && password !== confirmPassword)}
-          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-1"
+          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-1"
         >
           {submitting ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -289,12 +289,12 @@ const TeacherVerifyPage = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-slate-55 bg-slate-50 text-slate-900 relative px-4 py-12 overflow-hidden">
       {/* Background blobs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-indigo-500/5 blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] aspect-square rounded-full bg-primary/5 blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] aspect-square rounded-full bg-primary/5 blur-[100px] pointer-events-none"></div>
 
       <div className="w-full max-w-[520px] animate-fade-up z-10">
         <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center mb-4 shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
+          <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-4 shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
             <FiShield className="text-white text-2xl" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Teacher Profile Verification</h1>
@@ -306,7 +306,7 @@ const TeacherVerifyPage = () => {
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)]">
           <Suspense fallback={
             <div className="w-full flex flex-col items-center justify-center gap-5 min-h-[280px]">
-              <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <p className="text-sm text-slate-400">Loading verification page…</p>
             </div>
           }>
@@ -317,7 +317,7 @@ const TeacherVerifyPage = () => {
         <div className="w-full text-center mt-6">
           <Link
             href="/auth/access/teacher/login"
-            className="text-xs font-semibold hover:text-indigo-605 transition-colors py-1.5 px-3 rounded-full hover:bg-indigo-50 text-indigo-600"
+            className="text-xs font-semibold hover:text-indigo-605 transition-colors py-1.5 px-3 rounded-full hover:bg-primary-light text-primary"
           >
             Already have an account? Go to Login
           </Link>

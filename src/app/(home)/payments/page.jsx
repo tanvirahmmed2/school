@@ -64,9 +64,9 @@ const PublicPaymentsPage = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Paid':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100"><FiCheck /> Paid</span>;
+        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Paid</span>;
       case 'Partially Paid':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-650 border border-indigo-100">Partially Paid</span>;
+        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-indigo-650 border border-primary-light">Partially Paid</span>;
       case 'Unpaid':
       default:
         return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100"><FiClock /> Unpaid</span>;
@@ -78,7 +78,7 @@ const PublicPaymentsPage = () => {
       {/* Title */}
       <div className="text-center">
         <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
-          <FiDollarSign className="text-sky-600" /> Verify Student Bills
+          <FiDollarSign className="text-primary" /> Verify Student Bills
         </h1>
         <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
           Enter your official student Registration Number to verify current tuition statement logs, invoices, and pending fee dues.
@@ -95,13 +95,13 @@ const PublicPaymentsPage = () => {
               placeholder="Enter Registration Number (e.g. REG-1720886)"
               value={regNo}
               onChange={(e) => setRegNo(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/10 transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-2xl text-sm font-bold shadow-md shadow-sky-500/10 hover:shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60"
+            className="px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-2xl text-sm font-bold shadow-md shadow-sky-500/10 hover:shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60"
           >
             {loading ? 'Searching...' : 'Search Details'}
           </button>
@@ -110,7 +110,7 @@ const PublicPaymentsPage = () => {
 
       {loading ? (
         <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-          <div className="w-10 h-10 border-3 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
           <span className="text-xs font-semibold text-slate-400">Retrieving statement logs...</span>
         </div>
       ) : data ? (
@@ -126,7 +126,7 @@ const PublicPaymentsPage = () => {
               </div>
               <div className="mt-4 pt-3 border-t border-slate-50 flex items-center gap-1.5 text-xs text-slate-500 font-semibold">
                 <FiLayers className="text-slate-400" />
-                Class: <strong className="text-sky-600">{data.student.class_name}</strong>
+                Class: <strong className="text-primary">{data.student.class_name}</strong>
               </div>
             </div>
 
@@ -148,12 +148,12 @@ const PublicPaymentsPage = () => {
             <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Total Paid Invoices</span>
-                <span className="text-2xl font-black text-emerald-600">
+                <span className="text-2xl font-black text-primary">
                   ৳{summary.totalPaid.toFixed(2)}
                 </span>
                 <p className="text-[10px] text-slate-450 mt-1 font-semibold">Cleared fees recorded dynamically</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-500 border border-emerald-100">
+              <div className="p-3.5 rounded-2xl bg-primary-light text-primary border border-primary-light">
                 <FiCheck className="text-xl" />
               </div>
             </div>
@@ -193,7 +193,7 @@ const PublicPaymentsPage = () => {
                               <td className="px-5 py-3.5 font-bold text-slate-700">{fee.title}</td>
                               <td className="px-5 py-3.5 text-slate-500">{new Date(fee.due_date).toLocaleDateString()}</td>
                               <td className="px-5 py-3.5 text-right font-bold text-slate-900">৳{parseFloat(fee.amount).toFixed(2)}</td>
-                              <td className="px-5 py-3.5 text-right text-emerald-600 font-bold">৳{parseFloat(fee.paid_amount).toFixed(2)}</td>
+                              <td className="px-5 py-3.5 text-right text-primary font-bold">৳{parseFloat(fee.paid_amount).toFixed(2)}</td>
                               <td className="px-5 py-3.5">{getStatusBadge(fee.status)}</td>
                             </tr>
                           ))}

@@ -19,7 +19,7 @@ import { SCHOOL_NAME } from '@/lib/secret';
 
 const About = () => {
   const stats = [
-    { value: '5,000+', label: 'Enrolled Students', desc: 'Active scholars across multiple technical and management programs.', color: 'from-blue-600 to-sky-500' },
+    { value: '5,000+', label: 'Enrolled Students', desc: 'Active scholars across multiple technical and management programs.', color: 'bg-primary text-secondary' },
     { value: '150+', label: 'Expert Faculty', desc: 'PhD holders, certified mentors, and leading industry professionals.', color: 'from-amber-600 to-orange-500' },
     { value: '15+', label: 'Active Clubs', desc: 'Nurturing leadership, coding skills, and extra-curricular interests.', color: 'from-rose-600 to-pink-500' },
   ];
@@ -30,7 +30,7 @@ const About = () => {
       desc: 'Explore the major milestones, founding chronicles, and institutional growth of Fontana Institute of Technology since 2015.',
       href: '/about/history',
       icon: FiClock,
-      color: 'text-sky-600 bg-sky-50 border-sky-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Vision & Core Values',
@@ -44,7 +44,7 @@ const About = () => {
       desc: 'Read our institutional mission detailing progressive teaching frameworks, student care plans, and administrative criteria.',
       href: '/about/mission-vission',
       icon: FiBookOpen,
-      color: 'text-emerald-600 bg-emerald-50 border-emerald-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Campus & Infrastructure',
@@ -85,8 +85,8 @@ const About = () => {
         
         <div className="relative bg-slate-900 text-white rounded-3xl p-8 md:p-14 overflow-hidden shadow-xl border border-slate-800">
           <div className="absolute inset-0 bg-linear-to-tr from-sky-950/80 via-slate-900 to-indigo-950/80 z-0" />
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
 
           <div className="relative z-10 text-center flex flex-col items-center gap-4">
             
@@ -99,7 +99,7 @@ const About = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {stats.map((stat, idx) => (
             <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-shadow">
-              <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-sky-500 to-indigo-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r bg-primary text-secondary" />
               <span className={`text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-linear-to-r ${stat.color}`}>
                 {stat.value}
               </span>
@@ -143,7 +143,7 @@ const About = () => {
                   <p className="text-slate-500 text-xs leading-relaxed">
                     {sec.desc}
                   </p>
-                  <div className="mt-auto pt-2 text-[10px] font-bold text-sky-600 uppercase tracking-wider flex items-center gap-1 group-hover:text-sky-800">
+                  <div className="mt-auto pt-2 text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:text-primary">
                     <span>Explore</span>
                     <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -175,7 +175,7 @@ const About = () => {
                     <h4 className="font-extrabold text-slate-950 text-sm sm:text-base">
                       {leader.name}
                     </h4>
-                    <span className="inline-block text-[10px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded mt-0.5">
+                    <span className="inline-block text-[10px] font-semibold text-primary bg-primary-light px-2 py-0.5 rounded mt-0.5">
                       {leader.role}
                     </span>
                   </div>
@@ -200,8 +200,8 @@ const About = () => {
         </div>
 
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col md:flex-row gap-6 items-start relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-2 h-full bg-sky-600" />
-          <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 border border-sky-100 mt-1">
+          <div className="absolute top-0 right-0 w-2 h-full bg-primary" />
+          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center shrink-0 border border-primary-light mt-1">
             <FiShield className="text-lg" />
           </div>
           <div className="flex flex-col gap-3">

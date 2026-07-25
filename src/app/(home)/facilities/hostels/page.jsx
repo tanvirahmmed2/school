@@ -44,7 +44,7 @@ const HostelFacilities = () => {
         {/* Dynamic Hostels Directory */}
         {loading ? (
           <div className="w-full py-12 flex justify-center bg-white rounded-3xl border border-slate-100 shadow-xs">
-            <div className="w-8 h-8 border-2 border-sky-655 border-sky-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-sky-655 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         ) : hostels.length === 0 ? (
           <div className="w-full py-12 bg-white rounded-3xl border border-slate-100 flex flex-col items-center justify-center text-center p-6 shadow-xs">
@@ -65,7 +65,7 @@ const HostelFacilities = () => {
                     <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover" />
                   </div>
                 ) : (
-                  <div className="w-full h-36 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center text-amber-300 relative shrink-0">
+                  <div className="w-full h-36 rounded-2xl bg-primaryr from-amber-50 to-orange-50 flex items-center justify-center text-amber-300 relative shrink-0">
                     <FiHome className="text-4xl" />
                   </div>
                 )}
@@ -75,7 +75,7 @@ const HostelFacilities = () => {
                     <h3 className="font-extrabold text-slate-800 text-base">{hostel.name}</h3>
                     <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded-md tracking-wider shrink-0 ${
                       hostel.gender === 'Male'
-                        ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                        ? 'bg-primary-light text-primary border border-primary-light'
                         : hostel.gender === 'Female'
                         ? 'bg-pink-50 text-pink-600 border border-pink-100'
                         : 'bg-slate-100 text-slate-600'
@@ -99,7 +99,7 @@ const HostelFacilities = () => {
                   <span className="flex items-center gap-1">
                     <FiLayers /> {hostel.total_room || 0} rooms
                   </span>
-                  <Link href="/auth/student/login" className="text-sky-600 hover:text-sky-800 transition-colors">
+                  <Link href="/auth/student/login" className="text-primary hover:text-primary transition-colors">
                     Login to Request Room →
                   </Link>
                 </div>

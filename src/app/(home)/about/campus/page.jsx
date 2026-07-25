@@ -19,7 +19,7 @@ const CampusPage = () => {
       title: 'Central Library',
       desc: 'An expansive academic repository featuring over 50,000 reference volumes, international journal catalog databases, and 20 quiet digital terminals for research.',
       icon: FiBookOpen,
-      color: 'text-sky-600 bg-sky-50 border-sky-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'High-Tech Labs & Innovation Hub',
@@ -31,7 +31,7 @@ const CampusPage = () => {
       title: 'Residential Hostels',
       desc: 'Twin-sharing student rooms featuring dining halls, stable fiber Wi-Fi networks, laundry facilities, and 24/7 security watch systems.',
       icon: FiMap,
-      color: 'text-emerald-600 bg-emerald-50 border-emerald-100'
+      color: 'text-primary bg-primary-light border-primary-light'
     }
   ];
 
@@ -46,13 +46,13 @@ const CampusPage = () => {
       title: 'Eco-Friendly Setup',
       desc: 'Incorporating clean energy structures including 80kW rooftop solar grid arrays, green study gardens, and rainwater conservation basins.',
       icon: FiSun,
-      color: 'text-emerald-500 bg-emerald-50'
+      color: 'text-primary bg-primary-light'
     },
     {
       title: 'Secure Access & Network',
       desc: 'Entire campus is secured with RFID card check-gates, complete CCTV coverage, and secure student credentials access across portals.',
       icon: FiShield,
-      color: 'text-indigo-500 bg-indigo-50'
+      color: 'text-primary bg-primary-light'
     }
   ];
 

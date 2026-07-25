@@ -14,11 +14,11 @@ import {
 
 const iconList = [FiFlag, FiAward, FiBookmark, FiStar, FiTrendingUp];
 const colorStyles = [
-  'text-sky-600 bg-sky-50 border-sky-100',
+  'text-primary bg-primary-light border-primary-light',
   'text-amber-600 bg-amber-50 border-amber-100',
-  'text-emerald-600 bg-emerald-50 border-emerald-100',
+  'text-primary bg-primary-light border-primary-light',
   'text-rose-600 bg-rose-50 border-rose-100',
-  'text-indigo-600 bg-indigo-50 border-indigo-100'
+  'text-primary bg-primary-light border-primary-light'
 ];
 
 const formatDate = (dateStr) => {
@@ -73,7 +73,7 @@ const HistoryPage = () => {
       
         {loading ? (
           <div className="bg-white border border-slate-100 rounded-3xl p-12 shadow-xs flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
             <p className="text-sm font-semibold text-slate-500">Loading historical milestones...</p>
           </div>
         ) : error ? (
@@ -115,10 +115,10 @@ const HistoryPage = () => {
                     {/* Content block */}
                     <div className="flex flex-col gap-2 mt-1 w-full">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
-                        <h3 className="font-black text-slate-900 text-sm sm:text-base group-hover:text-indigo-600 transition-colors">
+                        <h3 className="font-black text-slate-900 text-sm sm:text-base group-hover:text-primary transition-colors">
                           {item.title}
                         </h3>
-                        <span className="text-xs font-black text-indigo-600 tracking-wider bg-indigo-50 px-2.5 py-0.5 rounded-full w-fit shrink-0">
+                        <span className="text-xs font-black text-primary tracking-wider bg-primary-light px-2.5 py-0.5 rounded-full w-fit shrink-0">
                           {formatDate(item.date)}
                         </span>
                       </div>
@@ -130,7 +130,7 @@ const HistoryPage = () => {
 
                       {item.infor && item.infor.trim() !== '' && (
                         <div className="mt-1 bg-slate-50 border border-slate-100 p-3 rounded-xl text-xs font-semibold text-slate-600 max-w-2xl flex items-start gap-2">
-                          <FiInfo className="text-indigo-500 text-sm shrink-0 mt-0.5" />
+                          <FiInfo className="text-primary text-sm shrink-0 mt-0.5" />
                           <span className="whitespace-pre-line">{item.infor}</span>
                         </div>
                       )}

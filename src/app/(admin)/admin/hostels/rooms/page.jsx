@@ -125,7 +125,7 @@ const AdminHostelRoomsPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiGrid className="text-emerald-600" /> Hostel Rooms Directory
+          <FiGrid className="text-primary" /> Hostel Rooms Directory
         </h1>
         <p className="text-sm text-slate-500">
           Configure rooms, bedding capacities, AC/Non-AC categories, and status checks.
@@ -136,7 +136,7 @@ const AdminHostelRoomsPage = () => {
         {/* Form panel */}
         <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
           <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-            <FiPlus className="text-emerald-600" /> 
+            <FiPlus className="text-primary" /> 
             {editId ? 'Modify Room Details' : 'Register New Room'}
           </h2>
 
@@ -150,7 +150,7 @@ const AdminHostelRoomsPage = () => {
                 value={hostelId}
                 onChange={(e) => setHostelId(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               >
                 <option value="">-- Choose Hostel --</option>
                 {hostels.map(h => (
@@ -170,7 +170,7 @@ const AdminHostelRoomsPage = () => {
                 value={roomNumber}
                 onChange={(e) => setRoomNumber(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -183,7 +183,7 @@ const AdminHostelRoomsPage = () => {
                 value={roomType}
                 onChange={(e) => setRoomType(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               >
                 <option value="AC Single">AC Single</option>
                 <option value="AC Double">AC Double</option>
@@ -206,7 +206,7 @@ const AdminHostelRoomsPage = () => {
                 value={capacity}
                 onChange={(e) => setCapacity(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               />
             </div>
 
@@ -219,7 +219,7 @@ const AdminHostelRoomsPage = () => {
                 value={availabilityStatus}
                 onChange={(e) => setAvailabilityStatus(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
               >
                 <option value="Available">Available</option>
                 <option value="Full">Full</option>
@@ -241,7 +241,7 @@ const AdminHostelRoomsPage = () => {
                 type="submit"
                 disabled={submitting}
                 className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                  editId ? 'bg-emerald-600 hover:bg-emerald-700 w-1/2' : 'bg-emerald-650 hover:bg-emerald-700 w-full bg-emerald-600'
+                  editId ? 'bg-primary hover:bg-primary-dark w-1/2' : 'bg-emerald-650 hover:bg-primary-dark w-full bg-primary'
                 } disabled:opacity-50`}
               >
                 {submitting ? (
@@ -280,7 +280,7 @@ const AdminHostelRoomsPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading rooms registry...</span>
             </div>
           ) : rooms.length === 0 ? (
@@ -322,7 +322,7 @@ const AdminHostelRoomsPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-[10px] font-bold rounded-lg ${
                           room.availability_status === 'Available'
-                            ? 'bg-emerald-50 text-emerald-600'
+                            ? 'bg-primary-light text-primary'
                             : room.availability_status === 'Full'
                             ? 'bg-amber-50 text-amber-600'
                             : 'bg-red-50 text-red-650 text-red-600'
@@ -333,7 +333,7 @@ const AdminHostelRoomsPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(room)}
-                          className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
                           title="Edit Room"
                         >
                           <FiEdit className="text-sm" />

@@ -133,7 +133,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
   if (loadingLists) {
     return (
       <div className="w-full bg-white border border-slate-100 rounded-3xl p-8 flex items-center justify-center gap-3">
-        <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-400">Loading form options...</span>
       </div>
     );
@@ -157,7 +157,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={dayId}
               onChange={(e) => setDayId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             >
               <option value="">Select Day...</option>
               {days.map((day) => (
@@ -178,7 +178,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={classId}
               onChange={(e) => setClassId(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             >
               <option value="">Select Class...</option>
               {classes.map((c) => (
@@ -198,7 +198,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={sectionId}
               onChange={(e) => setSectionId(e.target.value)}
               disabled={submitting || !classId}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 disabled:opacity-60"
             >
               <option value="">All Sections (Class-Wide)</option>
               {sections.map((s) => (
@@ -219,7 +219,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={classSubjectId}
               onChange={(e) => setClassSubjectId(e.target.value)}
               disabled={submitting || !classId}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 disabled:opacity-60"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 disabled:opacity-60"
             >
               <option value="">Select Subject...</option>
               {filteredClassSubjects.map((cs) => (
@@ -243,7 +243,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             />
           </div>
 
@@ -258,7 +258,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
               disabled={submitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
             />
           </div>
         </div>
@@ -275,7 +275,7 @@ const RoutineCreateForm = ({ initialClassId = '', initialSectionId = '', onSucce
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer flex items-center gap-2 disabled:opacity-60"
+            className="px-5 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-xl shadow-xs transition-all duration-150 cursor-pointer flex items-center gap-2 disabled:opacity-60"
           >
             {submitting ? 'Adding...' : 'Add Routine Slot'}
           </button>

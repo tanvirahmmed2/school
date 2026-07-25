@@ -63,7 +63,7 @@ const AdminPreviousExamsPage = () => {
       {/* Top Header Section */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiCalendar className="text-blue-600" /> Previous Exams Registry
+          <FiCalendar className="text-primary" /> Previous Exams Registry
         </h1>
         <p className="text-sm text-slate-500">
           View and manage historically archived exam routines and logs.
@@ -72,7 +72,7 @@ const AdminPreviousExamsPage = () => {
 
       {loading ? (
         <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           <span className="text-sm font-semibold text-slate-400">Loading archived exams...</span>
         </div>
       ) : exams.length === 0 ? (
@@ -106,12 +106,12 @@ const AdminPreviousExamsPage = () => {
                         </span>
                       )}
                       {exam.class_name && (
-                        <span className="font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
                           Class: {exam.class_name}
                         </span>
                       )}
                       {exam.exam_fee !== undefined && (
-                        <span className="font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
                           Exam Fee: {exam.exam_fee} BDT
                         </span>
                       )}

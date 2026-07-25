@@ -31,7 +31,7 @@ const ApplyPage = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Admissions 2026-27
           </span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
@@ -48,7 +48,7 @@ const ApplyPage = () => {
             const Icon = step.icon;
             return (
               <div key={idx} className="bg-white rounded-2xl border border-slate-100 p-6 flex gap-4 hover:shadow-xs transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 text-lg shrink-0 font-bold">
+                <div className="w-12 h-12 rounded-xl bg-primary-light flex items-center justify-center text-primary text-lg shrink-0 font-bold">
                   <Icon />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -68,13 +68,13 @@ const ApplyPage = () => {
         </div>
 
         {/* CTA Banner */}
-        <div className="bg-gradient-to-tr from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
+        <div className="bg-primaryr from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-800/10 via-transparent to-transparent"></div>
           <div className="flex flex-col gap-2 relative z-10">
             <h2 className="text-xl md:text-2xl font-black tracking-tight">
               Ready to Submit Your Application?
             </h2>
-            <p className="text-sky-200 text-xs md:text-sm max-w-md mx-auto leading-relaxed">
+            <p className="text-secondary text-xs md:text-sm max-w-md mx-auto leading-relaxed">
               Our academic registrar registry portal is open. Get instant enrollment confirmations by completing the online application form.
             </p>
           </div>
