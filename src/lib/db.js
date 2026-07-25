@@ -89,4 +89,38 @@ export async function ensureEventsTables() {
   }
 }
 
+let historiesTableEnsured = false;
+export async function ensureHistoriesTable() {
+  if (historiesTableEnsured) return;
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS histories (
+        id BIGSERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        infor TEXT,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
+      ALTER TABLE histories ADD COLUMN IF NOT EXISTS date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE histories ADD COLUMN IF NOT EXISTS infor TEXT;
+      DO $$ 
+      BEGIN 
+        IF EXISTS (
+          SELECT 1 
+          FROM information_schema.columns 
+          WHERE table_name='histories' AND column_name='year'
+        ) THEN 
+          ALTER TABLE histories ALTER COLUMN year DROP NOT NULL; 
+        END IF; 
+      END $$;
+    `);
+    historiesTableEnsured = true;
+  } catch (err) {
+    console.error('Error ensuring histories database table:', err);
+  }
+}
+
 export default pool;
+

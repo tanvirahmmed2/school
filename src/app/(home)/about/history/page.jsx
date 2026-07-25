@@ -1,133 +1,147 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { 
   FiClock, 
   FiStar, 
   FiFlag, 
   FiBookmark, 
   FiAward,
-  FiArrowLeft,
-  FiTrendingUp
+  FiTrendingUp,
+  FiInfo,
+  FiAlertCircle
 } from 'react-icons/fi';
 
+const iconList = [FiFlag, FiAward, FiBookmark, FiStar, FiTrendingUp];
+const colorStyles = [
+  'text-sky-600 bg-sky-50 border-sky-100',
+  'text-amber-600 bg-amber-50 border-amber-100',
+  'text-emerald-600 bg-emerald-50 border-emerald-100',
+  'text-rose-600 bg-rose-50 border-rose-100',
+  'text-indigo-600 bg-indigo-50 border-indigo-100'
+];
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
 const HistoryPage = () => {
-  const timeline = [
-    {
-      year: '2015',
-      title: 'The Foundation & Inception',
-      desc: 'Fontana Institute of Technology (FIT) was established on April 15, 2015, under the direction of a dedicated council of computer scientists and academic philanthropists. The initial campus started with two engineering laboratories and a curriculum focusing on system design, database management, and business administration fundamentals.',
-      details: 'Initial cohort: 75 students | Faculty: 8 pioneering instructors.',
-      icon: FiFlag,
-      color: 'text-sky-600 bg-sky-50 border-sky-100'
-    },
-    {
-      year: '2018',
-      title: 'First Graduates & State Accreditation',
-      desc: 'The institute celebrated its first graduating class of computer science and management scholars, with an impressive 89% securing placement within six months. In the same year, FIT achieved full regional accreditation and formal university alliance credentials.',
-      details: 'First batch size: 68 graduates | Top hiring sectors: Software and Fintech.',
-      icon: FiAward,
-      color: 'text-amber-600 bg-amber-50 border-amber-100'
-    },
-    {
-      year: '2021',
-      title: 'Innovation Hub & Postgraduate Grants',
-      desc: 'FIT inaugurated its Robotics & Sustainable Energy Innovation Center. Backed by government research grants, the center has since produced key patents in solar micro-grid designs and decentralized security protocols.',
-      details: 'Research funding: $1.2M USD | Patents filed: 3 unique architectures.',
-      icon: FiBookmark,
-      color: 'text-emerald-600 bg-emerald-50 border-emerald-100'
-    },
-    {
-      year: '2024',
-      title: 'Campus Expansion & Central Library',
-      desc: 'To support a rapidly expanding student body, the physical campus footprint doubled. This expansion saw the construction of a state-of-the-art Central Library housing online research databases, a multi-sport indoor stadium, and a modern residential hostel.',
-      details: 'Library capacity: 50,000+ volumes | Hostel capacity: 400+ residents.',
-      icon: FiStar,
-      color: 'text-rose-600 bg-rose-50 border-rose-100'
-    },
-    {
-      year: '2026',
-      title: 'Fully Digital Ecosystem Rollout',
-      desc: 'FIT completed the transition to a fully digitized registrar system, integrating student profiles, academic schedules, term results, and fee accounts into a single secure web application. This phase establishes FIT as one of the most technologically advanced campuses in the region.',
-      details: 'Platform uptime: 99.9% | Transactions: 100% paperless.',
-      icon: FiTrendingUp,
-      color: 'text-indigo-600 bg-indigo-50 border-indigo-100'
-    },
-  ];
+  const [histories, setHistories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchHistories = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/histories');
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to load history data');
+      }
+      const list = data.paylod?.histories || data.histories || [];
+      setHistories(list);
+    } catch (err) {
+      console.error('Error fetching histories:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHistories();
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="w-full flex flex-col gap-10">
+      <div className="w-full flex flex-col gap-10 max-w-5xl mx-auto">
         
-        
+        {/* Page Header */}
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Our Historic Journey
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
-            From a focused engineering center in 2015 to a multi-disciplinary technology institute today. Discover the key milestones in our growth.
+            Discover the key milestones, foundation, and achievements in our institutional growth.
           </p>
         </div>
 
-        <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col gap-4 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-200" />
-          <blockquote className="text-slate-600 italic text-xs sm:text-sm leading-relaxed">
-            &ldquo;We did not build Fontana simply to award certificates. We designed it as a community where young minds acquire the discipline, ethics, and technical prowess required to transform society through technology.&rdquo;
-          </blockquote>
-          <div className="flex flex-col gap-0.5">
-            <cite className="font-extrabold text-slate-900 text-xs sm:text-sm not-italic">
-              Marcus Vance, Sr.
-            </cite>
-            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
-              Co-Founder & Chief Academic Trustee
-            </span>
+      
+        {loading ? (
+          <div className="bg-white border border-slate-100 rounded-3xl p-12 shadow-xs flex flex-col items-center justify-center gap-3">
+            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm font-semibold text-slate-500">Loading historical milestones...</p>
           </div>
-        </div>
-
-        {/* Timeline */}
-        <div className="relative bg-white border border-slate-100 rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col gap-8">
-          {/* Vertical central bar (only on sm and above) */}
-          <div className="absolute left-[39px] sm:left-[47px] top-12 bottom-12 w-0.5 bg-slate-100" />
-          
-          <div className="flex flex-col gap-10 relative z-10">
-            {timeline.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div key={idx} className="flex gap-4 sm:gap-6 items-start group">
-                  
-                  {/* Badge Timeline circle */}
-                  <div className={`w-12 h-12 rounded-full border-2 border-white flex items-center justify-center shrink-0 shadow-xs relative transition-transform group-hover:scale-105 ${item.color}`}>
-                    <Icon className="text-base" />
-                  </div>
-
-                  {/* Content block */}
-                  <div className="flex flex-col gap-2 mt-1 w-full">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
-                      <h3 className="font-black text-slate-900 text-sm sm:text-base group-hover:text-sky-650 transition-colors">
-                        {item.title}
-                      </h3>
-                      <span className="text-xs font-black text-sky-600 tracking-wider bg-sky-50 px-2.5 py-0.5 rounded-full w-fit">
-                        Year {item.year}
-                      </span>
-                    </div>
+        ) : error ? (
+          <div className="bg-rose-50 border border-rose-100 rounded-3xl p-8 text-center flex flex-col items-center gap-3">
+            <FiAlertCircle className="text-3xl text-rose-600" />
+            <p className="text-sm font-semibold text-rose-700">{error}</p>
+            <button
+              onClick={fetchHistories}
+              className="px-4 py-2 bg-rose-600 text-white text-xs font-bold rounded-xl hover:bg-rose-700 transition-colors"
+            >
+              Retry Loading
+            </button>
+          </div>
+        ) : histories.length === 0 ? (
+          <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center justify-center gap-3">
+            <FiClock className="text-4xl text-slate-300" />
+            <h3 className="text-base font-bold text-slate-700">No History Records Available</h3>
+            <p className="text-xs text-slate-500 max-w-md">
+              No historical milestones have been published yet. Please check back later or add records in the admin console.
+            </p>
+          </div>
+        ) : (
+          <div className="relative bg-white border border-slate-100 rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col gap-8">
+            {/* Vertical central bar */}
+            <div className="absolute left-[39px] sm:left-[47px] top-12 bottom-12 w-0.5 bg-slate-100" />
+            
+            <div className="flex flex-col gap-10 relative z-10">
+              {histories.map((item, idx) => {
+                const Icon = iconList[idx % iconList.length];
+                const colorStyle = colorStyles[idx % colorStyles.length];
+                return (
+                  <div key={item.id || idx} className="flex gap-4 sm:gap-6 items-start group">
                     
-                    <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-2xl">
-                      {item.desc}
-                    </p>
-
-                    <div className="mt-1 bg-slate-50 border border-slate-100/60 p-2.5 rounded-xl text-[10px] sm:text-xs font-semibold text-slate-500 max-w-fit">
-                      {item.details}
+                    {/* Badge Timeline circle */}
+                    <div className={`w-12 h-12 rounded-full border-2 border-white flex items-center justify-center shrink-0 shadow-xs relative transition-transform group-hover:scale-105 ${colorStyle}`}>
+                      <Icon className="text-base" />
                     </div>
+
+                    {/* Content block */}
+                    <div className="flex flex-col gap-2 mt-1 w-full">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
+                        <h3 className="font-black text-slate-900 text-sm sm:text-base group-hover:text-indigo-600 transition-colors">
+                          {item.title}
+                        </h3>
+                        <span className="text-xs font-black text-indigo-600 tracking-wider bg-indigo-50 px-2.5 py-0.5 rounded-full w-fit shrink-0">
+                          {formatDate(item.date)}
+                        </span>
+                      </div>
+                      
+                      <div 
+                        className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-3xl prose prose-slate"
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      />
+
+                      {item.infor && item.infor.trim() !== '' && (
+                        <div className="mt-1 bg-slate-50 border border-slate-100 p-3 rounded-xl text-xs font-semibold text-slate-600 max-w-2xl flex items-start gap-2">
+                          <FiInfo className="text-indigo-500 text-sm shrink-0 mt-0.5" />
+                          <span className="whitespace-pre-line">{item.infor}</span>
+                        </div>
+                      )}
+                    </div>
+
                   </div>
-
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-
-        
+        )}
 
       </div>
     </div>

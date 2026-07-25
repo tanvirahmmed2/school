@@ -28,6 +28,12 @@ const Sidebar = () => {
   const [achievementsOpen, setAchievementsOpen] = useState(pathname.startsWith('/admin/achievements'));
   const [recognitionsOpen, setRecognitionsOpen] = useState(pathname.startsWith('/admin/recognition'));
   const [eventsOpen, setEventsOpen] = useState(pathname.startsWith('/admin/events'));
+  const [historyOpen, setHistoryOpen] = useState(pathname.startsWith('/admin/history'));
+
+  const historyLinks = [
+    { label: 'History Milestones', href: '/admin/history', icon: FiClock },
+    { label: 'Add History', href: '/admin/history/new', icon: FiPlus },
+  ];
 
   const eventLinks = [
     { label: 'All Events', href: '/admin/events', icon: FiCalendar },
@@ -275,6 +281,7 @@ const Sidebar = () => {
             <CollapsibleGroup label="Achievements" icon={FiAward} isOpen={achievementsOpen} setIsOpen={setAchievementsOpen} prefix="/admin/acheivement" links={achievementLinks} />
             <CollapsibleGroup label="Recognitions" icon={FiAward} isOpen={recognitionsOpen} setIsOpen={setRecognitionsOpen} prefix="/admin/recognition" links={recognitionLinks} />
             <CollapsibleGroup label="Events & Seminars" icon={FiCalendar} isOpen={eventsOpen} setIsOpen={setEventsOpen} prefix="/admin/events" links={eventLinks} />
+            <CollapsibleGroup label="Institutional History" icon={FiClock} isOpen={historyOpen} setIsOpen={setHistoryOpen} prefix="/admin/history" links={historyLinks} />
           </div>
 
           {/* Group 5: System Gateway */}

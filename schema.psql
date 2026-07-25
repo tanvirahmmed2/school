@@ -1989,3 +1989,23 @@ CREATE INDEX IF NOT EXISTS idx_student_fee_payments_fee ON student_fee_payments 
 CREATE INDEX IF NOT EXISTS idx_hostel_allocations_room ON hostel_allocations (room_id);
 CREATE INDEX IF NOT EXISTS idx_hostel_allocations_student ON hostel_allocations (student_id);
 CREATE INDEX IF NOT EXISTS idx_class_routines_lookup ON class_routines (class_id, section_id);
+
+-- ============================================================================
+-- HISTORIES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS histories (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    date TIMESTAMPTZ NOT NULL,
+    infor TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_histories_updated_at ON histories;
+CREATE TRIGGER update_histories_updated_at
+    BEFORE UPDATE ON histories
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+

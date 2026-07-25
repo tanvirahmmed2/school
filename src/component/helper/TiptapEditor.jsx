@@ -6,6 +6,7 @@ import StarterKit from '@tiptap/starter-kit';
 
 const TiptapEditor = ({ value, onChange, placeholder = 'Write description...' }) => {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: {
