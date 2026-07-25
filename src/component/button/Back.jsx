@@ -6,7 +6,7 @@ import { BiLeftArrow } from 'react-icons/bi'
 const Back = () => {
     const {goBack}=useContext(Context)
   return (
-    <div onClick={goBack} className='flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-secondary text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-pointer'><BiLeftArrow/> Back</div>
+    <div onClick={goBack} className='flex items-center justify-center gap-2 px-4 py-2.5 bg-secondary hover:bg-secondary-dark text-primary text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-pointer'><BiLeftArrow/> Back</div>
   )
 }
 

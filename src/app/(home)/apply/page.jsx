@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiCheckCircle, FiFileText, FiUserCheck, FiCreditCard, FiArrowRight } from 'react-icons/fi';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const ApplyPage = () => {
   const steps = [
@@ -28,21 +29,17 @@ const ApplyPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            Admissions 2026-27
-          </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
-            Begin Your Journey At FIT
+          
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
+            Begin Your Journey At {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')}
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
             Enroll today at the Fontana Institute of Technology to build technical skillsets guided by expert global faculty.
           </p>
         </div>
 
-        {/* Steps Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {steps.map((step, idx) => {
             const Icon = step.icon;
@@ -67,9 +64,8 @@ const ApplyPage = () => {
           })}
         </div>
 
-        {/* CTA Banner */}
-        <div className="bg-primaryr from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-800/10 via-transparent to-transparent"></div>
+        <div className="bg-primary from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-primary-dark from-sky-800/10 via-transparent to-transparent"></div>
           <div className="flex flex-col gap-2 relative z-10">
             <h2 className="text-xl md:text-2xl font-black tracking-tight">
               Ready to Submit Your Application?
