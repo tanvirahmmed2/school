@@ -55,7 +55,7 @@ const Life = () => {
 
           {/* Card 3 */}
           <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-4">
-            <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+            <div className="w-12 h-12 bg-primary-light text-primary rounded-xl flex items-center justify-center text-xl shrink-0">
               <FiTarget />
             </div>
             <div>

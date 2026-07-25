@@ -11,7 +11,8 @@ import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { staffSidebar, setStaffSidebar } = useContext(Context);
+  const { staffSidebar, setStaffSidebar, themeColor } = useContext(Context);
+  const mainColor = themeColor || '#059669';
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 

@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { query, ensureEventsTables } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
 // GET all events
 export async function GET() {
   try {
-    await ensureEventsTables();
     const result = await query('SELECT * FROM events ORDER BY event_date ASC');
     const res_data_306 = { events: result.rows };
     return NextResponse.json({
@@ -29,7 +28,6 @@ export async function GET() {
 // POST create event (Admin or Registrar)
 export async function POST(request) {
   try {
-    await ensureEventsTables();
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_1158 = { error: 'Unauthorized. Admins or Registrars only.' };

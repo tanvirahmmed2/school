@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { query, ensureHistoriesTable } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
 // GET all histories (Public) - Newest at top, oldest at the bottom
 export async function GET() {
   try {
-    await ensureHistoriesTable();
     const result = await query('SELECT * FROM histories ORDER BY date DESC, id DESC');
     return NextResponse.json({
       success: true,
@@ -27,7 +26,6 @@ export async function GET() {
 // POST create history (Admin only)
 export async function POST(request) {
   try {
-    await ensureHistoriesTable();
     const authenticated = await isAdmin();
     if (!authenticated) {
       return NextResponse.json({

@@ -60,7 +60,7 @@ const Events = () => {
         <div className="text-center mt-10">
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs hover:shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-secondary text-xs font-bold transition-all shadow-xs hover:shadow-md"
           >
             <span>View All Events</span>
             <FiArrowRight className="text-sm" />

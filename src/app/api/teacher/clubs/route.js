@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { query, ensureClubTables } from '@/lib/db';
+import { query } from '@/lib/db';
 import { getTeacherUser } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
 // GET clubs assigned to teacher as club admin
 export async function GET() {
   try {
-    await ensureClubTables();
     const teacher = await getTeacherUser();
     if (!teacher) {
       return NextResponse.json({

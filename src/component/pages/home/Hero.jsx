@@ -57,7 +57,7 @@ const Hero = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 blur-[2px] select-none pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover z-0 blur-[2px] scale-110 select-none pointer-events-none"
       >
         <source src="/campus.mp4" type="video/mp4" />
       </video>

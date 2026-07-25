@@ -16,17 +16,33 @@ export const ContextProvider = ({ children }) => {
   const [classes, setClasses] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [designations, setDesignations] = useState([]);
+  const [websiteSettings, setWebsiteSettings] = useState(null);
 
   const goBack = () => {
     router.back();
   };
+
+  const fetchWebsiteSettings = useCallback(async () => {
+    try {
+      const res = await fetch('/api/website-settings');
+      if (res.ok) {
+        const data = await res.json();
+        const settings = data.payload?.settings || data.paylod?.settings || data.settings;
+        if (settings) {
+          setWebsiteSettings(settings);
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching website settings in Context:', err);
+    }
+  }, []);
 
   const fetchDesignations = useCallback(async () => {
     try {
       const designationsRes = await fetch('/api/authorities/designations');
       if (designationsRes.ok) {
         const data = await designationsRes.json();
-        setDesignations(data.paylod?.designations || data.payload?.designations || []);
+        setDesignations(data.payload?.designations || data.paylod?.designations || []);
       }
     } catch (err) {
       console.error('Error fetching designations in Context:', err);
@@ -38,7 +54,7 @@ export const ContextProvider = ({ children }) => {
       const classesRes = await fetch('/api/classes');
       if (classesRes.ok) {
         const data = await classesRes.json();
-        setClasses(data.paylod?.classes || data.payload?.classes || []);
+        setClasses(data.payload?.classes || data.paylod?.classes || []);
       }
     } catch (err) {
       console.error('Error fetching classes in Context:', err);
@@ -50,7 +66,7 @@ export const ContextProvider = ({ children }) => {
       const clubsRes = await fetch('/api/clubs');
       if (clubsRes.ok) {
         const data = await clubsRes.json();
-        setClubs(data.paylod?.clubs || data.payload?.clubs || []);
+        setClubs(data.payload?.clubs || data.paylod?.clubs || []);
       }
     } catch (err) {
       console.error('Error fetching clubs in Context:', err);
@@ -58,30 +74,34 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    fetchWebsiteSettings();
+    fetchDesignations();
     fetchClasses();
     fetchClubs();
-    fetchDesignations();
-  }, [fetchClasses, fetchClubs, fetchDesignations]);
-
-  const values = {
-    goBack,
-    sidebar,
-    setSidebar,
-    adminSidebar,
-    setAdminSidebar,
-    TeacherSidebar,
-    setTeacherSidebar,
-    studentSidebar,
-    setStudentSidebar,
-    staffSidebar,
-    setStaffSidebar,
-    classes, setClasses, fetchClasses,
-    clubs, setClubs, fetchClubs,
-    designations, setDesignations, fetchDesignations
-  };
+  }, [fetchWebsiteSettings, fetchDesignations, fetchClasses, fetchClubs]);
 
   return (
-    <Context.Provider value={values}>
+    <Context.Provider
+      value={{
+        goBack,
+        sidebar,
+        setSidebar,
+        adminSidebar,
+        setAdminSidebar,
+        TeacherSidebar,
+        setTeacherSidebar,
+        studentSidebar,
+        setStudentSidebar,
+        staffSidebar,
+        setStaffSidebar,
+        classes,
+        clubs,
+        designations,
+        websiteSettings,
+        setWebsiteSettings,
+        fetchWebsiteSettings
+      }}
+    >
       {children}
     </Context.Provider>
   );

@@ -8,7 +8,8 @@ import { Context } from '@/component/helper/Context';
 
 const Navbar = () => {
   const router = useRouter();
-  const { studentSidebar, setStudentSidebar } = useContext(Context);
+  const { studentSidebar, setStudentSidebar, themeColor } = useContext(Context);
+  const mainColor = themeColor || '#059669';
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 

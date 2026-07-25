@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { query, ensureClubTables } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin, getTeacherUser, getStudentUser } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
 // GET single club details with restricted notice_info access
 export async function GET(request, { params }) {
   try {
-    await ensureClubTables();
     const { id } = await params;
     const result = await query(
       'SELECT id, name, motto, slug, description, notice_info, image, created_at FROM clubs WHERE id::text = $1 OR slug = $1',

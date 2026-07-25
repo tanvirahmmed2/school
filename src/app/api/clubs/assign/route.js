@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { query, ensureClubTables } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
 // GET assignments for a club and options
 export async function GET(request) {
   try {
-    await ensureClubTables();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err_286 = { error: 'Unauthorized. Admins only.' };
@@ -77,7 +76,6 @@ export async function GET(request) {
 // POST update assignments
 export async function POST(request) {
   try {
-    await ensureClubTables();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err_2722 = { error: 'Unauthorized. Admins only.' };

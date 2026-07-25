@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { query, ensureEventsTables } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
 // GET single event
 export async function GET(request, { params }) {
   try {
-    await ensureEventsTables();
     const { id } = await params;
     const result = await query('SELECT * FROM events WHERE id = $1', [id]);
     if (result.rows.length === 0) {
@@ -36,7 +35,6 @@ export async function GET(request, { params }) {
 // PUT update event (Admin or Registrar)
 export async function PUT(request, { params }) {
   try {
-    await ensureEventsTables();
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_289 = { error: 'Unauthorized. Admins or Registrars only.' };
@@ -130,7 +128,6 @@ export async function PUT(request, { params }) {
 // DELETE event (Admin or Registrar)
 export async function DELETE(request, { params }) {
   try {
-    await ensureEventsTables();
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_2759 = { error: 'Unauthorized. Admins or Registrars only.' };

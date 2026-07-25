@@ -8,18 +8,19 @@ import { MdMenu } from 'react-icons/md';
 import { SCHOOL_NAME } from '@/lib/secret';
 
 const Navbar = () => {
-  const { classes, clubs, designations, sidebar, setSidebar } = useContext(Context);
+  const { classes, clubs, designations, sidebar, setSidebar, websiteSettings } = useContext(Context);
   const pathname = usePathname();
 
-  const linkStyle = () => `px-3 h-10 flex w-full items-center justify-center transition-all duration-200 cursor-pointer text-xs lg:text-sm font-semibold text-white  hover:text-white rounded-lg`;
-  const dropdownTriggerStyle = () => `px-3 w-full h-10 flex items-center justify-center transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 text-white  hover:text-white rounded-lg`;
+  const schoolName = websiteSettings?.school_name || websiteSettings?.site_title || SCHOOL_NAME;
+
+  const linkStyle = () => `px-3 h-10 flex w-full items-center justify-center transition-all duration-200 cursor-pointer text-xs lg:text-sm font-semibold text-white hover:text-white rounded-lg`;
+  const dropdownTriggerStyle = () => `px-3 w-full h-10 flex items-center justify-center transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 text-white hover:text-white rounded-lg`;
 
   return (
     <nav className="relative w-full bg-emerald-500 text-white flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
-
       <section className="w-full flex flex-row items-center justify-between h-14 md:h-16">
         <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight">
-          {SCHOOL_NAME}
+          {schoolName}
         </Link>
 
         <section className="hidden md:flex flex-row items-center justify-end gap-5">
@@ -30,7 +31,10 @@ const Navbar = () => {
             <Link href={'/auth/student'} className="transition-colors text-white hover:text-emerald-100">
               Student Portal
             </Link>
-            <Link href={'/auth/access'} className="text-emerald-600 transition-all bg-white hover:bg-emerald-50 hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs">
+            <Link
+              href={'/auth/access'}
+              className="text-emerald-600 transition-all bg-white hover:bg-emerald-50 hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs"
+            >
               Login
             </Link>
           </div>
@@ -38,7 +42,7 @@ const Navbar = () => {
 
         <button
           onClick={() => setSidebar(!sidebar)}
-          className="md:hidden text-2xl transition-colors cursor-pointer p-2 rounded-lg text-white "
+          className="md:hidden text-2xl transition-colors cursor-pointer p-2 rounded-lg text-white"
           aria-label="Toggle Menu"
         >
           <MdMenu />
@@ -120,7 +124,6 @@ const Navbar = () => {
         <Link href={'/notices'} className={linkStyle()}>Notices</Link>
         <Link href={'/contact'} className={linkStyle()}>Contact</Link>
       </section>
-
     </nav>
   );
 };

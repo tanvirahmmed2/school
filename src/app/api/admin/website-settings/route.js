@@ -19,8 +19,10 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      paylod: { settings }
-    });
+      payload: { settings },
+      paylod: { settings },
+      settings
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching website settings:', error);
     return NextResponse.json({
@@ -108,8 +110,10 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       message: 'Website settings saved successfully.',
-      paylod: { settings }
-    });
+      payload: { settings },
+      paylod: { settings },
+      settings
+    }, { status: 200 });
   } catch (error) {
     console.error('Error saving website settings:', error);
     return NextResponse.json({
@@ -118,4 +122,3 @@ export async function POST(request) {
     }, { status: 500 });
   }
 }
-

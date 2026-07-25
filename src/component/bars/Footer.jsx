@@ -1,13 +1,23 @@
-import Link from 'next/link'
-import React from 'react'
-import { FaLocationArrow } from 'react-icons/fa'
-import { IoCall, IoMail } from 'react-icons/io5'
+'use client';
+
+import Link from 'next/link';
+import React, { useContext } from 'react';
+import { FaLocationArrow, FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { IoCall, IoMail } from 'react-icons/io5';
+import { Context } from '../helper/Context';
 
 const Footer = () => {
+  const { websiteSettings } = useContext(Context);
+
+  const schoolName = websiteSettings?.school_name || websiteSettings?.site_title || 'FIT';
+  const phone = websiteSettings?.contact_phone || '+880 180 500 03886';
+  const email = websiteSettings?.contact_email || 'support@disibin.com';
+  const address = websiteSettings?.address || 'Dhaka 1200';
+
   return (
-    <footer className='w-full bg-emerald-950 text-white flex flex-col items-center justify-center border-t border-emerald-500/30 shadow-inner px-4 md:px-8 py-8 md:py-12 overflow-x-hidden gap-20'>
+    <footer className='w-full bg-emerald-950 text-white flex flex-col items-center justify-center border-t border-emerald-500/30 shadow-inner px-4 md:px-8 py-8 md:py-12 overflow-x-hidden gap-12 sm:gap-16'>
       <div className='w-full flex flex-col gap-3 md:col-span-2'>
-        <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-emerald-500/50 pb-2 text-white'>
+        <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-emerald-800 pb-2 text-emerald-100'>
           Quick Links
         </h3>
         <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-1 text-xs md:text-base'>
@@ -37,26 +47,85 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className='w-full flex flex-col md:flex-row items-center justify-around gap-8 text-xs md:text-sm'>
-        <div className='w-full flex flex-col gap-3'>
-          <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-emerald-500/50 pb-2 text-white'>
-            Contact with FIT
+      <div className='w-full flex flex-col md:flex-row items-start justify-between gap-8 text-xs md:text-sm'>
+        <div className='w-full md:w-1/2 flex flex-col gap-3'>
+          <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-emerald-800 pb-2 text-emerald-100'>
+            Contact with {schoolName}
           </h3>
-          <p className='text-emerald-50/90 leading-relaxed'>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. At dolor ea repudiandae culpa possimus aperiam vel ratione delectus optio mollitia.
+          <p className='text-emerald-200/80 leading-relaxed'>
+            Dedicated to academic excellence, innovation, and holistic student development. Reach out to our administrative office for any inquiries.
           </p>
           <div className='flex flex-col gap-2 mt-1'>
-            <p className='w-full flex flex-row gap-2 items-center text-emerald-50/90'><IoCall className='text-emerald-300' /> +880 180 500 03886</p>
-            <p className='w-full flex flex-row gap-2 items-center text-emerald-50/90'><IoMail className='text-emerald-300' /> support@disibin.com</p>
-            <p className='w-full flex flex-row gap-2 items-center text-emerald-50/90'><FaLocationArrow className='text-emerald-300' /> Dhaka 1200</p>
+            {phone && (
+              <p className='w-full flex flex-row gap-2 items-center text-emerald-100/90'>
+                <IoCall className='text-emerald-400 shrink-0' /> {phone}
+              </p>
+            )}
+            {email && (
+              <p className='w-full flex flex-row gap-2 items-center text-emerald-100/90'>
+                <IoMail className='text-emerald-400 shrink-0' /> {email}
+              </p>
+            )}
+            {address && (
+              <p className='w-full flex flex-row gap-2 items-center text-emerald-100/90'>
+                <FaLocationArrow className='text-emerald-400 shrink-0' /> {address}
+              </p>
+            )}
           </div>
+
+          {/* Social Links */}
+          {(websiteSettings?.facebook_url || websiteSettings?.twitter_url || websiteSettings?.instagram_url || websiteSettings?.youtube_url) && (
+            <div className='flex items-center gap-3 mt-3'>
+              {websiteSettings.facebook_url && (
+                <a
+                  href={websiteSettings.facebook_url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='p-2 bg-emerald-900/60 hover:bg-emerald-800 text-white rounded-lg transition-colors'
+                  aria-label='Facebook'
+                >
+                  <FaFacebookF className='text-sm' />
+                </a>
+              )}
+              {websiteSettings.twitter_url && (
+                <a
+                  href={websiteSettings.twitter_url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='p-2 bg-emerald-900/60 hover:bg-emerald-800 text-white rounded-lg transition-colors'
+                  aria-label='Twitter'
+                >
+                  <FaTwitter className='text-sm' />
+                </a>
+              )}
+              {websiteSettings.instagram_url && (
+                <a
+                  href={websiteSettings.instagram_url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='p-2 bg-emerald-900/60 hover:bg-emerald-800 text-white rounded-lg transition-colors'
+                  aria-label='Instagram'
+                >
+                  <FaInstagram className='text-sm' />
+                </a>
+              )}
+              {websiteSettings.youtube_url && (
+                <a
+                  href={websiteSettings.youtube_url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='p-2 bg-emerald-900/60 hover:bg-emerald-800 text-white rounded-lg transition-colors'
+                  aria-label='YouTube'
+                >
+                  <FaYoutube className='text-sm' />
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
-
-
-
-        <div className='w-full flex flex-col items-center justify-center gap-4 mt-6 md:mt-0 sm:col-span-2 md:col-span-1'>
-          <div className='w-full max-w-100 aspect-video bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-md'>
+        <div className='w-full md:w-1/2 flex flex-col items-center justify-center gap-4 mt-4 md:mt-0'>
+          <div className='w-full max-w-md aspect-video bg-emerald-900/40 border border-emerald-800/80 rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-md'>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3515.3160107217595!2d90.47247927524832!3d24.898498477904493!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375653ef6517fdcf%3A0x360557fb2a9073f9!2sDisibin!5e1!3m2!1sen!2sbd!4v1784655551008!5m2!1sen!2sbd"
               width="100%"
@@ -65,14 +134,16 @@ const Footer = () => {
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
-              title="FIT Location Map"
+              title="Location Map"
             ></iframe>
           </div>
-          <p className='text-emerald-100/90 text-center text-xs font-semibold'>Copyright reserved © FIT 2026</p>
+          <p className='text-emerald-200/80 text-center text-xs font-semibold'>
+            Copyright reserved © {schoolName} {new Date().getFullYear()}
+          </p>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

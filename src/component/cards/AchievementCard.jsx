@@ -20,7 +20,7 @@ const AchievementCard = ({ achievement, href, className = '' }) => {
   return (
     <Link href={targetHref} className="block h-full">
       <div
-        className={`bg-white rounded-3xl border border-slate-100 overflow-hidden flex flex-col hover:border-amber-200 hover:shadow-[0_8px_30px_rgba(245,158,11,0.08)] transition-all duration-250 group h-full ${className}`}
+        className={`bg-white rounded-3xl border border-slate-100 overflow-hidden flex flex-col hover:border-primary hover:shadow-md transition-all duration-250 group h-full ${className}`}
       >
         {coverImage ? (
           <div className="w-full h-48 bg-slate-100 overflow-hidden relative">
@@ -31,20 +31,20 @@ const AchievementCard = ({ achievement, href, className = '' }) => {
             />
           </div>
         ) : (
-          <div className="w-full h-36 bg-gradient-to-br from-emerald-50 via-emerald-50/50 to-slate-50 flex items-center justify-center relative">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-100/80 border border-emerald-200 flex items-center justify-center text-emerald-600 text-3xl group-hover:scale-110 transition-transform duration-300">
+          <div className="w-full h-36 bg-primary-light flex items-center justify-center relative">
+            <div className="w-16 h-16 rounded-2xl bg-white border border-primary-border flex items-center justify-center text-primary text-3xl group-hover:scale-110 transition-transform duration-300 shadow-xs">
               <FiAward />
             </div>
           </div>
         )}
 
         <div className="p-6 flex flex-col gap-2 flex-1">
-          <div className="flex items-center gap-1.5 text-emerald-600 text-xs font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider">
             <FiAward className="text-sm shrink-0" />
             <span>Campus Milestone</span>
           </div>
 
-          <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-emerald-600 transition-colors">
+          <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
             {title}
           </h3>
 
@@ -52,7 +52,7 @@ const AchievementCard = ({ achievement, href, className = '' }) => {
             {cleanDescription}
           </p>
 
-          <div className="pt-3 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-emerald-600 group-hover:text-emerald-700 mt-auto">
+          <div className="pt-3 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-primary mt-auto">
             <span>View Milestone</span>
             <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
           </div>

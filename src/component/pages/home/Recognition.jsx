@@ -81,7 +81,7 @@ const Recognition = () => {
             {/* View All Button */}
             <Link
               href="/recognitions"
-              className="ml-2 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-full border border-emerald-200/80 transition-colors"
+              className="ml-2 inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light hover:bg-primary-light px-3.5 py-2 rounded-full border border-primary-border transition-colors"
             >
               <span>View All</span>
               <FiArrowRight className="text-xs" />

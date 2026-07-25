@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { query, ensureHistoriesTable } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
 // GET single history by ID
 export async function GET(request, { params }) {
   try {
-    await ensureHistoriesTable();
     const { id } = await params;
 
     const result = await query('SELECT * FROM histories WHERE id = $1', [id]);
@@ -38,7 +37,6 @@ export async function GET(request, { params }) {
 // PUT update history by ID (Admin only)
 export async function PUT(request, { params }) {
   try {
-    await ensureHistoriesTable();
     const authenticated = await isAdmin();
     if (!authenticated) {
       return NextResponse.json({
@@ -109,7 +107,6 @@ export async function PUT(request, { params }) {
 // DELETE history by ID (Admin only)
 export async function DELETE(request, { params }) {
   try {
-    await ensureHistoriesTable();
     const authenticated = await isAdmin();
     if (!authenticated) {
       return NextResponse.json({

@@ -9,8 +9,10 @@ import { MdOutlineAnnouncement } from 'react-icons/md';
 import { SCHOOL_NAME } from '@/lib/secret';
 
 const Sidebar = () => {
-  const { sidebar, setSidebar, classes, clubs, designations } = useContext(Context);
+  const { sidebar, setSidebar, classes, clubs, designations, themeColor } = useContext(Context);
   const pathname = usePathname();
+
+  const mainColor = themeColor || '#059669';
 
   const [openSection, setOpenSection] = useState(null);
 

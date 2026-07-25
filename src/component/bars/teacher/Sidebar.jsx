@@ -13,7 +13,8 @@ import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { TeacherSidebar, setTeacherSidebar } = useContext(Context);
+  const { TeacherSidebar, setTeacherSidebar, themeColor } = useContext(Context);
+  const mainColor = themeColor || '#059669';
   const [isClubAdmin, setIsClubAdmin] = useState(false);
   const [clubDropdownOpen, setClubDropdownOpen] = useState(false);
 

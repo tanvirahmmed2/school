@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { query, ensureEventsTables } from '@/lib/db';
+import { query } from '@/lib/db';
 
 export async function GET() {
   try {
-    await ensureEventsTables();
     const result = await query('SELECT * FROM events ORDER BY event_date ASC LIMIT 2');
     const res_data = { events: result.rows };
     return NextResponse.json({

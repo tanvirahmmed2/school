@@ -14,7 +14,8 @@ import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { adminSidebar, setAdminSidebar } = useContext(Context);
+  const { adminSidebar, setAdminSidebar, themeColor } = useContext(Context);
+  const mainColor = themeColor || '#059669';
 
   // Dynamic collapsible state
   const [classesOpen, setClassesOpen] = useState(pathname.startsWith('/admin/classes'));

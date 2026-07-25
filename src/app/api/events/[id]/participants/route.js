@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { query, ensureEventsTables } from '@/lib/db';
+import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 
 // GET participants for a specific event (Admin or Registrar)
 export async function GET(request, { params }) {
   try {
-    await ensureEventsTables();
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_310 = { error: 'Unauthorized. Admins or Registrars only.' };

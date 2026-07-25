@@ -11,7 +11,8 @@ import { Context } from '@/component/helper/Context';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { studentSidebar, setStudentSidebar } = useContext(Context);
+  const { studentSidebar, setStudentSidebar, themeColor } = useContext(Context);
+  const mainColor = themeColor || '#059669';
   const [isClubMember, setIsClubMember] = useState(false);
 
   useEffect(() => {
