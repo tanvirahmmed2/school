@@ -68,10 +68,10 @@ const CashierTransactionsPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiDollarSign className="text-amber-500 animate-bounce" /> Transaction Ledger
+          <FiDollarSign className="text-primary animate-pulse" /> Financial Transaction Ledger
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Review general incoming and outgoing payments recorded by the Fontana Institute finance desk.
+          Review audit transactions, payment methods, and cashier billing activity logged by the finance desk.
         </p>
       </div>
 
@@ -82,7 +82,7 @@ const CashierTransactionsPage = () => {
             <span className="text-slate-300 text-5xl mb-3">💵</span>
             <h3 className="text-sm font-bold text-slate-600">No Transactions Found</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
-              No transactions have been recorded in the ledger yet.
+              No payment transactions have been logged in the ledger yet.
             </p>
           </div>
         ) : (
@@ -90,39 +90,70 @@ const CashierTransactionsPage = () => {
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Transaction ID</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Description</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Txn Number</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Type &amp; Category</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Method</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Billed By</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Amount</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Amount (৳)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {transactions.map((trans) => (
-                  <tr key={trans.id} className="hover:bg-slate-50/30 transition-colors">
-                    <td className="px-6 py-4 text-sm font-semibold text-slate-700">
-                      #{trans.id}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-700">
-                      {trans.description || 'General Payment'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-lg">
-                        <FiCreditCard className="text-slate-400" />
-                        {trans.payment_method || 'N/A'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-xs text-slate-500 font-semibold">
-                      <div className="flex items-center gap-1.5">
-                        <FiCalendar />
-                        {new Date(trans.payment_date).toLocaleDateString()}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-bold text-primary text-right">
-                      ${Number(trans.amount).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
+                {transactions.map((trans) => {
+                  const isCredit = (trans.transaction_type || 'Credit').toLowerCase() === 'credit';
+                  return (
+                    <tr key={trans.id} className="hover:bg-slate-50/30 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold text-slate-800 font-mono">
+                            {trans.transaction_number || `#TXN-${trans.id}`}
+                          </span>
+                          {trans.remarks && (
+                            <span className="text-[10px] text-slate-450 font-medium max-w-[220px] truncate">
+                              {trans.remarks}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
+                            isCredit ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
+                          }`}>
+                            {trans.transaction_type || 'Credit'}
+                          </span>
+                          <span className="text-xs font-semibold text-slate-700">
+                            {trans.category || 'General Payment'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-600 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-xl">
+                          <FiCreditCard className="text-slate-400 text-xs" />
+                          {trans.payment_method || 'Cash'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-xs font-semibold text-slate-600">
+                          {trans.billed_by ? (
+                            <span className="font-mono text-primary font-bold">{trans.billed_by}</span>
+                          ) : (
+                            <span className="text-slate-400 italic">System / Auto</span>
+                          )}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 font-semibold">
+                        <div className="flex items-center gap-1.5">
+                          <FiCalendar className="text-slate-400" />
+                          {new Date(trans.payment_date).toLocaleDateString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800 text-right">
+                        ৳{Number(trans.amount || 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

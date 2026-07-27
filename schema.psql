@@ -715,6 +715,7 @@ CREATE TABLE IF NOT EXISTS student_fee_payments (
     payment_method VARCHAR(50) NOT NULL DEFAULT 'Cash',
     transaction_id VARCHAR(100),
     remarks TEXT,
+    billed_by VARCHAR(255),
     payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
@@ -1303,6 +1304,7 @@ CREATE TABLE IF NOT EXISTS admission_fees (
     student_admission_id BIGINT UNIQUE NOT NULL REFERENCES student_admissions(id) ON DELETE CASCADE,
     amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     status VARCHAR(50) DEFAULT 'unpaid' CHECK (status IN ('unpaid', 'pending', 'paid', 'cancelled')),
+    billed_by VARCHAR(255),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -1548,6 +1550,7 @@ CREATE TABLE IF NOT EXISTS payment_transactions (
     gateway_transaction_id VARCHAR(100),
     status VARCHAR(50) NOT NULL DEFAULT 'Success' CHECK (status IN ('Pending', 'Success', 'Failed')),
     remarks TEXT,
+    billed_by VARCHAR(255),
     payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP

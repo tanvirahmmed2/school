@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import pool from '@/lib/db';
-import { isAdmin, isRegister, isCashier } from '@/lib/auth';
+import { isAdmin, isRegister, isCashier, verifyJWT } from '@/lib/auth';
 import { sendEmail } from '@/lib/brevo';
 
 export async function PUT(request) {
@@ -9,6 +10,14 @@ export async function PUT(request) {
     const authorized = (await isAdmin()) || (await isRegister()) || (await isCashier());
     if (!authorized) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
+    }
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-staff')?.value;
+    let staffEmail = null;
+    if (token) {
+      const decoded = verifyJWT(token);
+      staffEmail = decoded?.email || null;
     }
 
     const body = await request.json();
@@ -62,20 +71,20 @@ export async function PUT(request) {
     // Update the admission fee status
     let feeResult = await client.query(`
       UPDATE admission_fees
-      SET status = $1, updated_at = CURRENT_TIMESTAMP
-      WHERE student_admission_id = $2
+      SET status = $1, billed_by = $2, updated_at = CURRENT_TIMESTAMP
+      WHERE student_admission_id = $3
       RETURNING *
-    `, [normStatus, parseInt(student_admission_id, 10)]);
+    `, [normStatus, staffEmail, parseInt(student_admission_id, 10)]);
 
     let feeRecord;
 
     if (feeResult.rows.length === 0) {
       const fees = applicant.fees || 0.00;
       const insertResult = await client.query(`
-        INSERT INTO admission_fees (student_admission_id, amount, status)
-        VALUES ($1, $2, $3)
+        INSERT INTO admission_fees (student_admission_id, amount, status, billed_by)
+        VALUES ($1, $2, $3, $4)
         RETURNING *
-      `, [parseInt(student_admission_id, 10), fees, normStatus]);
+      `, [parseInt(student_admission_id, 10), fees, normStatus, staffEmail]);
       
       feeRecord = insertResult.rows[0];
     } else {
@@ -99,14 +108,15 @@ export async function PUT(request) {
       await client.query(`
         INSERT INTO payment_transactions (
           transaction_number, payment_method, amount, transaction_type, category, 
-          reference_id, status, remarks, payment_date
-        ) VALUES ($1, $2, $3, 'Credit', 'Admission Fee', $4, 'Success', $5, CURRENT_TIMESTAMP)
+          reference_id, status, remarks, billed_by, payment_date
+        ) VALUES ($1, $2, $3, 'Credit', 'Admission Fee', $4, 'Success', $5, $6, CURRENT_TIMESTAMP)
       `, [
         transactionNo,
         method,
         actualAmountPaid,
         applicant.id,
-        rmk
+        rmk,
+        staffEmail
       ]);
 
       // Send email to applicant with upload link for candidate image & signature

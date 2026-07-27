@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import pool, { query } from '@/lib/db';
-import { isAdmin, isCashier } from '@/lib/auth';
+import { isAdmin, isCashier, verifyJWT } from '@/lib/auth';
 import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 // GET student fees logs (Admin/Cashier only)
@@ -212,6 +213,14 @@ export async function PUT(request) {
       }, { status: 403 });
     }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-staff')?.value;
+    let staffEmail = null;
+    if (token) {
+      const decoded = verifyJWT(token);
+      staffEmail = decoded?.email || null;
+    }
+
     const { fee_id, paid_amount, payment_method, transaction_id, remarks } = await request.json();
 
     if (!fee_id || paid_amount === undefined) {
@@ -296,9 +305,9 @@ export async function PUT(request) {
     // Log payment transaction details
     const method = payment_method ? payment_method.trim() : 'Cash';
     await client.query(
-      `INSERT INTO student_fee_payments (student_fee_id, amount_paid, payment_method, transaction_id, remarks, payment_date)
-       VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
-      [fee_id, numPaid, method, transaction_id ? transaction_id.trim() : null, remarks ? remarks.trim() : null]
+      `INSERT INTO student_fee_payments (student_fee_id, amount_paid, payment_method, transaction_id, remarks, billed_by, payment_date)
+       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)`,
+      [fee_id, numPaid, method, transaction_id ? transaction_id.trim() : null, remarks ? remarks.trim() : null, staffEmail]
     );
 
     // Insert into unified ledger payment_transactions
@@ -306,9 +315,9 @@ export async function PUT(request) {
     try {
       await client.query(
         `INSERT INTO payment_transactions (
-          transaction_number, payment_method, amount, transaction_type, category, reference_id, status, remarks, payment_date
-        ) VALUES ($1, $2, $3, 'Credit', 'Student Fee', $4, 'Success', $5, CURRENT_TIMESTAMP)`,
-        [txnNo, method, numPaid, fee.student_id, remarks ? remarks.trim() : `Collected payment for ${fee.title}`]
+          transaction_number, payment_method, amount, transaction_type, category, reference_id, status, remarks, billed_by, payment_date
+        ) VALUES ($1, $2, $3, 'Credit', 'Student Fee', $4, 'Success', $5, $6, CURRENT_TIMESTAMP)`,
+        [txnNo, method, numPaid, fee.student_id, remarks ? remarks.trim() : `Collected payment for ${fee.title}`, staffEmail]
       );
     } catch (txnErr) {
       console.error('Error logging payment_transactions:', txnErr);
