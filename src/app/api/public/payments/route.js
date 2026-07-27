@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 // GET billing details by registration number (Public route)
 export async function GET(request) {
@@ -10,6 +11,9 @@ export async function GET(request) {
     if (!regNo) {
       return NextResponse.json({ success: false, error: 'Registration number is required.' }, { status: 400 });
     }
+
+    // Auto-generate missing monthly fees
+    await triggerMonthlyFeeGeneration();
 
     // Find student
     const studentRes = await query(`
@@ -25,12 +29,13 @@ export async function GET(request) {
 
     const student = studentRes.rows[0];
 
-    // Fetch student fees invoices
+    // Fetch student fees invoices (Last 3 fees)
     const feesRes = await query(`
       SELECT id, title, amount, due_date, status, paid_amount, payment_date
       FROM student_fees
       WHERE student_id = $1
-      ORDER BY due_date DESC
+      ORDER BY due_date DESC, id DESC
+      LIMIT 3
     `, [student.id]);
 
     // Fetch student fines log

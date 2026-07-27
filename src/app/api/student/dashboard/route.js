@@ -70,13 +70,13 @@ export async function GET() {
     // 4. Count unpaid fees and fines
     const unpaidFeesRes = await query(`
       SELECT COUNT(*) as count FROM student_fees 
-      WHERE student_id = $1 AND status IN ('Unpaid', 'Partially Paid')
+      WHERE student_id = $1 AND LOWER(status) IN ('unpaid', 'partially paid')
     `, [studentId]);
     const unpaidFeesCount = parseInt(unpaidFeesRes.rows[0]?.count || 0, 10);
 
     const unpaidFinesRes = await query(`
       SELECT COUNT(*) as count FROM student_fines 
-      WHERE student_id = $1 AND status = 'Unpaid'
+      WHERE student_id = $1 AND LOWER(status) = 'unpaid'
     `, [studentId]);
     const unpaidFinesCount = parseInt(unpaidFinesRes.rows[0]?.count || 0, 10);
 

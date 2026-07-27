@@ -124,7 +124,7 @@ export async function POST(request) {
 
       const newFee = await query(
         `INSERT INTO student_fees (student_id, title, amount, due_date, status, paid_amount)
-         VALUES ($1, $2, $3, $4, 'Unpaid', 0.00)
+         VALUES ($1, $2, $3, $4, 'unpaid', 0.00)
          RETURNING *`,
         [student_id, title.trim(), numAmount, due_date]
       );
@@ -165,7 +165,7 @@ export async function POST(request) {
       for (const std of studentsInClass.rows) {
         await query(
           `INSERT INTO student_fees (student_id, title, amount, due_date, status, paid_amount)
-           VALUES ($1, $2, $3, $4, 'Unpaid', 0.00)`,
+           VALUES ($1, $2, $3, $4, 'unpaid', 0.00)`,
           [std.id, title.trim(), numAmount, due_date]
         );
       }

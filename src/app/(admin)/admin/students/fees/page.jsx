@@ -591,10 +591,10 @@ const AdminStudentFeesPage = () => {
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${
-                          fee.status === 'Paid' 
+                        <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full capitalize ${
+                          (fee.status || '').toLowerCase() === 'paid' 
                             ? 'bg-green-50 text-green-600' 
-                            : fee.status === 'Partially Paid' 
+                            : (fee.status || '').toLowerCase() === 'partially paid' 
                             ? 'bg-primary-light text-primary' 
                             : 'bg-red-50 text-red-600'
                         }`}>

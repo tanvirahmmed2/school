@@ -349,7 +349,7 @@ const CashierExamFeePage = () => {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {examFees.map((fee) => {
-                        const isPaid = fee.status === 'Paid';
+                        const isPaid = (fee.status || '').toLowerCase() === 'paid';
                         return (
                           <tr key={fee.id} className="hover:bg-slate-50/30 transition-colors">
                             <td className="px-5 py-3 whitespace-nowrap">

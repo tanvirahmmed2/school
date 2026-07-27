@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiSearch, FiDollarSign, FiClock, FiCheck, FiInfo, FiLayers, FiAlertCircle } from 'react-icons/fi';
+import { FiSearch, FiDollarSign, FiClock, FiCheck, FiInfo, FiLayers, FiAlertCircle, FiPrinter } from 'react-icons/fi';
+import { printStudentFeeReceipt } from '@/lib/receipts/student_fee';
 
 const PublicPaymentsPage = () => {
   const [regNo, setRegNo] = useState('');
@@ -43,15 +44,15 @@ const PublicPaymentsPage = () => {
     const { fees, fines } = data;
 
     const unpaidFees = fees
-      .filter((f) => f.status !== 'Paid')
-      .reduce((sum, f) => sum + (parseFloat(f.amount) - parseFloat(f.paid_amount)), 0);
+      .filter((f) => (f.status || '').toLowerCase() !== 'paid')
+      .reduce((sum, f) => sum + (parseFloat(f.amount) - parseFloat(f.paid_amount || 0)), 0);
 
     const unpaidFines = fines
-      .filter((f) => f.status !== 'Paid')
-      .reduce((sum, f) => sum + parseFloat(f.amount), 0);
+      .filter((f) => (f.status || '').toLowerCase() !== 'paid')
+      .reduce((sum, f) => sum + parseFloat(f.amount || 0), 0);
 
     const paidFees = fees
-      .reduce((sum, f) => sum + parseFloat(f.paid_amount), 0);
+      .reduce((sum, f) => sum + parseFloat(f.paid_amount || 0), 0);
 
     return {
       totalOutstanding: unpaidFees + unpaidFines,
@@ -62,12 +63,13 @@ const PublicPaymentsPage = () => {
   const summary = getSummary();
 
   const getStatusBadge = (status) => {
-    switch (status) {
-      case 'Paid':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Paid</span>;
-      case 'Partially Paid':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-light text-indigo-650 border border-primary-light">Partially Paid</span>;
-      case 'Unpaid':
+    const norm = (status || 'unpaid').toLowerCase();
+    switch (norm) {
+      case 'paid':
+        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100"><FiCheck /> Paid</span>;
+      case 'partially paid':
+        return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100">Partially Paid</span>;
+      case 'unpaid':
       default:
         return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100"><FiClock /> Unpaid</span>;
     }
@@ -92,6 +94,7 @@ const PublicPaymentsPage = () => {
             <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
             <input
               type="text"
+              placeholder="Enter Student Registration Number (e.g. 2026-6001)..."
               value={regNo}
               onChange={(e) => setRegNo(e.target.value)}
               className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
@@ -184,6 +187,7 @@ const PublicPaymentsPage = () => {
                             <th className="px-5 py-3 font-bold text-slate-400 uppercase text-[10px] tracking-wider text-right">Fee Due</th>
                             <th className="px-5 py-3 font-bold text-slate-400 uppercase text-[10px] tracking-wider text-right">Paid</th>
                             <th className="px-5 py-3 font-bold text-slate-400 uppercase text-[10px] tracking-wider">Status</th>
+                            <th className="px-5 py-3 font-bold text-slate-400 uppercase text-[10px] tracking-wider text-right">Receipt</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 text-slate-800">
@@ -192,8 +196,16 @@ const PublicPaymentsPage = () => {
                               <td className="px-5 py-3.5 font-bold text-slate-700">{fee.title}</td>
                               <td className="px-5 py-3.5 text-slate-500">{new Date(fee.due_date).toLocaleDateString()}</td>
                               <td className="px-5 py-3.5 text-right font-bold text-slate-900">৳{parseFloat(fee.amount).toFixed(2)}</td>
-                              <td className="px-5 py-3.5 text-right text-primary font-bold">৳{parseFloat(fee.paid_amount).toFixed(2)}</td>
+                              <td className="px-5 py-3.5 text-right text-primary font-bold">৳{parseFloat(fee.paid_amount || 0).toFixed(2)}</td>
                               <td className="px-5 py-3.5">{getStatusBadge(fee.status)}</td>
+                              <td className="px-5 py-3.5 text-right">
+                                <button
+                                  onClick={() => printStudentFeeReceipt(fee, data.student)}
+                                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                                >
+                                  <FiPrinter className="text-xs" /> Print Receipt
+                                </button>
+                              </td>
                             </tr>
                           ))}
                         </tbody>
