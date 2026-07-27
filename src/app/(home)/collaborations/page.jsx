@@ -39,7 +39,7 @@ const CollaborationsPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Global Network
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Our Collaborations
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -76,10 +76,10 @@ const CollaborationsPage = () => {
                       </div>
                     )}
                     <div className="flex flex-col gap-1.5 w-full">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
                         Academic Partner
                       </span>
-                      <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-primary transition-colors">
+                      <h3 className="font-semibold text-slate-900 text-lg group-hover:text-primary transition-colors">
                         {partner.institution_name}
                       </h3>
                       
@@ -98,7 +98,7 @@ const CollaborationsPage = () => {
             <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-2xl mb-4">
               <FiBriefcase />
             </div>
-            <h3 className="font-extrabold text-slate-800 text-lg">No collaborations to display</h3>
+            <h3 className="font-semibold text-slate-800 text-lg">No collaborations to display</h3>
             <p className="text-slate-500 text-sm mt-1 max-w-sm mx-auto">
               We are currently finalizing our network partnerships. Please check back later.
             </p>
@@ -109,7 +109,7 @@ const CollaborationsPage = () => {
         <div className="bg-primaryr from-slate-900 to-sky-950 text-white rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-6 relative overflow-hidden shadow-xl">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent"></div>
           <div className="flex flex-col gap-3 relative z-10">
-            <h2 className="text-xl md:text-2xl font-black tracking-tight">
+            <h2 className="text-xl md:text-2xl font-semibold tracking-tight">
               Interested in Partnering with FIT?
             </h2>
             <p className="text-secondary text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
@@ -118,7 +118,7 @@ const CollaborationsPage = () => {
           </div>
           <a
             href="mailto:collaborations@fit.edu.bd"
-            className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
+            className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-semibold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
           >
             <FiUsers />
             <span>Connect with External Relations</span>

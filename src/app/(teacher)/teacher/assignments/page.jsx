@@ -94,7 +94,7 @@ const TeacherAssignmentsPageContent = () => {
       {/* Title */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Class Assignments</h1>
+          <h1 className="text-2xl font-semibold text-slate-800 mb-2">Class Assignments</h1>
           <p className="text-slate-500 text-sm font-medium">Post homework tasks and review submissions for <span className="text-primary font-bold">{subjectName}</span>.</p>
         </div>
         <button

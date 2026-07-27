@@ -132,11 +132,11 @@ const ApplyFormContent = () => {
           <FiCheckCircle />
         </div>
 
-        <span className="text-xs font-extrabold text-green-700 bg-green-50 px-3 py-1 rounded-full uppercase tracking-wider">
+        <span className="text-xs font-semibold text-green-700 bg-green-50 px-3 py-1 rounded-full uppercase tracking-wider">
           Application Submitted
         </span>
 
-        <h2 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+        <h2 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
           Application Receipt
         </h2>
         <p className="text-xs text-slate-500 mt-1">
@@ -148,7 +148,7 @@ const ApplyFormContent = () => {
           <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
             <div>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Applicant Number</p>
-              <p className="text-xl font-black text-primary font-mono mt-0.5">{receiptData.applicantNumber}</p>
+              <p className="text-xl font-semibold text-primary font-mono mt-0.5">{receiptData.applicantNumber}</p>
             </div>
             <button
               onClick={copyReceiptNumber}
@@ -193,7 +193,7 @@ const ApplyFormContent = () => {
           <FiFileText />
         </div>
         <div>
-          <h2 className="text-lg font-black text-slate-900 tracking-tight">Admission Registration Form</h2>
+          <h2 className="text-lg font-semibold text-slate-900 tracking-tight">Admission Registration Form</h2>
           <p className="text-xs text-slate-400">Fill in the candidate's profile credentials.</p>
         </div>
       </div>
@@ -219,7 +219,7 @@ const ApplyPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Fontana Enrollment Portal
           </span>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-3xl font-semibold text-slate-900 mt-2 tracking-tight">
             Intake Application Registry
           </h1>
         </div>

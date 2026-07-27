@@ -12,7 +12,7 @@ const About = () => {
           
           <div className="lg:col-span-7 flex flex-col gap-6">
             
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
               A Legacy of Academic and Personal Excellence
             </h2>
             <p className="text-slate-600 text-sm leading-relaxed">

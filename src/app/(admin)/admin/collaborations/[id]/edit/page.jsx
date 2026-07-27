@@ -107,7 +107,7 @@ const EditCollaborationPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Edit Collaboration
           </h1>
         </div>

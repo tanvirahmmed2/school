@@ -121,7 +121,7 @@ const AchievementListPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
             Recorded Records
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Institutional Achievements
           </h1>
           <p className="text-slate-500 text-xs mt-1">
@@ -184,7 +184,7 @@ const AchievementListPage = () => {
                     </div>
                   )}
 
-                  <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
 

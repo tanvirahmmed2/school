@@ -63,7 +63,7 @@ const CollaborationsListPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Institutional Collaborations
           </h1>
         </div>
@@ -88,10 +88,10 @@ const CollaborationsListPage = () => {
             <table className="w-full border-collapse text-left text-xs text-slate-650">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6 w-24">Logo</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Institution Name</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Description</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right w-48">Actions</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pl-6 w-24">Logo</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Institution Name</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Description</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right w-48">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 font-semibold text-slate-800">
@@ -114,7 +114,7 @@ const CollaborationsListPage = () => {
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         <FiBriefcase className="text-primary flex-shrink-0" />
-                        <span className="font-extrabold text-slate-900">{item.institution_name}</span>
+                        <span className="font-semibold text-slate-900">{item.institution_name}</span>
                       </div>
                     </td>
 

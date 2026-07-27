@@ -92,7 +92,7 @@ export default function NewAuthorityPage() {
 
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+        <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
           <FiUserPlus className="text-primary" /> Onboard New Board Member
         </h1>
         <p className="text-sm text-slate-500 font-medium">

@@ -120,7 +120,7 @@ export default function AuthoritiesListPage() {
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
             <FiUsers className="text-primary" /> Governing Board Registry
           </h1>
           <p className="text-sm text-slate-500 font-medium">
@@ -230,7 +230,7 @@ export default function AuthoritiesListPage() {
             </button>
 
             <div className="flex flex-col gap-1.5 border-b border-slate-50 pb-4">
-              <h2 className="text-lg font-extrabold text-slate-800">Edit Board Member</h2>
+              <h2 className="text-lg font-semibold text-slate-800">Edit Board Member</h2>
               <p className="text-xs text-slate-400">Modify photo and credentials parameters below.</p>
             </div>
 

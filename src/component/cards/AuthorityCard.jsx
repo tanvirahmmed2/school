@@ -49,7 +49,7 @@ const AuthorityCard = ({ authority, className = '', isRole = false }) => {
           {/* Details side */}
           <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg group-hover:text-primary transition-colors leading-tight">
+              <h3 className="font-semibold text-slate-900 text-base sm:text-lg group-hover:text-primary transition-colors leading-tight">
                 {title || name}
               </h3>
             </div>
@@ -91,7 +91,7 @@ const AuthorityCard = ({ authority, className = '', isRole = false }) => {
       <div className="flex-1 min-w-0 flex flex-col justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-            <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl group-hover:text-primary transition-colors leading-snug">
+            <h3 className="font-semibold text-slate-900 text-lg sm:text-xl group-hover:text-primary transition-colors leading-snug">
               {displayName}
             </h3>
             {displayDesignation && (

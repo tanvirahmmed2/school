@@ -111,7 +111,7 @@ const ClubNewsDetailPage = () => {
                 )}
               </div>
 
-              <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
+              <h1 className="text-2xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-snug">
                 {clubNews.title}
               </h1>
             </div>

@@ -30,7 +30,7 @@ const NoticesPage = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Notices &amp; Announcements
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">

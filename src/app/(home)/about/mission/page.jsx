@@ -47,7 +47,7 @@ const MissionPage = () => {
       <div className="w-full flex flex-col gap-10">
         
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
             Our Mission & Objectives
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
@@ -61,7 +61,7 @@ const MissionPage = () => {
               <FiGlobe className="text-xl" />
             </div>
             <div className="flex flex-col gap-2">
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+              <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
                 Institutional Mission
               </h3>
               <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
@@ -75,7 +75,7 @@ const MissionPage = () => {
               <FiEye className="text-xl" />
             </div>
             <div className="flex flex-col gap-2">
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+              <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
                 Institutional Vision
               </h3>
               <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
@@ -101,7 +101,7 @@ const MissionPage = () => {
                     <Icon className="text-base" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="font-extrabold text-slate-900 text-sm sm:text-base">
+                    <h4 className="font-semibold text-slate-900 text-sm sm:text-base">
                       {strat.title}
                     </h4>
                     <p className="text-slate-500 text-xs leading-relaxed">
@@ -120,7 +120,7 @@ const MissionPage = () => {
             <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider">
               Vision 2030
             </span>
-            <h3 className="font-black text-white text-lg sm:text-xl">
+            <h3 className="font-semibold text-white text-lg sm:text-xl">
               Strategic Growth Benchmarks
             </h3>
             <p className="text-slate-300 text-xs sm:text-sm">
@@ -131,7 +131,7 @@ const MissionPage = () => {
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
             {goals.map((g, idx) => (
               <div key={idx} className="flex flex-col gap-1.5 p-4 bg-white/5 rounded-2xl border border-white/10">
-                <span className="font-extrabold text-sky-400 text-xs sm:text-sm">
+                <span className="font-semibold text-sky-400 text-xs sm:text-sm">
                   {g.target}
                 </span>
                 <p className="text-slate-300 text-[11px] sm:text-xs leading-relaxed">

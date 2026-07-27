@@ -49,7 +49,7 @@ const RecognitionDetailPage = () => {
         <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-3xl mb-4">
           <FiAward />
         </div>
-        <h1 className="text-2xl font-black text-slate-900">Recognition Not Found</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Recognition Not Found</h1>
         <p className="text-slate-500 text-sm mt-2">This recognition may have been removed or the link is invalid.</p>
         <Link
           href="/"
@@ -99,7 +99,7 @@ const RecognitionDetailPage = () => {
             </span>
 
             {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
+            <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight leading-tight mb-5">
               {recognition.name}
             </h1>
 

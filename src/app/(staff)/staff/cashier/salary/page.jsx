@@ -202,7 +202,7 @@ const CashierPayrollPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-600 font-semibold text-right">৳{parseFloat(s.basic).toLocaleString()}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-600 font-semibold text-right">+৳{parseFloat(s.allowance).toLocaleString()}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-600 font-semibold text-right">-৳{parseFloat(s.deductions).toLocaleString()}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-extrabold text-slate-800 text-right">৳{netPaid.toLocaleString()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-800 text-right">৳{netPaid.toLocaleString()}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
                           isPaid ? 'bg-primary-light text-primary' : 'bg-amber-50 text-amber-600'

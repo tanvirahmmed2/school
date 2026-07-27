@@ -27,7 +27,7 @@ const Alumni = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Network
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             FIT Alumni Association
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -41,7 +41,7 @@ const Alumni = () => {
             <div className="w-10 h-10 bg-primary-light text-primary rounded-xl flex items-center justify-center shrink-0">
               <FiUsers />
             </div>
-            <h3 className="font-extrabold text-slate-800 text-sm">Graduates Network</h3>
+            <h3 className="font-semibold text-slate-800 text-sm">Graduates Network</h3>
             <p className="text-slate-500 text-xs leading-relaxed">
               Access to a global directory containing over 5,000 active members to find mentors and explore job vacancies.
             </p>
@@ -51,7 +51,7 @@ const Alumni = () => {
             <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center shrink-0">
               <FiBriefcase />
             </div>
-            <h3 className="font-extrabold text-slate-800 text-sm">Alumni Referrals</h3>
+            <h3 className="font-semibold text-slate-800 text-sm">Alumni Referrals</h3>
             <p className="text-slate-500 text-xs leading-relaxed">
               Direct referral opportunities at technology partners, multinational institutions, and engineering firms.
             </p>
@@ -61,7 +61,7 @@ const Alumni = () => {
             <div className="w-10 h-10 bg-primary-light text-primary rounded-xl flex items-center justify-center shrink-0">
               <FiGlobe />
             </div>
-            <h3 className="font-extrabold text-slate-800 text-sm">Alumni Meetups</h3>
+            <h3 className="font-semibold text-slate-800 text-sm">Alumni Meetups</h3>
             <p className="text-slate-500 text-xs leading-relaxed">
               Annual alumni dinners, technical lectures, campus visit events, and project review panels.
             </p>
@@ -70,7 +70,7 @@ const Alumni = () => {
 
         {/* Testimonials */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col gap-6">
-          <h3 className="font-extrabold text-slate-900 text-base border-b border-slate-100 pb-3">Graduates Stories</h3>
+          <h3 className="font-semibold text-slate-900 text-base border-b border-slate-100 pb-3">Graduates Stories</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {testimonials.map((t, idx) => (
@@ -79,7 +79,7 @@ const Alumni = () => {
                   "{t.quote}"
                 </p>
                 <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col">
-                  <span className="font-extrabold text-slate-850 text-xs text-slate-800">{t.name}</span>
+                  <span className="font-semibold text-slate-850 text-xs text-slate-800">{t.name}</span>
                   <span className="text-[10px] text-slate-400 font-semibold">{t.batch} • {t.role}</span>
                 </div>
               </div>

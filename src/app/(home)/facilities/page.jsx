@@ -37,7 +37,7 @@ const FacilitiesPage = () => {
           <span className="text-xs font-bold text-sky-655 bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest text-primary">
             FIT Facilities
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Institute Facilities & Services
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -58,7 +58,7 @@ const FacilitiesPage = () => {
                   <Icon className="text-sm" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-800 text-sm">
+                  <h3 className="font-semibold text-slate-800 text-sm">
                     {card.title}
                   </h3>
                   <p className="text-slate-500 text-xs mt-1.5 leading-relaxed">

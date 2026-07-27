@@ -187,7 +187,7 @@ export default function DesignationsManagementPage() {
             <FiAward />
           </div>
           <div className="flex flex-col gap-0.5">
-            <h1 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
+            <h1 className="text-xl md:text-2xl font-semibold text-slate-800 tracking-tight">
               Designations Management
             </h1>
             <p className="text-xs md:text-sm text-slate-500 font-medium">
@@ -228,7 +228,7 @@ export default function DesignationsManagementPage() {
           </div>
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Designations</span>
-            <h3 className="text-2xl font-black text-slate-800">{designations.length}</h3>
+            <h3 className="text-2xl font-semibold text-slate-800">{designations.length}</h3>
           </div>
         </div>
 
@@ -339,7 +339,7 @@ export default function DesignationsManagementPage() {
                 <div className="w-9 h-9 rounded-xl bg-primary-light text-primary flex items-center justify-center">
                   <FiPlus className="text-lg" />
                 </div>
-                <h3 className="font-extrabold text-slate-800 text-lg">Add New Designation</h3>
+                <h3 className="font-semibold text-slate-800 text-lg">Add New Designation</h3>
               </div>
               <button
                 onClick={() => setIsCreateOpen(false)}
@@ -427,7 +427,7 @@ export default function DesignationsManagementPage() {
                 <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
                   <FiEdit2 className="text-lg" />
                 </div>
-                <h3 className="font-extrabold text-slate-800 text-lg">Edit Designation</h3>
+                <h3 className="font-semibold text-slate-800 text-lg">Edit Designation</h3>
               </div>
               <button
                 onClick={() => setEditingDesignation(null)}

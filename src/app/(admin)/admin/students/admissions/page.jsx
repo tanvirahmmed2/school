@@ -93,8 +93,11 @@ const AdmissionsPage = () => {
     }
   };
 
-  const pendingAdmissions = admissions.filter((a) => a.status === 'Pending');
-  const processedAdmissions = admissions.filter((a) => a.status !== 'Pending');
+  const pendingAdmissions = admissions.filter((a) => (a.status || '').toLowerCase() === 'pending');
+  const processedAdmissions = admissions.filter((a) => {
+    const st = (a.status || '').toLowerCase();
+    return st === 'approved' || st === 'rejected';
+  });
 
   const currentTabAdmissions = activeTab === 'pending' ? pendingAdmissions : processedAdmissions;
 
@@ -171,14 +174,14 @@ const AdmissionsPage = () => {
             <span>{selectedIds.length} Selected</span>
             <button
               disabled={bulkProcessing}
-              onClick={() => handleBulkAction('Approved')}
+              onClick={() => handleBulkAction('approved')}
               className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1 text-[11px]"
             >
               <FiCheck /> Approve Selected
             </button>
             <button
               disabled={bulkProcessing}
-              onClick={() => handleBulkAction('Rejected')}
+              onClick={() => handleBulkAction('rejected')}
               className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1 text-[11px]"
             >
               <FiX /> Reject Selected
@@ -309,7 +312,7 @@ const AdmissionsPage = () => {
                             </Link>
                             <button
                               disabled={processingId !== null}
-                              onClick={() => handleProcessAdmission(adm.id, 'Approved')}
+                              onClick={() => handleProcessAdmission(adm.id, 'approved')}
                               className="p-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-xl transition-all cursor-pointer"
                               title="Approve Admission"
                             >
@@ -317,7 +320,7 @@ const AdmissionsPage = () => {
                             </button>
                             <button
                               disabled={processingId !== null}
-                              onClick={() => handleProcessAdmission(adm.id, 'Rejected')}
+                              onClick={() => handleProcessAdmission(adm.id, 'rejected')}
                               className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all cursor-pointer"
                               title="Reject Admission"
                             >

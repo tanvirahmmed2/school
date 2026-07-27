@@ -62,7 +62,7 @@ const CampusPage = () => {
         
         
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
             Our Campus & Infrastructure
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
@@ -86,7 +86,7 @@ const CampusPage = () => {
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${fac.color}`}>
                     <Icon className="text-base" />
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm sm:text-base">
+                  <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
                     {fac.title}
                   </h3>
                   <p className="text-slate-500 text-xs leading-relaxed">
@@ -113,7 +113,7 @@ const CampusPage = () => {
                     <Icon className="text-sm" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm">
+                    <h4 className="font-semibold text-slate-900 text-xs sm:text-sm">
                       {h.title}
                     </h4>
                     <p className="text-slate-500 text-[11px] sm:text-xs leading-relaxed">
@@ -130,7 +130,7 @@ const CampusPage = () => {
           <div className="absolute inset-0 bg-linear-to-r from-sky-950/40 via-slate-900 to-indigo-950/40 z-0" />
           
           <div className="relative z-10 flex flex-col gap-1.5 max-w-xl">
-            <h4 className="font-black text-white text-base sm:text-lg">
+            <h4 className="font-semibold text-white text-base sm:text-lg">
               Looking for detailed measurements & parameters?
             </h4>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
@@ -140,7 +140,7 @@ const CampusPage = () => {
 
           <Link
             href="/contact"
-            className="relative z-10 bg-white hover:bg-slate-50 text-slate-900 font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs hover:shadow-md cursor-pointer shrink-0 flex items-center gap-1.5"
+            className="relative z-10 bg-white hover:bg-slate-50 text-slate-900 font-semibold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs hover:shadow-md cursor-pointer shrink-0 flex items-center gap-1.5"
           >
             <span>Contact</span>
             <FiArrowRight />

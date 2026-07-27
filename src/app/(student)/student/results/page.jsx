@@ -48,7 +48,7 @@ const ResultsPage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Marks & Results</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Marks & Results</h1>
         <p className="text-slate-500 text-sm font-medium">Verify your compiled semester GPA, letter grade, and subject-wise score cards.</p>
       </div>
 
@@ -96,12 +96,12 @@ const ResultsPage = () => {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">GPA</span>
-                      <span className="text-xl font-black text-blue-400">{currentResult.gpa}</span>
+                      <span className="text-xl font-semibold text-blue-400">{currentResult.gpa}</span>
                     </div>
                     <div className="w-px h-8 bg-slate-800"></div>
                     <div className="text-right">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Grade</span>
-                      <span className="text-xl font-black text-emerald-400">{currentResult.grade}</span>
+                      <span className="text-xl font-semibold text-emerald-400">{currentResult.grade}</span>
                     </div>
                   </div>
                 </div>

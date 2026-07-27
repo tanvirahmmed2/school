@@ -547,7 +547,7 @@ const CashierMonthlyFeePage = () => {
                           {new Date(fee.due_date).toLocaleDateString()}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-extrabold text-slate-800 text-right">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-800 text-right">
                         ৳{parseFloat(fee.amount).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-primary text-right">

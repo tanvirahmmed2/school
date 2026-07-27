@@ -66,7 +66,7 @@ const ApplyPage = () => {
         <div className="bg-primary from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-primary-dark from-sky-800/10 via-transparent to-transparent"></div>
           <div className="flex flex-col gap-2 relative z-10">
-            <h2 className="text-xl md:text-2xl font-black tracking-tight">
+            <h2 className="text-xl md:text-2xl font-semibold tracking-tight">
               Ready to Submit Your Application?
             </h2>
             <p className="text-secondary text-xs md:text-sm max-w-md mx-auto leading-relaxed">
@@ -75,7 +75,7 @@ const ApplyPage = () => {
           </div>
           <Link
             href="/admission"
-            className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-sky-950 font-extrabold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
+            className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-sky-950 font-semibold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
           >
             <span>Fill Application Form</span>
             <FiArrowRight />

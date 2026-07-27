@@ -30,7 +30,7 @@ const Events = () => {
     <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="w-full mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             Upcoming Campus Events
           </h2>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-sm">

@@ -34,7 +34,7 @@ export default function PublicStaffPage() {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest inline-flex items-center gap-1.5 border border-primary-light">
             <FiBriefcase className="text-xs" /> Support & Administration
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Institutional Staff Directory
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base font-medium">

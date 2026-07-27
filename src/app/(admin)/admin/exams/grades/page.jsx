@@ -159,7 +159,7 @@ const AdminGradesPage = () => {
                   <tr key={grade.grade_id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center font-black text-sm shadow-xs">
+                        <div className="w-10 h-10 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center font-semibold text-sm shadow-xs">
                           {grade.letter_grade}
                         </div>
                         <div>

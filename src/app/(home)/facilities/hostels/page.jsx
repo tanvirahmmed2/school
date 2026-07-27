@@ -33,7 +33,7 @@ const HostelFacilities = () => {
           <span className="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest">
             Residences
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Residential Housing Directory
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -72,7 +72,7 @@ const HostelFacilities = () => {
 
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-extrabold text-slate-800 text-base">{hostel.name}</h3>
+                    <h3 className="font-semibold text-slate-800 text-base">{hostel.name}</h3>
                     <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded-md tracking-wider shrink-0 ${
                       hostel.gender === 'Male'
                         ? 'bg-primary-light text-primary border border-primary-light'

@@ -145,7 +145,7 @@ export default function AdminTeacherQualificationsPage() {
 
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+        <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
           <FiAward className="text-primary" /> Manage Teacher Qualifications
         </h1>
         <p className="text-sm text-slate-500 font-medium">
@@ -202,7 +202,7 @@ export default function AdminTeacherQualificationsPage() {
             <>
               {/* Form Block */}
               <div className="bg-white border border-slate-100 rounded-3xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-4">
-                <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-50 pb-3">
+                <h3 className="text-xs font-semibold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-50 pb-3">
                   <FiAward className="text-primary" /> {editMode ? 'Edit Qualification Record' : 'Add Teacher Qualification'}
                 </h3>
                 <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
@@ -293,7 +293,7 @@ export default function AdminTeacherQualificationsPage() {
 
               {/* List Block */}
               <div className="bg-white border border-slate-100 rounded-3xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-4">
-                <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider border-b border-slate-50 pb-3">
+                <h3 className="text-xs font-semibold text-slate-800 uppercase tracking-wider border-b border-slate-50 pb-3">
                   Recorded Teacher Qualifications List
                 </h3>
 
@@ -310,7 +310,7 @@ export default function AdminTeacherQualificationsPage() {
                     {qualifications.map(q => (
                       <div key={q.id} className="p-4 border border-slate-100 rounded-2xl flex items-center justify-between hover:border-slate-200 transition-all">
                         <div className="flex flex-col gap-0.5">
-                          <h4 className="font-extrabold text-slate-800 text-xs">{q.degree}</h4>
+                          <h4 className="font-semibold text-slate-800 text-xs">{q.degree}</h4>
                           <span className="text-[10px] text-slate-400 font-bold uppercase block">{q.institution}</span>
                           <div className="flex items-center gap-2 mt-1.5">
                             <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">Graduation: {q.passing_year}</span>

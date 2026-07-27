@@ -90,7 +90,7 @@ const RegistrarParticipantsContent = () => {
             <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit mb-2">
               <FiUsers /> Registrar Registry
             </div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">
               Event Participants List
             </h1>
             <p className="text-slate-500 text-xs md:text-sm mt-1">

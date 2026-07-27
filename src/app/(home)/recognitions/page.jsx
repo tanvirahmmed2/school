@@ -44,7 +44,7 @@ const RecognitionsPage = () => {
           <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest mb-3">
             Honours &amp; Awards
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             All Recognitions
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-sm">

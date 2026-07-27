@@ -11,10 +11,10 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { ids, status } = body; // ids = [1, 2, ...], status = 'Approved' or 'Rejected'
+    const normStatus = status ? status.toLowerCase() : '';
 
-    if (!Array.isArray(ids) || ids.length === 0 || !status || !['Approved', 'Rejected'].includes(status)) {
-      return NextResponse.json({ success: false, error: 'Valid array of applicant IDs and status (Approved/Rejected) are required.' }, { status: 400 });
+    if (!Array.isArray(ids) || ids.length === 0 || !normStatus || !['approved', 'rejected'].includes(normStatus)) {
+      return NextResponse.json({ success: false, error: 'Valid array of applicant IDs and status (approved/rejected) are required.' }, { status: 400 });
     }
 
     client = await pool.connect();
@@ -36,7 +36,7 @@ export async function POST(request) {
 
       const admission = admRes.rows[0];
 
-      if (status === 'Approved') {
+      if (normStatus === 'approved') {
         const feeCheck = await client.query('SELECT status FROM admission_fees WHERE student_admission_id = $1', [id]);
         const feeStatus = feeCheck.rows[0]?.status;
         
@@ -62,7 +62,7 @@ export async function POST(request) {
 
         await client.query(`
           UPDATE student_admissions SET
-            status = 'Approved',
+            status = 'approved',
             updated_at = CURRENT_TIMESTAMP
           WHERE id = $1
         `, [id]);
@@ -76,7 +76,7 @@ export async function POST(request) {
 
         await client.query(`
           UPDATE student_admissions SET
-            status = 'Rejected',
+            status = 'rejected',
             updated_at = CURRENT_TIMESTAMP
           WHERE id = $1
         `, [id]);

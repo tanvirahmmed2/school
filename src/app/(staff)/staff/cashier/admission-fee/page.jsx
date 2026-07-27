@@ -97,7 +97,7 @@ const AdmissionFeeDesk = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           student_admission_id: collectingPaymentAdm.id,
-          status: 'Paid',
+          status: 'paid',
           amount_paid: paymentAmount,
           payment_method: paymentMethod,
           transaction_id: transactionId,
@@ -113,7 +113,7 @@ const AdmissionFeeDesk = () => {
       // Update state locally
       setAdmissions(prev => 
         prev.map(adm => 
-          adm.id === collectingPaymentAdm.id ? { ...adm, fee_status: 'Paid' } : adm
+          adm.id === collectingPaymentAdm.id ? { ...adm, fee_status: 'paid' } : adm
         )
       );
 
@@ -193,7 +193,7 @@ const AdmissionFeeDesk = () => {
         <div className="bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Total Fee Roster</span>
-            <span className="text-2xl font-black text-slate-800">৳{totalFeesAmount.toFixed(2)}</span>
+            <span className="text-2xl font-semibold text-slate-800">৳{totalFeesAmount.toFixed(2)}</span>
           </div>
           <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
             <FiDollarSign className="text-slate-500 text-lg" />
@@ -203,7 +203,7 @@ const AdmissionFeeDesk = () => {
         <div className="bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">Total Fees Collected</span>
-            <span className="text-2xl font-black text-primary">৳{paidFeesAmount.toFixed(2)}</span>
+            <span className="text-2xl font-semibold text-primary">৳{paidFeesAmount.toFixed(2)}</span>
           </div>
           <div className="w-12 h-12 rounded-2xl bg-primary-light border border-primary-light flex items-center justify-center">
             <FiCheck className="text-primary text-lg" />
@@ -213,7 +213,7 @@ const AdmissionFeeDesk = () => {
         <div className="bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest block mb-1">Outstanding Fees</span>
-            <span className="text-2xl font-black text-amber-600">৳{pendingFeesAmount.toFixed(2)}</span>
+            <span className="text-2xl font-semibold text-amber-600">৳{pendingFeesAmount.toFixed(2)}</span>
           </div>
           <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
             <FiClock className="text-amber-600 text-lg" />
@@ -385,7 +385,7 @@ const AdmissionFeeDesk = () => {
                       </td>
                       <td className="px-6 py-4 text-sm font-semibold text-slate-600">{adm.class_name}</td>
                       <td className="px-6 py-4 text-xs text-slate-500 font-semibold">{adm.admission_title || 'General Admission'}</td>
-                      <td className="px-6 py-4 text-sm font-extrabold text-slate-700 text-right">
+                      <td className="px-6 py-4 text-sm font-semibold text-slate-700 text-right">
                         ৳{parseFloat(adm.admission_fees_amount || adm.fee_amount || 0).toFixed(2)}
                       </td>
                       <td className="px-6 py-4">

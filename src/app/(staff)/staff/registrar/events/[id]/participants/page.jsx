@@ -67,7 +67,7 @@ const RegistrarEventParticipantsPage = () => {
               <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full w-fit">
                 Event Participants Overview
               </span>
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">
                 {event.title}
               </h1>
               <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 pt-1">

@@ -32,7 +32,7 @@ const ClassesPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Academic Programs
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Our Academic Classes
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -62,7 +62,7 @@ const ClassesPage = () => {
                   <div className="w-12 h-12 rounded-xl bg-primary-light flex items-center justify-center text-primary text-xl font-bold mb-4 group-hover:scale-105 transition-transform duration-200">
                     <FiLayers />
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-lg group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-slate-900 text-lg group-hover:text-primary transition-colors">
                     {cls.name}
                   </h3>
                   

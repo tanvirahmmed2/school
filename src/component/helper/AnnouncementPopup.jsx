@@ -49,13 +49,13 @@ const AnnouncementPopup = () => {
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-black uppercase text-amber-600 tracking-widest">
+          <span className="text-[10px] font-semibold uppercase text-amber-600 tracking-widest">
             Announcement
           </span>
         </div>
 
         <div className="flex flex-col gap-2">
-          <h2 className="text-base font-black text-slate-900 tracking-tight leading-snug">
+          <h2 className="text-base font-semibold text-slate-900 tracking-tight leading-snug">
             {announcement.name}
           </h2>
           <div 

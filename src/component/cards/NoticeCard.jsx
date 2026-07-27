@@ -34,7 +34,7 @@ const NoticeCard = ({ notice, className = '' }) => {
               {title}
             </h3>
             {is_pinned && (
-              <span className="text-[9px] font-black text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
+              <span className="text-[9px] font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
                 Pinned
               </span>
             )}

@@ -100,10 +100,10 @@ const About = () => {
           {stats.map((stat, idx) => (
             <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-shadow">
               <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r bg-primary text-secondary" />
-              <span className={`text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-linear-to-r ${stat.color}`}>
+              <span className={`text-3xl md:text-4xl font-semibold text-transparent bg-clip-text bg-linear-to-r ${stat.color}`}>
                 {stat.value}
               </span>
-              <span className="font-extrabold text-slate-800 text-xs sm:text-sm">
+              <span className="font-semibold text-slate-800 text-xs sm:text-sm">
                 {stat.label}
               </span>
               <p className="text-slate-500 text-[11px] sm:text-xs leading-relaxed mt-1">
@@ -115,7 +115,7 @@ const About = () => {
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">
               Explore Our Core Pillars
             </h2>
             <p className="text-slate-500 text-xs sm:text-sm">
@@ -156,7 +156,7 @@ const About = () => {
         {/* Leadership Section */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">
               Leadership & Administration
             </h2>
             <p className="text-slate-500 text-xs sm:text-sm">
@@ -172,7 +172,7 @@ const About = () => {
                     {leader.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-slate-950 text-sm sm:text-base">
+                    <h4 className="font-semibold text-slate-950 text-sm sm:text-base">
                       {leader.name}
                     </h4>
                     <span className="inline-block text-[10px] font-semibold text-primary bg-primary-light px-2 py-0.5 rounded mt-0.5">
@@ -205,7 +205,7 @@ const About = () => {
             <FiShield className="text-lg" />
           </div>
           <div className="flex flex-col gap-3">
-            <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+            <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
               Charter of Academic Quality
             </h3>
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">

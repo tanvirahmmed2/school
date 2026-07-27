@@ -132,7 +132,7 @@ const ClassDetailsPage = () => {
             <div className="w-full h-50 bg-linear-to-br from-teal-700 to-blue-500 flex items-center justify-center text-white rounded-xl">
 
               
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight">
+              <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">
                 {selectedClass.name}
               </h1>
 
@@ -164,7 +164,7 @@ const ClassDetailsPage = () => {
             {/* 3. Class Subjects section */}
             <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 className="text-base font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-base font-semibold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                   <FiBook className="text-slate-400" /> Academic Subjects ({classSubjects.length})
                 </h3>
                 <span className="text-[10px] font-bold text-slate-400">Configured subjects for this class</span>
@@ -188,7 +188,7 @@ const ClassDetailsPage = () => {
 
             <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 className="text-base font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-base font-semibold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                   <FiUser className="text-slate-400" /> Dedicated Faculty Members ({teachers.length})
                 </h3>
                 <span className="text-[10px] font-bold text-slate-400">Assigned professors & lecturers</span>
@@ -212,7 +212,7 @@ const ClassDetailsPage = () => {
             <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
               <FiBook />
             </div>
-            <h3 className="font-bold text-slate-850 text-base font-extrabold">Class not found</h3>
+            <h3 className="font-bold text-slate-850 text-base font-semibold">Class not found</h3>
             <p className="text-slate-500 text-xs mt-1.5">
               The requested class code "{id}" does not match any registered records in our academic database.
             </p>

@@ -369,7 +369,7 @@ const ExcelAttendanceForm = () => {
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <FiBook className="text-xs" /> Class
               {dayName && (
-                <span className="ml-auto px-2 py-0.5 bg-primary-light text-primary text-[10px] font-extrabold rounded-lg border border-primary-light">
+                <span className="ml-auto px-2 py-0.5 bg-primary-light text-primary text-[10px] font-semibold rounded-lg border border-primary-light">
                   {dayName}
                 </span>
               )}
@@ -406,7 +406,7 @@ const ExcelAttendanceForm = () => {
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <FiClock className="text-xs" /> Period
               {!loadingDropdowns && periods.length > 0 && (
-                <span className="ml-auto px-2 py-0.5 bg-primary-light text-primary text-[10px] font-extrabold rounded-lg border border-primary-light">
+                <span className="ml-auto px-2 py-0.5 bg-primary-light text-primary text-[10px] font-semibold rounded-lg border border-primary-light">
                   {periods.length} system periods
                 </span>
               )}
@@ -604,11 +604,11 @@ const ExcelAttendanceForm = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-primary-light rounded-2xl border border-primary-light text-center">
                   <span className="text-[10px] font-bold text-primary uppercase tracking-wider block mb-1">Imported</span>
-                  <span className="text-2xl font-black text-primary">{importSummary.successCount}</span>
+                  <span className="text-2xl font-semibold text-primary">{importSummary.successCount}</span>
                 </div>
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Warnings</span>
-                  <span className={`text-2xl font-black ${importSummary.warningCount > 0 ? 'text-amber-500' : 'text-slate-400'}`}>
+                  <span className={`text-2xl font-semibold ${importSummary.warningCount > 0 ? 'text-amber-500' : 'text-slate-400'}`}>
                     {importSummary.warningCount}
                   </span>
                 </div>

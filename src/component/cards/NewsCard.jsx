@@ -38,7 +38,7 @@ const NewsCard = ({ news, href, className = '' }) => {
           </div>
         )}
 
-        <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
           {title}
         </h3>
 

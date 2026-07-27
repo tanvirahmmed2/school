@@ -141,7 +141,7 @@ const ApplicantDetailsContent = () => {
               </div>
             )}
             <div>
-              <h2 className="text-base font-black text-slate-800">{applicant.applicant_name}</h2>
+              <h2 className="text-base font-semibold text-slate-800">{applicant.applicant_name}</h2>
               <span className="inline-flex mt-1.5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-primary-light text-primary border border-primary-light">
                 Class: {applicant.class_name}
               </span>
@@ -214,7 +214,7 @@ const ApplicantDetailsContent = () => {
             {/* Header info */}
             <div className="flex justify-between items-start gap-4 pb-4 border-b border-slate-50">
               <div>
-                <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-black tracking-wide ${
+                <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide ${
                   applicant.status === 'Pending' 
                     ? 'bg-amber-50 text-amber-600 border border-amber-100' 
                     : applicant.status === 'Approved'
@@ -236,7 +236,7 @@ const ApplicantDetailsContent = () => {
 
             {/* Profile Fields */}
             <div>
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">1. Personal Profile</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">1. Personal Profile</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
@@ -269,7 +269,7 @@ const ApplicantDetailsContent = () => {
 
             {/* Contact Details */}
             <div className="border-t border-slate-50 pt-5">
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">2. Contact & Address</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">2. Contact & Address</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
@@ -294,7 +294,7 @@ const ApplicantDetailsContent = () => {
 
             {/* Parents Details */}
             <div className="border-t border-slate-50 pt-5">
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">3. Guardian Metadata</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">3. Guardian Metadata</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">

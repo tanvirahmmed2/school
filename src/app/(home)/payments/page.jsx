@@ -77,7 +77,7 @@ const PublicPaymentsPage = () => {
     <div className="w-full min-h-[70vh] py-12 px-4 md:px-8 max-w-5xl mx-auto flex flex-col gap-8 animate-fade-up">
       {/* Title */}
       <div className="text-center">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight flex items-center justify-center gap-2">
           <FiDollarSign className="text-primary" /> Verify Student Bills
         </h1>
         <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
@@ -121,7 +121,7 @@ const PublicPaymentsPage = () => {
             <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Student Details</span>
-                <h2 className="text-lg font-black text-slate-800">{data.student.name}</h2>
+                <h2 className="text-lg font-semibold text-slate-800">{data.student.name}</h2>
                 <p className="text-xs font-bold text-slate-400 mt-0.5">Reg: {data.student.registration_number}</p>
               </div>
               <div className="mt-4 pt-3 border-t border-slate-50 flex items-center gap-1.5 text-xs text-slate-500 font-semibold">
@@ -134,7 +134,7 @@ const PublicPaymentsPage = () => {
             <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Outstanding Balance</span>
-                <span className={`text-2xl font-black ${summary.totalOutstanding > 0 ? 'text-rose-650 text-rose-600' : 'text-slate-800'}`}>
+                <span className={`text-2xl font-semibold ${summary.totalOutstanding > 0 ? 'text-rose-650 text-rose-600' : 'text-slate-800'}`}>
                   ৳{summary.totalOutstanding.toFixed(2)}
                 </span>
                 <p className="text-[10px] text-slate-450 mt-1 font-semibold">Includes pending monthly/exam fees & fines</p>
@@ -148,7 +148,7 @@ const PublicPaymentsPage = () => {
             <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Total Paid Invoices</span>
-                <span className="text-2xl font-black text-primary">
+                <span className="text-2xl font-semibold text-primary">
                   ৳{summary.totalPaid.toFixed(2)}
                 </span>
                 <p className="text-[10px] text-slate-450 mt-1 font-semibold">Cleared fees recorded dynamically</p>

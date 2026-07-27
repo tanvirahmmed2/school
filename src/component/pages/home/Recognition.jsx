@@ -53,7 +53,7 @@ const Recognition = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">
               Recognitions
             </h2>
             <p className="text-slate-500 mt-1 text-xs md:text-sm max-w-lg">

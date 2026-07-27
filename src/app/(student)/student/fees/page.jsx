@@ -70,7 +70,7 @@ const FeesPage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Fees & Fines</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Fees & Fines</h1>
         <p className="text-slate-500 text-sm font-medium">Verify outstanding balance, tuition ledgers, and institutional fines.</p>
       </div>
 
@@ -82,7 +82,7 @@ const FeesPage = () => {
             <div key={idx} className={`p-6 rounded-3xl border ${stat.color} flex items-center justify-between`}>
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider opacity-85 block mb-1">{stat.label}</span>
-                <span className="text-2xl md:text-3xl font-black">{stat.value}</span>
+                <span className="text-2xl md:text-3xl font-semibold">{stat.value}</span>
               </div>
               <div className="p-4 rounded-2xl bg-white/20 border border-white/10">
                 <Icon className="text-2xl" />

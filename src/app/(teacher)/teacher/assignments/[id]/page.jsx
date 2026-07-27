@@ -94,7 +94,7 @@ const SubmissionGradingPageContent = ({ params }) => {
           <FiArrowLeft className="text-lg" />
         </button>
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-800 mb-1">{assignmentTitle}</h1>
+          <h1 className="text-2xl font-semibold text-slate-800 mb-1">{assignmentTitle}</h1>
           <p className="text-slate-500 text-sm font-medium">Review and grade assignment uploads from students.</p>
         </div>
       </div>
@@ -165,7 +165,7 @@ const SubmissionGradingPageContent = ({ params }) => {
                       <div className="mt-2 p-4 bg-primary-light/30 border border-primary-light/30 rounded-2xl">
                         <div className="flex justify-between items-center mb-1">
                           <span className="text-xs font-bold text-slate-800">Grade details</span>
-                          <span className="text-xs font-extrabold text-primary">Obtained: {sub.marks_obtained}</span>
+                          <span className="text-xs font-semibold text-primary">Obtained: {sub.marks_obtained}</span>
                         </div>
                         {sub.remarks && (
                           <div className="text-slate-500 text-[11px] font-medium italic mt-1">

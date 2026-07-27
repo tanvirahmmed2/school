@@ -216,7 +216,7 @@ const AttendanceRecordForm = () => {
         {dayName && (
           <div className="flex items-center gap-2 px-4 py-3 bg-primary-light border border-primary-light rounded-2xl shrink-0">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Day</span>
-            <span className="text-sm font-extrabold text-primary">{dayName}</span>
+            <span className="text-sm font-semibold text-primary">{dayName}</span>
           </div>
         )}
 

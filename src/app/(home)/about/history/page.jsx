@@ -62,7 +62,7 @@ const HistoryPage = () => {
         
         {/* Page Header */}
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
             Our Historic Journey
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
@@ -115,10 +115,10 @@ const HistoryPage = () => {
                     {/* Content block */}
                     <div className="flex flex-col gap-2 mt-1 w-full">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
-                        <h3 className="font-black text-slate-900 text-sm sm:text-base group-hover:text-primary transition-colors">
+                        <h3 className="font-semibold text-slate-900 text-sm sm:text-base group-hover:text-primary transition-colors">
                           {item.title}
                         </h3>
-                        <span className="text-xs font-black text-primary tracking-wider bg-primary-light px-2.5 py-0.5 rounded-full w-fit shrink-0">
+                        <span className="text-xs font-semibold text-primary tracking-wider bg-primary-light px-2.5 py-0.5 rounded-full w-fit shrink-0">
                           {formatDate(item.date)}
                         </span>
                       </div>

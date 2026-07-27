@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import pool, { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 import { sendEmail } from '@/lib/brevo';
+import { deleteImage } from '@/lib/cloudinary';
 
 // POST publish admission results (Admin only)
 export async function POST(request) {
@@ -37,6 +38,10 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Results have already been published for this circular.' }, { status: 400 });
     }
 
+    // Get max seats of target class
+    const classInfoRes = await client.query('SELECT max_seats FROM classes WHERE id = $1', [circular.class_id]);
+    const maxSeats = classInfoRes.rows[0]?.max_seats || 40;
+
     // 2. Fetch all approved applications for this circular
     const approvedCandidatesRes = await client.query(`
       SELECT 
@@ -60,11 +65,12 @@ export async function POST(request) {
         c.numeric_name AS class_numeric_name
       FROM student_admissions sa
       JOIN classes c ON sa.applied_class_id = c.id
-      WHERE sa.admission_id = $1 AND sa.status = 'Approved'
-      ORDER BY sa.applicant_name ASC, sa.id ASC
+      WHERE sa.admission_id = $1 AND LOWER(sa.status) = 'approved'
+      ORDER BY sa.id ASC
     `, [admission_id]);
 
-    const candidates = approvedCandidatesRes.rows;
+    // Limit to max seats of the class
+    const candidates = approvedCandidatesRes.rows.slice(0, maxSeats);
 
     const academicYear = new Date().getFullYear();
     let registeredCount = 0;
@@ -260,7 +266,17 @@ export async function POST(request) {
       VALUES ($1, '/auth/student/registration', FALSE)
     `, [`Admission Results Published: ${circular.title}`]);
 
-    // 6. DELETE ALL applicant data for this circular from student_admissions table (cleans up both approved and rejected records)
+    // 6. Clean up Cloudinary assets and DELETE ALL applicant data for this circular
+    const allAppsRes = await client.query('SELECT image_id, signature_id FROM student_admissions WHERE admission_id = $1', [admission_id]);
+    for (const appRow of allAppsRes.rows) {
+      if (appRow.image_id) {
+        try { await deleteImage(appRow.image_id); } catch(err) { console.error('Error deleting Cloudinary image:', err); }
+      }
+      if (appRow.signature_id) {
+        try { await deleteImage(appRow.signature_id); } catch(err) { console.error('Error deleting Cloudinary signature:', err); }
+      }
+    }
+
     await client.query('DELETE FROM student_admissions WHERE admission_id = $1', [admission_id]);
 
     await client.query('COMMIT');

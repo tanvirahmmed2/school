@@ -58,7 +58,7 @@ const AdminHomePage = () => {
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-primary-light/10 pointer-events-none" />
 
         <div className="flex flex-col gap-2 z-10">
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">
             Welcome back, System Administrator
           </h1>
           <p className="text-slate-300 text-xs md:text-sm max-w-xl">
@@ -96,7 +96,7 @@ const AdminHomePage = () => {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
               {stats.totalStudents ? stats.totalStudents.toLocaleString() : '0'}
             </h2>
             <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
@@ -114,7 +114,7 @@ const AdminHomePage = () => {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
               {stats.totalTeachers ? stats.totalTeachers.toLocaleString() : '0'}
             </h2>
             <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
@@ -132,7 +132,7 @@ const AdminHomePage = () => {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
               {stats.totalStaff ? stats.totalStaff.toLocaleString() : '0'}
             </h2>
             <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
@@ -150,7 +150,7 @@ const AdminHomePage = () => {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
               {stats.totalClasses ? stats.totalClasses.toLocaleString() : '0'}
             </h2>
             <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
@@ -171,7 +171,7 @@ const AdminHomePage = () => {
               <div className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center text-base">
                 <FiUserPlus />
               </div>
-              <h3 className="font-extrabold text-slate-900 text-base">Admissions Overview</h3>
+              <h3 className="font-semibold text-slate-900 text-base">Admissions Overview</h3>
             </div>
             <Link href="/staff/registrar/admissions" className="text-xs font-bold text-primary flex items-center gap-1">
               View All <FiArrowRight />
@@ -181,15 +181,15 @@ const AdminHomePage = () => {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Total Applications</p>
-              <p className="text-2xl font-extrabold text-slate-900 mt-1">{admissions.total}</p>
+              <p className="text-2xl font-semibold text-slate-900 mt-1">{admissions.total}</p>
             </div>
             <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-100">
               <p className="text-xs text-amber-700 font-bold uppercase tracking-wider">Pending Review</p>
-              <p className="text-2xl font-extrabold text-amber-700 mt-1">{admissions.pending}</p>
+              <p className="text-2xl font-semibold text-amber-700 mt-1">{admissions.pending}</p>
             </div>
             <div className="p-4 bg-primary-light rounded-2xl border border-primary-light">
               <p className="text-xs text-primary font-bold uppercase tracking-wider">Approved</p>
-              <p className="text-2xl font-extrabold text-primary mt-1">{admissions.approved}</p>
+              <p className="text-2xl font-semibold text-primary mt-1">{admissions.approved}</p>
             </div>
           </div>
 
@@ -218,7 +218,7 @@ const AdminHomePage = () => {
               <div className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center text-base">
                 <FiDollarSign />
               </div>
-              <h3 className="font-extrabold text-slate-900 text-base">Financial Overview</h3>
+              <h3 className="font-semibold text-slate-900 text-base">Financial Overview</h3>
             </div>
             <Link href="/staff/cashier/transactions" className="text-xs font-bold text-primary flex items-center gap-1">
               Cashier Ledger <FiArrowRight />
@@ -228,19 +228,19 @@ const AdminHomePage = () => {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="p-4 bg-primary-light rounded-2xl border border-primary-light">
               <p className="text-xs text-primary font-bold uppercase tracking-wider">Total Income</p>
-              <p className="text-lg md:text-xl font-extrabold text-primary mt-1">
+              <p className="text-lg md:text-xl font-semibold text-primary mt-1">
                 ৳{finance.totalIncome.toLocaleString()}
               </p>
             </div>
             <div className="p-4 bg-rose-50/60 rounded-2xl border border-rose-100">
               <p className="text-xs text-rose-700 font-bold uppercase tracking-wider">Expenses</p>
-              <p className="text-lg md:text-xl font-extrabold text-rose-700 mt-1">
+              <p className="text-lg md:text-xl font-semibold text-rose-700 mt-1">
                 ৳{finance.totalExpenses.toLocaleString()}
               </p>
             </div>
             <div className="p-4 bg-primary-light rounded-2xl border border-primary-light">
               <p className="text-xs text-primary font-bold uppercase tracking-wider">Net Balance</p>
-              <p className="text-lg md:text-xl font-extrabold text-primary mt-1">
+              <p className="text-lg md:text-xl font-semibold text-primary mt-1">
                 ৳{finance.netBalance.toLocaleString()}
               </p>
             </div>
@@ -256,7 +256,7 @@ const AdminHomePage = () => {
 
       {/* Quick Action Navigation Tiles */}
       <div className="flex flex-col gap-4">
-        <h3 className="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-slate-900 tracking-tight flex items-center gap-2">
           <FiLayers className="text-primary" /> Admin Module Shortcuts
         </h3>
 
@@ -329,7 +329,7 @@ const AdminHomePage = () => {
         {/* Recent Admissions Table */}
         <div className="lg:col-span-7 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+            <h3 className="font-semibold text-slate-900 text-base flex items-center gap-2">
               <FiUserPlus className="text-primary" /> Recent Admission Applications
             </h3>
             <Link href="/staff/registrar/admissions" className="text-xs font-bold text-primary">
@@ -378,7 +378,7 @@ const AdminHomePage = () => {
         {/* Security & System Activity Logs */}
         <div className="lg:col-span-5 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+            <h3 className="font-semibold text-slate-900 text-base flex items-center gap-2">
               <FiShield className="text-primary" /> Security Login Logs
             </h3>
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">

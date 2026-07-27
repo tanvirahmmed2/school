@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <footer className='w-full bg-primary-dark text-secondary flex flex-col items-center justify-center shadow-inner px-4 md:px-8 py-8 md:py-12 overflow-x-hidden gap-12 sm:gap-16'>
       <div className='w-full flex flex-col gap-3 md:col-span-2'>
-        <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-primary pb-2 text-secondary'>
+        <h3 className='font-semibold text-sm md:text-base tracking-tight border-b border-primary pb-2 text-secondary'>
           Quick Links
         </h3>
         <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-1 text-xs md:text-base'>
@@ -49,7 +49,7 @@ const Footer = () => {
       </div>
       <div className='w-full flex flex-col md:flex-row items-start justify-between gap-8 text-xs md:text-sm'>
         <div className='w-full md:w-1/2 flex flex-col gap-3'>
-          <h3 className='font-extrabold text-sm md:text-base tracking-tight border-b border-primary pb-2 text-secondary'>
+          <h3 className='font-semibold text-sm md:text-base tracking-tight border-b border-primary pb-2 text-secondary'>
             Contact with {schoolName}
           </h3>
           <p className='text-secondary/80 leading-relaxed'>

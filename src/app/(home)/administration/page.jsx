@@ -58,7 +58,7 @@ const AdministrationPage = () => {
         </div>
       )}
       <div className="flex flex-col gap-0.5 min-w-0">
-        <h3 className="font-extrabold text-slate-900 text-sm md:text-base group-hover:text-primary transition-colors truncate">
+        <h3 className="font-semibold text-slate-900 text-sm md:text-base group-hover:text-primary transition-colors truncate">
           {member.name}
         </h3>
         <span className="text-[10px] font-bold text-primary bg-primary-light px-2 py-0.5 rounded w-fit uppercase tracking-wider">
@@ -80,7 +80,7 @@ const AdministrationPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             FIT Administration
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Institutional Administration & Governance
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -107,7 +107,7 @@ const AdministrationPage = () => {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
                   <FiUsers className="text-xl text-primary" />
-                  <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Executive Board & Leadership</h2>
+                  <h2 className="text-xl font-semibold text-slate-800 tracking-tight">Executive Board & Leadership</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {executives.map(renderCard)}
@@ -120,7 +120,7 @@ const AdministrationPage = () => {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
                   <FiUsers className="text-xl text-primary" />
-                  <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Academic Senate & Council</h2>
+                  <h2 className="text-xl font-semibold text-slate-800 tracking-tight">Academic Senate & Council</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {councilMembers.map(renderCard)}
@@ -133,7 +133,7 @@ const AdministrationPage = () => {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
                   <FiUsers className="text-xl text-primary" />
-                  <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Administrative Support Teams</h2>
+                  <h2 className="text-xl font-semibold text-slate-800 tracking-tight">Administrative Support Teams</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {supportStaff.map(renderCard)}

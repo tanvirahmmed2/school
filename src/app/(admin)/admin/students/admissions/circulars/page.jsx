@@ -203,7 +203,7 @@ const CircularsPage = () => {
                     <td className="px-6 py-4 text-xs font-bold text-primary">
                       Class: {c.class_name}
                     </td>
-                    <td className="px-6 py-4 text-xs font-extrabold text-slate-750">
+                    <td className="px-6 py-4 text-xs font-semibold text-slate-750">
                       BDT {parseFloat(c.fees || 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-650 font-bold">

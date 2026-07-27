@@ -79,7 +79,7 @@ export default function AdminHistoryPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
             <FiClock className="text-primary" /> Institutional History Milestones
           </h1>
           <p className="text-xs text-slate-500 font-medium">
@@ -123,7 +123,7 @@ export default function AdminHistoryPage() {
             >
               <div className="flex flex-col gap-2 max-w-3xl">
                 <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-primary-light border border-primary-light text-primary text-xs font-black rounded-lg">
+                  <span className="px-3 py-1 bg-primary-light border border-primary-light text-primary text-xs font-semibold rounded-lg">
                     {formatDate(item.date)}
                   </span>
                   <h2 className="text-base font-bold text-slate-800">{item.title}</h2>

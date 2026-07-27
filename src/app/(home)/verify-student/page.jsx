@@ -47,7 +47,7 @@ const VerifyStudentPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Verification Registry
           </span>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-3xl font-semibold text-slate-900 mt-2 tracking-tight">
             Student Identity Verifier
           </h1>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
@@ -115,7 +115,7 @@ const VerifyStudentPage = () => {
                   <div className="flex flex-col gap-2">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Student Name</p>
-                      <h3 className="text-base font-black text-slate-800">{student.name}</h3>
+                      <h3 className="text-base font-semibold text-slate-800">{student.name}</h3>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4 mt-1.5">

@@ -93,7 +93,7 @@ const StudentHomePage = () => {
       {/* Welcome Banner */}
       <div className="bg-primary text-secondary rounded-3xl p-6 md:p-10 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
             {welcomeMessage()}, {profile?.name || 'Student'}!
           </h1>
           <p className="text-secondary/90 text-sm md:text-base font-medium max-w-xl">
@@ -126,7 +126,7 @@ const StudentHomePage = () => {
                 <div className={`p-3 rounded-xl border ${card.color} transition-transform duration-200 group-hover:scale-105`}>
                   <Icon className="text-xl" />
                 </div>
-                <span className="text-2xl md:text-3xl font-extrabold text-slate-800">
+                <span className="text-2xl md:text-3xl font-semibold text-slate-800">
                   {card.value}
                 </span>
               </div>

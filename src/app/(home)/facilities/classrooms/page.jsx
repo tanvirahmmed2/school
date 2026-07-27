@@ -13,7 +13,7 @@ const ClassroomFacilities = () => {
           <span className="text-xs font-bold text-sky-655 bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest text-primary">
             Study Blocks
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Classrooms & Lecture Halls
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -28,7 +28,7 @@ const ClassroomFacilities = () => {
               <FiPlay className="text-lg" />
             </div>
             <div className="flex flex-col gap-1.5">
-              <h3 className="font-extrabold text-slate-900 text-sm">Interactive Media Projectors</h3>
+              <h3 className="font-semibold text-slate-900 text-sm">Interactive Media Projectors</h3>
               <p className="text-slate-500 text-xs">Every classroom block features standard overhead smart projection displays, digital writing pads, and dynamic screen mirroring options for teachers.</p>
             </div>
           </div>
@@ -38,7 +38,7 @@ const ClassroomFacilities = () => {
               <FiServer className="text-lg" />
             </div>
             <div className="flex flex-col gap-1.5">
-              <h3 className="font-extrabold text-slate-900 text-sm">Power Backups & Connectivity</h3>
+              <h3 className="font-semibold text-slate-900 text-sm">Power Backups & Connectivity</h3>
               <p className="text-slate-500 text-xs">High-speed wireless internet terminals across student seats with stable backup generators ensuring uninterruptible class schedules.</p>
             </div>
           </div>
@@ -48,7 +48,7 @@ const ClassroomFacilities = () => {
               <FiWind className="text-lg" />
             </div>
             <div className="flex flex-col gap-1.5">
-              <h3 className="font-extrabold text-slate-900 text-sm">Comfort and Air Conditioning</h3>
+              <h3 className="font-semibold text-slate-900 text-sm">Comfort and Air Conditioning</h3>
               <p className="text-slate-500 text-xs">Fully air-conditioned environments configured with environment-friendly air filter vents to keep classrooms fresh and promote learning concentration.</p>
             </div>
           </div>

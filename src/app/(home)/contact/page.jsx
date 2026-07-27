@@ -29,7 +29,7 @@ const Contact = () => {
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Contact Academic Office
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -40,7 +40,7 @@ const Contact = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           
           <div className="md:col-span-5 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col gap-6">
-            <h3 className="font-extrabold text-slate-900 text-base">{schoolName} Campus Address</h3>
+            <h3 className="font-semibold text-slate-900 text-base">{schoolName} Campus Address</h3>
             
             <div className="flex flex-col gap-4">
               <div className="flex gap-3 items-start">
@@ -77,7 +77,7 @@ const Contact = () => {
 
           {/* Map Side */}
           <div className="md:col-span-7 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col gap-4">
-            <h3 className="font-extrabold text-slate-900 text-base mb-2">Our Location</h3>
+            <h3 className="font-semibold text-slate-900 text-base mb-2">Our Location</h3>
             <div className="w-full overflow-hidden rounded-2xl border border-slate-100">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3618.984847499078!2d90.47247927537212!3d24.898498477904457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375653ef6517fdcf%3A0x360557fb2a9073f9!2sDisibin!5e0!3m2!1sen!2sbd!4v1784044575096!5m2!1sen!2sbd"

@@ -179,13 +179,13 @@ export async function POST(request) {
       }
     }
 
-    // 4. Save to student_admissions
+    // 4. Save to student_admissions with status 'incomplete'
     const result = await query(`
       INSERT INTO student_admissions (
         admission_id, applicant_name, email, phone, date_of_birth, gender, address, 
         applied_class_id, previous_school, guardian_name, guardian_phone, birth_regi_number, 
         image, image_id, signature, signature_id, status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'Pending')
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'incomplete')
       RETURNING *
     `, [
       parseInt(admission_id, 10),
@@ -214,7 +214,7 @@ export async function POST(request) {
     try {
       await query(`
         INSERT INTO admission_fees (student_admission_id, amount, status)
-        VALUES ($1, $2, 'pending')
+        VALUES ($1, $2, 'unpaid')
         ON CONFLICT (student_admission_id) DO UPDATE SET amount = EXCLUDED.amount
       `, [applicant.id, admissionFeeAmount]);
     } catch (feeErr) {
@@ -288,10 +288,11 @@ export async function PUT(request) {
     }
 
     const body = await request.json();
-    const { id, status } = body; // status = 'Approved' or 'Rejected'
+    const { id, status } = body; 
+    const normStatus = status ? status.toLowerCase() : '';
 
-    if (!id || !status || !['Approved', 'Rejected'].includes(status)) {
-      return NextResponse.json({ success: false, error: 'ID and valid status (Approved/Rejected) are required.' }, { status: 400 });
+    if (!id || !normStatus || !['approved', 'rejected'].includes(normStatus)) {
+      return NextResponse.json({ success: false, error: 'ID and valid status (approved/rejected) are required.' }, { status: 400 });
     }
 
     // Get candidate record
@@ -302,7 +303,7 @@ export async function PUT(request) {
 
     const admission = admissionRes.rows[0];
 
-    if (status === 'Approved') {
+    if (normStatus === 'approved') {
       const feeCheck = await query('SELECT status FROM admission_fees WHERE student_admission_id = $1', [id]);
       const feeStatus = feeCheck.rows[0]?.status;
       if (!feeStatus || (feeStatus.toLowerCase() !== 'paid')) {
@@ -325,7 +326,7 @@ export async function PUT(request) {
 
       await query(`
         UPDATE student_admissions SET
-          status = 'Approved',
+          status = 'approved',
           updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
       `, [id]);
@@ -337,7 +338,7 @@ export async function PUT(request) {
 
       await query(`
         UPDATE student_admissions SET
-          status = 'Rejected',
+          status = 'rejected',
           updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
       `, [id]);
@@ -345,7 +346,7 @@ export async function PUT(request) {
 
     return NextResponse.json({
       success: true,
-      message: `Admission candidate application status updated to ${status}.`
+      message: `Admission candidate application status updated to ${normStatus}.`
     });
   } catch (error) {
     console.error('Error processing admission application:', error);

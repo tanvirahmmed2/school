@@ -24,7 +24,7 @@ const AuthoritiesPage = () => {
         
         <div className="text-center max-w-2xl mx-auto space-y-3">
           
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             Governance &amp; Authorities
           </h1>
           <p className="text-slate-500 text-sm md:text-base leading-relaxed">
@@ -44,7 +44,7 @@ const AuthoritiesPage = () => {
               <FiUsers />
             </div>
             <div className="space-y-1">
-              <h3 className="text-lg font-extrabold text-slate-900">No Authority Roles Available</h3>
+              <h3 className="text-lg font-semibold text-slate-900">No Authority Roles Available</h3>
               <p className="text-xs text-slate-500 leading-relaxed max-w-md mx-auto">
                 No authority designations have been configured yet.
               </p>

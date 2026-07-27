@@ -86,6 +86,7 @@ export async function POST(request) {
         image_id = $2,
         signature = $3,
         signature_id = $4,
+        status = 'pending',
         updated_at = CURRENT_TIMESTAMP
       WHERE id = $5
     `, [imageUrl, imageId, signatureUrl, signatureId, parseInt(id, 10)]);

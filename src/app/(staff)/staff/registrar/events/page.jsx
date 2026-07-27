@@ -58,7 +58,7 @@ const RegistrarEventsPage = () => {
             <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit mb-2">
               <FiCalendar /> Registrar Desk
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">
               Events & Seminars Registry
             </h1>
             <p className="text-slate-500 text-xs md:text-sm mt-1">

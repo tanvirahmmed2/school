@@ -133,7 +133,7 @@ const AttendanceViewPage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto pb-12">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Attendance Records</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Attendance Records</h1>
         <p className="text-slate-500 text-sm font-medium">
           View all attendance you have recorded across your classes. Use the filters to narrow results.
         </p>
@@ -232,15 +232,15 @@ const AttendanceViewPage = () => {
         <div className="grid grid-cols-3 gap-4 -mt-4">
           <div className="bg-white border border-slate-100 rounded-2xl p-4 text-center">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total</p>
-            <p className="text-2xl font-black text-slate-800">{records.length}</p>
+            <p className="text-2xl font-semibold text-slate-800">{records.length}</p>
           </div>
           <div className="bg-primary-light border border-primary-light rounded-2xl p-4 text-center">
             <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Present</p>
-            <p className="text-2xl font-black text-primary">{presentCount}</p>
+            <p className="text-2xl font-semibold text-primary">{presentCount}</p>
           </div>
           <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-center">
             <p className="text-[10px] font-bold text-rose-500 uppercase tracking-wider mb-1">Absent</p>
-            <p className="text-2xl font-black text-rose-600">{absentCount}</p>
+            <p className="text-2xl font-semibold text-rose-600">{absentCount}</p>
           </div>
         </div>
       )}
@@ -279,7 +279,7 @@ const AttendanceViewPage = () => {
                 {/* Date header */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div>
-                    <h2 className="text-sm font-extrabold text-slate-800">{dayLabel}</h2>
+                    <h2 className="text-sm font-semibold text-slate-800">{dayLabel}</h2>
                     <p className="text-[11px] text-slate-400 font-medium mt-0.5">{dayRecords.length} records</p>
                   </div>
                   <div className="flex gap-2">

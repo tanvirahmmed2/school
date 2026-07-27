@@ -19,12 +19,13 @@ export async function PUT(request) {
       payment_method, 
       transaction_id, 
       remarks 
-    } = body; // status = 'Paid', 'Pending', 'Cancelled'
+    } = body;
+    const normStatus = status ? status.toLowerCase() : '';
 
-    if (!student_admission_id || !status || !['Pending', 'Paid', 'Cancelled'].includes(status)) {
+    if (!student_admission_id || !normStatus || !['unpaid', 'pending', 'paid', 'cancelled'].includes(normStatus)) {
       return NextResponse.json({ 
         success: false, 
-        error: 'Student Admission ID and valid fee status (Pending/Paid/Cancelled) are required.' 
+        error: 'Student Admission ID and valid fee status (unpaid/pending/paid/cancelled) are required.' 
       }, { status: 400 });
     }
 

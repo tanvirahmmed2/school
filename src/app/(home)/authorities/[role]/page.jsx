@@ -112,7 +112,7 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
                 <FiUsers />
               </div>
               <div className="space-y-1">
-                <h3 className="text-lg font-extrabold text-slate-900">No Members Listed Yet</h3>
+                <h3 className="text-lg font-semibold text-slate-900">No Members Listed Yet</h3>
                 <p className="text-xs text-slate-500 leading-relaxed max-w-md mx-auto">
                   There are currently no registered authority members under the &quot;{displayTitle}&quot; role. Check back soon or explore other leadership roles.
                 </p>
@@ -127,7 +127,7 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
           ) : (
             <div className="space-y-6">
               <div className="flex items-center justify-between px-1">
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-400">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                   Members ({authorities.length})
                 </h2>
               </div>

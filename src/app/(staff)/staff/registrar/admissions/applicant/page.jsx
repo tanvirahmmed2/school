@@ -131,8 +131,8 @@ const ApplicantDetailsContent = () => {
             </div>
 
             <div>
-              <h2 className="text-lg font-black text-slate-900 tracking-tight">{applicant.applicant_name}</h2>
-              <span className="inline-flex items-center gap-1 text-[10px] font-black text-primary bg-primary-light px-2 py-0.5 rounded uppercase tracking-wider mt-1">
+              <h2 className="text-lg font-semibold text-slate-900 tracking-tight">{applicant.applicant_name}</h2>
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary bg-primary-light px-2 py-0.5 rounded uppercase tracking-wider mt-1">
                 Class: {applicant.class_name}
               </span>
             </div>

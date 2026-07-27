@@ -47,7 +47,7 @@ const RoutinePage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Class Routine</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Class Routine</h1>
         <p className="text-slate-500 text-sm font-medium">Keep track of your classes and subjects schedule.</p>
       </div>
 

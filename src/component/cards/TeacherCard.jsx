@@ -29,7 +29,7 @@ const TeacherCard = ({ teacher, className = '' }) => {
       {/* Right: Info Panel */}
       <div className="flex-1 min-w-0 p-5 flex flex-col justify-center gap-2">
         {/* Name */}
-        <h4 className="text-base font-extrabold text-slate-900 group-hover:text-primary transition-colors leading-tight truncate">
+        <h4 className="text-base font-semibold text-slate-900 group-hover:text-primary transition-colors leading-tight truncate">
           {teacher.name}
         </h4>
 

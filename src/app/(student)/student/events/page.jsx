@@ -74,7 +74,7 @@ const StudentEventsPage = () => {
           <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit">
             Student Portal
           </span>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 mt-2 tracking-tight">
             Campus Events & Seminars
           </h1>
           <p className="text-slate-500 text-xs md:text-sm mt-1">

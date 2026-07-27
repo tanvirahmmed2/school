@@ -12,7 +12,7 @@ const Life = () => {
       <div className="w-full">
         <div className="text-center mb-12">
           
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             Student Life at {schoolname.split(" ").map(word => word[0]).join("")}
           </h2>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-sm">

@@ -56,7 +56,7 @@ const PublicMonthlyFeesPage = () => {
         <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-full w-fit mx-auto">
           FIT Academic Portal
         </span>
-        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+        <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight flex items-center justify-center gap-2">
           Academic Overview & Tuition Fees
         </h1>
         <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
@@ -72,7 +72,7 @@ const PublicMonthlyFeesPage = () => {
           {/* Institutional Education Section */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
             <div>
-              <h2 className="text-lg font-black text-slate-800 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
                 🎓 Our Educational Approach
               </h2>
               <p className="text-xs text-slate-550 mt-1">
@@ -99,7 +99,7 @@ const PublicMonthlyFeesPage = () => {
               <div className="p-3 bg-primary-light text-primary rounded-2xl border border-primary-light">
                 <FiUsers className="text-xl" />
               </div>
-              <span className="text-xs font-black text-slate-800">Qualified Educators</span>
+              <span className="text-xs font-semibold text-slate-800">Qualified Educators</span>
               <p className="text-[10px] text-slate-450 leading-relaxed font-medium">Expert subject mentors and certified counselors.</p>
             </div>
 
@@ -107,7 +107,7 @@ const PublicMonthlyFeesPage = () => {
               <div className="p-3 bg-primary-light text-primary rounded-2xl border border-primary-light">
                 <FiCpu className="text-xl" />
               </div>
-              <span className="text-xs font-black text-slate-800">Smart Smart Labs</span>
+              <span className="text-xs font-semibold text-slate-800">Smart Smart Labs</span>
               <p className="text-[10px] text-slate-450 leading-relaxed font-medium">Computer ICT hubs and advanced physics/chemistry labs.</p>
             </div>
 
@@ -115,7 +115,7 @@ const PublicMonthlyFeesPage = () => {
               <div className="p-3 bg-amber-50 text-amber-500 rounded-2xl border border-amber-100">
                 <FiBookOpen className="text-xl" />
               </div>
-              <span className="text-xs font-black text-slate-800">Rich Library</span>
+              <span className="text-xs font-semibold text-slate-800">Rich Library</span>
               <p className="text-[10px] text-slate-450 leading-relaxed font-medium">A wide collection of textbooks, research volumes, and silent study desks.</p>
             </div>
           </div>
@@ -128,7 +128,7 @@ const PublicMonthlyFeesPage = () => {
           {/* Tuition Rates Card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col gap-5">
             <div>
-              <h3 className="text-xs font-black uppercase text-slate-400 tracking-wider">Class Monthly Fees</h3>
+              <h3 className="text-xs font-semibold uppercase text-slate-400 tracking-wider">Class Monthly Fees</h3>
               <p className="text-[10px] text-slate-450 mt-1 font-semibold">Active monthly tuition rates dynamically fetched from the database.</p>
             </div>
 
@@ -150,7 +150,7 @@ const PublicMonthlyFeesPage = () => {
                       <FiLayers className="text-primary text-sm" />
                       {fee.class_name}
                     </div>
-                    <span className="text-xs font-extrabold text-slate-900">
+                    <span className="text-xs font-semibold text-slate-900">
                       {parseFloat(fee.amount) > 0 ? `৳${parseFloat(fee.amount).toFixed(2)}` : 'TBD'}
                     </span>
                   </div>
@@ -161,7 +161,7 @@ const PublicMonthlyFeesPage = () => {
 
           {/* Payment Terms Guide */}
           <div className="bg-slate-950 text-white rounded-3xl p-6 shadow-md flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase tracking-wider text-sky-400">Fee Payment Terms</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-sky-400">Fee Payment Terms</h4>
             <ul className="flex flex-col gap-3.5 text-xs leading-relaxed text-slate-300 font-medium">
               <li className="flex items-start gap-2.5">
                 <FiCheckCircle className="text-emerald-400 mt-0.5 shrink-0" />

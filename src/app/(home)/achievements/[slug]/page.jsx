@@ -96,7 +96,7 @@ const AchievementDetailPage = () => {
               <div className="flex items-center gap-2 text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-wider w-fit">
                 <FiAward className="text-sm" /> Campus Milestone
               </div>
-              <h1 className="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
+              <h1 className="text-2xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-snug">
                 {achievement.title}
               </h1>
             </div>

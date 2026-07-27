@@ -55,7 +55,7 @@ const RegistrarNewsPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Registrar Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Campus News Registry
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -101,11 +101,11 @@ const RegistrarNewsPage = () => {
               <table className="w-full border-collapse text-left text-xs text-slate-650">
                 <thead>
                   <tr className="border-b border-slate-100 bg-slate-50/50">
-                    <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6">Cover</th>
-                    <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Article Title</th>
-                    <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">URL Slug</th>
-                    <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Published Date</th>
-                    <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right">Actions</th>
+                    <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pl-6">Cover</th>
+                    <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Article Title</th>
+                    <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">URL Slug</th>
+                    <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Published Date</th>
+                    <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50 font-semibold text-slate-800">
@@ -123,7 +123,7 @@ const RegistrarNewsPage = () => {
                         )}
                       </td>
                       <td className="p-4 max-w-xs md:max-w-sm">
-                        <div className="truncate font-extrabold text-slate-900">{item.title}</div>
+                        <div className="truncate font-semibold text-slate-900">{item.title}</div>
                         <div className="truncate text-slate-450 text-[10px] mt-0.5 max-w-[260px] font-medium">{item.content}</div>
                       </td>
                       <td className="p-4 font-mono text-[10px] text-slate-500">{item.slug}</td>

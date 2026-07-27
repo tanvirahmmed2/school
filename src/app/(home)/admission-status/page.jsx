@@ -86,7 +86,7 @@ const AdmissionStatusPage = () => {
     <div className="w-full min-h-[70vh] py-12 px-4 md:px-8 max-w-3xl mx-auto flex flex-col gap-8 animate-fade-up">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight flex items-center justify-center gap-2">
           <FiAward className="text-primary animate-pulse" /> Admission Status & Results
         </h1>
         <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
@@ -131,7 +131,7 @@ const AdmissionStatusPage = () => {
                 <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">
                   Circular: {application.circular_name || 'General Admission'}
                 </span>
-                <h2 className="text-xl font-black text-slate-800">{application.candidate_name}</h2>
+                <h2 className="text-xl font-semibold text-slate-800">{application.candidate_name}</h2>
                 <p className="text-xs text-slate-450 mt-0.5">Email: {application.candidate_email}</p>
               </div>
               <div className="sm:text-right">
@@ -157,7 +157,7 @@ const AdmissionStatusPage = () => {
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Processing Fee</span>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-sm font-extrabold text-slate-700">৳500.00</span>
+                  <span className="text-sm font-semibold text-slate-700">৳500.00</span>
                   {getPaymentStatusBadge(application.payment_status)}
                 </div>
               </div>
@@ -169,7 +169,7 @@ const AdmissionStatusPage = () => {
                 <div>
                   {application.application_status === 'Accepted' ? (
                     <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-3">
-                      <div className="flex items-center gap-2 text-primary font-extrabold">
+                      <div className="flex items-center gap-2 text-primary font-semibold">
                         <FiCheckCircle className="text-xl" />
                         <span>Congratulations! Admission Selected</span>
                       </div>
@@ -179,17 +179,17 @@ const AdmissionStatusPage = () => {
                       <div className="grid grid-cols-2 gap-4 mt-2 max-w-sm text-xs font-bold">
                         <div className="bg-white border border-primary-light p-3 rounded-xl">
                           <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Class Section</span>
-                          <span className="text-slate-800 text-sm font-extrabold">{application.section_name || 'Assigning...'}</span>
+                          <span className="text-slate-800 text-sm font-semibold">{application.section_name || 'Assigning...'}</span>
                         </div>
                         <div className="bg-white border border-primary-light p-3 rounded-xl">
                           <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Roll Number</span>
-                          <span className="text-primary text-sm font-extrabold">{application.roll_number || 'Assigning...'}</span>
+                          <span className="text-primary text-sm font-semibold">{application.roll_number || 'Assigning...'}</span>
                         </div>
                       </div>
                     </div>
                   ) : application.application_status === 'Rejected' ? (
                     <div className="p-6 bg-slate-50 border border-slate-100 rounded-2xl flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-slate-700 font-extrabold">
+                      <div className="flex items-center gap-2 text-slate-700 font-semibold">
                         <FiXCircle className="text-xl text-slate-500" />
                         <span>Application Not Selected</span>
                       </div>
@@ -199,7 +199,7 @@ const AdmissionStatusPage = () => {
                     </div>
                   ) : (
                     <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-amber-700 font-extrabold">
+                      <div className="flex items-center gap-2 text-amber-700 font-semibold">
                         <FiClock className="text-xl" />
                         <span>Review Under Processing</span>
                       </div>
@@ -211,7 +211,7 @@ const AdmissionStatusPage = () => {
                 </div>
               ) : (
                 <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-primary font-extrabold">
+                  <div className="flex items-center gap-2 text-primary font-semibold">
                     <FiFileText className="text-xl text-primary" />
                     <span>Admissions Results Pending</span>
                   </div>

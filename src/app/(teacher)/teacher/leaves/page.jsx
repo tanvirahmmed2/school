@@ -101,7 +101,7 @@ const LeavesPage = () => {
       {/* Title & Apply action */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Leave Applications</h1>
+          <h1 className="text-2xl font-semibold text-slate-800 mb-2">Leave Applications</h1>
           <p className="text-slate-500 text-sm font-medium">Apply for new leaves and monitor your historical submissions status.</p>
         </div>
         <button

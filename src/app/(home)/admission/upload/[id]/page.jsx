@@ -143,7 +143,7 @@ const CandidateUploadPage = () => {
             <span className="inline-block text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest mb-2">
               Applicant Portal
             </span>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">
               Upload Photo &amp; Signature
             </h1>
             <p className="text-slate-500 text-xs mt-1">
@@ -155,7 +155,7 @@ const CandidateUploadPage = () => {
           <div className="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <p className="text-xs text-slate-400 font-medium">Applicant Number</p>
-              <p className="text-base font-extrabold text-primary font-mono">APP-1000{applicant.id}</p>
+              <p className="text-base font-semibold text-primary font-mono">APP-1000{applicant.id}</p>
               <p className="text-xs font-bold text-slate-800 mt-1">{applicant.applicant_name}</p>
             </div>
             <div className="text-right sm:text-right text-xs">

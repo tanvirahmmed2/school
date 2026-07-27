@@ -10,7 +10,7 @@ const ResultsPortalPage = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Results & Academic Transcripts
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -23,7 +23,7 @@ const ResultsPortalPage = () => {
               <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 text-lg">
                 <FiSearch />
               </div>
-              <h3 className="font-extrabold text-slate-900 text-lg">
+              <h3 className="font-semibold text-slate-900 text-lg">
                 Public Inquiry Form
               </h3>
               <p className="text-slate-500 text-xs md:text-sm leading-relaxed">

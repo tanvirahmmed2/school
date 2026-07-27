@@ -51,7 +51,7 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
 
         <div className="pt-3 px-0.5 flex flex-col items-center justify-center flex-1 gap-1.5">
           
-          <h3 className="font-extrabold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="font-semibold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {cardTitle}
           </h3>
 

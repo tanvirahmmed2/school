@@ -47,7 +47,7 @@ const VisionPage = () => {
         
        
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
             Our Vision & Core Values
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
@@ -65,7 +65,7 @@ const VisionPage = () => {
               <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider">
                 The Long-Term Aim
               </span>
-              <h3 className="font-extrabold text-white text-base sm:text-lg">
+              <h3 className="font-semibold text-white text-base sm:text-lg">
                 To stand at the global forefront of technical and administrative education.
               </h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-1">
@@ -92,7 +92,7 @@ const VisionPage = () => {
                     <div className={`w-9 h-9 rounded-xl flex items-center justify-center border shrink-0 ${val.color}`}>
                       <Icon className="text-sm sm:text-base" />
                     </div>
-                    <h4 className="font-extrabold text-slate-900 text-sm sm:text-base">
+                    <h4 className="font-semibold text-slate-900 text-sm sm:text-base">
                       {val.title}
                     </h4>
                   </div>
@@ -111,7 +111,7 @@ const VisionPage = () => {
             <FiAward className="text-xl" />
           </div>
           <div className="flex flex-col gap-3">
-            <h3 className="font-extrabold text-slate-900 text-sm sm:text-base">
+            <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
               Academic Quality Framework
             </h3>
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">

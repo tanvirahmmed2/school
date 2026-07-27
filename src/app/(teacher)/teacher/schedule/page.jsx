@@ -46,7 +46,7 @@ const SchedulePage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Class Schedule</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Class Schedule</h1>
         <p className="text-slate-500 text-sm font-medium">View your daily routine schedules, classes, and room numbers.</p>
       </div>
 

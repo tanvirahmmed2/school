@@ -196,7 +196,7 @@ const StaffLeavesPage = () => {
                       <span className="text-xs font-bold text-slate-700">
                         {item.type}
                       </span>
-                      <span className={`px-2 py-0.5 text-[9px] font-extrabold rounded-full border ${
+                      <span className={`px-2 py-0.5 text-[9px] font-semibold rounded-full border ${
                         item.status === 'Approved' ? 'bg-primary-light text-primary border-primary-light' :
                         item.status === 'Rejected' ? 'bg-red-50 text-red-655 border-red-100' :
                         'bg-amber-50 text-amber-600 border-amber-100'

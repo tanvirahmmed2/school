@@ -66,7 +66,7 @@ const Hero = () => {
         
         
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-tight text-white max-w-4xl">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-tight text-white max-w-4xl">
           {schoolName || SCHOOL_NAME}
         </h1>
 
@@ -99,7 +99,7 @@ const Hero = () => {
               <FiUsers className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-3xl font-black text-slate-900 tracking-tight">
+              <p className="text-3xl font-semibold text-slate-900 tracking-tight">
                 {stats.totalStudents ? `${stats.totalStudents.toLocaleString()}+` : '0'}
               </p>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Total Students</p>
@@ -111,7 +111,7 @@ const Hero = () => {
               <FiBookOpen className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-3xl font-black text-slate-900 tracking-tight">
+              <p className="text-3xl font-semibold text-slate-900 tracking-tight">
                 {stats.totalTeachers ? `${stats.totalTeachers}+` : '0'}
               </p>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Expert Faculty</p>
@@ -123,7 +123,7 @@ const Hero = () => {
               <FiLayers className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-3xl font-black text-slate-900 tracking-tight">
+              <p className="text-3xl font-semibold text-slate-900 tracking-tight">
                 {stats.totalClasses || '0'}
               </p>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Academic Classes</p>

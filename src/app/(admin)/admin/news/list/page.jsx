@@ -115,7 +115,7 @@ const NewsListPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight flex items-center gap-2">
             <FiFileText className="text-primary" /> Published Campus News
           </h1>
           <p className="text-xs text-slate-500 mt-1">
@@ -167,7 +167,7 @@ const NewsListPage = () => {
 
                     {/* Title & Content Snippet */}
                     <td className="p-4 max-w-xs md:max-w-sm">
-                      <div className="font-extrabold text-slate-900 text-sm leading-tight">{item.title}</div>
+                      <div className="font-semibold text-slate-900 text-sm leading-tight">{item.title}</div>
                       <p className="text-slate-500 text-xs mt-1 leading-relaxed line-clamp-2">
                         {stripHtml(item.content)}
                       </p>

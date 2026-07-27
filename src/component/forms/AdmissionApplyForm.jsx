@@ -258,73 +258,15 @@ const AdmissionApplyForm = ({
         </div>
       </div>
 
-      {/* Document Uploads (Optional Initial) */}
+      {/* Fee Payment & Photo/Signature Process Notice */}
       <div className="border-t border-slate-50 pt-4 mt-2">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">3. Candidate Documents (Optional)</h3>
-          <span className="text-[10px] font-semibold text-primary bg-primary-light px-2.5 py-0.5 rounded-full">
-            Can upload now or via email link after fee payment
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Image Upload */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Candidate Photo (Optional)
-            </label>
-            <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl items-center text-center">
-              {form.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={form.image}
-                  alt="Candidate Preview"
-                  className="w-24 h-24 rounded-xl object-cover border border-slate-200 shadow-sm"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-xl bg-slate-100 flex flex-col items-center justify-center text-slate-400 text-xs font-semibold gap-1">
-                  <FiUploadCloud className="text-lg" />
-                  <span>Select Image</span>
-                </div>
-              )}
-              <input
-                type="file"
-                name="image"
-                accept="image/jpeg,image/png"
-                onChange={handleFileChange}
-                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
-              />
-            </div>
-          </div>
-
-          {/* Signature Upload */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Candidate Signature (Optional)
-            </label>
-            <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl items-center text-center">
-              {form.signature ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={form.signature}
-                  alt="Signature Preview"
-                  className="w-full max-w-[150px] h-16 rounded-xl object-contain border border-slate-200 shadow-sm bg-white p-1"
-                />
-              ) : (
-                <div className="w-32 h-16 rounded-xl bg-slate-100 flex flex-col items-center justify-center text-slate-400 text-xs font-semibold gap-1">
-                  <FiUploadCloud className="text-lg" />
-                  <span>Select Signature</span>
-                </div>
-              )}
-              <input
-                type="file"
-                name="signature"
-                accept="image/jpeg,image/png"
-                onChange={handleFileChange}
-                className="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
-              />
-            </div>
-          </div>
+        <div className="bg-sky-50/80 border border-sky-100 p-4 rounded-2xl flex flex-col gap-1.5">
+          <h4 className="text-xs font-bold text-sky-900 flex items-center gap-1.5">
+            <FiUploadCloud className="text-sky-600" /> Next Step After Submission
+          </h4>
+          <p className="text-xs text-sky-800 leading-relaxed">
+            Upon submitting this application form, your application will be created with status <strong className="text-sky-950">incomplete</strong> and an <strong className="text-sky-950">unpaid</strong> admission fee receipt will be generated. Please pay the admission fee to the school cashier. Once payment is completed, you will receive an email to upload your picture and signature, which will submit your application for final admin review.
+          </p>
         </div>
       </div>
 

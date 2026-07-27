@@ -41,7 +41,7 @@ const CreateAchievementPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
             Control Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Record New Achievement
           </h1>
         </div>

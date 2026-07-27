@@ -34,7 +34,7 @@ const ClubsPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
             Student Life
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight">
             Our Student Clubs
           </h1>
           <p className="text-slate-500 max-w-xl mx-auto text-sm sm:text-base">

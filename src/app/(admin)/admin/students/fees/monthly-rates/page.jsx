@@ -109,7 +109,7 @@ const MonthlyRatesPage = () => {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
           <FiDollarSign className="text-primary" /> Class Tuition Fee Rates
         </h1>
         <p className="text-sm text-slate-500 mt-1">
@@ -130,9 +130,9 @@ const MonthlyRatesPage = () => {
               <table className="w-full border-collapse text-left text-xs text-slate-655">
                 <thead>
                   <tr className="bg-slate-50/50 border-b border-slate-100">
-                    <th className="px-6 py-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Class Name</th>
-                    <th className="px-6 py-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Monthly rate</th>
-                    <th className="px-6 py-4 font-black uppercase text-[10px] tracking-wider text-slate-400 text-right pr-8">Actions</th>
+                    <th className="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Class Name</th>
+                    <th className="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Monthly rate</th>
+                    <th className="px-6 py-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 text-right pr-8">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50 font-semibold text-slate-800">
@@ -146,7 +146,7 @@ const MonthlyRatesPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {item.monthly_fee_id ? (
-                          <span className="text-sm font-extrabold text-slate-900">
+                          <span className="text-sm font-semibold text-slate-900">
                             ৳{parseFloat(item.amount).toFixed(2)}
                           </span>
                         ) : (

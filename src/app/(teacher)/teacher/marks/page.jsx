@@ -155,7 +155,7 @@ const MarksEntryPage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Student Marks Evaluation</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Student Marks Evaluation</h1>
         <p className="text-slate-500 text-sm font-medium">Record and update student exam marks for assigned classes and subjects.</p>
       </div>
 

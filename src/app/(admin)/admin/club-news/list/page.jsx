@@ -33,7 +33,7 @@ const ClubNewsListPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Club Announcements & News
           </h1>
         </div>
@@ -58,10 +58,10 @@ const ClubNewsListPage = () => {
             <table className="w-full border-collapse text-left text-xs text-slate-650">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6">Cover</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Club</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Announcement Title</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Published Date</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pl-6">Cover</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Club</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Announcement Title</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Published Date</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 font-semibold text-slate-800">
@@ -79,13 +79,13 @@ const ClubNewsListPage = () => {
                       )}
                     </td>
                     <td className="p-4">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-primary bg-primary-light px-2 py-0.5 rounded uppercase tracking-wider">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-primary bg-primary-light px-2 py-0.5 rounded uppercase tracking-wider">
                         <FiUsers className="text-xs" />
                         {item.club_name}
                       </span>
                     </td>
                     <td className="p-4 max-w-xs md:max-w-sm">
-                      <div className="truncate font-extrabold text-slate-900">{item.title}</div>
+                      <div className="truncate font-semibold text-slate-900">{item.title}</div>
                       <div className="truncate text-slate-450 text-[10px] mt-0.5 max-w-[260px] font-medium">{item.content}</div>
                     </td>
                     <td className="p-4 text-slate-500 font-medium">

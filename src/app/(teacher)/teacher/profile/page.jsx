@@ -173,7 +173,7 @@ const ProfilePage = () => {
     <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Profile</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Profile</h1>
         <p className="text-slate-500 text-sm font-medium">Verify your official teacher credentials, designations, and contact information.</p>
       </div>
 
@@ -183,7 +183,7 @@ const ProfilePage = () => {
           {profile?.image ? (
             <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-primary-light text-primary flex items-center justify-center text-4xl font-extrabold">
+            <div className="w-full h-full bg-primary-light text-primary flex items-center justify-center text-4xl font-semibold">
               {profile?.name ? profile.name.charAt(0).toUpperCase() : 'T'}
             </div>
           )}
@@ -367,7 +367,7 @@ const ProfilePage = () => {
         {showForm && (
           <form onSubmit={handleFormSubmit} className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 md:p-5 flex flex-col gap-4 animate-fade-down duration-200">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
+              <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
                 {editId ? 'Edit Degree Record' : 'Add Degree / Certificate'}
               </h4>
               <button
@@ -457,7 +457,7 @@ const ProfilePage = () => {
             {qualifications.map(q => (
               <div key={q.id} className="p-4 border border-slate-100 rounded-2xl flex items-center justify-between hover:border-slate-200 transition-all bg-white">
                 <div className="flex flex-col gap-0.5">
-                  <h4 className="font-extrabold text-slate-800 text-xs">{q.degree}</h4>
+                  <h4 className="font-semibold text-slate-800 text-xs">{q.degree}</h4>
                   <span className="text-[10px] text-slate-400 font-bold uppercase block">{q.institution}</span>
                   <div className="flex items-center gap-2 mt-1.5">
                     <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">Graduation: {q.passing_year}</span>

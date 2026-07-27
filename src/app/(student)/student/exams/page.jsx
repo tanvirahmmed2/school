@@ -54,7 +54,7 @@ const ExamsPage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Exam Routine</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Exam Routine</h1>
         <p className="text-slate-500 text-sm font-medium">Verify schedules and exam locations for current and upcoming terms.</p>
       </div>
 

@@ -29,7 +29,7 @@ const EventCard = ({ event, href, className = '' }) => {
           />
           {dateObj && (
             <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-primary-light text-primary px-2.5 py-1 rounded-xl flex flex-col items-center justify-center font-bold text-xs shadow-xs">
-              <span className="text-sm font-black leading-none">{day}</span>
+              <span className="text-sm font-semibold leading-none">{day}</span>
               <span className="text-[9px] uppercase tracking-wider">{month}</span>
             </div>
           )}
@@ -37,7 +37,7 @@ const EventCard = ({ event, href, className = '' }) => {
       ) : (
         <div className="w-full sm:w-40 bg-primary-light flex sm:flex-col items-center justify-center p-4 shrink-0 relative border-b sm:border-b-0 sm:border-r border-slate-100">
           <div className="w-14 h-14 bg-white border border-primary-light text-primary rounded-2xl flex flex-col items-center justify-center shadow-xs">
-            <span className="text-lg font-black leading-none">{day}</span>
+            <span className="text-lg font-semibold leading-none">{day}</span>
             <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">{month}</span>
           </div>
         </div>
@@ -61,7 +61,7 @@ const EventCard = ({ event, href, className = '' }) => {
             )}
           </div>
 
-          <h3 className="font-extrabold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
             {title}
           </h3>
 

@@ -212,29 +212,29 @@ const StudentTranscriptsPage = () => {
               <div className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center font-bold text-2xl mb-3">
                 FIT
               </div>
-              <h2 className="text-xl font-black text-slate-850 tracking-tight">FUTURE INSTITUTE OF TECHNOLOGY</h2>
-              <p className="text-[10px] text-slate-450 uppercase tracking-widest font-extrabold mt-1">Official Academic Transcript</p>
+              <h2 className="text-xl font-semibold text-slate-850 tracking-tight">FUTURE INSTITUTE OF TECHNOLOGY</h2>
+              <p className="text-[10px] text-slate-450 uppercase tracking-widest font-semibold mt-1">Official Academic Transcript</p>
             </div>
 
             <div className="grid grid-cols-2 gap-y-3 gap-x-6 py-6 text-sm">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Student Name</span>
-                <p className="font-extrabold text-slate-800 mt-0.5">{transcriptData.student.name}</p>
+                <p className="font-semibold text-slate-800 mt-0.5">{transcriptData.student.name}</p>
               </div>
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Registration Number</span>
-                <p className="font-extrabold text-slate-800 mt-0.5">{transcriptData.student.registration_number}</p>
+                <p className="font-semibold text-slate-800 mt-0.5">{transcriptData.student.registration_number}</p>
               </div>
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Academic Class</span>
-                <p className="font-extrabold text-slate-800 mt-0.5">
+                <p className="font-semibold text-slate-800 mt-0.5">
                   Class {transcriptData.student.class_name} 
                   {transcriptData.student.section_name ? ` (Sec ${transcriptData.student.section_name})` : ''}
                 </p>
               </div>
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Exam Term</span>
-                <p className="font-extrabold text-slate-800 mt-0.5">
+                <p className="font-semibold text-slate-800 mt-0.5">
                   {exams.find(e => (e.id || e.exam_id) === parseInt(transExam, 10))?.name || 'Academic Term'}
                 </p>
               </div>
@@ -271,19 +271,19 @@ const StudentTranscriptsPage = () => {
             <div className="grid grid-cols-3 gap-4 mt-6 bg-slate-50 border border-slate-100 p-5 rounded-2xl">
               <div className="text-center">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Marks</span>
-                <p className="text-lg font-black text-slate-800 mt-0.5">
+                <p className="text-lg font-semibold text-slate-800 mt-0.5">
                   {parseFloat(transcriptData.overallResult.total_marks || 0).toFixed(2)}
                 </p>
               </div>
               <div className="text-center border-x border-slate-200">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">GPA Achieved</span>
-                <p className="text-lg font-black text-primary mt-0.5">
+                <p className="text-lg font-semibold text-primary mt-0.5">
                   {parseFloat(transcriptData.overallResult.gpa || 0).toFixed(2)}
                 </p>
               </div>
               <div className="text-center">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Overall Grade</span>
-                <p className="text-lg font-black text-primary mt-0.5">
+                <p className="text-lg font-semibold text-primary mt-0.5">
                   {transcriptData.overallResult.grade || 'Pending'}
                 </p>
               </div>

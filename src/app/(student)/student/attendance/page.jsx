@@ -66,7 +66,7 @@ const AttendancePage = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Attendance Registry</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Attendance Registry</h1>
         <p className="text-slate-500 text-sm font-medium">Verify your registered presence and check monthly updates.</p>
       </div>
 
@@ -80,7 +80,7 @@ const AttendancePage = () => {
                 <span className="text-xs font-bold opacity-80">{card.label}</span>
                 <Icon className="text-lg opacity-80" />
               </div>
-              <span className="text-xl md:text-2xl font-extrabold">{card.value}</span>
+              <span className="text-xl md:text-2xl font-semibold">{card.value}</span>
             </div>
           );
         })}

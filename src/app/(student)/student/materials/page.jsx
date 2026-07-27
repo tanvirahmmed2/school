@@ -44,7 +44,7 @@ const StudentMaterialsPageContent = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Study Materials</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Study Materials</h1>
         <p className="text-slate-500 text-sm font-medium">Access shared resources, lecture guides, slides, and files for <span className="text-primary font-bold">{subjectName}</span>.</p>
       </div>
 

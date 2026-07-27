@@ -63,7 +63,7 @@ const RecognitionListPage = () => {
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Recognitions &amp; Awards
           </h1>
         </div>
@@ -88,12 +88,12 @@ const RecognitionListPage = () => {
             <table className="w-full border-collapse text-left text-xs text-slate-650">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pl-6">Image</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Recognition Name</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Description</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Awarded By</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400">Date</th>
-                  <th className="p-4 font-black uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right">Actions</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pl-6">Image</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Recognition Name</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Description</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Awarded By</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400">Date</th>
+                  <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pr-6 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 font-semibold text-slate-800">
@@ -116,7 +116,7 @@ const RecognitionListPage = () => {
                     <td className="p-4 max-w-[200px]">
                       <div className="flex items-center gap-2">
                         <FiAward className="text-amber-500 flex-shrink-0" />
-                        <span className="font-extrabold text-slate-900">{item.name}</span>
+                        <span className="font-semibold text-slate-900">{item.name}</span>
                       </div>
                     </td>
 

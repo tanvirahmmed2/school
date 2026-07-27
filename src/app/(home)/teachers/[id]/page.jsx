@@ -81,16 +81,16 @@ const TeacherDetailPage = () => {
                     <img src={teacher.image} alt={teacher.name} className="w-full h-full object-cover" />
                   </div>
                 ) : (
-                  <div className="w-24 h-24 rounded-full bg-primaryr from-sky-200 to-indigo-100 text-sky-750 flex items-center justify-center text-3xl font-black mb-4">
+                  <div className="w-24 h-24 rounded-full bg-primaryr from-sky-200 to-indigo-100 text-sky-750 flex items-center justify-center text-3xl font-semibold mb-4">
                     {getInitials(teacher.name)}
                   </div>
                 )}
-                <h3 className="font-extrabold text-slate-900 text-base">{teacher.name}</h3>
+                <h3 className="font-semibold text-slate-900 text-base">{teacher.name}</h3>
                 <div className="flex flex-col items-center gap-1.5 mt-1.5">
                   <span className="text-xs font-bold text-primary bg-primary-light px-2.5 py-0.5 rounded uppercase tracking-wider">
                     {teacher.designation || 'Faculty Member'}
                   </span>
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider ${
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded uppercase tracking-wider ${
                     teacher.is_permanent 
                       ? 'bg-primary-light text-primary border border-primary-light/50' 
                       : 'bg-amber-50 text-amber-600 border border-amber-100/50'
@@ -118,7 +118,7 @@ const TeacherDetailPage = () => {
                 <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest w-fit">
                   Faculty Profile
                 </span>
-                <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
+                <h2 className="text-2xl font-semibold text-slate-900 tracking-tight leading-tight">
                   Academic Background
                 </h2>
                 
@@ -126,7 +126,7 @@ const TeacherDetailPage = () => {
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                     <FiBookOpen className="text-lg text-primary" />
-                    <h3 className="font-extrabold text-slate-800 text-sm md:text-base">Degrees & Qualifications</h3>
+                    <h3 className="font-semibold text-slate-800 text-sm md:text-base">Degrees & Qualifications</h3>
                   </div>
 
                   {qualifications.length === 0 ? (
@@ -138,7 +138,7 @@ const TeacherDetailPage = () => {
                       {qualifications.map(q => (
                         <div key={q.id} className="p-4 border border-slate-100 rounded-2xl flex items-center justify-between hover:border-slate-200 transition-all bg-white">
                           <div className="flex flex-col gap-0.5">
-                            <h4 className="font-extrabold text-slate-800 text-xs">{q.degree}</h4>
+                            <h4 className="font-semibold text-slate-800 text-xs">{q.degree}</h4>
                             <span className="text-[10px] text-slate-400 font-bold uppercase block">{q.institution}</span>
                             <div className="flex items-center gap-2 mt-1.5">
                               <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-605 text-slate-500 rounded-full">Graduation: {q.passing_year}</span>
@@ -163,7 +163,7 @@ const TeacherDetailPage = () => {
             <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
               <FiUser />
             </div>
-            <h3 className="font-bold text-slate-800 text-base font-extrabold">Teacher not found</h3>
+            <h3 className="font-bold text-slate-800 text-base font-semibold">Teacher not found</h3>
             <p className="text-slate-500 text-xs mt-1">
               The requested faculty profile does not match any active records.
             </p>

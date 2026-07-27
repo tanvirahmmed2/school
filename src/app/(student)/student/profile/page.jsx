@@ -42,13 +42,13 @@ const ProfilePage = () => {
     <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">My Profile</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Profile</h1>
         <p className="text-slate-500 text-sm font-medium">Verify your official records, parents details, and class admissions.</p>
       </div>
 
       {/* Header Profile Card */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-        <div className="w-24 h-24 rounded-full bg-primary-light border border-primary-light text-primary flex items-center justify-center text-4xl font-extrabold shadow-sm">
+        <div className="w-24 h-24 rounded-full bg-primary-light border border-primary-light text-primary flex items-center justify-center text-4xl font-semibold shadow-sm">
           {profile?.name ? profile.name.charAt(0).toUpperCase() : 'S'}
         </div>
         <div className="text-center md:text-left flex-1">

@@ -107,7 +107,7 @@ const StudentAssignmentsPageContent = () => {
     <div className="flex flex-col gap-8 w-full mx-auto">
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Class Assignments</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Class Assignments</h1>
         <p className="text-slate-500 text-sm font-medium">View active coursework, task due dates, and track your grading status for <span className="text-primary font-bold">{subjectName}</span>.</p>
       </div>
 
@@ -219,7 +219,7 @@ const StudentAssignmentsPageContent = () => {
       {submitModalAssignment && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-lg relative animate-in fade-in zoom-in-95 duration-150">
-            <h3 className="font-extrabold text-slate-800 text-lg mb-2">Submit Assignment</h3>
+            <h3 className="font-semibold text-slate-800 text-lg mb-2">Submit Assignment</h3>
             <p className="text-slate-400 text-xs font-medium mb-6">Subject: <span className="font-bold text-slate-655 text-slate-600">{submitModalAssignment.title}</span></p>
 
             <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">

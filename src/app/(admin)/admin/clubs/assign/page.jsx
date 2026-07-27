@@ -167,7 +167,7 @@ const AdminClubsAssignPage = () => {
               {/* Admins (Teachers) */}
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
                 <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
-                  <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
+                  <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
                     <FiShield className="text-primary" /> Club Admins (Teachers)
                   </h3>
                   <div className="relative">
@@ -201,7 +201,7 @@ const AdminClubsAssignPage = () => {
                             className="w-4 h-4 rounded text-primary border-slate-300 outline-none cursor-pointer"
                           />
                           <div className="flex flex-col">
-                            <span className="font-extrabold">{t.name}</span>
+                            <span className="font-semibold">{t.name}</span>
                             <span className="text-[10px] text-slate-405 text-slate-400">{t.email}</span>
                           </div>
                         </label>
@@ -228,7 +228,7 @@ const AdminClubsAssignPage = () => {
               {/* Members (Students) */}
               <div className="bg-white border border-slate-100 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col overflow-hidden h-[450px]">
                 <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-3">
-                  <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
+                  <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
                     <FiUsers className="text-primary" /> Club Members (Students)
                   </h3>
                   <div className="relative">
@@ -261,7 +261,7 @@ const AdminClubsAssignPage = () => {
                           className="w-4 h-4 rounded text-primary border-slate-350 outline-none"
                         />
                         <div className="flex flex-col">
-                          <span className="font-extrabold">{st.name}</span>
+                          <span className="font-semibold">{st.name}</span>
                           <span className="text-[10px] text-slate-400">Reg ID: {st.registration_number}</span>
                         </div>
                       </label>
