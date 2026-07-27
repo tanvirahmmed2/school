@@ -272,14 +272,14 @@ export async function PUT(request) {
       }, { status: 400 });
     }
 
-    let newStatus = 'Unpaid';
+    let newStatus = 'unpaid';
     let paymentDate = fee.payment_date;
 
     if (newCumulativePaid >= totalAmount) {
-      newStatus = 'Paid';
+      newStatus = 'paid';
       paymentDate = new Date();
     } else if (newCumulativePaid > 0) {
-      newStatus = 'Partially Paid';
+      newStatus = 'partially paid';
     }
 
     const result = await client.query(
@@ -300,6 +300,19 @@ export async function PUT(request) {
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
       [fee_id, numPaid, method, transaction_id ? transaction_id.trim() : null, remarks ? remarks.trim() : null]
     );
+
+    // Insert into unified ledger payment_transactions
+    const txnNo = `TXN-FEE-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`;
+    try {
+      await client.query(
+        `INSERT INTO payment_transactions (
+          transaction_number, payment_method, amount, transaction_type, category, reference_id, status, remarks, payment_date
+        ) VALUES ($1, $2, $3, 'Credit', 'Student Fee', $4, 'Success', $5, CURRENT_TIMESTAMP)`,
+        [txnNo, method, numPaid, fee.student_id, remarks ? remarks.trim() : `Collected payment for ${fee.title}`]
+      );
+    } catch (txnErr) {
+      console.error('Error logging payment_transactions:', txnErr);
+    }
 
     // Also log in exam_fee_payments if this is an exam fee
     if (fee.title.startsWith('Exam Fee:')) {

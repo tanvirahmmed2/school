@@ -3,6 +3,7 @@ import pool, { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 import { sendEmail } from '@/lib/brevo';
 import { deleteImage } from '@/lib/cloudinary';
+import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 // POST publish admission results (Admin only)
 export async function POST(request) {
@@ -281,6 +282,13 @@ export async function POST(request) {
 
     await client.query('COMMIT');
     client.release();
+
+    // Auto-generate current month fee for newly registered students
+    try {
+      await triggerMonthlyFeeGeneration();
+    } catch (feeErr) {
+      console.error('Error generating monthly fee for published students:', feeErr);
+    }
 
     return NextResponse.json({
       success: true,

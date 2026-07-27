@@ -6,9 +6,13 @@ import { isAdmin } from '@/lib/auth';
 export async function GET() {
   try {
     const result = await query(`
-      SELECT adm.*, c.name AS class_name 
+      SELECT 
+        adm.*, 
+        c.name AS class_name,
+        COALESCE(cmf.amount, 0.00) AS monthly_fee
       FROM admissions adm
       JOIN classes c ON adm.class_id = c.id
+      LEFT JOIN class_monthly_fees cmf ON c.id = cmf.class_id
       ORDER BY adm.admission_start_date DESC
     `);
     return NextResponse.json({

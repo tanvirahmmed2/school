@@ -53,9 +53,7 @@ const PublicMonthlyFeesPage = () => {
     <div className="w-full min-h-[80vh] py-12 px-4 md:px-8 mx-auto flex flex-col gap-10 animate-fade-up">
       {/* Hero Header */}
       <div className="text-center flex flex-col gap-3">
-        <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-full w-fit mx-auto">
-          FIT Academic Portal
-        </span>
+        
         <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight flex items-center justify-center gap-2">
           Academic Overview & Tuition Fees
         </h1>
@@ -66,10 +64,8 @@ const PublicMonthlyFeesPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         
-        {/* Left 2/3 Panel: Institution Info & Curriculum */}
         <div className="lg:col-span-2 flex flex-col gap-8">
           
-          {/* Institutional Education Section */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
             <div>
               <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 // GET all students (with class & section filter)
 export async function GET(request) {
@@ -163,7 +164,14 @@ export async function POST(request) {
       ]
     );
 
-    const res_data_3702 = { message: 'Student account pre-created successfully.', student: result.rows[0] };
+    const newStudent = result.rows[0];
+    try {
+      await triggerMonthlyFeeGeneration(newStudent.id);
+    } catch (feeErr) {
+      console.error('Error generating monthly fee for new student:', feeErr);
+    }
+
+    const res_data_3702 = { message: 'Student account pre-created successfully.', student: newStudent };
       return NextResponse.json({
         success: true,
         message: res_data_3702?.message || 'Successfully fecthed data',

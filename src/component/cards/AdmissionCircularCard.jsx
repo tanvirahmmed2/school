@@ -7,20 +7,27 @@ import { FiLayers, FiClock, FiCalendar, FiArrowRight } from 'react-icons/fi';
 const AdmissionCircularCard = ({ circular }) => {
   if (!circular) return null;
 
-  const { id, title, class_name, finish_date, min_age, max_age, fees } = circular;
+  const { id, title, class_name, finish_date, min_age, max_age, fees, monthly_fee } = circular;
 
   return (
     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-primary-light transition-all flex flex-col justify-between gap-5 group">
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary-light px-3 py-1 rounded-full">
             <FiLayers className="text-xs" /> Class: {class_name}
           </span>
-          {fees !== undefined && fees !== null && (
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100/50">
-              BDT {parseFloat(fees).toFixed(2)}
-            </span>
-          )}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {fees !== undefined && fees !== null && (
+              <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100/50">
+                Admission Fee: BDT {parseFloat(fees).toFixed(2)}
+              </span>
+            )}
+            {monthly_fee !== undefined && monthly_fee !== null && parseFloat(monthly_fee) > 0 && (
+              <span className="text-xs font-semibold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
+                Monthly Fee: BDT {parseFloat(monthly_fee).toFixed(2)}
+              </span>
+            )}
+          </div>
         </div>
 
         <h3 className="text-base font-semibold text-slate-900 leading-snug group-hover:text-primary transition-colors mt-1">

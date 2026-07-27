@@ -236,129 +236,13 @@ const CashierMonthlyFeePage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiDollarSign className="text-primary animate-pulse" /> Monthly Tuition & Fees
+            <FiDollarSign className="text-primary animate-pulse" /> Monthly Tuition & Fees Cashier Desk
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Generate monthly student tuition invoice desk, manage billing structures, and log payments.
+            Review auto-generated monthly student tuition invoices and collect student fee payments.
           </p>
         </div>
-
-        <button
-          onClick={() => {
-            setShowAddInvoice(!showAddInvoice);
-            setRecordingPaymentFee(null);
-          }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
-        >
-          {showAddInvoice ? (
-            <>
-              <FiX className="text-lg" /> Close Billing Panel
-            </>
-          ) : (
-            <>
-              <FiPlus className="text-lg" /> Bill Monthly Invoices
-            </>
-          )}
-        </button>
       </div>
-
-      {/* Billing Invoice Creation Card */}
-      {showAddInvoice && (
-        <form onSubmit={handleCreateInvoice} className="bg-white border border-slate-100 p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-5 animate-fade-down">
-          <div>
-            <h2 className="text-base font-bold text-slate-850 flex items-center gap-1.5">
-              <FiLayers className="text-primary" /> Generate Fee Invoices
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Create monthly charges class-wide or for an individual student.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Fee Invoice Title *</label>
-              <input
-                type="text"
-                required
-                value={invTitle}
-                onChange={(e) => setInvTitle(e.target.value)}
-                disabled={submitting}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Billing Amount (BDT) *</label>
-              <input
-                type="number"
-                required
-                value={invAmount}
-                onChange={(e) => setInvAmount(e.target.value)}
-                disabled={submitting}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Due Date *</label>
-              <input
-                type="date"
-                required
-                value={invDueDate}
-                onChange={(e) => setInvDueDate(e.target.value)}
-                disabled={submitting}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Target Class *</label>
-              <select
-                value={invClassId}
-                onChange={(e) => setInvClassId(e.target.value)}
-                disabled={submitting}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary cursor-pointer"
-              >
-                <option value="">Select target class...</option>
-                {classes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Target Student (Optional)</label>
-              <select
-                value={invStudentId}
-                onChange={(e) => setInvStudentId(e.target.value)}
-                disabled={submitting || !invClassId}
-                className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary cursor-pointer disabled:opacity-50"
-              >
-                <option value="">All Students (Class-wide Invoice)</option>
-                {invStudentsList.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} ({s.registration_number})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="flex justify-end mt-2">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="px-6 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 disabled:opacity-60"
-            >
-              {submitting ? 'Generating Invoices...' : 'Generate and Log Invoices'}
-            </button>
-          </div>
-        </form>
-      )}
 
       {/* Record Payment Dialog */}
       {recordingPaymentFee && (
@@ -523,8 +407,9 @@ const CashierMonthlyFeePage = () => {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredFees.map((fee) => {
-                  const normalizedStatus = fee.status;
-                  const isPaid = normalizedStatus === 'Paid';
+                  const rawStatus = (fee.status || 'unpaid').toLowerCase();
+                  const isPaid = rawStatus === 'paid';
+                  const isPartiallyPaid = rawStatus === 'partially paid';
                   return (
                     <tr key={fee.id} className="hover:bg-slate-50/30 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -548,14 +433,14 @@ const CashierMonthlyFeePage = () => {
                         ৳{parseFloat(fee.paid_amount || 0).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold capitalize ${
                           isPaid
-                            ? 'bg-primary-light text-emerald-650 text-primary border border-primary-light'
-                            : normalizedStatus === 'Partially Paid'
-                            ? 'bg-primary-light text-primary border border-primary-light'
-                            : 'bg-red-50 text-red-655 text-red-600 border border-red-100'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                            : isPartiallyPaid
+                            ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                            : 'bg-red-50 text-red-600 border border-red-100'
                         }`}>
-                          {normalizedStatus}
+                          {rawStatus}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm">

@@ -214,6 +214,12 @@ const ApplyFormContent = () => {
                     <span>Admission Fee: <strong className="text-primary font-bold">BDT {parseFloat(selectedCircular.fees).toFixed(2)}</strong></span>
                   </div>
                 )}
+                {selectedCircular.monthly_fee !== undefined && selectedCircular.monthly_fee !== null && parseFloat(selectedCircular.monthly_fee) > 0 && (
+                  <div className="flex items-center gap-1.5 text-sky-700">
+                    <FiDollarSign className="text-sky-600" />
+                    <span>Monthly Fee: <strong className="text-sky-800 font-bold">BDT {parseFloat(selectedCircular.monthly_fee).toFixed(2)}</strong></span>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -61,6 +61,23 @@ CREATE TRIGGER update_classes_updated_at
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
+-- CLASS MONTHLY FEES TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS class_monthly_fees (
+    id BIGSERIAL PRIMARY KEY,
+    class_id BIGINT UNIQUE NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    amount NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_class_monthly_fees_updated_at ON class_monthly_fees;
+CREATE TRIGGER update_class_monthly_fees_updated_at
+    BEFORE UPDATE ON class_monthly_fees
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
 -- SECTIONS TABLE
 -- ============================================================================
 
@@ -492,7 +509,7 @@ CREATE TABLE IF NOT EXISTS student_fees (
     title VARCHAR(255) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (amount >= 0.00),
     due_date DATE NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'Unpaid' CHECK (status IN ('Paid', 'Unpaid', 'Partially Paid')),
+    status VARCHAR(50) NOT NULL DEFAULT 'unpaid' CHECK (LOWER(status) IN ('unpaid', 'paid', 'partially paid', 'pending', 'cancelled')),
     paid_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     payment_date TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

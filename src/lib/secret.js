@@ -22,3 +22,5 @@ export const LOGO_URL = ''
 export const META_TITLE = "Star Cadet Academia - Academic Excellence & Growth"
 export const META_DESCRIPTION = 'Manage student enrollments, exam records, gradesheets, timetables, and billing files dynamically.'
 
+export const MONTHLY_FEE_DUE_DAY = parseInt('6', 10);
+
