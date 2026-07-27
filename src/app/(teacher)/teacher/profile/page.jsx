@@ -242,7 +242,6 @@ const ProfilePage = () => {
                   value={profileData.number}
                   onChange={(e) => setProfileData({ ...profileData, number: e.target.value })}
                   className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
-                  placeholder="e.g. +880 180..."
                 />
               </div>
 
@@ -251,7 +250,6 @@ const ProfilePage = () => {
                 <TiptapEditor
                   value={profileData.address}
                   onChange={(val) => setProfileData({ ...profileData, address: val })}
-                  placeholder="e.g. Dhaka, Bangladesh"
                 />
               </div>
 
@@ -390,7 +388,6 @@ const ProfilePage = () => {
                   name="degree"
                   value={formData.degree}
                   onChange={handleInputChange}
-                  placeholder="e.g. Bachelor of Science in Electrical Engineering"
                   className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   required
                 />
@@ -403,7 +400,6 @@ const ProfilePage = () => {
                   name="institution"
                   value={formData.institution}
                   onChange={handleInputChange}
-                  placeholder="e.g. Massachusetts Institute of Technology"
                   className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   required
                 />
@@ -416,7 +412,6 @@ const ProfilePage = () => {
                   name="passing_year"
                   value={formData.passing_year}
                   onChange={handleInputChange}
-                  placeholder="e.g. 2016"
                   className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                   required
                 />
@@ -429,7 +424,6 @@ const ProfilePage = () => {
                   name="result"
                   value={formData.result}
                   onChange={handleInputChange}
-                  placeholder="e.g. CGPA 3.84"
                   className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:border-primary bg-white font-semibold"
                 />
               </div>

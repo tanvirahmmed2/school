@@ -146,7 +146,6 @@ const StudentRegistration = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. REG-2026-123456"
                   value={regNo}
                   onChange={(e) => setRegNo(e.target.value)}
                   disabled={loading}
@@ -162,7 +161,6 @@ const StudentRegistration = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 123456"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
                   disabled={loading}
@@ -196,7 +194,6 @@ const StudentRegistration = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={loading}
@@ -211,7 +208,6 @@ const StudentRegistration = () => {
                   <input
                     type="email"
                     required
-                    placeholder="johndoe@gmail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
@@ -229,7 +225,6 @@ const StudentRegistration = () => {
                   <input
                     type="tel"
                     required
-                    placeholder="e.g. +8801700000000"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     disabled={loading}
@@ -261,7 +256,6 @@ const StudentRegistration = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Richard Doe"
                     value={parentName}
                     onChange={(e) => setParentName(e.target.value)}
                     disabled={loading}
@@ -276,7 +270,6 @@ const StudentRegistration = () => {
                   <input
                     type="tel"
                     required
-                    placeholder="e.g. +8801800000000"
                     value={parentContact}
                     onChange={(e) => setParentContact(e.target.value)}
                     disabled={loading}
@@ -294,7 +287,6 @@ const StudentRegistration = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. 2005822184..."
                     value={birthCert}
                     onChange={(e) => setBirthCert(e.target.value)}
                     disabled={loading}
@@ -309,7 +301,6 @@ const StudentRegistration = () => {
                   <input
                     type="password"
                     required
-                    placeholder="e.g. Minimum 6 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
@@ -326,7 +317,6 @@ const StudentRegistration = () => {
                 <textarea
                   required
                   rows={3}
-                  placeholder="e.g. House 40, Road 4, Sector 12, Uttara, Dhaka"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   disabled={loading}

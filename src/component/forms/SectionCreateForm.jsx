@@ -84,7 +84,6 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Section A"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
@@ -98,7 +97,6 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
           </label>
           <input
             type="number"
-            placeholder="e.g. 40"
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
             disabled={submitting}
@@ -112,7 +110,6 @@ const SectionCreateForm = ({ classes, onSuccess, onCancel }) => {
           </label>
           <input
             type="text"
-            placeholder="e.g. Room 102"
             value={roomNumber}
             onChange={(e) => setRoomNumber(e.target.value)}
             disabled={submitting}

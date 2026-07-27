@@ -113,7 +113,6 @@ const LessonsPageContent = () => {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g. Introduction to Derivatives"
                 className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
@@ -123,7 +122,6 @@ const LessonsPageContent = () => {
               <TiptapEditor
                 value={formData.description}
                 onChange={(val) => setFormData({ ...formData, description: val })}
-                placeholder="Describe key learning outcomes, resources needed, and activities..."
               />
             </div>
 

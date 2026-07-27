@@ -1,8 +1,12 @@
+import { SCHOOL_NAME } from '@/lib/secret';
+
+const shortName = SCHOOL_NAME.split(" ").map((w) => w[0]).join('');
+
 export const metadata = {
-  title: 'Marks Evaluation - Teacher Portal',
-  description: 'Record, update, and manage student exam grades and mark ledger sheets.'
+  title: `Teacher - Marks | ${shortName} Campus`,
+  description: `Explore Teacher - Marks page at ${SCHOOL_NAME} (${shortName}).`,
 };
 
 export default function MarksLayout({ children }) {
-  return children;
+  return <>{children}</>;
 }

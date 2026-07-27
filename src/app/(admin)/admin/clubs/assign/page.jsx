@@ -174,7 +174,6 @@ const AdminClubsAssignPage = () => {
                     <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
                     <input
                       type="text"
-                      placeholder="Search teachers..."
                       value={searchTeacher}
                       onChange={(e) => setSearchTeacher(e.target.value)}
                       className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-primary"
@@ -209,7 +208,6 @@ const AdminClubsAssignPage = () => {
                         {isChecked && (
                           <input
                             type="text"
-                            placeholder="Designation (e.g. Advisor, President)"
                             value={selectedAdmins.find(item => item.teacher_id === t.id)?.designation || ''}
                             onChange={(e) => handleDesignationChange(t.id, e.target.value)}
                             className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs outline-none focus:border-primary bg-white text-slate-800 mt-1 font-normal"
@@ -235,7 +233,6 @@ const AdminClubsAssignPage = () => {
                     <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
                     <input
                       type="text"
-                      placeholder="Search students (name or Reg ID)..."
                       value={searchStudent}
                       onChange={(e) => setSearchStudent(e.target.value)}
                       className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 border-slate-200 rounded-xl text-xs outline-none focus:border-primary"

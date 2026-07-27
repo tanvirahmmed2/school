@@ -1,8 +1,12 @@
+import { SCHOOL_NAME } from '@/lib/secret';
+
+const shortName = SCHOOL_NAME.split(" ").map((w) => w[0]).join('');
+
 export const metadata = {
-  title: 'Timetable & Class Schedule - Teacher Portal',
-  description: 'Access your daily class timetable, routine hours, and classroom allocations.'
+  title: `Teacher - Schedule | ${shortName} Campus`,
+  description: `Explore Teacher - Schedule page at ${SCHOOL_NAME} (${shortName}).`,
 };
 
 export default function ScheduleLayout({ children }) {
-  return children;
+  return <>{children}</>;
 }

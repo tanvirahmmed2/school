@@ -98,7 +98,6 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Professor John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
@@ -113,7 +112,6 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="email"
             required
-            placeholder="e.g. john@school.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={submitting}
@@ -128,7 +126,6 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. +880 170 000 0000"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             disabled={submitting}
@@ -143,7 +140,6 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Assistant Professor"
             value={designation}
             onChange={(e) => setDesignation(e.target.value)}
             disabled={submitting}

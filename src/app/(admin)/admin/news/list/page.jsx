@@ -257,7 +257,6 @@ const NewsListPage = () => {
                   required
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  placeholder="e.g. FIT Annual Convocation 2026"
                   className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all font-medium"
                 />
               </div>
@@ -290,7 +289,6 @@ const NewsListPage = () => {
                   required
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
-                  placeholder="Write complete article details..."
                   className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all resize-none font-medium"
                 />
               </div>

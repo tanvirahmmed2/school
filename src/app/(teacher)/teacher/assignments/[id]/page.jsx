@@ -211,7 +211,6 @@ const SubmissionGradingPageContent = ({ params }) => {
                     min="0"
                     value={gradeForm.marks_obtained}
                     onChange={(e) => setGradeForm({ ...gradeForm, marks_obtained: e.target.value })}
-                    placeholder="e.g. 92.5"
                     className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
@@ -221,7 +220,6 @@ const SubmissionGradingPageContent = ({ params }) => {
                   <TiptapEditor
                     value={gradeForm.remarks}
                     onChange={(val) => setGradeForm({ ...gradeForm, remarks: val })}
-                    placeholder="Provide constructive feedback..."
                   />
                 </div>
 

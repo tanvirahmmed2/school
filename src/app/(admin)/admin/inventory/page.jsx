@@ -564,7 +564,6 @@ const InventoryPage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Company / Supplier Name *</label>
                 <input
                   type="text"
-                  placeholder="e.g. Acme Stationeries"
                   value={supplierForm.name}
                   onChange={(e) => setSupplierForm((p) => ({ ...p, name: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -576,7 +575,6 @@ const InventoryPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Person</label>
                   <input
                     type="text"
-                    placeholder="e.g. John Doe"
                     value={supplierForm.contact_name}
                     onChange={(e) => setSupplierForm((p) => ({ ...p, contact_name: e.target.value }))}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -587,7 +585,6 @@ const InventoryPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Phone *</label>
                   <input
                     type="text"
-                    placeholder="+1 555-920-2212"
                     value={supplierForm.phone}
                     onChange={(e) => setSupplierForm((p) => ({ ...p, phone: e.target.value }))}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -599,7 +596,6 @@ const InventoryPage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Email</label>
                 <input
                   type="email"
-                  placeholder="sales@acme.com"
                   value={supplierForm.email}
                   onChange={(e) => setSupplierForm((p) => ({ ...p, email: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -609,7 +605,6 @@ const InventoryPage = () => {
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mailing Address</label>
                 <textarea
-                  placeholder="Street and details..."
                   value={supplierForm.address}
                   onChange={(e) => setSupplierForm((p) => ({ ...p, address: e.target.value }))}
                   rows={2.5}
@@ -661,7 +656,6 @@ const InventoryPage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Item Name *</label>
                 <input
                   type="text"
-                  placeholder="e.g. Marker Pen Black"
                   value={itemForm.name}
                   onChange={(e) => setItemForm((p) => ({ ...p, name: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -673,7 +667,6 @@ const InventoryPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Unique Item Code *</label>
                   <input
                     type="text"
-                    placeholder="e.g. ITEM-MARK-BLK"
                     value={itemForm.code}
                     onChange={(e) => setItemForm((p) => ({ ...p, code: e.target.value }))}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -684,7 +677,6 @@ const InventoryPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Stock Unit *</label>
                   <input
                     type="text"
-                    placeholder="e.g. Pcs, Box, Pack"
                     value={itemForm.unit}
                     onChange={(e) => setItemForm((p) => ({ ...p, unit: e.target.value }))}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -695,7 +687,6 @@ const InventoryPage = () => {
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Description</label>
                 <textarea
-                  placeholder="Specify dimensions or details..."
                   value={itemForm.description}
                   onChange={(e) => setItemForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2.5}
@@ -733,7 +724,6 @@ const InventoryPage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category Name *</label>
                 <input
                   type="text"
-                  placeholder="e.g. Office Supplies, Electronics"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, name: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -743,7 +733,6 @@ const InventoryPage = () => {
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Description</label>
                 <textarea
-                  placeholder="Brief description notes..."
                   value={categoryForm.description}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2.5}
@@ -834,7 +823,6 @@ const InventoryPage = () => {
                     <div className="col-span-2 flex flex-col">
                       <input
                         type="number"
-                        placeholder="Qty"
                         value={line.quantity}
                         onChange={(e) => handleLineItemChange(i, 'quantity', e.target.value)}
                         className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white"
@@ -845,7 +833,6 @@ const InventoryPage = () => {
                       <input
                         type="number"
                         step="0.01"
-                        placeholder="Unit Price"
                         value={line.unit_price}
                         onChange={(e) => handleLineItemChange(i, 'unit_price', e.target.value)}
                         className="w-full px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white"
@@ -873,7 +860,6 @@ const InventoryPage = () => {
                   <input
                     type="number"
                     step="0.01"
-                    placeholder="Total Paid Out"
                     value={purchaseForm.paid_amount}
                     onChange={(e) => setPurchaseForm((p) => ({ ...p, paid_amount: e.target.value }))}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
@@ -884,7 +870,6 @@ const InventoryPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Remarks / Invoice Code</label>
                   <input
                     type="text"
-                    placeholder="e.g. Inv #8839"
                     value={purchaseForm.remarks}
                     onChange={(e) => setPurchaseForm((p) => ({ ...p, remarks: e.target.value }))}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"

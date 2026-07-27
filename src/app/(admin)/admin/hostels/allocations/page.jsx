@@ -175,7 +175,6 @@ const AdminHostelAllocationsPage = () => {
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="e.g. REG-10293"
                 value={searchRegNo}
                 onChange={(e) => setSearchRegNo(e.target.value)}
                 className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-primary"

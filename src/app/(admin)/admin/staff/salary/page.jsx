@@ -302,7 +302,6 @@ const AdminStaffSalaryPage = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Senior Accounts Officer"
                   value={gradeName}
                   onChange={(e) => setGradeName(e.target.value)}
                   disabled={submittingGrade}
@@ -318,7 +317,6 @@ const AdminStaffSalaryPage = () => {
                   type="number"
                   step="0.01"
                   required
-                  placeholder="e.g. 45000"
                   value={basicSalary}
                   onChange={(e) => setBasicSalary(e.target.value)}
                   disabled={submittingGrade}
@@ -334,7 +332,6 @@ const AdminStaffSalaryPage = () => {
                   type="number"
                   step="0.01"
                   required
-                  placeholder="e.g. 6000"
                   value={allowance}
                   onChange={(e) => setAllowance(e.target.value)}
                   disabled={submittingGrade}

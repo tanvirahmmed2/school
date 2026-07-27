@@ -217,7 +217,6 @@ export default function AuthorityQualificationsPage() {
                       name="degree"
                       value={formData.degree}
                       onChange={handleInputChange}
-                      placeholder="e.g. Master of Business Administration (MBA)"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
@@ -231,7 +230,6 @@ export default function AuthorityQualificationsPage() {
                       name="institution"
                       value={formData.institution}
                       onChange={handleInputChange}
-                      placeholder="e.g. Harvard University"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
@@ -245,7 +243,6 @@ export default function AuthorityQualificationsPage() {
                       name="passing_year"
                       value={formData.passing_year}
                       onChange={handleInputChange}
-                      placeholder="e.g. 2018"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
@@ -259,7 +256,6 @@ export default function AuthorityQualificationsPage() {
                       name="result"
                       value={formData.result}
                       onChange={handleInputChange}
-                      placeholder="e.g. GPA 3.92 / First Class"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                     />
                   </div>

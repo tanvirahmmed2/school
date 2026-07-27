@@ -138,7 +138,6 @@ const EditCollaborationPage = () => {
                 name="institution_name"
                 value={formData.institution_name}
                 onChange={handleChange}
-                placeholder="e.g. MIT Media Lab"
                 className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
@@ -169,7 +168,6 @@ const EditCollaborationPage = () => {
               <TiptapEditor
                 value={formData.description}
                 onChange={(val) => setFormData(prev => ({ ...prev, description: val }))}
-                placeholder="Brief description about the collaboration, programs, or research areas..."
               />
             </div>
           </div>

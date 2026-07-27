@@ -156,7 +156,6 @@ const AdminClubsNewPage = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Debating Society"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={submitting}
@@ -170,7 +169,6 @@ const AdminClubsNewPage = () => {
               </label>
               <input
                 type="text"
-                placeholder="e.g. Innovate, Empower, Lead"
                 value={motto}
                 onChange={(e) => setMotto(e.target.value)}
                 disabled={submitting}
@@ -185,7 +183,6 @@ const AdminClubsNewPage = () => {
               <TiptapEditor
                 value={description}
                 onChange={setDescription}
-                placeholder="Brief description of the club's objectives..."
               />
             </div>
 

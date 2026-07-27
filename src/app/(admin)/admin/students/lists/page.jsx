@@ -311,7 +311,6 @@ const AdminStudentListsPage = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. STU99220"
                 value={preRegNo}
                 onChange={(e) => setPreRegNo(e.target.value)}
                 disabled={submitting}
@@ -364,7 +363,6 @@ const AdminStudentListsPage = () => {
               </label>
               <input
                 type="number"
-                placeholder="e.g. 1"
                 value={preRoll}
                 onChange={(e) => setPreRoll(e.target.value)}
                 disabled={submitting}
@@ -418,7 +416,6 @@ const AdminStudentListsPage = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. John Doe"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   disabled={submitting}
@@ -432,7 +429,6 @@ const AdminStudentListsPage = () => {
                 </label>
                 <input
                   type="email"
-                  placeholder="name@school.com"
                   value={editEmail}
                   onChange={(e) => setEditEmail(e.target.value)}
                   disabled={submitting}
@@ -528,7 +524,6 @@ const AdminStudentListsPage = () => {
                 </label>
                 <input
                   type="number"
-                  placeholder="e.g. 1"
                   value={editRoll}
                   onChange={(e) => setEditRoll(e.target.value)}
                   disabled={submitting}

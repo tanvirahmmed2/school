@@ -114,7 +114,6 @@ const ClassEditForm = ({ cls, onSuccess, onCancel }) => {
           <TiptapEditor
             value={description}
             onChange={setDescription}
-            placeholder="Brief overview or description of this class..."
           />
         </div>
 

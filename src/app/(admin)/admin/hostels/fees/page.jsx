@@ -197,7 +197,6 @@ const AdminHostelFeesPage = () => {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="e.g. REG-10293"
                   value={searchRegNo}
                   onChange={(e) => setSearchRegNo(e.target.value)}
                   className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-rose-500"
@@ -248,7 +247,6 @@ const AdminHostelFeesPage = () => {
                 required
                 min="0"
                 step="0.01"
-                placeholder="e.g. 150.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 disabled={submitting}
@@ -265,7 +263,6 @@ const AdminHostelFeesPage = () => {
                 required
                 min="0"
                 step="0.01"
-                placeholder="e.g. 0.00"
                 value={paidAmount}
                 onChange={(e) => setPaidAmount(e.target.value)}
                 disabled={submitting}

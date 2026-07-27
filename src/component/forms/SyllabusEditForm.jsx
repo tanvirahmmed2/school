@@ -144,7 +144,6 @@ const SyllabusEditForm = ({ syllabus, onSuccess, onCancel }) => {
             <input
               type="text"
               required
-              placeholder="e.g. Grade 10 Math Term 1 Syllabus"
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={submitting}
@@ -160,7 +159,6 @@ const SyllabusEditForm = ({ syllabus, onSuccess, onCancel }) => {
             <input
               type="text"
               required
-              placeholder="e.g. First Term 2026"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               disabled={submitting}
@@ -177,7 +175,6 @@ const SyllabusEditForm = ({ syllabus, onSuccess, onCancel }) => {
           <input
             type="url"
             required
-            placeholder="e.g. https://example.com/syllabus/grade10-math.pdf"
             value={link}
             onChange={(e) => setLink(e.target.value)}
             disabled={submitting}

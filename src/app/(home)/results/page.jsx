@@ -34,7 +34,6 @@ const ResultsPortalPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Student Roll ID</label>
                   <input
                     type="text"
-                    placeholder="e.g. STU-10254"
                     className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 </div>
@@ -42,7 +41,6 @@ const ResultsPortalPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Exam Term / Session</label>
                   <input
                     type="text"
-                    placeholder="e.g. Spring 2026"
                     className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 </div>

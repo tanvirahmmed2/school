@@ -61,7 +61,6 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Tanvir Ahmed"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
@@ -76,7 +75,6 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="email"
             required
-            placeholder="e.g. tanvir@school.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={submitting}
@@ -91,7 +89,6 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. +880 180 500 0388"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             disabled={submitting}
@@ -106,7 +103,6 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="password"
             required
-            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={submitting}
@@ -121,7 +117,6 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
           <textarea
             required
             rows={2}
-            placeholder="e.g. Dhaka 1200, Bangladesh"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             disabled={submitting}

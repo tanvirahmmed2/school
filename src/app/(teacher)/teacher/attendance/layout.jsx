@@ -1,8 +1,12 @@
+import { SCHOOL_NAME } from '@/lib/secret';
+
+const shortName = SCHOOL_NAME.split(" ").map((w) => w[0]).join('');
+
 export const metadata = {
-  title: 'Attendance Registry - Teacher Portal',
-  description: 'Log daily student attendance sheets by class level and date.'
+  title: `Teacher - Attendance | ${shortName} Campus`,
+  description: `Explore Teacher - Attendance page at ${SCHOOL_NAME} (${shortName}).`,
 };
 
 export default function AttendanceLayout({ children }) {
-  return children;
+  return <>{children}</>;
 }

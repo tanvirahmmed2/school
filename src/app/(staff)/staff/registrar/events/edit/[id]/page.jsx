@@ -135,7 +135,6 @@ const RegistrarEditEventPage = () => {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Annual Cultural & Tech Fest 2026"
                 className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
@@ -162,7 +161,6 @@ const RegistrarEditEventPage = () => {
                   required
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="e.g. Campus Central Auditorium"
                   className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>
@@ -177,7 +175,6 @@ const RegistrarEditEventPage = () => {
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Write a comprehensive description of the event..."
                 className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>

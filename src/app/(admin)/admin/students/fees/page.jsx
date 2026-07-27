@@ -326,7 +326,6 @@ const AdminStudentFeesPage = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Tuition Fee January 2026"
                 value={invTitle}
                 onChange={(e) => setInvTitle(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
@@ -339,7 +338,6 @@ const AdminStudentFeesPage = () => {
                 type="number"
                 step="0.01"
                 required
-                placeholder="e.g. 150.00"
                 value={invAmount}
                 onChange={(e) => setInvAmount(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
@@ -427,7 +425,6 @@ const AdminStudentFeesPage = () => {
                 type="number"
                 step="0.01"
                 required
-                placeholder="e.g. 50.00"
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-909 outline-none focus:bg-white focus:border-primary"
@@ -468,7 +465,6 @@ const AdminStudentFeesPage = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Late Library Return Fine"
                 value={fineTitle}
                 onChange={(e) => setFineTitle(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"
@@ -481,7 +477,6 @@ const AdminStudentFeesPage = () => {
                 type="number"
                 step="0.01"
                 required
-                placeholder="e.g. 10.00"
                 value={fineAmount}
                 onChange={(e) => setFineAmount(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none focus:bg-white focus:border-primary"

@@ -256,7 +256,6 @@ const AdminHostelsPage = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Shahidullah Hall"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={submittingHostel}
@@ -271,7 +270,6 @@ const AdminHostelsPage = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. West Campus Sector 4"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   disabled={submittingHostel}
@@ -285,7 +283,6 @@ const AdminHostelsPage = () => {
                 </label>
                 <input
                   type="number"
-                  placeholder="e.g. 100"
                   value={totalRoom}
                   onChange={(e) => setTotalRoom(e.target.value)}
                   disabled={submittingHostel}
@@ -315,7 +312,6 @@ const AdminHostelsPage = () => {
                 <TiptapEditor
                   value={description}
                   onChange={(val) => setDescription(val)}
-                  placeholder="Details about building facilities..."
                 />
               </div>
 

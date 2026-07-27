@@ -55,7 +55,6 @@ const SubjectCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Mathematics"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
@@ -70,7 +69,6 @@ const SubjectCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. M101"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             disabled={submitting}

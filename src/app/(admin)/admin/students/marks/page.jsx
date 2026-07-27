@@ -245,7 +245,6 @@ const StudentMarksPage = () => {
                           min="0"
                           max={item.total_marks}
                           required
-                          placeholder="0.00"
                           value={item.marks_obtained}
                           onChange={(e) => handleMarkChange(item.student_id, 'marks_obtained', e.target.value)}
                           className="w-28 px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
@@ -265,7 +264,6 @@ const StudentMarksPage = () => {
                       <td className="px-6 py-2">
                         <input
                           type="text"
-                          placeholder="remarks (optional)"
                           value={item.remarks}
                           onChange={(e) => handleMarkChange(item.student_id, 'remarks', e.target.value)}
                           className="w-full max-w-xs px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"

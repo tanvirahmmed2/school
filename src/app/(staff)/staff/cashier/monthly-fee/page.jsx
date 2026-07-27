@@ -280,7 +280,6 @@ const CashierMonthlyFeePage = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Monthly Tuition Fee - July 2026"
                 value={invTitle}
                 onChange={(e) => setInvTitle(e.target.value)}
                 disabled={submitting}
@@ -293,7 +292,6 @@ const CashierMonthlyFeePage = () => {
               <input
                 type="number"
                 required
-                placeholder="e.g. 1500"
                 value={invAmount}
                 onChange={(e) => setInvAmount(e.target.value)}
                 disabled={submitting}
@@ -382,7 +380,6 @@ const CashierMonthlyFeePage = () => {
                 step="0.01"
                 required
                 max={(parseFloat(recordingPaymentFee.amount) - parseFloat(recordingPaymentFee.paid_amount)).toFixed(2)}
-                placeholder="e.g. 1500"
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -411,7 +408,6 @@ const CashierMonthlyFeePage = () => {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction ID</label>
               <input
                 type="text"
-                placeholder="e.g. BKX928S"
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -422,7 +418,6 @@ const CashierMonthlyFeePage = () => {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</label>
               <input
                 type="text"
-                placeholder="e.g. Cleared via counter"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -456,7 +451,6 @@ const CashierMonthlyFeePage = () => {
           <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
           <input
             type="text"
-            placeholder="Search by student name, registration number, or fee invoice title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-primary"

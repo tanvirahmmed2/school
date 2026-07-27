@@ -48,7 +48,6 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
         <input
           type="text"
           required
-          placeholder="e.g. Revised Midterm Exam Routine 2026"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -60,7 +59,6 @@ const NoticeCreateForm = ({ onSuccess, onCancel }) => {
         <input
           type="url"
           required
-          placeholder="e.g. https://drive.google.com/..."
           value={link}
           onChange={(e) => setLink(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"

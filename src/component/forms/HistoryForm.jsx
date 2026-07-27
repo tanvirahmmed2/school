@@ -121,7 +121,6 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Foundation & Digital Transformation"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={submitting}
@@ -138,7 +137,6 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
         <TiptapEditor
           value={description}
           onChange={setDescription}
-          placeholder="Provide detailed information about this historical milestone..."
         />
       </div>
 
@@ -149,7 +147,6 @@ const HistoryForm = ({ initialData, onSuccess, onCancel, onDelete }) => {
         </label>
         <textarea
           rows={3}
-          placeholder="e.g. Initial cohort: 100 students | 5 departments launched..."
           value={infor}
           onChange={(e) => setInfor(e.target.value)}
           disabled={submitting}

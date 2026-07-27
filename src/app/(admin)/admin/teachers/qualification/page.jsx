@@ -214,7 +214,6 @@ export default function AdminTeacherQualificationsPage() {
                       name="degree"
                       value={formData.degree}
                       onChange={handleInputChange}
-                      placeholder="e.g. Master of Science in Computer Science (MSCS)"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
@@ -228,7 +227,6 @@ export default function AdminTeacherQualificationsPage() {
                       name="institution"
                       value={formData.institution}
                       onChange={handleInputChange}
-                      placeholder="e.g. Stanford University"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
@@ -242,7 +240,6 @@ export default function AdminTeacherQualificationsPage() {
                       name="passing_year"
                       value={formData.passing_year}
                       onChange={handleInputChange}
-                      placeholder="e.g. 2020"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                       required
                     />
@@ -256,7 +253,6 @@ export default function AdminTeacherQualificationsPage() {
                       name="result"
                       value={formData.result}
                       onChange={handleInputChange}
-                      placeholder="e.g. GPA 3.95 / Summa Cum Laude"
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
                     />
                   </div>

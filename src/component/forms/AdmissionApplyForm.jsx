@@ -117,7 +117,6 @@ const AdmissionApplyForm = ({
             <input
               type="text"
               required
-              placeholder="e.g. Jane Doe"
               value={form.applicant_name}
               onChange={(e) => setForm((p) => ({ ...p, applicant_name: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -144,7 +143,6 @@ const AdmissionApplyForm = ({
             <input
               type="text"
               required
-              placeholder="Birth Certificate Number"
               value={form.birth_regi_number}
               onChange={(e) => setForm((p) => ({ ...p, birth_regi_number: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -171,7 +169,6 @@ const AdmissionApplyForm = ({
             <input
               type="email"
               required
-              placeholder="candidate@example.com"
               value={form.email}
               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -185,7 +182,6 @@ const AdmissionApplyForm = ({
             <input
               type="tel"
               required
-              placeholder="+1 (555) 000-0000"
               value={form.phone}
               onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -200,7 +196,6 @@ const AdmissionApplyForm = ({
             </label>
             <input
               type="text"
-              placeholder="e.g. Fontana Elementary School"
               value={form.previous_school}
               onChange={(e) => setForm((p) => ({ ...p, previous_school: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -214,7 +209,6 @@ const AdmissionApplyForm = ({
             <textarea
               rows={2}
               required
-              placeholder="House no, Street Name, City, Zip Code"
               value={form.address}
               onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary resize-none"
@@ -223,7 +217,6 @@ const AdmissionApplyForm = ({
         </div>
       </div>
 
-      {/* Guardian Section */}
       <div className="border-t border-slate-50 pt-4 mt-2">
         <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">2. Parent / Guardian Details</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -234,7 +227,6 @@ const AdmissionApplyForm = ({
             <input
               type="text"
               required
-              placeholder="Guardian full name"
               value={form.guardian_name}
               onChange={(e) => setForm((p) => ({ ...p, guardian_name: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -248,7 +240,6 @@ const AdmissionApplyForm = ({
             <input
               type="tel"
               required
-              placeholder="Guardian contact phone number"
               value={form.guardian_phone}
               onChange={(e) => setForm((p) => ({ ...p, guardian_phone: e.target.value }))}
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"

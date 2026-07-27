@@ -29,9 +29,7 @@ const ClassesPage = () => {
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            Academic Programs
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Our Academic Classes
           </h1>

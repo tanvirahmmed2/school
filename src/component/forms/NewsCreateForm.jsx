@@ -65,7 +65,6 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. FIT Annual Convocation 2026"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -76,7 +75,6 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
           <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">SEO URL Slug (Optional)</label>
           <input
             type="text"
-            placeholder="e.g. annual-convocation-2026"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -99,7 +97,6 @@ const NewsCreateForm = ({ onSuccess, onCancel }) => {
         <textarea
           required
           rows={8}
-          placeholder="Write the complete news article details here..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"

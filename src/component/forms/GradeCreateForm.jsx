@@ -74,7 +74,6 @@ const GradeCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. A+"
             maxLength={5}
             value={letterGrade}
             onChange={(e) => setLetterGrade(e.target.value)}
@@ -93,7 +92,6 @@ const GradeCreateForm = ({ onSuccess, onCancel }) => {
             step="0.01"
             min="0"
             max="100"
-            placeholder="e.g. 80.00"
             value={minMark}
             onChange={(e) => setMinMark(e.target.value)}
             disabled={submitting}
@@ -111,7 +109,6 @@ const GradeCreateForm = ({ onSuccess, onCancel }) => {
             step="0.01"
             min="0"
             max="100"
-            placeholder="e.g. 100.00"
             value={maxMark}
             onChange={(e) => setMaxMark(e.target.value)}
             disabled={submitting}

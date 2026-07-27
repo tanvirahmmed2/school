@@ -53,7 +53,6 @@ const AdminLoginForm = () => {
         <input
           type="email"
           required
-          placeholder="admin@school.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
@@ -76,7 +75,6 @@ const AdminLoginForm = () => {
         <input
           type="password"
           required
-          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={loading}

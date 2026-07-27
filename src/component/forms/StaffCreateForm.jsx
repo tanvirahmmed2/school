@@ -94,7 +94,6 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Michael Smith"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
@@ -108,7 +107,6 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="email"
             required
-            placeholder="e.g. michael.smith@school.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
@@ -122,7 +120,6 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="tel"
             required
-            placeholder="e.g. 555-0150"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"

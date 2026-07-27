@@ -1,8 +1,12 @@
+import { SCHOOL_NAME } from '@/lib/secret';
+
+const shortName = SCHOOL_NAME.split(" ").map((w) => w[0]).join('');
+
 export const metadata = {
-  title: 'Lesson Planner - Teacher Portal',
-  description: 'Structure your curriculum plans, execution dates, and learning outcomes.'
+  title: `Teacher - Lessons | ${shortName} Campus`,
+  description: `Explore Teacher - Lessons page at ${SCHOOL_NAME} (${shortName}).`,
 };
 
 export default function LessonsLayout({ children }) {
-  return children;
+  return <>{children}</>;
 }

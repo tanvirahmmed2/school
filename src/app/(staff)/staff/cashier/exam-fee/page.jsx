@@ -183,7 +183,6 @@ const CashierExamFeePage = () => {
                 step="0.01"
                 required
                 max={(parseFloat(recordingPaymentFee.amount) - parseFloat(recordingPaymentFee.paid_amount)).toFixed(2)}
-                placeholder="e.g. 500"
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-amber-500"
@@ -212,7 +211,6 @@ const CashierExamFeePage = () => {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction ID</label>
               <input
                 type="text"
-                placeholder="e.g. TXN9201"
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-amber-500"
@@ -223,7 +221,6 @@ const CashierExamFeePage = () => {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</label>
               <input
                 type="text"
-                placeholder="e.g. Direct counter clearance"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-amber-500"
@@ -261,7 +258,6 @@ const CashierExamFeePage = () => {
             <div className="flex flex-col gap-3">
               <input
                 type="text"
-                placeholder="Search exams..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-amber-500"

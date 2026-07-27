@@ -237,7 +237,6 @@ export default function DesignationsManagementPage() {
             <FiSearch className="absolute left-4 text-slate-400 text-base" />
             <input
               type="text"
-              placeholder="Search by designation title, slug, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-11 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -357,7 +356,6 @@ export default function DesignationsManagementPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Executive Director, Principal"
                   value={newTitle}
                   onChange={handleCreateTitleChange}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -372,7 +370,6 @@ export default function DesignationsManagementPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. executive-director"
                   value={newSlug}
                   onChange={handleCreateSlugChange}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -383,7 +380,6 @@ export default function DesignationsManagementPage() {
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Description</label>
                 <textarea
                   rows={3}
-                  placeholder="Brief role description or details..."
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
@@ -445,7 +441,6 @@ export default function DesignationsManagementPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Executive Director"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -459,7 +454,6 @@ export default function DesignationsManagementPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. executive-director"
                   value={editSlug}
                   onChange={(e) => setEditSlug(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -470,7 +464,6 @@ export default function DesignationsManagementPage() {
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Description</label>
                 <textarea
                   rows={3}
-                  placeholder="Brief role description or details..."
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"

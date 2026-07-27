@@ -108,7 +108,6 @@ const StudentRecovery = () => {
                 <input
                   type="email"
                   required
-                  placeholder="name@school.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
@@ -141,7 +140,6 @@ const StudentRecovery = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 123456"
                   maxLength={6}
                   value={token}
                   onChange={(e) => setToken(e.target.value)}
@@ -158,7 +156,6 @@ const StudentRecovery = () => {
                 <input
                   type="password"
                   required
-                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}

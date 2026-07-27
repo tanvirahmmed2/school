@@ -119,7 +119,6 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
                   <TiptapEditor
                     value={formData[field.name] || ''}
                     onChange={(val) => setFormData(prev => ({ ...prev, [field.name]: val }))}
-                    placeholder={field.placeholder}
                   />
                 ) : field.type === 'select' ? (
                   <select
@@ -160,7 +159,6 @@ const AdminForm = ({ title, fields = [], apiEndpoint, onSuccess, onCancel, icon:
                     name={field.name}
                     value={formData[field.name] || ''}
                     onChange={handleChange}
-                    placeholder={field.placeholder}
                     className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
                   />
                 )}

@@ -142,7 +142,6 @@ const EditRecognitionPage = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="e.g. Best Student of the Year"
                 className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
@@ -157,7 +156,6 @@ const EditRecognitionPage = () => {
                 name="awarded_by"
                 value={formData.awarded_by}
                 onChange={handleChange}
-                placeholder="e.g. National Education Board"
                 className="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none transition-colors"
               />
             </div>
@@ -202,7 +200,6 @@ const EditRecognitionPage = () => {
               <TiptapEditor
                 value={formData.description}
                 onChange={(val) => setFormData(prev => ({ ...prev, description: val }))}
-                placeholder="Brief description about this recognition or award..."
               />
             </div>
           </div>

@@ -66,7 +66,6 @@ const VerifyStudentPage = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 2026-9001"
                   value={regNumber}
                   onChange={(e) => setRegNumber(e.target.value)}
                   className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-semibold outline-none focus:bg-white focus:border-primary transition-all text-slate-700"

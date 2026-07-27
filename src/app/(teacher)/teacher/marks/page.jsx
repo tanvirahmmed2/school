@@ -279,7 +279,6 @@ const MarksEntryPage = () => {
                         min="0"
                         value={s.marks_obtained !== null && s.marks_obtained !== undefined ? s.marks_obtained : ''}
                         onChange={(e) => handleMarkChange(s.student_id, e.target.value)}
-                        placeholder="e.g. 85"
                         className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-700 outline-none focus:border-primary transition-colors"
                       />
                     </td>
@@ -289,7 +288,6 @@ const MarksEntryPage = () => {
                         min="0"
                         value={s.total_marks !== null && s.total_marks !== undefined ? s.total_marks : 100}
                         onChange={(e) => handleTotalMarkChange(s.student_id, e.target.value)}
-                        placeholder="e.g. 100"
                         className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-400 outline-none focus:border-primary transition-colors"
                       />
                     </td>
@@ -298,7 +296,6 @@ const MarksEntryPage = () => {
                         type="text"
                         value={s.remarks || ''}
                         onChange={(e) => handleRemarksChange(s.student_id, e.target.value)}
-                        placeholder="e.g. Excellent work"
                         className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                       />
                     </td>

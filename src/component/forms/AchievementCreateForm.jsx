@@ -63,7 +63,6 @@ const AchievementCreateForm = ({ onSuccess, onCancel }) => {
         <input
           type="text"
           required
-          placeholder="e.g. Champion in National Mathematics Olympiad 2026"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -85,7 +84,6 @@ const AchievementCreateForm = ({ onSuccess, onCancel }) => {
         <textarea
           required
           rows={8}
-          placeholder="Write summary explanation of the achievements and award recipients..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"

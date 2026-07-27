@@ -195,7 +195,6 @@ const TeacherClubNewsPage = () => {
               <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">News Title *</label>
               <input
                 type="text"
-                placeholder="Enter article title..."
                 value={newsTitle}
                 onChange={(e) => setNewsTitle(e.target.value)}
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:bg-white"
@@ -206,7 +205,6 @@ const TeacherClubNewsPage = () => {
               <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Content Body *</label>
               <textarea
                 rows={6}
-                placeholder="Write news content, achievement details, or event updates..."
                 value={newsContent}
                 onChange={(e) => setNewsContent(e.target.value)}
                 className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none resize-none focus:bg-white leading-relaxed"

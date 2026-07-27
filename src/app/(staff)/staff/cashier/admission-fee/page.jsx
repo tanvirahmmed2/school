@@ -265,7 +265,6 @@ const AdmissionFeeDesk = () => {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction ID</label>
               <input
                 type="text"
-                placeholder="e.g. TXN9201"
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -276,7 +275,6 @@ const AdmissionFeeDesk = () => {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</label>
               <input
                 type="text"
-                placeholder="e.g. Admission Desk receipt"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -310,7 +308,6 @@ const AdmissionFeeDesk = () => {
           <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
           <input
             type="text"
-            placeholder="Search by candidate name, email, or phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-primary"

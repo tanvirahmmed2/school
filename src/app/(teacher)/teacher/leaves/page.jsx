@@ -174,7 +174,6 @@ const LeavesPage = () => {
                 <TiptapEditor
                   value={reason}
                   onChange={(val) => setReason(val)}
-                  placeholder="Describe details/reasons..."
                 />
               </div>
 

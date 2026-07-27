@@ -62,7 +62,6 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. Class 10"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
@@ -77,7 +76,6 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="number"
             required
-            placeholder="e.g. 10"
             value={numericName}
             onChange={(e) => setNumericName(e.target.value)}
             disabled={submitting}
@@ -92,7 +90,6 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. C10"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             disabled={submitting}
@@ -107,7 +104,6 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           <input
             type="number"
             required
-            placeholder="e.g. 40"
             value={maxSeats}
             onChange={(e) => setMaxSeats(e.target.value)}
             disabled={submitting}
@@ -123,7 +119,6 @@ const ClassCreateForm = ({ onSuccess, onCancel }) => {
           <TiptapEditor
             value={description}
             onChange={setDescription}
-            placeholder="Brief overview or description of this class..."
           />
         </div>
 

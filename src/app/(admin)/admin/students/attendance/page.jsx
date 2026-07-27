@@ -370,7 +370,6 @@ const AdminStudentAttendancePage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <input
                           type="text"
-                          placeholder="Add remark notes..."
                           value={std.remarks}
                           onChange={(e) => handleRemarksChange(std.student_id, e.target.value)}
                           className="w-full max-w-72 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 outline-none focus:bg-white focus:border-primary transition-colors"

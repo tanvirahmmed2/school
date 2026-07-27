@@ -155,7 +155,6 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
             <input
               type="text"
               required
-              placeholder="e.g. Midterm Evaluation Exam - 2026"
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={loading}
@@ -169,7 +168,6 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
             </label>
             <input
               type="text"
-              placeholder="e.g. First Term"
               value={term}
               onChange={(e) => setTerm(e.target.value)}
               disabled={loading}
@@ -221,7 +219,6 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
               type="number"
               min="0"
               required
-              placeholder="e.g. 500"
               value={examFee}
               onChange={(e) => setExamFee(e.target.value)}
               disabled={loading}
@@ -337,7 +334,6 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
                     <input
                       type="text"
                       required
-                      placeholder="10:00 AM"
                       value={schedule.start_time}
                       onChange={(e) => handleScheduleChange(index, 'start_time', e.target.value)}
                       className="w-full px-2.5 py-2 bg-white border border-slate-200 rounded-lg text-xs outline-none"
@@ -351,7 +347,6 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
                     <input
                       type="text"
                       required
-                      placeholder="01:00 PM"
                       value={schedule.end_time}
                       onChange={(e) => handleScheduleChange(index, 'end_time', e.target.value)}
                       className="w-full px-2.5 py-2 bg-white border border-slate-200 rounded-lg text-xs outline-none"
@@ -365,7 +360,6 @@ const ExamCreateForm = ({ examId, onSuccess, onCancel }) => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Room 101"
                       value={schedule.room_number}
                       onChange={(e) => handleScheduleChange(index, 'room_number', e.target.value)}
                       className="w-full px-2.5 py-2 bg-white border border-slate-200 rounded-lg text-xs outline-none"

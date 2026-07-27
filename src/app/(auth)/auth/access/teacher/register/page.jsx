@@ -127,7 +127,6 @@ const TeacherRegistration = () => {
                 <input
                   type="email"
                   required
-                  placeholder="teacher@school.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
@@ -180,7 +179,6 @@ const TeacherRegistration = () => {
                 <textarea
                   required
                   rows={2}
-                  placeholder="e.g. House 12, Road 2, Sector 3, Uttara, Dhaka"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   disabled={loading}
@@ -196,7 +194,6 @@ const TeacherRegistration = () => {
                 <input
                   type="password"
                   required
-                  placeholder="Minimum 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}

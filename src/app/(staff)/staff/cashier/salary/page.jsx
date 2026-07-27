@@ -150,7 +150,6 @@ const CashierPayrollPage = () => {
           <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
           <input
             type="text"
-            placeholder={`Search by ${activeTab} name or month...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-primary"

@@ -92,7 +92,6 @@ const PublicPaymentsPage = () => {
             <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
             <input
               type="text"
-              placeholder="Enter Registration Number (e.g. REG-1720886)"
               value={regNo}
               onChange={(e) => setRegNo(e.target.value)}
               className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"

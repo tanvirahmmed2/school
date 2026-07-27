@@ -64,7 +64,6 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
         <input
           type="text"
           required
-          placeholder="e.g. Session 2026-27 Intake"
           value={form.title}
           onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
           className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -91,7 +90,6 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Min Age (Yrs)</label>
           <input
             type="number"
-            placeholder="e.g. 5"
             value={form.min_age}
             onChange={(e) => setForm((p) => ({ ...p, min_age: e.target.value }))}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -102,7 +100,6 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Max Age (Yrs)</label>
           <input
             type="number"
-            placeholder="e.g. 8"
             value={form.max_age}
             onChange={(e) => setForm((p) => ({ ...p, max_age: e.target.value }))}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -114,7 +111,6 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Birth Registration Code requirement</label>
         <input
           type="text"
-          placeholder="e.g. BR-DRIVE-2026"
           value={form.birth_regi_number}
           onChange={(e) => setForm((p) => ({ ...p, birth_regi_number: e.target.value }))}
           className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -161,7 +157,6 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
           type="number"
           step="0.01"
           required
-          placeholder="e.g. 100.00"
           value={form.fees}
           onChange={(e) => setForm((p) => ({ ...p, fees: e.target.value }))}
           className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -173,7 +168,6 @@ const AdmissionCircularForm = ({ initialData, onSubmit, onCancel, classes, submi
         <TiptapEditor
           value={form.description}
           onChange={(val) => setForm((p) => ({ ...p, description: val }))}
-          placeholder="Write details about requirements, syllabus, exam details, etc..."
         />
       </div>
 

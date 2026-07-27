@@ -166,7 +166,6 @@ const AdminHostelRoomsPage = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Block A-102"
                 value={roomNumber}
                 onChange={(e) => setRoomNumber(e.target.value)}
                 disabled={submitting}
@@ -202,7 +201,6 @@ const AdminHostelRoomsPage = () => {
                 required
                 min="1"
                 max="10"
-                placeholder="e.g. 2"
                 value={capacity}
                 onChange={(e) => setCapacity(e.target.value)}
                 disabled={submitting}

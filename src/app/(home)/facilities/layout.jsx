@@ -1,6 +1,10 @@
+import { SCHOOL_NAME } from '@/lib/secret';
+
+const shortName = SCHOOL_NAME.split(" ").map((w) => w[0]).join('');
+
 export const metadata = {
-  title: "Facilities | FIT Campus",
-  description: "Explore classrooms, lab facilities, and hostel accommodations at Fontana Institute of Technology (FIT).",
+  title: `Facilities | ${shortName} Campus`,
+  description: `Explore classrooms, lab facilities, and hostel accommodations at ${SCHOOL_NAME} (${shortName}).`,
 };
 
 export default function FacilitiesLayout({ children }) {

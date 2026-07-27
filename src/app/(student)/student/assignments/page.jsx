@@ -229,7 +229,6 @@ const StudentAssignmentsPageContent = () => {
                   rows={4}
                   value={formData.submission_text}
                   onChange={(e) => setFormData({ ...formData, submission_text: e.target.value })}
-                  placeholder="Type your notes, solution summary, or explanations here..."
                   className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary resize-none"
                 />
               </div>
@@ -240,7 +239,6 @@ const StudentAssignmentsPageContent = () => {
                   type="url"
                   value={formData.file_url}
                   onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
-                  placeholder="e.g. https://drive.google.com/your-submission-file"
                   className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
                 />
               </div>

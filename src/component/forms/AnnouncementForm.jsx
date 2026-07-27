@@ -58,7 +58,6 @@ const AnnouncementForm = ({ initialData, onSubmit, onDelete, submitting }) => {
         <input
           type="text"
           required
-          placeholder="e.g. Admissions Open for Session 2026-27"
           value={name}
           onChange={(e) => setName(e.target.value)}
           disabled={submitting}
@@ -87,7 +86,6 @@ const AnnouncementForm = ({ initialData, onSubmit, onDelete, submitting }) => {
           </label>
           <input
             type="text"
-            placeholder="e.g. Main Office / Campus Auditorium"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             disabled={submitting}
@@ -103,7 +101,6 @@ const AnnouncementForm = ({ initialData, onSubmit, onDelete, submitting }) => {
         <TiptapEditor
           value={description}
           onChange={setDescription}
-          placeholder="Details of the announcement, links, registration criteria..."
         />
       </div>
 

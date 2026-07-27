@@ -149,7 +149,6 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
           <input
             type="text"
             required
-            placeholder="e.g. 2026"
             value={academicYear}
             onChange={(e) => setAcademicYear(e.target.value)}
             disabled={submitting}

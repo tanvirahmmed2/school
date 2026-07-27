@@ -129,7 +129,6 @@ const TeacherClubNoticePage = () => {
               rows={8}
               value={noticeText}
               onChange={(e) => setNoticeText(e.target.value)}
-              placeholder="Enter notice announcements, meeting schedules, or instructions for club members..."
               className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none resize-none font-normal leading-relaxed focus:bg-white focus:border-slate-400"
             />
           </div>

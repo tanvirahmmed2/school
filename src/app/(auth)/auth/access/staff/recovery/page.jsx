@@ -108,7 +108,6 @@ const RecoveryInner = () => {
           <input
             type="password"
             required
-            placeholder="Minimum 6 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
@@ -123,7 +122,6 @@ const RecoveryInner = () => {
           <input
             type="password"
             required
-            placeholder="Re-enter your password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={loading}
@@ -159,7 +157,6 @@ const RecoveryInner = () => {
         <input
           type="email"
           required
-          placeholder="staff@school.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}

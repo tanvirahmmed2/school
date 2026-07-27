@@ -117,7 +117,6 @@ const AdminRecovery = () => {
                   <input
                     type="email"
                     required
-                    placeholder="admin@school.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
@@ -173,7 +172,6 @@ const AdminRecovery = () => {
                     type="text"
                     required
                     maxLength={6}
-                    placeholder="Enter 6-digit code"
                     value={recoveryToken}
                     onChange={(e) => setRecoveryToken(e.target.value)}
                     disabled={loading}
@@ -188,7 +186,6 @@ const AdminRecovery = () => {
                   <input
                     type="password"
                     required
-                    placeholder="••••••••"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     disabled={loading}
@@ -203,7 +200,6 @@ const AdminRecovery = () => {
                   <input
                     type="password"
                     required
-                    placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={loading}

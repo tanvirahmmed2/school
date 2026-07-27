@@ -72,7 +72,6 @@ const GenericForm = ({
                 <textarea
                   required={required}
                   rows={rows}
-                  placeholder={placeholder}
                   value={values[name] || ''}
                   onChange={(e) => onChange(name, e.target.value)}
                   disabled={submitting}
@@ -82,7 +81,6 @@ const GenericForm = ({
                 <input
                   type={type}
                   required={required}
-                  placeholder={placeholder}
                   value={values[name] || ''}
                   onChange={(e) => onChange(name, e.target.value)}
                   disabled={submitting}

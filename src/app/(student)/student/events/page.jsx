@@ -87,7 +87,6 @@ const StudentEventsPage = () => {
           <FiSearch className="text-slate-400 text-lg" />
           <input
             type="text"
-            placeholder="Search events by title or venue location..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"

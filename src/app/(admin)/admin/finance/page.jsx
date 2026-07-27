@@ -527,7 +527,6 @@ const FinancePage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Title / Payee *</label>
                 <input
                   type="text"
-                  placeholder="e.g. Electricity Bill June"
                   value={expenseForm.title}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, title: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -540,7 +539,6 @@ const FinancePage = () => {
                   <input
                     type="number"
                     step="0.01"
-                    placeholder="120.00"
                     value={expenseForm.amount}
                     onChange={(e) => setExpenseForm((p) => ({ ...p, amount: e.target.value }))}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -562,7 +560,6 @@ const FinancePage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Paid By</label>
                 <input
                   type="text"
-                  placeholder="Admin Office / Accounts Manager"
                   value={expenseForm.paid_by}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, paid_by: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -572,7 +569,6 @@ const FinancePage = () => {
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Notes / Description</label>
                 <textarea
-                  placeholder="Additional context notes..."
                   value={expenseForm.description}
                   onChange={(e) => setExpenseForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2}
@@ -624,7 +620,6 @@ const FinancePage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Title *</label>
                 <input
                   type="text"
-                  placeholder="e.g. Government Grant 2026"
                   value={incomeForm.title}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, title: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -637,7 +632,6 @@ const FinancePage = () => {
                   <input
                     type="number"
                     step="0.01"
-                    placeholder="1200.00"
                     value={incomeForm.amount}
                     onChange={(e) => setIncomeForm((p) => ({ ...p, amount: e.target.value }))}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -659,7 +653,6 @@ const FinancePage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Received By</label>
                 <input
                   type="text"
-                  placeholder="Principal Office"
                   value={incomeForm.received_by}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, received_by: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -669,7 +662,6 @@ const FinancePage = () => {
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Notes / Description</label>
                 <textarea
-                  placeholder="Additional context details..."
                   value={incomeForm.description}
                   onChange={(e) => setIncomeForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2}
@@ -707,7 +699,6 @@ const FinancePage = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Name *</label>
                 <input
                   type="text"
-                  placeholder="e.g. Utility Bills, Donations"
                   value={categoryForm.name}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, name: e.target.value }))}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary"
@@ -729,7 +720,6 @@ const FinancePage = () => {
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Description</label>
                 <textarea
-                  placeholder="Brief description..."
                   value={categoryForm.description}
                   onChange={(e) => setCategoryForm((p) => ({ ...p, description: e.target.value }))}
                   rows={2}

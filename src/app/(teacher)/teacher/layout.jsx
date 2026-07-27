@@ -1,39 +1,8 @@
-import React from 'react'
-import { redirect } from 'next/navigation';
-import { isTeacher } from '@/lib/auth';
-import Navbar from '@/component/bars/teacher/Navbar'
-import Sidebar from '@/component/bars/teacher/Sidebar'
+import { SCHOOL_NAME } from '@/lib/secret';
 
-export const dynamic = 'force-dynamic';
+const shortName = SCHOOL_NAME.split(" ").map((w) => w[0]).join('');
 
 export const metadata = {
-  title: 'Teacher Portal Dashboard - School Management Portal',
-  description: 'Manage assigned class routines, track student attendance, evaluate exams, and view your schedule.'
+  title: `Teacher | ${shortName} Campus`,
+  description: `Explore Teacher page at ${SCHOOL_NAME} (${shortName}).`,
 };
-
-const TeacherLayout = async ({children}) => {
-  const authenticated = await isTeacher();
-
-  if (!authenticated) {
-    redirect('/auth/access/teacher/login');
-  }
-
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      {/* Top Navbar */}
-      <Navbar />
-
-      <div className="flex flex-1 relative pt-16">
-        {/* Left Sidebar */}
-        <Sidebar />
-
-        {/* Main Content Area */}
-        <main className="flex-1 w-full min-w-0 p-4 md:p-8 md:pl-[280px] transition-all duration-200">
-          {children}
-        </main>
-      </div>
-    </div>
-  )
-}
-
-export default TeacherLayout

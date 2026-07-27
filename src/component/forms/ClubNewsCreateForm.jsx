@@ -111,7 +111,6 @@ const ClubNewsCreateForm = ({ onSuccess, onCancel }) => {
         <input
           type="text"
           required
-          placeholder="e.g. Photography Club Exhibition 2026"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
@@ -133,7 +132,6 @@ const ClubNewsCreateForm = ({ onSuccess, onCancel }) => {
         <textarea
           required
           rows={8}
-          placeholder="Describe the club announcement or event summary details..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"

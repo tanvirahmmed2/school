@@ -111,7 +111,6 @@ const MaterialsPageContent = () => {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g. Lecture Slides - Week 1"
                 className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
@@ -122,7 +121,6 @@ const MaterialsPageContent = () => {
                 type="url"
                 value={formData.file_url}
                 onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
-                placeholder="e.g. https://drive.google.com/..."
                 className="w-full px-4 py-3 border border-slate-150 rounded-xl text-sm focus:outline-none focus:border-primary"
               />
             </div>
@@ -132,7 +130,6 @@ const MaterialsPageContent = () => {
               <TiptapEditor
                 value={formData.description}
                 onChange={(val) => setFormData({ ...formData, description: val })}
-                placeholder="Short description of this material..."
               />
             </div>
 

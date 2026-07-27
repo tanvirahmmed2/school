@@ -140,7 +140,6 @@ export default function NewAuthorityPage() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="e.g. Dr. Alexander Fontana"
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary font-medium"
                 required
               />
@@ -186,7 +185,6 @@ export default function NewAuthorityPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="e.g. alexander@fontana.edu"
                   className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50 font-medium"
                 />
               </div>
@@ -204,7 +202,6 @@ export default function NewAuthorityPage() {
                   name="contact"
                   value={formData.contact}
                   onChange={handleChange}
-                  placeholder="e.g. +1 (555) 019-2834"
                   className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50 font-medium"
                 />
               </div>
@@ -224,7 +221,6 @@ export default function NewAuthorityPage() {
               value={formData.bio}
               onChange={handleChange}
               rows={4}
-              placeholder="Provide a brief overview of professional accolades, governance history, or board experience..."
               className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary resize-none font-medium leading-relaxed"
             />
           </div>

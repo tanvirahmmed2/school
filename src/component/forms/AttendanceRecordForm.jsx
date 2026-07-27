@@ -417,7 +417,6 @@ const AttendanceRecordForm = () => {
                         type="text"
                         value={student.remarks || ''}
                         onChange={(e) => handleRemarksChange(student.student_id, e.target.value)}
-                        placeholder="Optional note..."
                         className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
                       />
                     </td>

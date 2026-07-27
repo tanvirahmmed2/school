@@ -66,7 +66,6 @@ const StudentLogin = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. REG12345"
                 value={regNo}
                 onChange={(e) => setRegNo(e.target.value)}
                 disabled={loading}
@@ -90,7 +89,6 @@ const StudentLogin = () => {
               <input
                 type="password"
                 required
-                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}

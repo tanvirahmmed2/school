@@ -146,7 +146,6 @@ const StaffLeavesPage = () => {
                 Reason Details
               </label>
               <textarea
-                placeholder="Describe your reason for leave application..."
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={4}

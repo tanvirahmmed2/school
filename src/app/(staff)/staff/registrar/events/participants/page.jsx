@@ -147,7 +147,6 @@ const RegistrarParticipantsContent = () => {
           <FiSearch className="text-slate-400 text-lg" />
           <input
             type="text"
-            placeholder="Search participant by student name, registration number, or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"

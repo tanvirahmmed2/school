@@ -64,7 +64,6 @@ const TeacherLogin = () => {
               <input
                 type="email"
                 required
-                placeholder="teacher@school.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
@@ -88,7 +87,6 @@ const TeacherLogin = () => {
               <input
                 type="password"
                 required
-                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}

@@ -222,7 +222,6 @@ const VerifyInner = () => {
           <textarea
             required
             rows={2}
-            placeholder="e.g. House 12, Road 2, Uttara, Dhaka"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             disabled={submitting}
@@ -237,7 +236,6 @@ const VerifyInner = () => {
           <input
             type="password"
             required
-            placeholder="Minimum 6 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={submitting}
@@ -252,7 +250,6 @@ const VerifyInner = () => {
           <input
             type="password"
             required
-            placeholder="Re-enter your password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={submitting}

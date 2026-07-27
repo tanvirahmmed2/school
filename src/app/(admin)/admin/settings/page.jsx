@@ -115,7 +115,6 @@ const SettingsPage = () => {
                     name="site_title"
                     value={settings.site_title || ''}
                     onChange={handleChange}
-                    placeholder="e.g. Fontana Institute of Technology"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
@@ -129,7 +128,6 @@ const SettingsPage = () => {
                       name="logo_id"
                       value={settings.logo_id || ''}
                       onChange={handleChange}
-                      placeholder="e.g. logo_brand_v1"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
@@ -153,7 +151,6 @@ const SettingsPage = () => {
                       name="contact_phone"
                       value={settings.contact_phone || ''}
                       onChange={handleChange}
-                      placeholder="+880 180 500 03886"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
@@ -168,7 +165,6 @@ const SettingsPage = () => {
                       name="contact_email"
                       value={settings.contact_email || ''}
                       onChange={handleChange}
-                      placeholder="support@disibin.com"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
@@ -184,7 +180,6 @@ const SettingsPage = () => {
                     rows={3}
                     value={settings.address || ''}
                     onChange={handleChange}
-                    placeholder="Campus Road, Section 4, Dhaka, Bangladesh"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors resize-none"
                   />
                 </div>
@@ -205,7 +200,6 @@ const SettingsPage = () => {
                     name="facebook_url"
                     value={settings.facebook_url || ''}
                     onChange={handleChange}
-                    placeholder="https://facebook.com/your-school"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
@@ -217,7 +211,6 @@ const SettingsPage = () => {
                     name="twitter_url"
                     value={settings.twitter_url || ''}
                     onChange={handleChange}
-                    placeholder="https://twitter.com/your-school"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
@@ -229,7 +222,6 @@ const SettingsPage = () => {
                     name="instagram_url"
                     value={settings.instagram_url || ''}
                     onChange={handleChange}
-                    placeholder="https://instagram.com/your-school"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
@@ -241,7 +233,6 @@ const SettingsPage = () => {
                     name="youtube_url"
                     value={settings.youtube_url || ''}
                     onChange={handleChange}
-                    placeholder="https://youtube.com/c/your-school"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>

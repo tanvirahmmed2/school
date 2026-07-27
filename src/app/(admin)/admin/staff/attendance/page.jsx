@@ -174,7 +174,6 @@ const AdminStaffAttendancePage = () => {
                         <FiClock className="text-slate-400 text-xs" />
                         <input
                           type="text"
-                          placeholder="e.g. 09:00:00"
                           value={item.check_in || ''}
                           onChange={(e) => handleTimeChange(item.staff_id, 'check_in', e.target.value)}
                           className="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white focus:border-primary"
@@ -186,7 +185,6 @@ const AdminStaffAttendancePage = () => {
                         <FiClock className="text-slate-400 text-xs" />
                         <input
                           type="text"
-                          placeholder="e.g. 17:00:00"
                           value={item.check_out || ''}
                           onChange={(e) => handleTimeChange(item.staff_id, 'check_out', e.target.value)}
                           className="w-24 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:bg-white focus:border-primary"
