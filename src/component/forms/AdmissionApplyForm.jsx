@@ -59,9 +59,9 @@ const AdmissionApplyForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      {/* Circular Selection */}
-      <div className="flex flex-col gap-1.5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
+      
+      <div className="flex flex-col gap-1.5 w-full">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
           <FiLayers /> Target Admission Circular *
         </label>
@@ -107,8 +107,7 @@ const AdmissionApplyForm = ({
         )}
       </div>
 
-      {/* Candidate Section */}
-      <div className="border-t border-slate-50 pt-4 mt-2">
+      <div className="border-t border-slate-50 pt-4 mt-2 w-full">
         <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">1. Candidate Details</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">

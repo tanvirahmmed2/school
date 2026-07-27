@@ -93,15 +93,6 @@ const AdmissionPage = () => {
                         </div>
                       )}
                     </div>
-                    {c.description && (
-                      <div className="border-t border-slate-100 pt-2.5 mt-1">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Details & Requirements</p>
-                        <div 
-                          className="prose prose-sm max-w-none text-[11px] text-slate-650 text-slate-650 leading-relaxed font-normal" 
-                          dangerouslySetInnerHTML={{ __html: c.description }} 
-                        />
-                      </div>
-                    )}
                   </div>
 
                   <Link

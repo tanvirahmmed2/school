@@ -3,9 +3,10 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { FiFileText, FiCheckCircle, FiCopy, FiMail, FiDollarSign, FiArrowLeft } from 'react-icons/fi';
+import { FiFileText, FiCheckCircle, FiCopy, FiMail, FiDollarSign, FiArrowLeft, FiLayers, FiClock, FiCalendar, FiEdit3 } from 'react-icons/fi';
 import Link from 'next/link';
 import AdmissionApplyForm from '@/component/forms/AdmissionApplyForm';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const ApplyFormContent = () => {
   const searchParams = useSearchParams();
@@ -17,6 +18,7 @@ const ApplyFormContent = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [receiptData, setReceiptData] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const loadCirculars = async () => {
@@ -127,7 +129,7 @@ const ApplyFormContent = () => {
 
   if (receiptData) {
     return (
-      <div className="w-full max-w-lg mx-auto bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)] text-center animate-scale-up">
+      <div className="w-full bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)] text-center animate-scale-up border border-slate-100">
         <div className="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
           <FiCheckCircle />
         </div>
@@ -143,7 +145,6 @@ const ApplyFormContent = () => {
           A receipt has been dispatched to <strong>{receiptData.email}</strong>.
         </p>
 
-        {/* Receipt Box */}
         <div className="my-6 bg-slate-50 p-5 rounded-2xl border border-slate-150 text-left flex flex-col gap-3">
           <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
             <div>
@@ -166,7 +167,6 @@ const ApplyFormContent = () => {
           </div>
         </div>
 
-        {/* Instructions */}
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-left mb-6">
           <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5 mb-1">
             <FiDollarSign className="text-amber-600" /> Next Step: Visit Cashier Office
@@ -187,26 +187,93 @@ const ApplyFormContent = () => {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-11 h-11 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-xl">
-          <FiFileText />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold text-slate-900 tracking-tight">Admission Registration Form</h2>
-          <p className="text-xs text-slate-400">Fill in the candidate's profile credentials.</p>
-        </div>
-      </div>
+    <div className="w-full flex flex-col gap-6">
+      {/* Detailed Circular Information Card */}
+      {selectedCircular ? (
+        <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-100 pb-5">
+            <div>
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full mb-2">
+                <FiLayers /> Class: {selectedCircular.class_name}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">{selectedCircular.title}</h2>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500 font-semibold mt-3">
+                <div className="flex items-center gap-1.5">
+                  <FiClock className="text-slate-400" />
+                  <span>Deadline: <strong className="text-slate-700">{new Date(selectedCircular.finish_date).toLocaleDateString()}</strong></span>
+                </div>
+                {selectedCircular.min_age !== null || selectedCircular.max_age !== null ? (
+                  <div className="flex items-center gap-1.5">
+                    <FiCalendar className="text-slate-400" />
+                    <span>Age limits: <strong className="text-slate-700">{selectedCircular.min_age || 0} to {selectedCircular.max_age || '∞'} years</strong></span>
+                  </div>
+                ) : null}
+                {selectedCircular.fees !== undefined && selectedCircular.fees !== null && (
+                  <div className="flex items-center gap-1.5 text-primary">
+                    <FiDollarSign className="text-primary" />
+                    <span>Admission Fee: <strong className="text-primary font-bold">BDT {parseFloat(selectedCircular.fees).toFixed(2)}</strong></span>
+                  </div>
+                )}
+              </div>
+            </div>
 
-      <AdmissionApplyForm
-        circulars={circulars}
-        selectedCircular={selectedCircular}
-        onCircularChange={handleCircularChange}
-        onSubmit={handleSubmit}
-        submitting={submitting}
-        admissionIdParam={admissionIdParam}
-        onGoBack={() => router.push('/admission')}
-      />
+            <button
+              onClick={() => setShowForm((prev) => !prev)}
+              className="px-6 py-3 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl transition-all cursor-pointer shadow-sm flex items-center justify-center gap-2 shrink-0 self-start sm:self-auto"
+            >
+              <FiEdit3 className="text-sm" />
+              <span>{showForm ? 'Hide Application Form' : 'Fill Application Form'}</span>
+            </button>
+          </div>
+
+          {selectedCircular.description && (
+            <div>
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Detailed Circular Information &amp; Requirements</h4>
+              <div
+                className="prose prose-sm max-w-none text-xs text-slate-650 leading-relaxed font-normal bg-slate-50/70 p-4 rounded-2xl border border-slate-100"
+                dangerouslySetInnerHTML={{ __html: selectedCircular.description }}
+              />
+            </div>
+          )}
+        </div>
+      ) : null}
+
+      {/* Application Form (Initially hidden when selectedCircular exists, toggled via button) */}
+      {(!selectedCircular || showForm) && (
+        <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)] animate-fade-down">
+          <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-xl">
+                <FiFileText />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900 tracking-tight">Admission Registration Form</h2>
+                <p className="text-xs text-slate-400">Fill in the candidate&apos;s profile credentials.</p>
+              </div>
+            </div>
+
+            {selectedCircular && (
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+              >
+                Hide Form
+              </button>
+            )}
+          </div>
+
+          <AdmissionApplyForm
+            circulars={circulars}
+            selectedCircular={selectedCircular}
+            onCircularChange={handleCircularChange}
+            onSubmit={handleSubmit}
+            submitting={submitting}
+            admissionIdParam={admissionIdParam}
+            onGoBack={() => router.push('/admission')}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -217,7 +284,7 @@ const ApplyPage = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            Fontana Enrollment Portal
+            {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')} Enrollment Portal
           </span>
           <h1 className="text-3xl font-semibold text-slate-900 mt-2 tracking-tight">
             Intake Application Registry
