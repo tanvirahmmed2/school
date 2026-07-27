@@ -39,7 +39,6 @@ const ApplyPage = () => {
             Enroll today at the Fontana Institute of Technology to build technical skillsets guided by expert global faculty.
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {steps.map((step, idx) => {
             const Icon = step.icon;
