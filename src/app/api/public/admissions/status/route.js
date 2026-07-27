@@ -14,36 +14,42 @@ export async function GET(request) {
     let sql = `
       SELECT 
         sa.id AS application_id,
-        sa.name AS candidate_name,
+        sa.applicant_name AS candidate_name,
         sa.email AS candidate_email,
         sa.status AS application_status,
-        sa.payment_status,
+        COALESCE(af.status, 'unpaid') AS payment_status,
+        COALESCE(af.amount, adm.fees, 0) AS fee_amount,
         sa.created_at,
         c.name AS class_name,
-        adm.name AS circular_name,
-        adm.is_result_published,
-        aa.roll_number,
-        sec.name AS section_name
+        adm.title AS circular_name,
+        adm.is_result_published
       FROM student_admissions sa
-      LEFT JOIN classes c ON sa.class_id = c.id
+      LEFT JOIN classes c ON sa.applied_class_id = c.id
       LEFT JOIN admissions adm ON sa.admission_id = adm.id
-      LEFT JOIN accepted_admissions aa ON sa.id = aa.student_admission_id
-      LEFT JOIN sections sec ON aa.section_id = sec.id
+      LEFT JOIN admission_fees af ON sa.id = af.student_admission_id
     `;
 
     const params = [];
     const searchTrimmed = search.trim();
 
+    let idValue = null;
+    if (!isNaN(parseInt(searchTrimmed, 10))) {
+      idValue = parseInt(searchTrimmed, 10);
+    } else if (searchTrimmed.toUpperCase().startsWith('APP-')) {
+      const parsed = parseInt(searchTrimmed.replace(/^APP-/i, ''), 10);
+      if (!isNaN(parsed)) idValue = parsed;
+    }
+
     // Check if search looks like an email or id
     if (searchTrimmed.includes('@')) {
       sql += ' WHERE LOWER(sa.email) = LOWER($1)';
       params.push(searchTrimmed);
-    } else if (!isNaN(parseInt(searchTrimmed, 10))) {
-      sql += ' WHERE sa.id = $1';
-      params.push(parseInt(searchTrimmed, 10));
+    } else if (idValue !== null) {
+      sql += ' WHERE sa.id = $1 OR sa.id = $2';
+      params.push(idValue, idValue > 10000 ? idValue - 10000 : idValue);
     } else {
       // Fallback: search email or name partially
-      sql += ' WHERE LOWER(sa.email) = LOWER($1) OR LOWER(sa.name) LIKE LOWER($2)';
+      sql += ' WHERE LOWER(sa.email) = LOWER($1) OR LOWER(sa.applicant_name) LIKE LOWER($2)';
       params.push(searchTrimmed, `%${searchTrimmed}%`);
     }
 
@@ -55,10 +61,19 @@ export async function GET(request) {
       return NextResponse.json({ success: false, error: 'Admission application not found.' }, { status: 404 });
     }
 
+    // Fetch institution settings
+    const settingsRes = await query('SELECT address, contact_phone, contact_email FROM website_settings ORDER BY id ASC LIMIT 1');
+    const dbSettings = settingsRes.rows[0] || {};
+
     return NextResponse.json({
       success: true,
       paylod: {
-        application: result.rows[0]
+        application: {
+          ...result.rows[0],
+          school_address: dbSettings.address || '',
+          school_phone: dbSettings.contact_phone || '',
+          school_email: dbSettings.contact_email || ''
+        }
       }
     }, { status: 200 });
   } catch (error) {

@@ -399,13 +399,9 @@ const AdmissionFeeDesk = () => {
                       </td>
                       <td className="px-6 py-4 text-sm text-right">
                         {normalizedStatus === 'paid' ? (
-                          <button
-                            onClick={() => handleUpdateStatus(adm.id, 'Pending')}
-                            disabled={updatingId === adm.id}
-                            className="text-xs font-bold text-amber-650 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50"
-                          >
-                            Mark Pending
-                          </button>
+                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100/60">
+                            <FiCheck className="text-sm" /> Payment Completed
+                          </span>
                         ) : (
                           <button
                             onClick={() => {
@@ -413,9 +409,9 @@ const AdmissionFeeDesk = () => {
                               setPaymentAmount(parseFloat(adm.admission_fees_amount || adm.fee_amount || 0).toFixed(2));
                             }}
                             disabled={updatingId === adm.id}
-                            className="text-xs font-bold text-emerald-650 hover:text-primary bg-primary-light hover:bg-primary-light px-3 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1"
+                            className="text-xs font-semibold text-emerald-700 hover:text-white bg-emerald-50 hover:bg-emerald-600 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5 border border-emerald-200 shadow-2xs"
                           >
-                            <FiCreditCard className="text-xs" /> Record Pay
+                            <FiCreditCard className="text-xs" /> Collect &amp; Mark Paid
                           </button>
                         )}
                       </td>

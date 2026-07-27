@@ -100,9 +100,7 @@ const AdminRecovery = () => {
           <>
             {/* Step 1 Header */}
             <div className="flex flex-col items-center mb-8 text-center">
-              <div className="w-14 h-14 bg-amber-55 border border-amber-100 rounded-2xl flex items-center justify-center mb-4 shadow-sm bg-amber-50">
-                <FiAlertTriangle className="text-2xl text-amber-600" />
-              </div>
+              
               <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Account Recovery</h1>
               <p className="text-sm text-slate-500 max-w-[320px]">Enter your administrative email to request a secure 6-digit recovery token.</p>
             </div>
@@ -154,9 +152,7 @@ const AdminRecovery = () => {
           <>
             {/* Step 2 Header */}
             <div className="flex flex-col items-center mb-8 text-center">
-              <div className="w-14 h-14 bg-primary-light border border-primary-light rounded-2xl flex items-center justify-center mb-4 shadow-sm">
-                <FiKey className="text-2xl text-primary" />
-              </div>
+             
               <h1 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Reset Password</h1>
               <p className="text-sm text-slate-500 max-w-[320px]">Enter the 6-digit token sent to {email} and set your new password.</p>
             </div>

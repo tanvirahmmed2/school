@@ -48,13 +48,24 @@ export async function PUT(request) {
 
     const applicant = admRes.rows[0];
 
+    // Check if fee is already paid
+    const currentFee = await client.query(
+      'SELECT status FROM admission_fees WHERE student_admission_id = $1',
+      [parseInt(student_admission_id, 10)]
+    );
+    if (currentFee.rows.length > 0 && currentFee.rows[0].status === 'paid' && normStatus !== 'paid') {
+      await client.query('ROLLBACK');
+      client.release();
+      return NextResponse.json({ success: false, error: 'Payment is already completed and cannot be reverted.' }, { status: 400 });
+    }
+
     // Update the admission fee status
     let feeResult = await client.query(`
       UPDATE admission_fees
       SET status = $1, updated_at = CURRENT_TIMESTAMP
       WHERE student_admission_id = $2
       RETURNING *
-    `, [status.toLowerCase(), parseInt(student_admission_id, 10)]);
+    `, [normStatus, parseInt(student_admission_id, 10)]);
 
     let feeRecord;
 
@@ -64,15 +75,21 @@ export async function PUT(request) {
         INSERT INTO admission_fees (student_admission_id, amount, status)
         VALUES ($1, $2, $3)
         RETURNING *
-      `, [parseInt(student_admission_id, 10), fees, status.toLowerCase()]);
+      `, [parseInt(student_admission_id, 10), fees, normStatus]);
       
       feeRecord = insertResult.rows[0];
     } else {
       feeRecord = feeResult.rows[0];
     }
 
-    // If status is Paid, record transaction & send email for photo/signature upload
-    if (status.toLowerCase() === 'paid') {
+    // If status is Paid, automatically set application status in student_admissions to 'pending'
+    if (normStatus === 'paid') {
+      await client.query(`
+        UPDATE student_admissions
+        SET status = 'pending', updated_at = CURRENT_TIMESTAMP
+        WHERE id = $1
+      `, [parseInt(student_admission_id, 10)]);
+
       const actualAmountPaid = amount_paid !== undefined ? parseFloat(amount_paid) : parseFloat(feeRecord.amount);
       const method = payment_method || 'Cash';
       const rmk = remarks || `Collected admission fee for candidate #${student_admission_id}`;

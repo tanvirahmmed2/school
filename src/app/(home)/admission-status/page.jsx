@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiSearch, FiLayers, FiCheckCircle, FiXCircle, FiClock, FiAlertCircle, FiAward, FiFileText } from 'react-icons/fi';
+import { FiSearch, FiLayers, FiCheckCircle, FiXCircle, FiClock, FiAlertCircle, FiAward, FiFileText, FiPrinter } from 'react-icons/fi';
+import { printAdmissionFeeReceipt } from '@/lib/receipts/admission_fee';
 
 const AdmissionStatusPage = () => {
   const [query, setQuery] = useState('');
@@ -38,48 +39,57 @@ const AdmissionStatusPage = () => {
   };
 
   const getReviewStatusBadge = (status) => {
-    switch (status) {
-      case 'Accepted':
+    const s = (status || '').toLowerCase();
+    switch (s) {
+      case 'approved':
+      case 'accepted':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
-            <FiCheckCircle /> Selected / Accepted
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <FiCheckCircle /> Selected / Approved
           </span>
         );
-      case 'Rejected':
+      case 'rejected':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
-            <FiXCircle /> Not Selected
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-100">
+            <FiXCircle /> Rejected! Try again
           </span>
         );
-      case 'Under Review':
+      case 'pending':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light">
-            <FiClock /> Under Review
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            <FiClock /> Result will be published soon
           </span>
         );
-      case 'Pending':
+      case 'incomplete':
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100">
-            <FiClock /> Pending Review
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+            <FiClock /> Incomplete (Fee / Photo Upload Pending)
           </span>
         );
     }
   };
 
   const getPaymentStatusBadge = (status) => {
-    if (status === 'Paid') {
+    const s = (status || '').toLowerCase();
+    if (s === 'paid') {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-green-50 text-green-600 border border-green-100">
           Paid
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-100">
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-600 border border-rose-100">
         Unpaid
       </span>
     );
+  };
+
+  const formatClass = (cls) => {
+    if (!cls) return 'N/A';
+    const str = String(cls).trim();
+    return str.toLowerCase().startsWith('class') ? str : `Class ${str}`;
   };
 
   return (
@@ -87,7 +97,7 @@ const AdmissionStatusPage = () => {
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-semibold text-slate-900 tracking-tight flex items-center justify-center gap-2">
-          <FiAward className="text-primary animate-pulse" /> Admission Status & Results
+          <FiAward className="text-primary animate-pulse" /> Admission Status &amp; Results
         </h1>
         <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
           Look up your admission intake application status, verification reviews, and final results index.
@@ -101,6 +111,7 @@ const AdmissionStatusPage = () => {
             <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
             <input
               type="text"
+              placeholder="Enter Application ID (e.g. 10008) or Email..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
@@ -133,9 +144,15 @@ const AdmissionStatusPage = () => {
                 <h2 className="text-xl font-semibold text-slate-800">{application.candidate_name}</h2>
                 <p className="text-xs text-slate-450 mt-0.5">Email: {application.candidate_email}</p>
               </div>
-              <div className="sm:text-right">
-                <span className="text-xs text-slate-400 font-bold block mb-1">Application ID: #{application.application_id}</span>
+              <div className="sm:text-right flex flex-col sm:items-end gap-1">
+                <span className="text-xs text-slate-400 font-bold block">Application ID: #{application.application_id}</span>
                 <span className="text-xs text-slate-450 block font-semibold">Applied on: {new Date(application.created_at).toLocaleDateString()}</span>
+                <button
+                  onClick={() => printAdmissionFeeReceipt(application)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer mt-1"
+                >
+                  <FiPrinter /> Print / Download Receipt
+                </button>
               </div>
             </div>
 
@@ -144,19 +161,19 @@ const AdmissionStatusPage = () => {
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Class</span>
                 <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-1 rounded-full">
                   <FiLayers className="text-sky-400 text-xs" />
-                  {application.class_name}
+                  {formatClass(application.class_name)}
                 </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Review Status</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Status</span>
                 <div>{getReviewStatusBadge(application.application_status)}</div>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Processing Fee</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Admission Fee</span>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-sm font-semibold text-slate-700">৳500.00</span>
+                  <span className="text-sm font-semibold text-slate-700">BDT {parseFloat(application.fee_amount || 0).toFixed(2)}</span>
                   {getPaymentStatusBadge(application.payment_status)}
                 </div>
               </div>
@@ -166,14 +183,14 @@ const AdmissionStatusPage = () => {
             <div className="mt-4 pt-6 border-t border-slate-100">
               {application.is_result_published ? (
                 <div>
-                  {application.application_status === 'Accepted' ? (
+                  {['approved', 'accepted'].includes((application.application_status || '').toLowerCase()) ? (
                     <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-3">
                       <div className="flex items-center gap-2 text-primary font-semibold">
                         <FiCheckCircle className="text-xl" />
                         <span>Congratulations! Admission Selected</span>
                       </div>
                       <p className="text-xs text-primary leading-relaxed font-semibold">
-                        Your application for Class {application.class_name} has been approved. Below are your assigned academic credentials:
+                        Your application for {formatClass(application.class_name)} has been approved. Below are your assigned academic credentials:
                       </p>
                       <div className="grid grid-cols-2 gap-4 mt-2 max-w-sm text-xs font-bold">
                         <div className="bg-white border border-primary-light p-3 rounded-xl">
@@ -186,13 +203,13 @@ const AdmissionStatusPage = () => {
                         </div>
                       </div>
                     </div>
-                  ) : application.application_status === 'Rejected' ? (
-                    <div className="p-6 bg-slate-50 border border-slate-100 rounded-2xl flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-slate-700 font-semibold">
-                        <FiXCircle className="text-xl text-slate-500" />
-                        <span>Application Not Selected</span>
+                  ) : (application.application_status || '').toLowerCase() === 'rejected' ? (
+                    <div className="p-6 bg-rose-50 border border-rose-100 rounded-2xl flex flex-col gap-2">
+                      <div className="flex items-center gap-2 text-rose-700 font-semibold">
+                        <FiXCircle className="text-xl text-rose-500" />
+                        <span>Rejected! Try again</span>
                       </div>
-                      <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                      <p className="text-xs text-rose-600 leading-relaxed font-medium">
                         We regret to inform you that your application was not selected for admission in this term. We appreciate your interest in our institution and wish you the best in your future academic activities.
                       </p>
                     </div>
@@ -200,22 +217,22 @@ const AdmissionStatusPage = () => {
                     <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl flex flex-col gap-2">
                       <div className="flex items-center gap-2 text-amber-700 font-semibold">
                         <FiClock className="text-xl" />
-                        <span>Review Under Processing</span>
+                        <span>Result will be published soon</span>
                       </div>
                       <p className="text-xs text-amber-800 leading-relaxed font-medium">
-                        Your application is currently under final review by the admissions committee. Once updates are cleared, your seat allocation details will be populated here.
+                        Your application is under review by the admissions committee. The circular results will be published soon.
                       </p>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-primary font-semibold">
-                    <FiFileText className="text-xl text-primary" />
-                    <span>Admissions Results Pending</span>
+                <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-amber-700 font-semibold">
+                    <FiClock className="text-xl text-amber-600" />
+                    <span>Result will be published soon</span>
                   </div>
-                  <p className="text-xs text-primary leading-relaxed font-medium">
-                    The admissions circular selection results for class {application.class_name} have not been published by the administration yet. Please check back later once official notifications are issued on the Notice Board.
+                  <p className="text-xs text-amber-800 leading-relaxed font-medium">
+                    The admissions circular selection results for {formatClass(application.class_name)} have not been published by the administration yet. Result will be published soon.
                   </p>
                 </div>
               )}

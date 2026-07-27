@@ -8,4 +8,5 @@ export { default as EventCard } from './EventCard';
 export { default as SubjectCard } from './SubjectCard';
 export { default as ClubCard } from './ClubCard';
 export { default as RecognitionCard } from './RecognitionCard';
+export { default as AdmissionCircularCard } from './AdmissionCircularCard';
 

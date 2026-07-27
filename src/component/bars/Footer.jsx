@@ -20,7 +20,7 @@ const Footer = () => {
         <h3 className='font-semibold text-sm md:text-base tracking-tight border-b border-primary pb-2 text-secondary'>
           Quick Links
         </h3>
-        <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-1 text-xs md:text-base'>
+        <div className='w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-1 text-xs md:text-sm'>
           <div className='flex flex-col gap-2'>
             <Link href={'/'} className='hover:text-secondary transition-colors duration-200'>Home</Link>
             <Link href={'/teachers'} className='hover:text-secondary transition-colors duration-200'>Teachers</Link>

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FiCheckCircle, FiFileText, FiClock, FiDollarSign, FiArrowRight, FiLayers, FiCalendar } from 'react-icons/fi';
 import Life from '@/component/pages/home/Life';
+import { AdmissionCircularCard } from '@/component/cards';
 
 const AdmissionPage = () => {
   const [circulars, setCirculars] = useState([]);
@@ -69,40 +69,7 @@ const AdmissionPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {circulars.map((c) => (
-                <div key={c.id} className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] hover:shadow-md hover:border-primary-light transition-all flex flex-col justify-between gap-4">
-                  <div className="flex flex-col gap-2">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light px-2.5 py-0.5 rounded-full w-max">
-                      <FiLayers /> Class: {c.class_name}
-                    </span>
-                    <h3 className="text-base font-bold text-slate-900 leading-snug mt-1">{c.title}</h3>
-                    <div className="flex flex-col gap-1.5 text-xs text-slate-500 font-semibold mt-2">
-                      <div className="flex items-center gap-1.5">
-                        <FiClock className="text-slate-400" />
-                        <span>Deadline: <strong className="text-slate-700">{new Date(c.finish_date).toLocaleDateString()}</strong></span>
-                      </div>
-                      {c.min_age !== null || c.max_age !== null ? (
-                        <div className="flex items-center gap-1.5">
-                          <FiCalendar className="text-slate-400" />
-                          <span>Age limits: <strong className="text-slate-700">{c.min_age || 0} to {c.max_age || '∞'} years</strong></span>
-                        </div>
-                      ) : null}
-                      {c.fees !== undefined && c.fees !== null && (
-                        <div className="flex items-center gap-1.5 text-primary">
-                          <FiDollarSign className="text-primary" />
-                          <span>Admission Fee: <strong className="text-primary">BDT {parseFloat(c.fees).toFixed(2)}</strong></span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <Link
-                    href={`/admission/apply?admission_id=${c.id}`}
-                    className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold tracking-wide transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                  >
-                    <span>Apply Online</span>
-                    <FiArrowRight />
-                  </Link>
-                </div>
+                <AdmissionCircularCard key={c.id} circular={c} />
               ))}
             </div>
           )}
