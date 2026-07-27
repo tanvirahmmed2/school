@@ -3,34 +3,42 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FiLayers, FiArrowRight, FiBookOpen } from 'react-icons/fi';
+import GradingScaleTable from '@/component/cards/GradingScaleTable';
 
 const ClassesPage = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let ignore = false;
     const fetchClasses = async () => {
       try {
         const res = await fetch('/api/classes');
         if (res.ok) {
           const data = await res.json();
-          setClasses(data.paylod.classes || []);
+          if (!ignore) {
+            setClasses(data.paylod.classes || []);
+          }
         }
       } catch (err) {
         console.error('Failed to fetch classes:', err);
       } finally {
-        setLoading(false);
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
     fetchClasses();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto">
-        <div className="text-center mb-12">
-          
-          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
+      <div className="mx-auto flex flex-col gap-12">
+        <div className="text-center">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             Our Academic Classes
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
@@ -81,7 +89,7 @@ const ClassesPage = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center max-w-md mx-auto shadow-xs mt-8">
+          <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center max-w-md mx-auto shadow-xs">
             <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
               <FiBookOpen />
             </div>
@@ -91,6 +99,12 @@ const ClassesPage = () => {
             </p>
           </div>
         )}
+
+        {/* Institutional Grading Scale Table */}
+        <GradingScaleTable 
+          title="Curriculum Grading System" 
+          subtitle="Overview of letter grades, mark range thresholds (%), and GPA points applied across all academic classes."
+        />
       </div>
     </div>
   );

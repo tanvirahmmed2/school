@@ -28,7 +28,31 @@ const AdminGradesPage = () => {
   };
 
   useEffect(() => {
-    fetchGrades();
+    let ignore = false;
+    async function loadData() {
+      try {
+        const response = await fetch('/api/grades');
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch grades.');
+        }
+        if (!ignore) {
+          setGrades(data.paylod.grades || []);
+        }
+      } catch (error) {
+        if (!ignore) {
+          toast.error(error.message);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+    loadData();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleDeleteGrade = async (gradeId, letterGrade) => {
@@ -149,6 +173,9 @@ const AdminGradesPage = () => {
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Max Mark Threshold (%)
                   </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Grade Point
+                  </th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
                     Actions
                   </th>
@@ -178,6 +205,11 @@ const AdminGradesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm font-semibold text-slate-700">
                         {parseFloat(grade.max_mark).toFixed(2)}%
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">
+                        {grade.point !== undefined && grade.point !== null ? parseFloat(grade.point).toFixed(2) : '0.00'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">

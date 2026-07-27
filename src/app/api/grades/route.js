@@ -2,9 +2,20 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
+async function ensureGradeTableColumns() {
+  try {
+    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS point DECIMAL(5,2) NOT NULL DEFAULT 0.00');
+    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP');
+    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP');
+  } catch (err) {
+    console.error('Error ensuring columns in mark_grades:', err);
+  }
+}
+
 // GET all grades
 export async function GET() {
   try {
+    await ensureGradeTableColumns();
     const result = await query('SELECT * FROM mark_grades ORDER BY min_mark DESC');
     const res_data = { grades: result.rows };
     return NextResponse.json({
@@ -27,6 +38,7 @@ export async function GET() {
 // POST create grade (Admin only)
 export async function POST(request) {
   try {
+    await ensureGradeTableColumns();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err = { error: 'Unauthorized. Admins only.' };
@@ -38,10 +50,10 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { letter_grade, min_mark, max_mark } = await request.json();
+    const { letter_grade, min_mark, max_mark, point } = await request.json();
 
-    if (!letter_grade || min_mark === undefined || max_mark === undefined) {
-      const res_err = { error: 'Letter grade, minimum mark, and maximum mark are required.' };
+    if (!letter_grade || min_mark === undefined || max_mark === undefined || point === undefined) {
+      const res_err = { error: 'Letter grade, minimum mark, maximum mark, and grade point are required.' };
       return NextResponse.json({
         success: false,
         message: res_err.error,
@@ -52,9 +64,10 @@ export async function POST(request) {
 
     const min = parseFloat(min_mark);
     const max = parseFloat(max_mark);
+    const parsedPoint = parseFloat(point);
 
-    if (isNaN(min) || isNaN(max) || min < 0 || max < 0 || min > 100 || max > 100) {
-      const res_err = { error: 'Marks must be numeric values between 0 and 100.' };
+    if (isNaN(min) || isNaN(max) || isNaN(parsedPoint) || min < 0 || max < 0 || min > 100 || max > 100 || parsedPoint < 0) {
+      const res_err = { error: 'Marks must be numeric values between 0 and 100, and grade point must be a non-negative number.' };
       return NextResponse.json({
         success: false,
         message: res_err.error,
@@ -101,10 +114,10 @@ export async function POST(request) {
     }
 
     const newGrade = await query(
-      `INSERT INTO mark_grades (letter_grade, min_mark, max_mark) 
-       VALUES ($1, $2, $3) 
+      `INSERT INTO mark_grades (letter_grade, min_mark, max_mark, point) 
+       VALUES ($1, $2, $3, $4) 
        RETURNING *`,
-      [trimmedLetterGrade, min, max]
+      [trimmedLetterGrade, min, max, parsedPoint]
     );
 
     const res_data = { message: 'Grade created successfully.', grade: newGrade.rows[0] };

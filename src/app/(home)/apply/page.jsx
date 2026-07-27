@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { FiCheckCircle, FiFileText, FiUserCheck, FiCreditCard, FiArrowRight } from 'react-icons/fi';
 import { SCHOOL_NAME } from '@/lib/secret';
+import GradingScaleTable from '@/component/cards/GradingScaleTable';
 
 const ApplyPage = () => {
   const steps = [
@@ -29,17 +30,17 @@ const ApplyPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full">
-        <div className="text-center mb-12">
-          
-          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
+      <div className="w-full flex flex-col gap-12">
+        <div className="text-center">
+          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             Begin Your Journey At {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')}
           </h1>
           <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
-            Enroll today at the Fontana Institute of Technology to build technical skillsets guided by expert global faculty.
+            Enroll today to build technical skillsets guided by expert global faculty.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {steps.map((step, idx) => {
             const Icon = step.icon;
             return (
@@ -62,6 +63,12 @@ const ApplyPage = () => {
             );
           })}
         </div>
+
+        {/* Institutional Grading Scale Table */}
+        <GradingScaleTable 
+          title="Academic Grading Standard" 
+          subtitle="Official minimum marks, maximum mark percentage ranges, and grade points for applicant evaluation."
+        />
 
         <div className="bg-primary from-sky-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-lg text-center flex flex-col items-center gap-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-primary-dark from-sky-800/10 via-transparent to-transparent"></div>
