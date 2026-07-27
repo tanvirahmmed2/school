@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiCheckCircle, FiArrowRight } from 'react-icons/fi';
+import { SCHOOL_NAME } from '@/lib/secret';
 
 const Admission = () => {
   return (
@@ -14,7 +15,7 @@ const Admission = () => {
           <div className="max-w-xl z-10 flex flex-col gap-4">
             
             <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-tight">
-              Begin Your Educational Journey With Us Today
+              Begin Your Educational Journey With  {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')} Today
             </h2>
             <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
               If your academic registration code has been pre-created by the FIT campus registrar, you can finalize your profile details and complete registration setup online.

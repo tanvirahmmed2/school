@@ -65,7 +65,7 @@ const Life = () => {
               </p>
             </div>
             <span className="mt-auto text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-              FIT Physical Education
+              {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')} Physical Education
             </span>
           </div>
         </div>

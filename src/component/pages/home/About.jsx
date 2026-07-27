@@ -1,5 +1,6 @@
 'use client';
 
+import { SCHOOL_NAME } from '@/lib/secret';
 import React from 'react';
 import { FiAward, FiBook, FiCheckCircle } from 'react-icons/fi';
 
@@ -15,7 +16,7 @@ const About = () => {
               A Legacy of Academic and Personal Excellence
             </h2>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Founded on the pillars of character, scholarship, and community, Fontana Institute of Technology is dedicated to preparing students for global career success. Our state-of-the-art facilities and progressive teaching methods cultivate a dynamic environment where potential is transformed into achievement.
+              Founded on the pillars of character, scholarship, and community, {SCHOOL_NAME} is dedicated to preparing students for global career success. Our state-of-the-art facilities and progressive teaching methods cultivate a dynamic environment where potential is transformed into achievement.
             </p>
 
             <div className="flex flex-col gap-3 mt-2">
@@ -68,9 +69,9 @@ const About = () => {
             </div>
 
             <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl flex flex-col gap-3 sm:col-span-2">
-              <h3 className="font-bold text-slate-800 text-sm">Fontana Accreditation</h3>
+              <h3 className="font-bold text-slate-800 text-sm">{SCHOOL_NAME.split(" ")[0]} Accreditation</h3>
               <p className="text-slate-500 text-xs leading-relaxed">
-                FIT is fully accredited by regional academic senates, ensuring global recognition of transcripts, courses, and certifications.
+                {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')} is fully accredited by regional academic senates, ensuring global recognition of transcripts, courses, and certifications.
               </p>
             </div>
           </div>
