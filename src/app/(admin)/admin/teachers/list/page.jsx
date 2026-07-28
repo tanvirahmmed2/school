@@ -3,18 +3,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiTrash2, FiUsers, FiMail, FiPhone, FiMapPin, FiCheckCircle, FiXCircle, FiBriefcase, FiUser, FiDollarSign, FiRefreshCw, FiSend } from 'react-icons/fi';
+import {
+  FiUsers,
+  FiUserCheck,
+  FiSearch,
+  FiTrash2,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiBriefcase,
+  FiUser,
+  FiRefreshCw,
+  FiSend,
+  FiCheck,
+  FiX
+} from 'react-icons/fi';
 
 const AdminTeachersListPage = () => {
   const [teachers, setTeachers] = useState([]);
   const [payScales, setPayScales] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const [resendingId, setResendingId] = useState(null);
 
   const fetchTeachers = async () => {
     try {
       const response = await axios.get('/api/teachers');
-      setTeachers(response.data.paylod.teachers || []);
+      setTeachers(response.data.paylod?.teachers || []);
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     }
@@ -52,10 +67,7 @@ const AdminTeachersListPage = () => {
         grade_id: teacher.grade_id
       });
 
-      toast.success(
-        `Teacher ${teacher.name} status updated successfully.`
-      );
-      
+      toast.success(`Teacher ${teacher.name} status updated.`);
       setTeachers(
         teachers.map((t) => (t.id === teacher.id ? { ...t, is_active: nextStatus } : t))
       );
@@ -78,10 +90,7 @@ const AdminTeachersListPage = () => {
         grade_id: teacher.grade_id
       });
 
-      toast.success(
-        `Teacher ${teacher.name} set to ${nextPermanent ? 'Permanent' : 'Temporary/Contract'}.`
-      );
-      
+      toast.success(`Teacher ${teacher.name} updated to ${nextPermanent ? 'Permanent' : 'Temporary'}.`);
       setTeachers(
         teachers.map((t) => (t.id === teacher.id ? { ...t, is_permanent: nextPermanent } : t))
       );
@@ -104,14 +113,17 @@ const AdminTeachersListPage = () => {
         grade_id: nextGradeId
       });
 
-      toast.success(`Updated pay scale grade for ${teacher.name}`);
-      
+      toast.success(`Pay scale grade updated for ${teacher.name}`);
       setTeachers(
-        teachers.map((t) => (t.id === teacher.id ? { 
-          ...t, 
-          grade_id: nextGradeId, 
-          grade_name: payScales.find(g => g.id === nextGradeId)?.name || null 
-        } : t))
+        teachers.map((t) =>
+          t.id === teacher.id
+            ? {
+                ...t,
+                grade_id: nextGradeId,
+                grade_name: payScales.find((g) => g.id === nextGradeId)?.name || null
+              }
+            : t
+        )
       );
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -119,14 +131,11 @@ const AdminTeachersListPage = () => {
   };
 
   const handleDeleteTeacher = async (id, teacherName) => {
-    const confirm = window.confirm(
-      `Are you sure you want to delete teacher "${teacherName}"? This will clear all class-subject assignments for this teacher as well.`
-    );
-    if (!confirm) return;
+    if (!window.confirm(`Are you sure you want to delete teacher "${teacherName}"?`)) return;
 
     try {
       const response = await axios.delete(`/api/teachers/${id}`);
-      toast.success(response.data.message || 'Teacher account deleted.');
+      toast.success(response.data.message || 'Teacher record deleted.');
       setTeachers(teachers.filter((t) => t.id !== id));
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
@@ -139,7 +148,7 @@ const AdminTeachersListPage = () => {
       const response = await axios.post('/api/teachers/resend-verification', {
         teacher_id: teacher.id
       });
-      toast.success(response.data.message || `Verification link resent to ${teacher.email}`);
+      toast.success(response.data.message || `Verification link sent to ${teacher.email}`);
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     } finally {
@@ -147,137 +156,182 @@ const AdminTeachersListPage = () => {
     }
   };
 
+  // Filtered teachers list
+  const filteredTeachers = teachers.filter((t) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      (t.name || '').toLowerCase().includes(q) ||
+      (t.email || '').toLowerCase().includes(q) ||
+      (t.number || '').toLowerCase().includes(q) ||
+      (t.designation || '').toLowerCase().includes(q)
+    );
+  });
+
+  // Metrics
+  const activeCount = teachers.filter((t) => t.is_active).length;
+  const permanentCount = teachers.filter((t) => t.is_permanent).length;
+  const pendingRegisterCount = teachers.filter((t) => !t.is_registered).length;
+
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header Section */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-primary" /> Teachers Registry
-        </h1>
-        <p className="text-sm text-slate-500">
-          View all registered teacher profiles, manage statuses, or remove records.
-        </p>
+    <div className="w-full max-w-7xl mx-auto space-y-6">
+      
+      {/* Header & Title */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <FiUsers className="text-primary" /> Teachers Registry
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Manage teacher profiles, account activations, employment status, and pay scale grades.
+          </p>
+        </div>
       </div>
 
-      {/* Teachers List Registry Table */}
-      <div className="w-full bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
-        <div className="px-6 py-5 border-b border-slate-100">
-          <h2 className="text-base font-bold text-slate-800">
-            Registered Teachers ({teachers.length})
+      {/* Summary Metrics Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Teachers</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-slate-800">{teachers.length}</span>
+            <FiUsers className="text-slate-400 text-sm" />
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Active Staff</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-emerald-600">{activeCount}</span>
+            <FiUserCheck className="text-emerald-500 text-sm" />
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Permanent Staff</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-primary">{permanentCount}</span>
+            <FiBriefcase className="text-primary text-sm" />
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Pending Setup</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-amber-600">{pendingRegisterCount}</span>
+            <FiRefreshCw className="text-amber-500 text-sm" />
+          </div>
+        </div>
+      </div>
+
+      {/* Search & Filter Bar */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center gap-3">
+        <FiSearch className="text-slate-400 text-sm ml-1" />
+        <input
+          type="text"
+          placeholder="Search teachers by name, email, phone, or designation..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full text-xs text-slate-800 bg-transparent outline-none placeholder:text-slate-400"
+        />
+        {searchQuery && (
+          <button onClick={() => setSearchQuery('')} className="text-slate-400 hover:text-slate-600 text-xs font-semibold px-2">
+            Clear
+          </button>
+        )}
+      </div>
+
+      {/* Teachers Table Registry */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-2xs">
+        <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+          <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+            Teacher Profiles ({filteredTeachers.length})
           </h2>
         </div>
 
         {loading ? (
-          <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-semibold text-slate-400">Loading registry...</span>
+          <div className="w-full py-12 flex flex-col items-center justify-center gap-2">
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-medium text-slate-400">Loading teacher registry...</span>
           </div>
-        ) : teachers.length === 0 ? (
-          <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-            <span className="text-slate-350 text-5xl mb-3">👥</span>
-            <h3 className="text-sm font-bold text-slate-600">No Teachers Found</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-              Register new teacher profiles using the "New Teacher Account" menu.
-            </p>
+        ) : filteredTeachers.length === 0 ? (
+          <div className="w-full py-12 flex flex-col items-center justify-center text-center px-4">
+            <FiUsers className="text-slate-300 text-3xl mb-2" />
+            <p className="text-xs font-semibold text-slate-600">No Teacher Profiles Found</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">Try searching with a different keyword.</p>
           </div>
         ) : (
           <div className="w-full overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Teacher Details
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Contact Details
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Address
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Account Setup
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Employment
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Assigned Grade
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">
-                    Actions
-                  </th>
+                <tr className="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <th className="px-4 py-3">Teacher</th>
+                  <th className="px-4 py-3">Contact</th>
+                  <th className="px-4 py-3">Registration</th>
+                  <th className="px-4 py-3">Employment</th>
+                  <th className="px-4 py-3">Pay Scale Grade</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
-                {teachers.map((teacher) => (
-                  <tr key={teacher.id} className="hover:bg-slate-50/30 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {filteredTeachers.map((teacher) => (
+                  <tr key={teacher.id} className="hover:bg-slate-50/50 transition-colors">
+                    
+                    {/* Teacher Details */}
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center">
-                          <FiUser className="text-base" />
+                        <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-600 font-bold text-xs">
+                          {teacher.name ? teacher.name.charAt(0).toUpperCase() : <FiUser />}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-800">{teacher.name}</p>
-                          <span className="text-[10px] text-slate-400 font-bold flex items-center gap-1 mt-0.5">
-                            <FiBriefcase className="text-slate-450" /> {teacher.designation || 'Unset designation'}
-                          </span>
+                          <p className="font-semibold text-slate-800">{teacher.name}</p>
+                          <p className="text-[10px] text-slate-400 font-medium">
+                            {teacher.designation || 'Teacher'}
+                          </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1 text-xs text-slate-655">
-                        <span className="flex items-center gap-1.5 text-slate-700">
-                          <FiMail className="text-slate-400 text-xs" /> {teacher.email}
-                        </span>
-                        <span className="flex items-center gap-1.5 text-slate-700">
-                          <FiPhone className="text-slate-400 text-xs" /> {teacher.number}
-                        </span>
-                      </div>
+
+                    {/* Contact Information */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <p className="text-slate-700 font-medium">{teacher.email}</p>
+                      <p className="text-[10px] text-slate-400">{teacher.number || 'N/A'}</p>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-xs text-slate-600 flex items-center gap-1.5">
-                        <FiMapPin className="text-slate-400" /> 
-                        {teacher.address || <span className="text-slate-400 italic">Address Pending Setup</span>}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${teacher.is_registered 
-                        ? 'bg-primary-light text-primary border border-primary-light' 
-                        : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
+
+                    {/* Registration State */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-0.5 text-[10px] font-semibold rounded-full ${
+                        teacher.is_registered
+                          ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                          : 'bg-amber-50 text-amber-600 border border-amber-100'
+                      }`}>
                         {teacher.is_registered ? 'Setup Completed' : 'Pending Register'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+
+                    {/* Employment Toggle */}
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <button
                         onClick={() => handleTogglePermanent(teacher)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${
                           teacher.is_permanent
-                            ? 'bg-primary-light text-primary hover:bg-primary-light'
-                            : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
+                            ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
-                        title="Click to toggle employment status"
                       >
-                        {teacher.is_permanent ? (
-                          <>
-                            <FiCheckCircle className="text-sm" /> Permanent
-                          </>
-                        ) : (
-                          <>
-                            <FiXCircle className="text-sm" /> Temporary
-                          </>
-                        )}
+                        {teacher.is_permanent ? <FiCheck className="text-xs" /> : <FiX className="text-xs" />}
+                        {teacher.is_permanent ? 'Permanent' : 'Temporary'}
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+
+                    {/* Pay Scale Grade Select */}
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <select
                         value={teacher.grade_id || ''}
                         onChange={(e) => handleUpdateGrade(teacher, e.target.value)}
-                        className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none transition-all duration-200 focus:bg-white focus:border-primary cursor-pointer"
+                        className="px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-800 outline-none focus:bg-white focus:border-primary transition-all cursor-pointer"
                       >
-                        <option value="">Unassigned</option>
+                        <option value="">Unassigned Grade</option>
                         {payScales.map((scale) => (
                           <option key={scale.id} value={scale.id}>
                             {scale.name}
@@ -285,51 +339,46 @@ const AdminTeachersListPage = () => {
                         ))}
                       </select>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+
+                    {/* Account Status Toggle */}
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <button
                         onClick={() => handleToggleStatus(teacher)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${
                           teacher.is_active
-                            ? 'bg-primary-light text-primary hover:bg-primary-light'
+                            ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
                             : 'bg-rose-50 text-rose-600 hover:bg-rose-100'
                         }`}
-                        title="Click to toggle active status"
                       >
-                        {teacher.is_active ? (
-                          <>
-                            <FiCheckCircle className="text-sm" /> Active
-                          </>
-                        ) : (
-                          <>
-                            <FiXCircle className="text-sm" /> Inactive
-                          </>
-                        )}
+                        {teacher.is_active ? 'Active' : 'Inactive'}
                       </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
-                      {/* Resend verification for pending accounts */}
+
+                    {/* Action Buttons */}
+                    <td className="px-4 py-3 whitespace-nowrap text-right space-x-1">
                       {!teacher.is_registered && (
                         <button
                           onClick={() => handleResendVerification(teacher)}
                           disabled={resendingId === teacher.id}
-                          className="p-2 bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer disabled:opacity-50"
+                          className="p-1.5 text-primary hover:bg-primary/10 rounded-lg transition-colors inline-flex items-center cursor-pointer disabled:opacity-50"
                           title={`Resend verification link to ${teacher.email}`}
                         >
                           {resendingId === teacher.id ? (
-                            <FiRefreshCw className="text-sm animate-spin" />
+                            <FiRefreshCw className="text-xs animate-spin" />
                           ) : (
-                            <FiSend className="text-sm" />
+                            <FiSend className="text-xs" />
                           )}
                         </button>
                       )}
                       <button
                         onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
-                        className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
-                        title="Remove Teacher"
+                        className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors inline-flex items-center cursor-pointer"
+                        title="Delete teacher record"
                       >
-                        <FiTrash2 className="text-sm" />
+                        <FiTrash2 className="text-xs" />
                       </button>
                     </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -337,6 +386,7 @@ const AdminTeachersListPage = () => {
           </div>
         )}
       </div>
+
     </div>
   );
 };

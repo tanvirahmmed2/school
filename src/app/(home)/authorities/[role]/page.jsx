@@ -62,7 +62,7 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/60 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         
         <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 overflow-x-auto py-1">
           <Link href="/" className="hover:text-primary transition-colors">
@@ -77,7 +77,7 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
         </nav>
 
        
-        <div>
+        <div className='w-full'>
           {loading ? (
             <div className="grid grid-cols-1 gap-6">
               {[1, 2].map((n) => (
@@ -125,13 +125,13 @@ const RoleAuthoritiesPage = ({ params: paramsPromise }) => {
               </Link>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-6 w-full">
               <div className="flex items-center justify-between px-1">
                 <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
                   Members ({authorities.length})
                 </h2>
               </div>
-              <div className="grid grid-cols-1 gap-6">
+              <div className="w-full flex-wrap flex items-center justify-center gap-6">
                 {authorities.map((member) => (
                   <AuthorityCard key={member.id} authority={member} isRole={false} />
                 ))}

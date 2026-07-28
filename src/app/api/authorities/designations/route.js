@@ -5,6 +5,9 @@ import { isAdmin } from '@/lib/auth';
 // GET all designations
 export async function GET() {
   try {
+    // Ensure column exists
+    await query('ALTER TABLE authority_designations ADD COLUMN IF NOT EXISTS is_head BOOLEAN DEFAULT FALSE;');
+
     const result = await query('SELECT * FROM authority_designations ORDER BY id ASC');
     const res_data = { designations: result.rows };
     return NextResponse.json({
@@ -23,6 +26,15 @@ export async function GET() {
   }
 }
 
+function slugify(text) {
+  return String(text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+}
+
 // POST create designation (Admin only)
 export async function POST(request) {
   try {
@@ -36,22 +48,24 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { title, slug, description } = await request.json();
+    const { title, slug, description, is_head = false } = await request.json();
 
-    if (!title || !slug) {
+    if (!title || !title.trim()) {
       return NextResponse.json({
         success: false,
-        message: 'Title and slug are required.',
+        message: 'Title is required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
 
+    const finalSlug = slug ? slugify(slug) : slugify(title);
+
     const result = await query(
-      `INSERT INTO authority_designations (title, slug, description) 
-       VALUES ($1, $2, $3) 
+      `INSERT INTO authority_designations (title, slug, description, is_head) 
+       VALUES ($1, $2, $3, $4) 
        RETURNING *`,
-      [title.trim(), slug.trim().toLowerCase(), description ? description.trim() : null]
+      [title.trim(), finalSlug, description ? description.trim() : null, Boolean(is_head)]
     );
 
     return NextResponse.json({

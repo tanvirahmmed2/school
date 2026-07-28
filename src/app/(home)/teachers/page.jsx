@@ -28,11 +28,8 @@ const TeachersPage = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
-            Academic Faculty
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Meet Our Expert Faculty
           </h1>
@@ -41,12 +38,11 @@ const TeachersPage = () => {
           </p>
         </div>
 
-        {/* Loading Skeleton */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-xs animate-pulse flex">
-                <div className="w-[120px] shrink-0 bg-slate-100"></div>
+                <div className="w-30 shrink-0 bg-slate-100"></div>
                 <div className="flex-1 p-5 flex flex-col justify-center gap-3">
                   <div className="h-3.5 bg-slate-200 rounded w-3/4"></div>
                   <div className="h-2.5 bg-slate-200 rounded w-1/2"></div>
@@ -56,7 +52,7 @@ const TeachersPage = () => {
             ))}
           </div>
         ) : teachers.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {teachers.map((teacher) => (
               <TeacherCard key={teacher.id} teacher={teacher} />
             ))}

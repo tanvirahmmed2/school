@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FiUser, FiMail, FiPhone, FiChevronRight, FiAward, FiBriefcase } from 'react-icons/fi';
+import Image from 'next/image';
 
 const AuthorityCard = ({ authority, className = '', isRole = false }) => {
   if (!authority) return null;
@@ -10,34 +11,23 @@ const AuthorityCard = ({ authority, className = '', isRole = false }) => {
   const {
     title,
     name,
-    desc,
-    bio,
-    email,
-    contact,
-    hours,
     href,
     image,
     designation,
     designation_title,
-    qualifications,
     icon: CustomIcon
   } = authority;
 
-  // Determine if this is a Role selection card or Member profile card
   const isRoleCard = isRole || Boolean(href && !name && title);
   const displayName = name || title || 'Board Member';
   const displayDesignation = designation_title || designation;
-  const displayDesc = bio || desc || 'Institutional Leadership Member';
-  const displayEmail = email;
-  const displayContact = contact || hours;
 
   if (isRoleCard) {
     return (
       <Link href={href || `/authorities/${authority.slug || ''}`} className="block group">
         <div
-          className={`bg-white rounded-2xl border border-slate-100 hover:border-primary hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:flex-row p-6 gap-5 ${className}`}
+          className={`bg-white rounded-2xl border border-slate-100 hover:border-primary shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:flex-row p-6 gap-5 ${className}`}
         >
-          {/* Icon side */}
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-primary-light border border-primary-border flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
             {CustomIcon ? (
               <CustomIcon className="text-primary text-2xl sm:text-3xl" />
@@ -46,7 +36,6 @@ const AuthorityCard = ({ authority, className = '', isRole = false }) => {
             )}
           </div>
 
-          {/* Details side */}
           <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
             <div className="flex items-center justify-between gap-2">
               <h3 className="font-semibold text-slate-900 text-base sm:text-lg group-hover:text-primary transition-colors leading-tight">
@@ -55,7 +44,7 @@ const AuthorityCard = ({ authority, className = '', isRole = false }) => {
             </div>
 
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-2">
-              {displayDesc}
+              {displayDesignation}
             </p>
           </div>
 
@@ -67,91 +56,44 @@ const AuthorityCard = ({ authority, className = '', isRole = false }) => {
     );
   }
 
-  // Authority Member Profile Card
+  const viewHref = authority.id ? `/authorities/view?id=${authority.id}` : '#';
+
   return (
-    <div
-      className={`group bg-white rounded-2xl border border-slate-100 hover:border-primary hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col sm:flex-row p-6 gap-6 ${className}`}
-    >
-      {/* Avatar / Photo */}
-      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-primary-light border border-primary-border flex items-center justify-center shrink-0 overflow-hidden relative shadow-xs">
-        {image ? (
-          <img
-            src={image}
-            alt={displayName}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-primary">
-            <FiUser className="text-4xl" />
-          </div>
-        )}
-      </div>
-
-      {/* Main Details */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between gap-3">
-        <div>
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-            <h3 className="font-semibold text-slate-900 text-lg sm:text-xl group-hover:text-primary transition-colors leading-snug">
-              {displayName}
-            </h3>
-            {displayDesignation && (
-              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-primary-light text-primary border border-primary-border shrink-0">
-                {displayDesignation}
-              </span>
-            )}
-          </div>
-
-          {displayDesc && (
-            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mt-1 line-clamp-3">
-              {displayDesc}
-            </p>
+    <Link href={viewHref}
+        className={`bg-white w-80 rounded-xl border border-slate-100 hover:border-primary hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col p-3 gap-6 ${className}`}
+      >
+        <div className="w-full aspect-square flex items-center justify-center shrink-0 overflow-hidden relative shadow-xs">
+          {image ? (
+            <Image
+              width={500}
+              height={500}
+              src={image}
+              alt={displayName}
+              className="w-full h-full object-cover aspect-square transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center text-primary py-8">
+              <FiUser className="text-4xl" />
+            </div>
           )}
         </div>
 
-        {/* Qualifications if provided */}
-        {qualifications && qualifications.length > 0 && (
-          <div className="pt-2 border-t border-slate-100">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-1.5">
-              <FiAward className="text-primary" /> Qualifications
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {qualifications.map((q, idx) => (
-                <span
-                  key={idx}
-                  className="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-50 text-slate-700 border border-slate-100"
-                >
-                  {q.degree} ({q.institution}, {q.passing_year})
-                </span>
-              ))}
+        <div className="w-full flex flex-col justify-between gap-3">
+          <div>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+              <h3 className="font-semibold text-slate-900 text-lg sm:text-xl group-hover:text-primary transition-colors leading-snug">
+                {displayName}
+              </h3>
             </div>
-          </div>
-        )}
 
-        {/* Contact Info Footer */}
-        {(displayEmail || displayContact) && (
-          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 pt-2 border-t border-slate-100">
-            {displayEmail && (
-              <a
-                href={`mailto:${displayEmail}`}
-                className="flex items-center gap-1.5 hover:text-primary transition-colors"
-              >
-                <FiMail className="text-primary shrink-0" />
-                <span className="truncate">{displayEmail}</span>
-              </a>
-            )}
-            {displayContact && (
-              <a
-                href={`tel:${displayContact}`}
-                className="flex items-center gap-1.5 hover:text-primary transition-colors"
-              >
-                <FiPhone className="text-primary shrink-0" />
-                <span className="truncate">{displayContact}</span>
-              </a>
+            {displayDesignation && (
+              <p className="text-primary text-xs sm:text-sm leading-relaxed mt-1 line-clamp-3">
+                {displayDesignation}
+              </p>
             )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </Link>
   );
 };
 

@@ -11,7 +11,6 @@ import {
   FiSearch,
   FiX,
   FiLayers,
-  FiHash,
   FiRefreshCw
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
@@ -26,29 +25,17 @@ export default function DesignationsManagementPage() {
   // Modal States
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
-  const [newSlug, setNewSlug] = useState('');
   const [newDescription, setNewDescription] = useState('');
-  const [isSlugUserEdited, setIsSlugUserEdited] = useState(false);
+  const [newIsHead, setNewIsHead] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
 
   const [editingDesignation, setEditingDesignation] = useState(null);
   const [editTitle, setEditTitle] = useState('');
-  const [editSlug, setEditSlug] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [editIsHead, setEditIsHead] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
 
   const [deletingId, setDeletingId] = useState(null);
-
-  // Auto-generate slug from title
-  const slugify = (text) => {
-    return text
-      .toString()
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '-');
-  };
 
   const fetchDesignations = async () => {
     setLoading(true);
@@ -71,24 +58,10 @@ export default function DesignationsManagementPage() {
     fetchDesignations();
   }, []);
 
-  // Title change handler in Create Modal
-  const handleCreateTitleChange = (e) => {
-    const val = e.target.value;
-    setNewTitle(val);
-    if (!isSlugUserEdited) {
-      setNewSlug(slugify(val));
-    }
-  };
-
-  const handleCreateSlugChange = (e) => {
-    setNewSlug(e.target.value);
-    setIsSlugUserEdited(true);
-  };
-
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
-    if (!newTitle.trim() || !newSlug.trim()) {
-      toast.error('Title and Slug are required.');
+    if (!newTitle.trim()) {
+      toast.error('Title is required.');
       return;
     }
 
@@ -96,16 +69,15 @@ export default function DesignationsManagementPage() {
     try {
       const res = await axios.post('/api/authorities/designations', {
         title: newTitle.trim(),
-        slug: newSlug.trim().toLowerCase(),
-        description: newDescription.trim() || null
+        description: newDescription.trim() || null,
+        is_head: newIsHead
       });
 
       toast.success(res.data.message || 'Designation created successfully.');
       setIsCreateOpen(false);
       setNewTitle('');
-      setNewSlug('');
       setNewDescription('');
-      setIsSlugUserEdited(false);
+      setNewIsHead(false);
       fetchDesignations();
     } catch (err) {
       console.error('Error creating designation:', err);
@@ -118,14 +90,14 @@ export default function DesignationsManagementPage() {
   const handleOpenEdit = (des) => {
     setEditingDesignation(des);
     setEditTitle(des.title || '');
-    setEditSlug(des.slug || '');
     setEditDescription(des.description || '');
+    setEditIsHead(Boolean(des.is_head));
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    if (!editTitle.trim() || !editSlug.trim()) {
-      toast.error('Title and Slug are required.');
+    if (!editTitle.trim()) {
+      toast.error('Title is required.');
       return;
     }
 
@@ -133,8 +105,8 @@ export default function DesignationsManagementPage() {
     try {
       const res = await axios.put(`/api/authorities/designations/${editingDesignation.id}`, {
         title: editTitle.trim(),
-        slug: editSlug.trim().toLowerCase(),
-        description: editDescription.trim() || null
+        description: editDescription.trim() || null,
+        is_head: editIsHead
       });
 
       toast.success(res.data.message || 'Designation updated successfully.');
@@ -279,7 +251,6 @@ export default function DesignationsManagementPage() {
                 <tr className="bg-slate-50/80 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                   <th className="py-3.5 px-6">#</th>
                   <th className="py-3.5 px-6">Title</th>
-                  <th className="py-3.5 px-6">Slug</th>
                   <th className="py-3.5 px-6">Description</th>
                   <th className="py-3.5 px-6 text-right">Actions</th>
                 </tr>
@@ -292,12 +263,12 @@ export default function DesignationsManagementPage() {
                       <div className="flex items-center gap-2">
                         <FiAward className="text-primary shrink-0 text-base" />
                         <span>{des.title}</span>
+                        {des.is_head && (
+                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full text-[10px] font-bold uppercase">
+                            Head Role
+                          </span>
+                        )}
                       </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <span className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 font-mono text-xs px-2.5 py-1 rounded-lg">
-                        <FiHash className="text-slate-400 text-[10px]" /> {des.slug}
-                      </span>
                     </td>
                     <td className="py-4 px-6 text-slate-500 max-w-xs truncate">
                       {des.description || <span className="text-slate-300 italic">No description provided</span>}
@@ -357,22 +328,8 @@ export default function DesignationsManagementPage() {
                   type="text"
                   required
                   value={newTitle}
-                  onChange={handleCreateTitleChange}
+                  onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                  <span>Slug <span className="text-red-500">*</span></span>
-                  <span className="text-[10px] text-slate-400 font-normal">Auto-generated identifier</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newSlug}
-                  onChange={handleCreateSlugChange}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 />
               </div>
 
@@ -384,6 +341,19 @@ export default function DesignationsManagementPage() {
                   onChange={(e) => setNewDescription(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                 />
+              </div>
+
+              <div className="flex items-center gap-2.5 pt-1">
+                <input
+                  type="checkbox"
+                  id="newIsHead"
+                  checked={newIsHead}
+                  onChange={(e) => setNewIsHead(e.target.checked)}
+                  className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
+                />
+                <label htmlFor="newIsHead" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Set as Head / Principal Designation
+                </label>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
@@ -448,19 +418,6 @@ export default function DesignationsManagementPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Slug <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={editSlug}
-                  onChange={(e) => setEditSlug(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Description</label>
                 <textarea
                   rows={3}
@@ -468,6 +425,19 @@ export default function DesignationsManagementPage() {
                   onChange={(e) => setEditDescription(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                 />
+              </div>
+
+              <div className="flex items-center gap-2.5 pt-1">
+                <input
+                  type="checkbox"
+                  id="editIsHead"
+                  checked={editIsHead}
+                  onChange={(e) => setEditIsHead(e.target.checked)}
+                  className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
+                />
+                <label htmlFor="editIsHead" className="text-xs font-bold text-slate-700 cursor-pointer">
+                  Set as Head / Principal Designation
+                </label>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">

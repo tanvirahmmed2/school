@@ -7,7 +7,7 @@ import { uploadImage } from '@/lib/cloudinary';
 export async function GET(request) {
   try {
     let queryText = `
-      SELECT a.*, d.title AS designation_title, d.slug AS designation
+      SELECT a.*, d.title AS designation_title, d.slug AS designation, COALESCE(d.is_head, FALSE) AS is_head
       FROM authorities a
       JOIN authority_designations d ON a.designation_id = d.id
     `;

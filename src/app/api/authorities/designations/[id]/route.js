@@ -47,23 +47,33 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { title, slug, description } = await request.json();
+    const { title, slug, description, is_head = false } = await request.json();
 
-    if (!title || !slug) {
+    if (!title || !title.trim()) {
       return NextResponse.json({
         success: false,
-        message: 'Title and slug are required.',
+        message: 'Title is required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
 
+    const slugify = (text) =>
+      String(text || '')
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+
+    const finalSlug = slug ? slugify(slug) : slugify(title);
+
     const result = await query(
       `UPDATE authority_designations 
-       SET title = $1, slug = $2, description = $3, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $4 
+       SET title = $1, slug = $2, description = $3, is_head = $4, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $5 
        RETURNING *`,
-      [title.trim(), slug.trim().toLowerCase(), description ? description.trim() : null, id]
+      [title.trim(), finalSlug, description ? description.trim() : null, Boolean(is_head), id]
     );
 
     if (result.rows.length === 0) {

@@ -30,7 +30,7 @@ export async function GET(request, { params }) {
     let authoritiesResult;
     if (designationInfo) {
       authoritiesResult = await query(`
-        SELECT a.*, d.title AS designation_title, d.slug AS designation
+        SELECT a.*, d.title AS designation_title, d.slug AS designation, COALESCE(d.is_head, FALSE) AS is_head
         FROM authorities a
         JOIN authority_designations d ON a.designation_id = d.id
         WHERE a.designation_id = $1
@@ -38,7 +38,7 @@ export async function GET(request, { params }) {
       `, [designationInfo.id]);
     } else {
       authoritiesResult = await query(`
-        SELECT a.*, d.title AS designation_title, d.slug AS designation
+        SELECT a.*, d.title AS designation_title, d.slug AS designation, COALESCE(d.is_head, FALSE) AS is_head
         FROM authorities a
         JOIN authority_designations d ON a.designation_id = d.id
         WHERE LOWER(d.slug) = LOWER($1) OR LOWER(d.title) = LOWER($1)

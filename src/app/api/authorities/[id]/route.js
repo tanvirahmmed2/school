@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
   try {
     const { id } = await params;
     const result = await query(`
-      SELECT a.*, d.title AS designation_title, d.slug AS designation
+      SELECT a.*, d.title AS designation_title, d.slug AS designation, COALESCE(d.is_head, FALSE) AS is_head
       FROM authorities a
       JOIN authority_designations d ON a.designation_id = d.id
       WHERE a.id = $1
@@ -24,12 +24,22 @@ export async function GET(request, { params }) {
       }, { status: 404 });
     }
 
-    const res_data_567 = { authority: result.rows[0] };
-      return NextResponse.json({
-        success: true,
-        message: res_data_567?.message || 'Successfully fecthed data',
-        paylod: res_data_567
-      }, { status: 200 });
+    const authority = result.rows[0];
+
+    // Fetch qualifications
+    const qualsResult = await query(
+      `SELECT * FROM authority_qualifications WHERE authority_id = $1 ORDER BY passing_year DESC`,
+      [id]
+    );
+    authority.qualifications = qualsResult.rows;
+
+    const res_data_567 = { authority };
+    return NextResponse.json({
+      success: true,
+      message: res_data_567?.message || 'Successfully fetched data',
+      paylod: res_data_567,
+      payload: res_data_567
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching authority member details:', error);
     const res_err_1174 = { error: 'Failed to retrieve authority member. Internal server error.' };
