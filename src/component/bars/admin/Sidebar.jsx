@@ -87,8 +87,9 @@ const Sidebar = () => {
   const clubLinks = [
     { label: 'Register Club', href: '/admin/clubs/new', icon: FiPlus },
     { label: 'Assign Roles', href: '/admin/clubs/assign', icon: FiUsers },
-    { label: 'Club Announcements', href: '/admin/club-news/list', icon: FiFileText },
-    { label: 'Publish Club News', href: '/admin/club-news/new', icon: FiPlus },
+    { label: 'Club Announcements', href: '/admin/clubs/announcements', icon: FiBell },
+    { label: 'Club News List', href: '/admin/clubs/news/list', icon: FiFileText },
+    { label: 'Publish Club News', href: '/admin/clubs/news/new', icon: FiPlus },
   ];
 
   const newsLinks = [

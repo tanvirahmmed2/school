@@ -103,7 +103,6 @@ const ClassDetailsPage = () => {
     <div className="w-full min-h-screen bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col gap-8">
 
-        {/* Navigation Action Area */}
         <div className="flex items-center justify-between">
           <button
             onClick={() => router.push('/classes')}
@@ -119,9 +118,7 @@ const ClassDetailsPage = () => {
 
         {loading ? (
           <div className="w-full flex flex-col gap-6 animate-pulse">
-            {/* Banner skeleton */}
             <div className="w-full h-48 bg-slate-200 rounded-3xl"></div>
-            {/* Details skeleton */}
             <div className="bg-white border border-slate-100 rounded-3xl p-8 flex flex-col gap-4">
               <div className="w-48 h-6 bg-slate-200 rounded"></div>
               <div className="w-full h-32 bg-slate-200 rounded"></div>
@@ -129,7 +126,7 @@ const ClassDetailsPage = () => {
           </div>
         ) : selectedClass ? (
           <div className="flex flex-col gap-10">
-            <div className="w-full h-50 bg-linear-to-br from-teal-700 to-blue-500 flex items-center justify-center text-white rounded-xl">
+            <div className="w-full h-50 bg-primary flex items-center justify-center text-white rounded-xl">
 
               
               <h1 className="text-3xl md:text-5xl font-semibold tracking-tight">
@@ -161,7 +158,6 @@ const ClassDetailsPage = () => {
               </div>
             </div>
 
-            {/* 3. Class Subjects section */}
             <div className="flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 className="text-base font-semibold text-slate-800 uppercase tracking-wider flex items-center gap-2">
@@ -199,7 +195,7 @@ const ClassDetailsPage = () => {
                   <FiInfo /> No registered academic faculty members found in the records.
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
                   {teachers.map((t) => (
                     <TeacherCard key={t.id} teacher={t} />
                   ))}
@@ -212,7 +208,7 @@ const ClassDetailsPage = () => {
             <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-xl mb-4">
               <FiBook />
             </div>
-            <h3 className="font-bold text-slate-850 text-base font-semibold">Class not found</h3>
+            <h3 className=" text-slate-850 text-base font-semibold">Class not found</h3>
             <p className="text-slate-500 text-xs mt-1.5">
               The requested class code "{id}" does not match any registered records in our academic database.
             </p>

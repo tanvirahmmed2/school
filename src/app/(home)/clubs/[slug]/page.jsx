@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { FiArrowLeft, FiCalendar, FiUsers } from 'react-icons/fi';
 import Image from 'next/image';
@@ -64,7 +65,7 @@ const ClubDetailsPage = () => {
   if (!selectedClub) {
     return (
       <div className="w-full min-h-screen bg-slate-50 py-16 px-4">
-        <div className="max-w-md mx-auto text-center bg-white border border-slate-200 rounded-2xl p-8 shadow-xs">
+        <div className="max-w-7xl mx-auto text-center bg-white border border-slate-200 rounded-2xl p-8 shadow-xs">
           <FiUsers className="text-3xl text-slate-400 mx-auto mb-3" />
           <h2 className="text-lg font-bold text-slate-800">Club Not Found</h2>
           <p className="text-xs text-slate-500 mt-1 mb-4">The requested club could not be found.</p>
@@ -115,7 +116,6 @@ const ClubDetailsPage = () => {
             )}
           </div>
 
-          {/* 4. Description */}
           <div className="border-t border-slate-100 pt-5 space-y-2">
             <h2 className="text-xs font-semibold uppercase text-slate-400 tracking-wider">About Club</h2>
             {selectedClub.description ? (
@@ -128,7 +128,6 @@ const ClubDetailsPage = () => {
             )}
           </div>
 
-          {/* Notice Information */}
           {selectedClub.notice_info && (
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1">
               <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Club Notice</h3>
@@ -140,7 +139,6 @@ const ClubDetailsPage = () => {
           )}
         </div>
 
-        {/* 5. Club News */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs space-y-4">
           <h2 className="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
             Club News & Updates

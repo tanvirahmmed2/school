@@ -5,7 +5,7 @@ import { FiBook, FiEdit, FiTrash2 } from 'react-icons/fi';
 
 const SubjectCard = ({ subject, onEdit, onDelete, className = '' }) => {
   return (
-    <div className={`bg-white border border-slate-100 hover:border-slate-200 rounded-3xl p-5 hover:shadow-md hover:scale-[1.01] transition-all duration-200 flex flex-col justify-between h-full ${className}`}>
+    <div className={`bg-white border border-slate-100 hover:border-slate-200 cursor-pointer rounded-3xl p-5 hover:shadow-md hover:scale-[1.01] transition-all duration-200 flex flex-col justify-between h-full ${className}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           
@@ -40,9 +40,6 @@ const SubjectCard = ({ subject, onEdit, onDelete, className = '' }) => {
         )}
       </div>
 
-      <div className="w-full h-px bg-slate-50 my-4"></div>
-
-    
     </div>
   );
 };

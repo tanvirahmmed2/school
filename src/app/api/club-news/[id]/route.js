@@ -93,16 +93,17 @@ export async function PUT(request, { params }) {
 
     const result = await query(
       `UPDATE club_news 
-       SET club_id = $1, title = $2, content = $3, image_url = $4, image_id = $5
+       SET club_id = $1, title = $2, content = $3, image = $4, image_url = $4, image_id = $5
        WHERE id = $6 
        RETURNING *`,
-      [club_id, title.trim(), content.trim(), imageUrl, imageId, parseInt(id, 10)]
+      [club_id, title.trim(), content.trim(), imageUrl || null, imageId || null, parseInt(id, 10)]
     );
 
     return NextResponse.json({
       success: true,
       message: 'Club news updated successfully.',
-      paylod: { clubNews: result.rows[0] }
+      paylod: { clubNews: result.rows[0] },
+      payload: { clubNews: result.rows[0] }
     });
   } catch (error) {
     console.error('Error updating club news:', error);

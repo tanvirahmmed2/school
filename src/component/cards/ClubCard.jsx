@@ -18,10 +18,9 @@ const ClubCard = ({ club, className = '' }) => {
 
   return (
     <div
-      className={`bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between hover:border-primary hover:shadow-md transition-all duration-200 group ${className}`}
+      className={`bg-white rounded-2xl  overflow-hidden flex flex-col justify-between hover:border-primary hover:shadow-md transition-all duration-200 group ${className}`}
     >
       <div>
-        {/* Cover / Image Area */}
         {image ? (
           <div className="w-full h-44 bg-slate-100 overflow-hidden relative border-b border-slate-100">
             <Image width={500} height={500}
@@ -38,11 +37,8 @@ const ClubCard = ({ club, className = '' }) => {
           </div>
         )}
 
-        {/* Details Area */}
         <div className="p-5 space-y-2">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-            Student Club
-          </span>
+          
 
           <h3 className="font-bold text-slate-900 text-lg group-hover:text-primary transition-colors">
             {name}

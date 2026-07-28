@@ -27,13 +27,10 @@ const ClubsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-10">
+      <div className="w-full space-y-10">
         
-        {/* Header */}
         <div className="text-center space-y-2">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
-            Student Life
-          </span>
+          
           <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight">
             Our Student Clubs
           </h1>
@@ -42,7 +39,6 @@ const ClubsPage = () => {
           </p>
         </div>
 
-        {/* Loading / Cards Grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
