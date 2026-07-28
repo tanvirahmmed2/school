@@ -302,6 +302,16 @@ export async function PUT(request) {
       [newCumulativePaid, newStatus, paymentDate, fee_id]
     );
 
+    // If Re-Admission fee is paid in full, activate and register the student account
+    if (newStatus === 'paid' && (fee.title || '').toLowerCase().includes('re-admission')) {
+      await client.query(
+        `UPDATE students 
+         SET is_active = TRUE, is_registered = TRUE, updated_at = CURRENT_TIMESTAMP 
+         WHERE id = $1`,
+        [fee.student_id]
+      );
+    }
+
     // Log payment transaction details
     const method = payment_method ? payment_method.trim() : 'Cash';
     await client.query(

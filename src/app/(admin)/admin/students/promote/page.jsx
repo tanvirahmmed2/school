@@ -24,6 +24,7 @@ const StudentPromotePage = () => {
   const [targetClassId, setTargetClassId] = useState('');
   const [selectedExamId, setSelectedExamId] = useState('');
   const [sortBy, setSortBy] = useState('gpa'); // 'gpa' or 'total'
+  const [admissionFee, setAdmissionFee] = useState('0');
 
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [students, setStudents] = useState([]);
@@ -217,7 +218,8 @@ const StudentPromotePage = () => {
           exam_id: parseInt(selectedExamId, 10),
           sort_by: sortBy,
           student_ids: modalPromotionData.studentIds,
-          include_failed: modalPromotionData.includeFailed
+          include_failed: modalPromotionData.includeFailed,
+          admission_fee: parseFloat(admissionFee) || 0
         })
       });
 
@@ -265,7 +267,7 @@ const StudentPromotePage = () => {
       {/* Control Panel Card */}
       <div className="bg-white border border-slate-100 p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-6">
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           
           {/* Source Class */}
           <div className="flex flex-col gap-1.5">
@@ -323,6 +325,22 @@ const StudentPromotePage = () => {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Re-Admission Fee Input */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              Re-Admission Fee (৳) *
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={admissionFee}
+              onChange={(e) => setAdmissionFee(e.target.value)}
+              placeholder="e.g. 500"
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
+            />
           </div>
 
         </div>

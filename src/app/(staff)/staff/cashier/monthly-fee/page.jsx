@@ -53,7 +53,7 @@ const CashierMonthlyFeePage = () => {
 
         const studentsRes = await fetch('/api/students');
         const studentsData = await studentsRes.json();
-        setStudents((studentsData.paylod?.students || []).filter((s) => s.is_registered));
+        setStudents(studentsData.paylod?.students || []);
       }
     } catch (err) {
       toast.error('Failed to load classes or student roster.');
@@ -215,9 +215,9 @@ const CashierMonthlyFeePage = () => {
     );
   }
 
-  // Filter out exam fees and admission fees, or general query search
+  // Filter out exam fees and standard admission fees, but keep re-admission fees, or general query search
   const filteredFees = fees.filter((fee) => {
-    const isExamOrAdmission = fee.title.toLowerCase().startsWith('exam fee') || fee.title.toLowerCase().startsWith('admission fee');
+    const isExamOrAdmission = (fee.title.toLowerCase().startsWith('exam fee') || fee.title.toLowerCase().startsWith('admission fee')) && !fee.title.toLowerCase().includes('re-admission');
     if (isExamOrAdmission) return false;
 
     if (searchQuery) {

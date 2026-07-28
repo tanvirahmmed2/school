@@ -29,8 +29,10 @@ export async function POST(request) {
       exam_id,
       sort_by = 'gpa',
       student_ids,
-      include_passed = false
+      include_passed = false,
+      admission_fee = 0
     } = body;
+    const numAdmissionFee = Math.max(0, parseFloat(admission_fee) || 0);
 
     if (!source_class_id || !target_class_id || !exam_id) {
       return NextResponse.json({
@@ -125,9 +127,17 @@ export async function POST(request) {
 
       await query(
         `UPDATE students 
-         SET class_id = $1, roll = $2, updated_at = CURRENT_TIMESTAMP 
+         SET class_id = $1, roll = $2, is_active = FALSE, is_registered = FALSE, updated_at = CURRENT_TIMESTAMP 
          WHERE id = $3`,
         [target_class_id, newRoll, st.id]
+      );
+
+      // Create Re-Admission Fee invoice for cashier collection
+      const feeTitle = `Re-Admission Fee: ${targetClassObj.name}`;
+      await query(
+        `INSERT INTO student_fees (student_id, title, amount, due_date, status, paid_amount)
+         VALUES ($1, $2, $3, CURRENT_DATE, 'unpaid', 0.00)`,
+        [st.id, feeTitle, numAdmissionFee]
       );
 
       updatedStudents.push({
