@@ -13,7 +13,7 @@ const ExamsPage = () => {
         const res = await fetch('/api/student/exams');
         if (res.ok) {
           const data = await res.json();
-          setSchedules(data.examSchedules || []);
+          setSchedules(data.paylod?.examSchedules || data.examSchedules || []);
         }
       } catch (error) {
         console.error('Error fetching exam schedules:', error);

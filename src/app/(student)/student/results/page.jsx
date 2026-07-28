@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiAward, FiBook, FiCheck, FiInfo } from 'react-icons/fi';
+import { FiAward, FiBook, FiCheck, FiInfo, FiPrinter } from 'react-icons/fi';
+import { printStudentFeeReceipt } from '@/lib/receipts/student_fee';
+import { printSingleMarkSheet } from '@/lib/receipts/singleMarkSheet';
 
 const ResultsPage = () => {
   const [data, setData] = useState({ results: [], marks: [] });
@@ -88,21 +90,32 @@ const ResultsPage = () => {
             {currentResult && (
               <>
                 {/* Result summary banner */}
-                <div className="bg-slate-900 text-white rounded-3xl p-6 flex items-center justify-between border border-slate-800">
+                <div className="bg-slate-900 text-white rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-slate-800">
                   <div>
                     <h2 className="text-base font-bold mb-1">{currentResult.exam_name} Summary</h2>
                     <p className="text-xs font-medium text-slate-400">Term: {currentResult.exam_term}</p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <div className="text-right">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">GPA</span>
                       <span className="text-xl font-semibold text-blue-400">{currentResult.gpa}</span>
                     </div>
-                    <div className="w-px h-8 bg-slate-800"></div>
+                    <div className="w-px h-8 bg-slate-800 hidden sm:block"></div>
                     <div className="text-right">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Grade</span>
                       <span className="text-xl font-semibold text-emerald-400">{currentResult.grade}</span>
                     </div>
+                    <button
+                      onClick={() => printSingleMarkSheet({
+                        student: data.student || {},
+                        exam: { name: currentResult.exam_name, term: currentResult.exam_term },
+                        result: currentResult,
+                        marks: filteredMarks
+                      })}
+                      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer border border-white/10 shrink-0"
+                    >
+                      <FiPrinter className="text-sm" /> Print Mark Sheet
+                    </button>
                   </div>
                 </div>
 

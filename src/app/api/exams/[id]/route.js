@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { syncExamStatuses } from '@/lib/exams';
 
 // GET details of a single exam including routines
 export async function GET(request, { params }) {
   try {
+    await syncExamStatuses();
     const { id } = await params;
 
     const examRes = await query(`
@@ -110,19 +112,22 @@ export async function PUT(request, { params }) {
 
     const updatedExam = updateExamRes.rows[0];
 
-    // If schedules array is provided, replace existing schedules
+    // If schedules array is provided, replace existing schedules bound to class_id
     if (schedules && Array.isArray(schedules)) {
+      const targetClassId = parseInt(class_id, 10);
       // Clear old schedules
       await query('DELETE FROM exam_schedules WHERE exam_id = $1', [id]);
 
       // Insert new schedules
       for (const item of schedules) {
-        const { class_id, subject_id, exam_date, start_time, end_time, room_number } = item;
-        if (class_id && subject_id && exam_date && start_time && end_time) {
+        const { subject_id, exam_date, start_time, end_time, room_number, full_marks } = item;
+        const schClassId = item.class_id ? parseInt(item.class_id, 10) : targetClassId;
+        const fm = full_marks ? parseFloat(full_marks) : 100.00;
+        if (schClassId && subject_id && exam_date && start_time && end_time) {
           await query(
-            `INSERT INTO exam_schedules (exam_id, class_id, subject_id, exam_date, start_time, end_time, room_number) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-            [id, class_id, subject_id, exam_date, start_time, end_time, room_number || null]
+            `INSERT INTO exam_schedules (exam_id, class_id, subject_id, exam_date, start_time, end_time, room_number, full_marks) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            [id, schClassId, subject_id, exam_date, start_time, end_time, room_number || null, fm]
           );
         }
       }
@@ -140,7 +145,7 @@ export async function PUT(request, { params }) {
   } catch (error) {
     console.error('Error updating exam:', error);
     if (error.code === '23505') {
-      const res_err_4901 = { error: 'An exam with this name already exists.' };
+      const res_err_4901 = { error: 'An exam with this name already exists for the selected class.' };
       return NextResponse.json({
         success: false,
         message: res_err_4901?.error || res_err_4901?.message || 'An error occurred',

@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { syncExamStatuses } from '@/lib/exams';
 
 // GET all exams
 export async function GET(request) {
   try {
+    await syncExamStatuses();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status'); // 'current', 'upcoming', 'previous'
 
@@ -96,40 +98,53 @@ export async function POST(request) {
       console.error('Failed to auto-create notice for exam:', noticeErr);
     }
 
-    // Generate unpaid student fees for active students in class
-    if (exam_fee && parseFloat(exam_fee) > 0) {
-      try {
-        const studentsRes = await query(
-          'SELECT id FROM students WHERE class_id = $1 AND is_active = TRUE',
-          [parseInt(class_id, 10)]
-        );
+    // Generate student fee records for active students in class
+    try {
+      const feeAmount = exam_fee ? parseFloat(exam_fee) : 0.00;
+      const initialStatus = feeAmount > 0 ? 'Unpaid' : 'Paid';
 
-        for (const student of studentsRes.rows) {
-          await query(
-            `INSERT INTO student_fees (student_id, title, amount, due_date, status) 
-             VALUES ($1, $2, $3, $4, 'Unpaid')`,
-            [
-              student.id,
-              `Exam Fee: ${name.trim()}`,
-              parseFloat(exam_fee),
-              start_date
-            ]
-          );
-        }
-      } catch (feeErr) {
-        console.error('Failed to auto-generate student fees for exam:', feeErr);
+      const studentsRes = await query(
+        'SELECT id FROM students WHERE class_id = $1 AND is_active = TRUE',
+        [parseInt(class_id, 10)]
+      );
+
+      for (const student of studentsRes.rows) {
+        await query(
+          `INSERT INTO student_fees (student_id, title, amount, paid_amount, due_date, status) 
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [
+            student.id,
+            `Exam Fee: ${name.trim()}`,
+            feeAmount,
+            initialStatus === 'Paid' ? feeAmount : 0.00,
+            start_date,
+            initialStatus
+          ]
+        );
       }
+    } catch (feeErr) {
+      console.error('Failed to auto-generate student fees for exam:', feeErr);
     }
 
-    // If schedule routines were provided, insert them
+    // Ensure full_marks column exists
+    try {
+      await query('ALTER TABLE exam_schedules ADD COLUMN IF NOT EXISTS full_marks DECIMAL(5,2) DEFAULT 100.00');
+    } catch (colErr) {
+      console.error('Column full_marks check error:', colErr);
+    }
+
+    // If schedule routines were provided, insert them bound to the target class
     if (schedules && Array.isArray(schedules) && schedules.length > 0) {
+      const targetClassId = parseInt(class_id, 10);
       for (const item of schedules) {
-        const { class_id, subject_id, exam_date, start_time, end_time, room_number } = item;
-        if (class_id && subject_id && exam_date && start_time && end_time) {
+        const { subject_id, exam_date, start_time, end_time, room_number, full_marks } = item;
+        const schClassId = item.class_id ? parseInt(item.class_id, 10) : targetClassId;
+        const fm = full_marks ? parseFloat(full_marks) : 100.00;
+        if (schClassId && subject_id && exam_date && start_time && end_time) {
           await query(
-            `INSERT INTO exam_schedules (exam_id, class_id, subject_id, exam_date, start_time, end_time, room_number) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-            [exam.id, class_id, subject_id, exam_date, start_time, end_time, room_number || null]
+            `INSERT INTO exam_schedules (exam_id, class_id, subject_id, exam_date, start_time, end_time, room_number, full_marks) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            [exam.id, schClassId, subject_id, exam_date, start_time, end_time, room_number || null, fm]
           );
         }
       }
@@ -144,7 +159,7 @@ export async function POST(request) {
   } catch (error) {
     console.error('Error creating exam:', error);
     if (error.code === '23505') {
-      const res_err_3762 = { error: 'An exam with this name already exists.' };
+      const res_err_3762 = { error: 'An exam with this name already exists for the selected class.' };
       return NextResponse.json({
         success: false,
         message: res_err_3762?.error || res_err_3762?.message || 'An error occurred',

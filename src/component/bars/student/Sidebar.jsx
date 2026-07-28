@@ -36,6 +36,7 @@ const Sidebar = () => {
     { label: 'My Attendance', href: '/student/attendance', icon: FiCalendar },
     { label: 'Subjects & Syllabus', href: '/student/subjects', icon: FiBook },
     { label: 'Exam Routine', href: '/student/exams', icon: FiCalendar },
+    { label: 'Admit Cards', href: '/student/cards', icon: FiFileText },
     { label: 'My Marks & Results', href: '/student/results', icon: FiAward },
     { label: 'Fees & Fines', href: '/student/fees', icon: FiDollarSign },
     { label: 'Campus Events', href: '/student/events', icon: FiCalendar },

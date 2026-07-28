@@ -76,15 +76,21 @@ export async function POST(request) {
     const academicYear = new Date().getFullYear();
     let registeredCount = 0;
 
-    // Get current max roll in this class
-    const maxRollRes = await client.query(
-      'SELECT MAX(roll) as max_roll FROM students WHERE class_id = $1',
+    // Get current student count in this class for sequential roll generation
+    const countRes = await client.query(
+      'SELECT COUNT(*) as count FROM students WHERE class_id = $1',
       [circular.class_id]
     );
-    let nextRoll = parseInt(maxRollRes.rows[0]?.max_roll || 0, 10) + 1;
+    let currentStudentSeq = parseInt(countRes.rows[0]?.count || 0, 10);
 
     // 3. Register each approved candidate as an official student
     for (const cand of candidates) {
+      currentStudentSeq++;
+      const match = String(cand.class_numeric_name || cand.class_name || '').match(/\d+/);
+      const classNum = match ? match[0] : '1';
+      const seqStr = String(currentStudentSeq).padStart(2, '0');
+      const candidateRoll = parseInt(`${classNum}0${seqStr}`, 10);
+
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
       const codeExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
       const parentsInfo = `Parent Name: ${cand.guardian_name}, Contact: ${cand.guardian_phone}`;
@@ -168,7 +174,7 @@ export async function POST(request) {
           cand.image_id,
           cand.signature,
           cand.signature_id,
-          nextRoll,
+          candidateRoll,
           studentId
         ]);
       } else {
@@ -197,7 +203,7 @@ export async function POST(request) {
           cand.image_id,
           cand.signature,
           cand.signature_id,
-          nextRoll
+          candidateRoll
         ]);
 
         studentId = studentRes.rows[0].id;

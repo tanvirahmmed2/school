@@ -7,7 +7,7 @@ import {
   FiHome, FiShield, FiLayers, FiGrid, FiBook,
   FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText,
   FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu, FiBell,
-  FiSettings, FiShoppingBag
+  FiSettings, FiShoppingBag, FiTrendingUp, FiTrendingDown
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -71,6 +71,8 @@ const Sidebar = () => {
 
   const studentLinks = [
     { label: 'Students List', href: '/admin/students/lists', icon: FiUsers },
+    { label: 'Promote Students', href: '/admin/students/promote', icon: FiTrendingUp },
+    { label: 'Demote Students', href: '/admin/students/demote', icon: FiTrendingDown },
     { label: 'Intake Applications', href: '/admin/students/admissions', icon: FiUserPlus },
     { label: 'Admission Circulars', href: '/admin/students/admissions/circulars', icon: FiLayers },
     { label: 'Student Leaves', href: '/admin/students/leaves', icon: FiCalendar },

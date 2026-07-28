@@ -188,7 +188,6 @@ const ApplyFormContent = () => {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      {/* Detailed Circular Information Card */}
       {selectedCircular ? (
         <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-slate-100 pb-5">
@@ -244,7 +243,6 @@ const ApplyFormContent = () => {
         </div>
       ) : null}
 
-      {/* Application Form (Initially hidden when selectedCircular exists, toggled via button) */}
       {(!selectedCircular || showForm) && (
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)] animate-fade-down">
           <div className="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
@@ -287,11 +285,9 @@ const ApplyFormContent = () => {
 const ApplyPage = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full">
         <div className="text-center mb-8">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            {SCHOOL_NAME.split(" ").map((w)=>w[0]).join('')} Enrollment Portal
-          </span>
+          
           <h1 className="text-3xl font-semibold text-slate-900 mt-2 tracking-tight">
             Intake Application Registry
           </h1>

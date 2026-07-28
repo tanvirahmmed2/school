@@ -200,7 +200,7 @@ const PublicPaymentsPage = () => {
                               <td className="px-5 py-3.5">{getStatusBadge(fee.status)}</td>
                               <td className="px-5 py-3.5 text-right">
                                 <button
-                                  onClick={() => printStudentFeeReceipt(fee, data.student)}
+                                  onClick={() => printStudentFeeReceipt(fee, data?.student || fee)}
                                   className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer"
                                 >
                                   <FiPrinter className="text-xs" /> Print Receipt

@@ -52,9 +52,18 @@ export async function GET() {
   }
 }
 
+async function ensureFullMarksColumn() {
+  try {
+    await query('ALTER TABLE exam_schedules ADD COLUMN IF NOT EXISTS full_marks DECIMAL(5,2) DEFAULT 100.00');
+  } catch (err) {
+    console.error('Error ensuring full_marks column in exam_schedules:', err);
+  }
+}
+
 // POST toggle publication status & compile marks
 export async function POST(request) {
   try {
+    await ensureFullMarksColumn();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err_2297 = { error: 'Unauthorized. Admins only.' };
@@ -87,25 +96,51 @@ export async function POST(request) {
 
       const studentIds = studentsRes.rows.map(r => r.student_id);
 
+      // Fetch dynamic grading scale from mark_grades
+      const gradesRes = await query('SELECT * FROM mark_grades ORDER BY min_mark DESC');
+      const markGrades = gradesRes.rows;
+
+      const getSubjectPointGrade = (percentage) => {
+        if (markGrades.length > 0) {
+          const matched = markGrades.find(g => percentage >= parseFloat(g.min_mark) && percentage <= parseFloat(g.max_mark));
+          if (matched) return { point: parseFloat(matched.point), letter: matched.letter_grade };
+        }
+        if (percentage >= 80) return { point: 5.00, letter: 'A+' };
+        if (percentage >= 70) return { point: 4.00, letter: 'A' };
+        if (percentage >= 60) return { point: 3.50, letter: 'A-' };
+        if (percentage >= 50) return { point: 3.00, letter: 'B' };
+        if (percentage >= 40) return { point: 2.00, letter: 'C' };
+        if (percentage >= 33) return { point: 1.00, letter: 'D' };
+        return { point: 0.00, letter: 'F' };
+      };
+
       for (const studentId of studentIds) {
-        // Fetch all subject marks for this student and exam
-        const marksRes = await query(
-          'SELECT marks_obtained, total_marks FROM marks WHERE student_id = $1 AND exam_id = $2',
-          [studentId, exam_id]
-        );
+        // Fetch all subject marks for this student and exam joined with exam_schedules.full_marks
+        const marksRes = await query(`
+          SELECT m.marks_obtained, m.total_marks, COALESCE(es.full_marks, m.total_marks, 100.00) AS full_marks
+          FROM marks m
+          LEFT JOIN exam_schedules es ON es.exam_id = m.exam_id AND es.subject_id = m.subject_id
+          WHERE m.student_id = $1 AND m.exam_id = $2
+        `, [studentId, exam_id]);
 
         let totalObtained = 0.00;
         let totalMax = 0.00;
+        let sumGradePoints = 0.00;
+        let subjectCount = 0;
         let hasFailedSubject = false;
 
         for (const mark of marksRes.rows) {
-          const obtained = parseFloat(mark.marks_obtained);
-          const max = parseFloat(mark.total_marks);
-          totalObtained += obtained;
-          totalMax += max;
+          const obtained = parseFloat(mark.marks_obtained || 0);
+          const fullM = parseFloat(mark.full_marks || mark.total_marks || 100);
+          const pct = fullM > 0 ? (obtained / fullM) * 100 : 0;
+          const { point, letter } = getSubjectPointGrade(pct);
 
-          // Check subject-level fail state (below 40% in any subject)
-          if (max > 0 && (obtained / max) * 100 < 40.0) {
+          totalObtained += obtained;
+          totalMax += fullM;
+          sumGradePoints += point;
+          subjectCount += 1;
+
+          if (point === 0.00 || letter === 'F') {
             hasFailedSubject = true;
           }
         }
@@ -114,20 +149,22 @@ export async function POST(request) {
         let overallGrade = 'F';
         let status = 'Fail';
 
-        if (totalMax > 0) {
-          const overallPercentage = (totalObtained / totalMax) * 100;
-          const { gpa, grade } = calculateGPAAndGrade(overallPercentage);
-          
-          overallGPA = gpa;
-          overallGrade = grade;
-
-          // If a student failed any single subject, their overall GPA becomes 0.00 and overall Grade 'F'
+        if (subjectCount > 0) {
           if (hasFailedSubject) {
             overallGPA = 0.00;
             overallGrade = 'F';
-          }
+            status = 'Fail';
+          } else {
+            overallGPA = parseFloat((sumGradePoints / subjectCount).toFixed(2));
+            if (overallGPA >= 5.00) overallGrade = 'A+';
+            else if (overallGPA >= 4.00) overallGrade = 'A';
+            else if (overallGPA >= 3.50) overallGrade = 'A-';
+            else if (overallGPA >= 3.00) overallGrade = 'B';
+            else if (overallGPA >= 2.00) overallGrade = 'C';
+            else overallGrade = 'F';
 
-          status = overallGPA >= 2.00 ? 'Pass' : 'Fail';
+            status = overallGPA >= 2.00 ? 'Pass' : 'Fail';
+          }
         }
 
         // Upsert summary inside results table
@@ -156,6 +193,21 @@ export async function POST(request) {
                      updated_at = CURRENT_TIMESTAMP`,
       [exam_id, is_published, publishedAt]
     );
+
+    // Auto-create notice when published
+    if (is_published) {
+      try {
+        const examInfo = await query('SELECT name FROM exams WHERE id = $1', [exam_id]);
+        const examName = examInfo.rows[0]?.name || `Exam #${exam_id}`;
+        await query(
+          `INSERT INTO notices (title, link, is_pinned) 
+           VALUES ($1, '/student/results', FALSE)`,
+          [`Exam Results Published: ${examName}`]
+        );
+      } catch (noticeErr) {
+        console.error('Failed to auto-create notice for result publication:', noticeErr);
+      }
+    }
 
     const res_data_5000 = {
       message: is_published 

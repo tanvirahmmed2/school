@@ -36,12 +36,9 @@ const AdmissionPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            Admissions Desk
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Admission & Enrollment circulars
           </h1>
@@ -50,7 +47,6 @@ const AdmissionPage = () => {
           </p>
         </div>
 
-        {/* Dynamic circular drives listings */}
         <div className="mb-12">
           <h2 className="text-base font-bold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-primary"></span> Active Circular Intakes

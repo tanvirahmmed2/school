@@ -31,10 +31,13 @@ export async function GET(request) {
 
     // Fetch student fees invoices (Last 3 fees)
     const feesRes = await query(`
-      SELECT id, title, amount, due_date, status, paid_amount, payment_date
-      FROM student_fees
-      WHERE student_id = $1
-      ORDER BY due_date DESC, id DESC
+      SELECT sf.id, sf.title, sf.amount, sf.due_date, sf.status, sf.paid_amount, sf.payment_date,
+             s.name AS student_name, s.registration_number, c.name AS class_name
+      FROM student_fees sf
+      JOIN students s ON sf.student_id = s.id
+      JOIN classes c ON s.class_id = c.id
+      WHERE sf.student_id = $1
+      ORDER BY sf.due_date DESC, sf.id DESC
       LIMIT 3
     `, [student.id]);
 

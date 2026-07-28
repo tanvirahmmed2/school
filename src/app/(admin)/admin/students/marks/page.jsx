@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiSave, FiRefreshCw, FiCalendar, FiFilter, FiBookOpen, FiAward } from 'react-icons/fi';
+import { FiSave, FiRefreshCw, FiCalendar, FiFilter, FiBookOpen, FiAward, FiEye } from 'react-icons/fi';
 
 const StudentMarksPage = () => {
   const [exams, setExams] = useState([]);
@@ -34,10 +35,10 @@ const StudentMarksPage = () => {
         axios.get('/api/sections'),
         axios.get('/api/subjects')
       ]);
-      setExams(examsRes.data.paylod.exams || []);
-      setClasses(classesRes.data.paylod.classes || []);
-      setSections(sectionsRes.data.paylod.sections || []);
-      setSubjects(subjectsRes.data.paylod.subjects || []);
+      setExams(examsRes.data.paylod?.exams || examsRes.data.exams || []);
+      setClasses(classesRes.data.paylod?.classes || classesRes.data.classes || []);
+      setSections(sectionsRes.data.paylod?.sections || sectionsRes.data.sections || []);
+      setSubjects(subjectsRes.data.paylod?.subjects || subjectsRes.data.subjects || []);
     } catch (error) {
       toast.error('Failed to load filter metadata.');
     }
@@ -59,7 +60,7 @@ const StudentMarksPage = () => {
         `/api/students/marks?exam_id=${selectedExam}&class_id=${selectedClass}&subject_id=${selectedSubject}&section_id=${selectedSection || 'all'}`
       );
       
-      const initialMarks = (response.data.paylod.students || []).map(student => ({
+      const initialMarks = (response.data.paylod?.students || response.data.students || []).map(student => ({
         student_id: student.student_id,
         name: student.name,
         registration_number: student.registration_number,
@@ -193,7 +194,15 @@ const StudentMarksPage = () => {
           </div>
         </div>
 
-        <div className="flex justify-end mt-4">
+        <div className="flex flex-wrap items-center justify-end gap-3 mt-4">
+          {selectedExam && selectedClass && (
+            <Link
+              href={`/admin/students/marks/preview?exam_id=${selectedExam}&class_id=${selectedClass}&section_id=${selectedSection || 'all'}`}
+              className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+            >
+              <FiEye className="text-sm" /> Preview Master Mark Sheet
+            </Link>
+          )}
           <button
             onClick={handleLoadMarksSheet}
             disabled={loadingMarks}

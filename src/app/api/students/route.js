@@ -99,8 +99,8 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Verify class exists
-    const classCheck = await query('SELECT id FROM classes WHERE id = $1', [class_id]);
+    // Verify class exists and get class details for roll generation
+    const classCheck = await query('SELECT id, name, numeric_name FROM classes WHERE id = $1', [class_id]);
     if (classCheck.rows.length === 0) {
       const res_err_3236 = { error: 'Target academic class not found.' };
       return NextResponse.json({
@@ -110,33 +110,34 @@ export async function POST(request) {
         paylod: null
       }, { status: 404 });
     }
+    const classObj = classCheck.rows[0];
 
-    // Verify section exists if provided
-    if (section_id) {
-      const secCheck = await query('SELECT id FROM sections WHERE id = $1 AND class_id = $2', [section_id, class_id]);
-      if (secCheck.rows.length === 0) {
-        const res_err_3795 = { error: 'Target section not found under this class.' };
-      return NextResponse.json({
-        success: false,
-        message: res_err_3795?.error || res_err_3795?.message || 'An error occurred',
-        error: res_err_3795?.error || 'Internal Server Error',
-        paylod: null
-      }, { status: 404 });
-      }
-    }
+    // Helper for class+0+studentnumber format (e.g. 6001, 6002, 6013)
+    const generateClassRoll = (classNameOrNumeric, seqNumber) => {
+      const match = String(classNameOrNumeric || '').match(/\d+/);
+      const classNum = match ? match[0] : '1';
+      const seqStr = String(seqNumber).padStart(2, '0');
+      return parseInt(`${classNum}0${seqStr}`, 10);
+    };
 
-    // Check duplicate roll number in class if roll is provided
+    let assignedRoll = null;
+
     if (roll !== undefined && roll !== '' && roll !== null) {
-      const parsedRoll = parseInt(roll, 10);
-      const rollCheck = await query('SELECT id FROM students WHERE class_id = $1 AND roll = $2', [class_id, parsedRoll]);
+      assignedRoll = parseInt(roll, 10);
+      const rollCheck = await query('SELECT id FROM students WHERE class_id = $1 AND roll = $2', [class_id, assignedRoll]);
       if (rollCheck.rows.length > 0) {
         return NextResponse.json({
           success: false,
-          message: `Roll number ${parsedRoll} is already assigned to another student in this class.`,
+          message: `Roll number ${assignedRoll} is already assigned to another student in this class.`,
           error: 'Bad Request',
           paylod: null
         }, { status: 400 });
       }
+    } else {
+      // Auto-calculate sequential roll in class+0+seq format
+      const countRes = await query('SELECT COUNT(*) as count FROM students WHERE class_id = $1', [class_id]);
+      const nextSeq = parseInt(countRes.rows[0]?.count || 0, 10) + 1;
+      assignedRoll = generateClassRoll(classObj.numeric_name || classObj.name, nextSeq);
     }
 
     // Check duplicate registration number
@@ -160,7 +161,7 @@ export async function POST(request) {
         class_id,
         section_id ? parseInt(section_id, 10) : null,
         gender || null,
-        roll !== undefined && roll !== '' && roll !== null ? parseInt(roll, 10) : null
+        assignedRoll
       ]
     );
 

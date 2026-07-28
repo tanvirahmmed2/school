@@ -356,7 +356,7 @@ CREATE TRIGGER update_teacher_attendances_updated_at
 
 CREATE TABLE IF NOT EXISTS exams (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
     term VARCHAR(100),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -364,7 +364,8 @@ CREATE TABLE IF NOT EXISTS exams (
     class_id BIGINT REFERENCES classes(id) ON DELETE CASCADE,
     exam_fee NUMERIC(10, 2) DEFAULT 0.00,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_exam_per_class UNIQUE (name, class_id)
 );
 
 DROP TRIGGER IF EXISTS update_exams_updated_at ON exams;
@@ -385,6 +386,7 @@ CREATE TABLE IF NOT EXISTS exam_schedules (
     start_time VARCHAR(50) NOT NULL,
     end_time VARCHAR(50) NOT NULL,
     room_number VARCHAR(50),
+    full_marks DECIMAL(5,2) DEFAULT 100.00,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(exam_id, class_id, subject_id)

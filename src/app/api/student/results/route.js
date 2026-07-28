@@ -30,6 +30,18 @@ export async function GET() {
 
     const studentId = decoded.id;
 
+    // Fetch student profile details
+    const studentRes = await query(`
+      SELECT s.id, s.name, s.registration_number, s.roll, s.class_id, s.section_id,
+             c.name AS class_name, sec.name AS section_name
+      FROM students s
+      JOIN classes c ON c.id = s.class_id
+      LEFT JOIN sections sec ON sec.id = s.section_id
+      WHERE s.id = $1
+    `, [studentId]);
+
+    const student = studentRes.rows[0] || null;
+
     // Fetch published results for this student
     const resultsRes = await query(`
       SELECT r.id, r.gpa, r.grade, r.total_marks, r.status,
@@ -41,6 +53,34 @@ export async function GET() {
       WHERE r.student_id = $1 AND rp.is_published = TRUE
       ORDER BY rp.published_at DESC
     `, [studentId]);
+
+    // Compute Merit Rank for each published exam
+    const resultsWithRank = [];
+    for (const resItem of resultsRes.rows) {
+      const allExamResultsRes = await query(`
+        SELECT r.student_id, r.gpa, r.total_marks, r.status, r.grade
+        FROM results r
+        WHERE r.exam_id = $1
+        ORDER BY r.gpa DESC, r.total_marks DESC
+      `, [resItem.exam_id]);
+
+      let rankCounter = 1;
+      let meritRank = null;
+
+      allExamResultsRes.rows.forEach(r => {
+        if (r.status === 'Pass' && r.grade !== 'F') {
+          if (r.student_id === studentId) {
+            meritRank = rankCounter;
+          }
+          rankCounter++;
+        }
+      });
+
+      resultsWithRank.push({
+        ...resItem,
+        merit_rank: meritRank
+      });
+    }
 
     // Fetch subject-wise marks for this student's published exams
     const marksRes = await query(`
@@ -54,7 +94,8 @@ export async function GET() {
     `, [studentId]);
 
     const res_data_1602 = {
-      results: resultsRes.rows,
+      student,
+      results: resultsWithRank,
       marks: marksRes.rows
     };
       return NextResponse.json({

@@ -34,12 +34,25 @@ export async function GET() {
 
     const studentId = decoded.id;
 
-    // Fetch student fees
+    // Fetch student profile
+    const studentRes = await query(`
+      SELECT s.id, s.name, s.registration_number, c.name AS class_name
+      FROM students s
+      JOIN classes c ON c.id = s.class_id
+      WHERE s.id = $1
+    `, [studentId]);
+
+    const student = studentRes.rows[0] || null;
+
+    // Fetch student fees joined with student & class info
     const feesRes = await query(`
-      SELECT id, title, amount, due_date, status, paid_amount, payment_date
-      FROM student_fees
-      WHERE student_id = $1
-      ORDER BY due_date DESC
+      SELECT sf.id, sf.student_id, sf.title, sf.amount, sf.due_date, sf.status, sf.paid_amount, sf.payment_date,
+             s.name AS student_name, s.registration_number, c.name AS class_name
+      FROM student_fees sf
+      JOIN students s ON sf.student_id = s.id
+      JOIN classes c ON s.class_id = c.id
+      WHERE sf.student_id = $1
+      ORDER BY sf.due_date DESC
     `, [studentId]);
 
     // Fetch student fines
@@ -51,6 +64,7 @@ export async function GET() {
     `, [studentId]);
 
     const res_data_1104 = {
+      student,
       fees: feesRes.rows,
       fines: finesRes.rows
     };

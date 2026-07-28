@@ -48,10 +48,10 @@ export function generateStudentFeeReceiptHTML(fee, studentInfo = {}) {
   }
 
   const receiptNo = `REC-FEE-2026${String(fee.id).padStart(4, '0')}`;
-  const studentName = studentInfo.name || fee.student_name || 'N/A';
-  const regNo = studentInfo.registration_number || fee.registration_number || 'N/A';
+  const studentName = studentInfo?.student_name || studentInfo?.name || fee?.student_name || fee?.name || 'N/A';
+  const regNo = studentInfo?.registration_number || studentInfo?.reg_no || fee?.registration_number || fee?.reg_no || 'N/A';
   
-  const rawClass = studentInfo.class_name || fee.class_name || 'N/A';
+  const rawClass = studentInfo?.class_name || studentInfo?.class || fee?.class_name || fee?.class || 'N/A';
   const className = rawClass.toLowerCase().startsWith('class') ? rawClass : `Class ${rawClass}`;
   
   const rawPayStatus = (fee.status || 'unpaid').toUpperCase();
@@ -359,7 +359,8 @@ export function generateStudentFeeReceiptHTML(fee, studentInfo = {}) {
 
 export function printStudentFeeReceipt(fee, studentInfo = {}) {
   if (typeof window === 'undefined') return;
-  const html = generateStudentFeeReceiptHTML(fee, studentInfo);
+  const mergedInfo = { ...fee, ...(studentInfo || {}) };
+  const html = generateStudentFeeReceiptHTML(fee, mergedInfo);
   const printWindow = window.open('', '_blank', 'width=850,height=950');
   if (printWindow) {
     printWindow.document.write(html);
