@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { FiMenu, FiLogOut, FiUser } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import { Context } from '@/component/helper/Context';
+import Image from 'next/image';
+import { LOGO_URL } from '@/lib/secret';
 
 const Navbar = () => {
   const router = useRouter();
@@ -60,8 +62,12 @@ const Navbar = () => {
 
         {/* Logo/Brand */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-secondary font-bold text-lg">
-            S
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-secondary font-bold text-lg overflow-hidden shrink-0">
+            {LOGO_URL ? (
+              <Image src={LOGO_URL} alt="School Logo" width={32} height={32} className="w-full h-full object-cover" />
+            ) : (
+              'S'
+            )}
           </div>
           <span className="font-bold text-slate-800 text-sm md:text-base hidden sm:inline-block">
             Student Portal
