@@ -10,4 +10,5 @@ export { default as ClubCard } from './ClubCard';
 export { default as ClubNewsCard } from './ClubNewsCard';
 export { default as RecognitionCard } from './RecognitionCard';
 export { default as AdmissionCircularCard } from './AdmissionCircularCard';
+export { default as HostelCard, HostelsCard } from './HostelCard';
 

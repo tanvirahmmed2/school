@@ -3,357 +3,317 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiGrid, FiPlus, FiEdit, FiTrash2, FiHome, FiCheckCircle } from 'react-icons/fi';
+import { FiHome, FiGrid, FiPlus, FiSearch, FiEdit, FiTrash2 } from 'react-icons/fi';
 
-const AdminHostelRoomsPage = () => {
-  const [rooms, setRooms] = useState([]);
+export default function AdminHostelRoomsPage() {
   const [hostels, setHostels] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [seats, setSeats] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filterHostelId, setFilterHostelId] = useState('');
 
-  // Form states
-  const [hostelId, setHostelId] = useState('');
+  // Room Form state
+  const [roomHostelId, setRoomHostelId] = useState('');
+  const [roomFloor, setRoomFloor] = useState('1');
   const [roomNumber, setRoomNumber] = useState('');
-  const [roomType, setRoomType] = useState('Non-AC Double');
-  const [capacity, setCapacity] = useState('2');
-  const [availabilityStatus, setAvailabilityStatus] = useState('Available');
-  const [editId, setEditId] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [roomType, setRoomType] = useState('Standard');
+  const [roomCapacity, setRoomCapacity] = useState('4');
+  const [oneTimeFee, setOneTimeFee] = useState('500');
+  const [monthlyFee, setMonthlyFee] = useState('1200');
+  const [submittingRoom, setSubmittingRoom] = useState(false);
+
+  // Filter
+  const [selectedHostelFilter, setSelectedHostelFilter] = useState('all');
+  const [seatSearch, setSeatSearch] = useState('');
 
   useEffect(() => {
-    fetchHostels();
-    fetchRooms();
-  }, [filterHostelId]);
+    fetchData();
+  }, []);
 
-  const fetchHostels = async () => {
-    try {
-      const response = await axios.get('/api/hostels');
-      setHostels(response.data.paylod.hostels || []);
-    } catch (error) {
-      console.error('Failed to load hostels:', error);
-    }
-  };
-
-  const fetchRooms = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const url = filterHostelId 
-        ? `/api/hostel-rooms?hostel_id=${filterHostelId}`
-        : '/api/hostel-rooms';
-      const response = await axios.get(url);
-      setRooms(response.data.paylod.rooms || []);
+      const [resH, resR, resS] = await Promise.all([
+        axios.get('/api/hostels'),
+        axios.get('/api/hostel-rooms'),
+        axios.get('/api/hostel-seats')
+      ]);
+
+      setHostels(resH.data.payload?.hostels || resH.data.paylod?.hostels || []);
+      setRooms(resR.data.payload?.rooms || resR.data.paylod?.rooms || []);
+      setSeats(resS.data.payload?.seats || resS.data.paylod?.seats || []);
     } catch (error) {
-      toast.error('Failed to load rooms registry.');
+      toast.error('Failed to load rooms and seats data.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleRoomSubmit = async (e) => {
     e.preventDefault();
-    if (!hostelId || !roomNumber || !roomType || !capacity) {
-      toast.error('All fields except status are required.');
+    if (!roomHostelId || !roomNumber || !roomCapacity) {
+      toast.error('Hostel, Room Number, and Capacity are required.');
       return;
     }
 
-    setSubmitting(true);
+    setSubmittingRoom(true);
     try {
       const payload = {
-        hostel_id: hostelId,
+        hostel_id: roomHostelId,
+        floor: parseInt(roomFloor, 10) || 1,
         room_number: roomNumber,
         room_type: roomType,
-        capacity: parseInt(capacity, 10),
-        availability_status: availabilityStatus
+        capacity: parseInt(roomCapacity, 10),
+        one_time_fee: parseFloat(oneTimeFee) || 0,
+        monthly_fee: parseFloat(monthlyFee) || 0
       };
 
-      if (editId) {
-        const response = await axios.put(`/api/hostel-rooms/${editId}`, payload);
-        toast.success(response.data.message || 'Room details updated!');
-        setEditId(null);
-      } else {
-        const response = await axios.post('/api/hostel-rooms', payload);
-        toast.success(response.data.message || 'Room created!');
-      }
-
-      clearForm();
-      fetchRooms();
+      const response = await axios.post('/api/hostel-rooms', payload);
+      toast.success(response.data.message || 'Room and seats created successfully!');
+      
+      setRoomNumber('');
+      fetchData();
     } catch (err) {
-      toast.error(err.response?.data?.error || err.message);
+      toast.error(err.response?.data?.message || err.response?.data?.error || err.message);
     } finally {
-      setSubmitting(false);
+      setSubmittingRoom(false);
     }
   };
 
-  const clearForm = () => {
-    setHostelId('');
-    setRoomNumber('');
-    setRoomType('Non-AC Double');
-    setCapacity('2');
-    setAvailabilityStatus('Available');
-    setEditId(null);
-  };
-
-  const handleEditClick = (room) => {
-    setEditId(room.id);
-    setHostelId(room.hostel_id);
-    setRoomNumber(room.room_number);
-    setRoomType(room.room_type);
-    setCapacity(room.capacity.toString());
-    setAvailabilityStatus(room.availability_status);
-  };
-
-  const handleDeleteRoom = async (id, roomNum, hostelName) => {
-    const confirm = window.confirm(
-      `Are you sure you want to delete room "${roomNum}" of "${hostelName}"? This will permanently release all student allocations associated with it.`
-    );
+  const handleDeleteSeat = async (seatId, seatCode) => {
+    const confirm = window.confirm(`Delete seat ${seatCode}?`);
     if (!confirm) return;
 
     try {
-      const response = await axios.delete(`/api/hostel-rooms/${id}`);
-      toast.success(response.data.message || 'Room deleted.');
-      setRooms(prev => prev.filter(r => r.id !== id));
-      if (editId === id) {
-        clearForm();
-      }
+      const response = await axios.delete(`/api/hostel-seats/${seatId}`);
+      toast.success(response.data.message || 'Seat deleted.');
+      fetchData();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     }
   };
+
+  const filteredSeats = seats.filter(s => {
+    const matchesHostel = selectedHostelFilter === 'all' || String(s.hostel_id) === String(selectedHostelFilter);
+    const matchesSearch = !seatSearch || 
+      s.seat_code?.toLowerCase().includes(seatSearch.toLowerCase()) ||
+      s.room_number?.toLowerCase().includes(seatSearch.toLowerCase()) ||
+      s.student_name?.toLowerCase().includes(seatSearch.toLowerCase());
+    return matchesHostel && matchesSearch;
+  });
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiGrid className="text-primary" /> Hostel Rooms Directory
+          <FiGrid className="text-primary" /> Rooms & Room Seats Management
         </h1>
         <p className="text-sm text-slate-500">
-          Configure rooms, bedding capacities, AC/Non-AC categories, and status checks.
+          Create floor rooms (e.g. 1st Floor Room 101), auto-generate seat codes (101A, 101B), and configure seat fees.
         </p>
       </div>
 
+      {/* Grid: Form + Seat Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Form panel */}
-        <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
-          <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-            <FiPlus className="text-primary" /> 
-            {editId ? 'Modify Room Details' : 'Register New Room'}
+        {/* Create Room Form */}
+        <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-4">
+          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <FiPlus className="text-primary" /> Create Room & Generate Seats
           </h2>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleRoomSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Select Hostel
-              </label>
+              <label className="text-xs font-bold text-slate-700">Select Hostel / Hall</label>
               <select
                 required
-                value={hostelId}
-                onChange={(e) => setHostelId(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
+                value={roomHostelId}
+                onChange={(e) => setRoomHostelId(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
               >
                 <option value="">-- Choose Hostel --</option>
-                {hostels.map(h => (
+                {hostels.map((h) => (
                   <option key={h.id} value={h.id}>{h.name}</option>
                 ))}
               </select>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Room Number / Code
-              </label>
-              <input
-                type="text"
-                required
-                value={roomNumber}
-                onChange={(e) => setRoomNumber(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Room Category / Type
-              </label>
-              <select
-                required
-                value={roomType}
-                onChange={(e) => setRoomType(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              >
-                <option value="AC Single">AC Single</option>
-                <option value="AC Double">AC Double</option>
-                <option value="Non-AC Single">Non-AC Single</option>
-                <option value="Non-AC Double">Non-AC Double</option>
-                <option value="Non-AC Quadruple (4-Bed)">Non-AC Quadruple (4-Bed)</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Bedding Capacity (Students)
-              </label>
-              <input
-                type="number"
-                required
-                min="1"
-                max="10"
-                value={capacity}
-                onChange={(e) => setCapacity(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Status
-              </label>
-              <select
-                required
-                value={availabilityStatus}
-                onChange={(e) => setAvailabilityStatus(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              >
-                <option value="Available">Available</option>
-                <option value="Full">Full</option>
-                <option value="Under Maintenance">Under Maintenance</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-3 mt-2">
-              {editId && (
-                <button
-                  type="button"
-                  onClick={clearForm}
-                  className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Floor Number</label>
+                <select
+                  value={roomFloor}
+                  onChange={(e) => setRoomFloor(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
                 >
-                  Cancel
-                </button>
-              )}
-              <button
-                type="submit"
-                disabled={submitting}
-                className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                  editId ? 'bg-primary hover:bg-primary-dark w-1/2' : 'bg-emerald-650 hover:bg-primary-dark w-full bg-primary'
-                } disabled:opacity-50`}
-              >
-                {submitting ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-                ) : editId ? (
-                  'Update Room'
-                ) : (
-                  'Register Room'
-                )}
-              </button>
+                  <option value="1">1st Floor</option>
+                  <option value="2">2nd Floor</option>
+                  <option value="3">3rd Floor</option>
+                  <option value="4">4th Floor</option>
+                  <option value="5">5th Floor</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Room Number</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. 101, 203"
+                  value={roomNumber}
+                  onChange={(e) => setRoomNumber(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+                />
+              </div>
             </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Room Type</label>
+                <select
+                  value={roomType}
+                  onChange={(e) => setRoomType(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+                >
+                  <option value="Standard">Standard</option>
+                  <option value="Deluxe">Deluxe</option>
+                  <option value="AC Room">AC Room</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Capacity (Seats)</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={roomCapacity}
+                  onChange={(e) => setRoomCapacity(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">One-Time Fee ($)</label>
+                <input
+                  type="number"
+                  value={oneTimeFee}
+                  onChange={(e) => setOneTimeFee(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Monthly Seat Fee ($)</label>
+                <input
+                  type="number"
+                  value={monthlyFee}
+                  onChange={(e) => setMonthlyFee(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+
+            <p className="text-[11px] text-slate-400 italic">
+              * Auto-generates seat codes e.g. {roomNumber || '101'}A, {roomNumber || '101'}B, {roomNumber || '101'}C...
+            </p>
+
+            <button
+              type="submit"
+              disabled={submittingRoom}
+              className="py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
+            >
+              {submittingRoom ? 'Creating...' : 'Create Room & Seats'}
+            </button>
           </form>
         </div>
 
-        {/* List panel */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
-          {/* Filtering Header */}
-          <div className="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+        {/* Seat Matrix Grid */}
+        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-xs p-6 space-y-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <h2 className="text-base font-bold text-slate-800">
-              Active Room Inventory ({rooms.length})
+              Hostel Seats Grid ({filteredSeats.length} seats)
             </h2>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500 font-semibold shrink-0">Filter Hostel:</span>
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
               <select
-                value={filterHostelId}
-                onChange={(e) => setFilterHostelId(e.target.value)}
-                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white"
+                value={selectedHostelFilter}
+                onChange={(e) => setSelectedHostelFilter(e.target.value)}
+                className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer"
               >
-                <option value="">All Hostels</option>
+                <option value="all">All Hostels</option>
                 {hostels.map(h => (
                   <option key={h.id} value={h.id}>{h.name}</option>
                 ))}
               </select>
+
+              <div className="relative w-full sm:w-48">
+                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
+                <input
+                  type="text"
+                  placeholder="Search seat code..."
+                  value={seatSearch}
+                  onChange={(e) => setSeatSearch(e.target.value)}
+                  className="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none"
+                />
+              </div>
             </div>
           </div>
 
           {loading ? (
-            <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-sm font-semibold text-slate-400">Loading rooms registry...</span>
-            </div>
-          ) : rooms.length === 0 ? (
-            <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-              <span className="text-slate-350 text-5xl mb-3">🛏️</span>
-              <h3 className="text-sm font-bold text-slate-655">No Rooms Found</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-                Create room entries for residential halls using the form on the left.
-              </p>
-            </div>
+            <div className="py-12 text-center text-slate-400 text-xs font-semibold">Loading rooms and seats...</div>
+          ) : filteredSeats.length === 0 ? (
+            <div className="py-12 text-center text-slate-400 text-xs">No seats found matching filter.</div>
           ) : (
-            <div className="w-full overflow-x-auto">
-              <table className="w-full border-collapse text-left">
-                <thead>
-                  <tr className="bg-slate-50/50 border-b border-slate-100">
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Hostel</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Room Number</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Type / Category</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Capacity</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {rooms.map((room) => (
-                    <tr key={room.id} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
-                        {room.hostel_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs font-bold text-slate-700 flex items-center gap-1.5 mt-2.5">
-                        <FiHome className="text-slate-400" /> {room.room_number}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-550">
-                        {room.room_type}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-600">
-                        {room.capacity} beds
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-[10px] font-bold rounded-lg ${
-                          room.availability_status === 'Available'
-                            ? 'bg-primary-light text-primary'
-                            : room.availability_status === 'Full'
-                            ? 'bg-amber-50 text-amber-600'
-                            : 'bg-red-50 text-red-650 text-red-600'
-                        }`}>
-                          {room.availability_status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
-                        <button
-                          onClick={() => handleEditClick(room)}
-                          className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
-                          title="Edit Room"
-                        >
-                          <FiEdit className="text-sm" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteRoom(room.id, room.room_number, room.hostel_name)}
-                          className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors cursor-pointer"
-                          title="Delete Room"
-                        >
-                          <FiTrash2 className="text-sm" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {filteredSeats.map((seat) => (
+                <div
+                  key={seat.id}
+                  className={`p-3.5 rounded-2xl border flex flex-col justify-between gap-2 transition-all ${
+                    seat.status === 'allocated'
+                      ? 'bg-rose-50/50 border-rose-200/80 text-rose-950'
+                      : 'bg-emerald-50/50 border-emerald-200/80 text-emerald-950'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold tracking-wider uppercase">
+                      Seat {seat.seat_code}
+                    </span>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider ${
+                      seat.status === 'allocated' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
+                    }`}>
+                      {seat.status}
+                    </span>
+                  </div>
+
+                  <div className="text-[11px] text-slate-600 space-y-0.5">
+                    <p><span className="font-bold">Hostel:</span> {seat.hostel_name}</p>
+                    <p><span className="font-bold">Location:</span> Floor {seat.floor}, Room {seat.room_number}</p>
+                    <p><span className="font-bold">Fees:</span> ${seat.one_time_fee} alloc / ${seat.monthly_fee}/mo</p>
+                  </div>
+
+                  {seat.status === 'allocated' ? (
+                    <div className="pt-2 border-t border-rose-200/60 text-[10px] font-bold text-rose-800 flex items-center justify-between">
+                      <span className="truncate">{seat.student_name}</span>
+                      <span className="shrink-0 text-slate-500">#{seat.student_reg}</span>
+                    </div>
+                  ) : (
+                    <div className="pt-2 border-t border-emerald-200/60 flex justify-end">
+                      <button
+                        onClick={() => handleDeleteSeat(seat.id, seat.seat_code)}
+                        className="text-[10px] font-bold text-rose-600 hover:text-rose-800 cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>
       </div>
     </div>
   );
-};
-
-export default AdminHostelRoomsPage;
+}

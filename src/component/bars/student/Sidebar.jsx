@@ -39,6 +39,7 @@ const Sidebar = () => {
     { label: 'Admit Cards', href: '/student/cards', icon: FiFileText },
     { label: 'My Marks & Results', href: '/student/results', icon: FiAward },
     { label: 'Fees & Fines', href: '/student/fees', icon: FiDollarSign },
+    { label: 'Hostel Accommodation', href: '/student/hostels', icon: FiHome },
     { label: 'Campus Events', href: '/student/events', icon: FiCalendar },
     ...(isClubMember ? [{ label: 'My Club Dashboard', href: '/student/clubs', icon: FiUsers }] : []),
     { label: 'My Profile', href: '/student/profile', icon: FiUser },

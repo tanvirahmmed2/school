@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   FiHome, FiShield, FiLayers, FiGrid, FiBook,
-  FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText,
+  FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText, FiUserCheck,
   FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu, FiBell,
   FiSettings, FiShoppingBag, FiTrendingUp, FiTrendingDown
 } from 'react-icons/fi';
@@ -146,10 +146,11 @@ const Sidebar = () => {
   ];
 
   const hostelLinks = [
-    { label: 'Hostels & Provosts', href: '/admin/hostels', icon: FiHome },
-    { label: 'Room Directory', href: '/admin/hostels/rooms', icon: FiGrid },
+    { label: 'Hostels Directory', href: '/admin/hostels', icon: FiHome },
+    { label: 'Student Applications', href: '/admin/hostels/applications', icon: FiFileText },
+    { label: 'Rooms & Seats', href: '/admin/hostels/rooms', icon: FiGrid },
     { label: 'Student Allocations', href: '/admin/hostels/allocations', icon: FiUsers },
-    { label: 'Hostel Fees', href: '/admin/hostels/fees', icon: FiDollarSign },
+    { label: 'Faculty Provosts', href: '/admin/hostels/provosts', icon: FiUserCheck },
   ];
 
   const groupHeaderStyle = "text-[10px] font-bold text-secondary uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-90 mt-2";

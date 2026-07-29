@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
 
 // GET all hostels
@@ -13,15 +13,15 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       message: 'Successfully fetched hostels',
+      payload: res_data,
       paylod: res_data
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching hostels:', error);
     return NextResponse.json({
       success: false,
-      message: 'Failed to retrieve hostels. Internal server error.',
-      error: 'Internal Server Error',
-      paylod: null
+      message: 'Failed to retrieve hostels.',
+      error: error.message
     }, { status: 500 });
   }
 }
@@ -29,13 +29,12 @@ export async function GET() {
 // POST create a new hostel
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
+    const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       return NextResponse.json({
         success: false,
-        message: 'Unauthorized. Admins only.',
-        error: 'Unauthorized',
-        paylod: null
+        message: 'Unauthorized. Admins and Registrars only.',
+        error: 'Unauthorized'
       }, { status: 403 });
     }
 

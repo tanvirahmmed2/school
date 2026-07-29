@@ -29,6 +29,7 @@ const Navbar = () => {
           <div className="w-auto flex flex-row items-center justify-center gap-8 text-sm font-semibold">
 
             <Link href={'/gallery'} className="transition-colors text-white hover:text-secondary">Gallery</Link>
+            <Link href={'/gallery'} className="transition-colors text-white hover:text-secondary">Gallery</Link>
             <Link href={'/apply'} className="transition-colors text-white hover:text-secondary">
               Apply
             </Link>

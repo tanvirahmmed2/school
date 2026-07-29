@@ -3,106 +3,71 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiUsers, FiPlus, FiTrash2, FiSearch, FiCheck, FiXCircle, FiCalendar, FiHome } from 'react-icons/fi';
+import { FiCheckCircle, FiPlus, FiRepeat, FiX, FiDollarSign, FiSearch } from 'react-icons/fi';
 
-const AdminHostelAllocationsPage = () => {
+export default function AdminHostelAllocationsPage() {
   const [allocations, setAllocations] = useState([]);
-  const [rooms, setRooms] = useState([]);
+  const [seats, setSeats] = useState([]);
+  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Search student states
-  const [searchRegNo, setSearchRegNo] = useState('');
-  const [searchingStudent, setSearchingStudent] = useState(false);
-  const [foundStudent, setFoundStudent] = useState(null);
+  // Modals
+  const [showAllocateModal, setShowAllocateModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
 
   // Form states
-  const [roomId, setRoomId] = useState('');
-  const [allocatedAt, setAllocatedAt] = useState(new Date().toISOString().split('T')[0]);
+  const [allocStudentId, setAllocStudentId] = useState('');
+  const [allocSeatId, setAllocSeatId] = useState('');
+  const [transferStudentId, setTransferStudentId] = useState('');
+  const [transferTargetSeatId, setTransferTargetSeatId] = useState('');
+  const [transferReason, setTransferReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  // Filters
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
-    fetchAllocations();
-    fetchAvailableRooms();
+    fetchData();
   }, []);
 
-  const fetchAllocations = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/hostel-allocations');
-      setAllocations(response.data.paylod.allocations || []);
+      const [resA, resS, resSt] = await Promise.all([
+        axios.get('/api/hostel-allocations'),
+        axios.get('/api/hostel-seats'),
+        axios.get('/api/students')
+      ]);
+
+      setAllocations(resA.data.payload?.allocations || resA.data.paylod?.allocations || []);
+      setSeats(resS.data.payload?.seats || resS.data.paylod?.seats || []);
+      setStudents(resSt.data.payload?.students || resSt.data.paylod?.students || []);
     } catch (error) {
-      toast.error('Failed to load room allocations.');
+      toast.error('Failed to load allocations data.');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchAvailableRooms = async () => {
-    try {
-      const response = await axios.get('/api/hostel-rooms');
-      // Only list rooms that have 'Available' status
-      const allRooms = response.data.paylod.rooms || [];
-      const available = allRooms.filter(r => r.availability_status === 'Available');
-      setRooms(available);
-    } catch (error) {
-      console.error('Failed to fetch rooms list:', error);
-    }
-  };
-
-  const handleSearchStudent = async () => {
-    if (!searchRegNo.trim()) {
-      toast.error('Enter a registration number.');
-      return;
-    }
-
-    setSearchingStudent(true);
-    setFoundStudent(null);
-    try {
-      const response = await axios.get(`/api/students?registration_number=${searchRegNo.trim()}`);
-      const students = response.data.paylod.students || [];
-      if (students.length === 0) {
-        toast.error('No student found with this registration number.');
-      } else {
-        // Find the exact match or first match
-        const match = students.find(
-          s => s.registration_number.toLowerCase() === searchRegNo.trim().toLowerCase()
-        ) || students[0];
-        
-        setFoundStudent(match);
-        toast.success(`Verified: ${match.name || 'Pre-created student'}`);
-      }
-    } catch (error) {
-      toast.error('Failed to search student record.');
-    } finally {
-      setSearchingStudent(false);
-    }
-  };
-
-  const handleAllocate = async (e) => {
+  const handleAllocateSubmit = async (e) => {
     e.preventDefault();
-    if (!foundStudent) {
-      toast.error('Verify and select a student first.');
-      return;
-    }
-    if (!roomId) {
-      toast.error('Select a room to allocate.');
+    if (!allocStudentId || !allocSeatId) {
+      toast.error('Please select student and seat.');
       return;
     }
 
     setSubmitting(true);
     try {
       const response = await axios.post('/api/hostel-allocations', {
-        student_id: foundStudent.id,
-        room_id: roomId,
-        allocated_at: allocatedAt
+        student_id: allocStudentId,
+        seat_id: allocSeatId
       });
 
-      toast.success(response.data.message || 'Room allocated successfully!');
-      setFoundStudent(null);
-      setSearchRegNo('');
-      setRoomId('');
-      fetchAllocations();
-      fetchAvailableRooms(); // Refresh rooms capacity status
+      toast.success(response.data.message || 'Seat allocated & fees sent to Cashier!');
+      setShowAllocateModal(false);
+      setAllocStudentId('');
+      setAllocSeatId('');
+      fetchData();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     } finally {
@@ -110,247 +75,316 @@ const AdminHostelAllocationsPage = () => {
     }
   };
 
-  const handleVacateRoom = async (id, studentName) => {
-    const confirm = window.confirm(`Mark "${studentName}" as vacated from room?`);
-    if (!confirm) return;
+  const handleTransferSubmit = async (e) => {
+    e.preventDefault();
+    if (!transferStudentId || !transferTargetSeatId) {
+      toast.error('Please select student and target seat.');
+      return;
+    }
 
+    setSubmitting(true);
     try {
-      const vacateDate = new Date().toISOString().split('T')[0];
-      const response = await axios.put(`/api/hostel-allocations/${id}`, {
-        status: 'Vacated',
-        vacated_at: vacateDate
+      const response = await axios.post('/api/hostel-allocations/transfer', {
+        student_id: transferStudentId,
+        to_seat_id: transferTargetSeatId,
+        reason: transferReason
       });
 
-      toast.success(response.data.message || 'Room marked as vacated.');
-      fetchAllocations();
-      fetchAvailableRooms();
+      toast.success(response.data.message || 'Student transferred successfully!');
+      setShowTransferModal(false);
+      setTransferStudentId('');
+      setTransferTargetSeatId('');
+      setTransferReason('');
+      fetchData();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const handleDeleteAllocation = async (id) => {
-    const confirm = window.confirm('Are you sure you want to permanently delete this allocation log record?');
-    if (!confirm) return;
+  const availableSeats = seats.filter(s => s.status === 'available');
 
-    try {
-      const response = await axios.delete(`/api/hostel-allocations/${id}`);
-      toast.success(response.data.message || 'Allocation record deleted.');
-      setAllocations(prev => prev.filter(a => a.id !== id));
-      fetchAvailableRooms();
-    } catch (err) {
-      toast.error(err.response?.data?.error || err.message);
-    }
-  };
+  const filteredAllocations = allocations.filter(a => {
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+    return (
+      a.student_name?.toLowerCase().includes(term) ||
+      a.student_reg?.toLowerCase().includes(term) ||
+      a.seat_code?.toLowerCase().includes(term) ||
+      a.hostel_name?.toLowerCase().includes(term)
+    );
+  });
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
       {/* Top Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUsers className="text-sky-655 text-primary" /> Room Allocation Registry
-        </h1>
-        <p className="text-sm text-slate-500">
-          Assign students to hostel rooms, verify occupancies, and process checkout vacations.
-        </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+            <FiCheckCircle className="text-primary" /> Seat Allocations & Student Transfers
+          </h1>
+          <p className="text-sm text-slate-500">
+            Allocate hostel seats to students, automatically issue cashier fee invoices, and execute seat/hall transfers.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowAllocateModal(true)}
+            className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <FiPlus className="text-sm" /> Allocate Seat
+          </button>
+          <button
+            onClick={() => setShowTransferModal(true)}
+            className="px-4 py-2 bg-sky-950 hover:bg-slate-900 text-sky-400 border border-sky-800/60 rounded-xl font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <FiRepeat className="text-sm" /> Transfer Student
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Allocations Form Panel */}
-        <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-5">
-          <div>
-            <h2 className="text-base font-bold text-slate-800 mb-1 flex items-center gap-2">
-              <FiPlus className="text-primary" /> Allocate Space
-            </h2>
-            <p className="text-[11px] text-slate-450 text-slate-400">
-              Verify the student registration number first, then select an available room.
-            </p>
-          </div>
+      {/* Main Allocations Table Card */}
+      <div className="bg-white border border-slate-100 rounded-3xl shadow-xs overflow-hidden space-y-4">
+        <div className="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <h2 className="text-base font-bold text-slate-800">
+            Active Allocations ({filteredAllocations.length})
+          </h2>
 
-          {/* Student Search Section */}
-          <div className="flex flex-col gap-2 p-4 bg-slate-50 border border-slate-100 rounded-2xl">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Student Registration No.
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={searchRegNo}
-                onChange={(e) => setSearchRegNo(e.target.value)}
-                className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-primary"
-              />
+          <div className="relative w-full sm:w-64">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
+            <input
+              type="text"
+              placeholder="Search student or seat..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="py-16 text-center text-slate-400 text-xs font-semibold">Loading allocations...</div>
+        ) : filteredAllocations.length === 0 ? (
+          <div className="py-16 text-center text-slate-400 text-xs">No active seat allocations found.</div>
+        ) : (
+          <div className="w-full overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3.5">Student</th>
+                  <th className="px-6 py-3.5">Hostel & Seat</th>
+                  <th className="px-6 py-3.5">Room & Floor</th>
+                  <th className="px-6 py-3.5">Allocation Date</th>
+                  <th className="px-6 py-3.5">Cashier Billing Link</th>
+                  <th className="px-6 py-3.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredAllocations.map((a) => (
+                  <tr key={a.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-6 py-4 font-bold text-slate-900">
+                      <div>{a.student_name}</div>
+                      <div className="text-[10px] text-slate-400 font-semibold">Reg: {a.student_reg} ({a.class_name})</div>
+                    </td>
+                    <td className="px-6 py-4 font-bold text-primary">
+                      <div>{a.hostel_name}</div>
+                      <div className="text-[10px] text-slate-600 font-bold">Seat Code: {a.seat_code}</div>
+                    </td>
+                    <td className="px-6 py-4 font-semibold text-slate-600">
+                      Room {a.room_number} (Floor {a.floor})
+                    </td>
+                    <td className="px-6 py-4 text-slate-500 font-semibold">
+                      {new Date(a.allocated_at).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                    </td>
+                    <td className="px-6 py-4 font-bold text-slate-700">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] bg-emerald-100 text-emerald-800">
+                        Invoiced (${a.one_time_fee} alloc + ${a.monthly_fee}/mo)
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => {
+                          setTransferStudentId(a.student_id);
+                          setShowTransferModal(true);
+                        }}
+                        className="px-3 py-1.5 bg-sky-950 text-sky-400 hover:bg-slate-900 font-bold rounded-xl text-[11px] border border-sky-800/60 cursor-pointer"
+                      >
+                        Transfer Seat
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* ALLOCATE SEAT MODAL */}
+      {showAllocateModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-100 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <FiPlus className="text-primary" /> Allocate Hostel Seat
+              </h3>
               <button
-                type="button"
-                onClick={handleSearchStudent}
-                disabled={searchingStudent}
-                className="p-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl transition-colors cursor-pointer"
-                title="Search student registration"
+                onClick={() => setShowAllocateModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 cursor-pointer"
               >
-                {searchingStudent ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                ) : (
-                  <FiSearch />
-                )}
+                <FiX />
               </button>
             </div>
 
-            {/* Found student confirmation */}
-            {foundStudent && (
-              <div className="mt-2 p-3 bg-primary-light border border-primary-light rounded-xl flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-primary">{foundStudent.name || 'Unnamed Student'}</span>
-                  <span className="text-[10px] text-primary font-semibold">
-                    {foundStudent.class_name || 'Class N/A'} • Gender: {foundStudent.gender || 'Unspecified'}
-                  </span>
-                </div>
-                <FiCheck className="text-primary font-bold" />
-              </div>
-            )}
-          </div>
-
-          {/* Allocation Details form */}
-          <form onSubmit={handleAllocate} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Select Available Room
-              </label>
-              <select
-                required
-                value={roomId}
-                onChange={(e) => setRoomId(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-              >
-                <option value="">-- Choose Room --</option>
-                {rooms.map(r => (
-                  <option key={r.id} value={r.id}>
-                    {r.hostel_name} ({r.hostel_gender || 'Unspecified'} Only) - Room {r.room_number} ({r.room_type}, capacity: {r.capacity})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                <FiCalendar /> Allocation Date
-              </label>
-              <input
-                type="date"
-                required
-                value={allocatedAt}
-                onChange={(e) => setAllocatedAt(e.target.value)}
-                disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting || !foundStudent}
-              className="py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer bg-sky-650 hover:bg-primary-dark w-full disabled:opacity-50 disabled:bg-slate-300 disabled:cursor-not-allowed mt-2 bg-primary"
-            >
-              {submitting ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-              ) : (
-                'Allocate Space'
-              )}
-            </button>
-          </form>
-        </div>
-
-        {/* Allocations Logs List */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
-          <div className="px-6 py-5 border-b border-slate-100">
-            <h2 className="text-base font-bold text-slate-800">
-              Allocations History ({allocations.length})
-            </h2>
-          </div>
-
-          {loading ? (
-            <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-sm font-semibold text-slate-400">Loading allocation registry...</span>
-            </div>
-          ) : allocations.length === 0 ? (
-            <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-              <span className="text-slate-350 text-5xl mb-3">📋</span>
-              <h3 className="text-sm font-bold text-slate-655">No Allocations Registered</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-                Search students and assign them beds to display logs here.
-              </p>
-            </div>
-          ) : (
-            <div className="w-full overflow-x-auto">
-              <table className="w-full border-collapse text-left">
-                <thead>
-                  <tr className="bg-slate-50/50 border-b border-slate-100">
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Student Details</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Hostel & Room</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Allocation Date</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {allocations.map((alloc) => (
-                    <tr key={alloc.id} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
-                        <div className="flex flex-col">
-                          <span>{alloc.student_name || 'Unnamed Student'}</span>
-                          <span className="text-[10px] text-slate-450 text-slate-400 font-semibold">{alloc.student_reg_number}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-700">
-                        <div className="flex flex-col">
-                          <span>{alloc.hostel_name}</span>
-                          <span className="text-[10px] font-bold text-slate-500">Room {alloc.room_number} ({alloc.room_type})</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-550 flex flex-col mt-2">
-                        <span><strong>Allocated:</strong> {new Date(alloc.allocated_at).toLocaleDateString()}</span>
-                        {alloc.vacated_at && (
-                          <span className="text-red-500 font-semibold">
-                            <strong>Vacated:</strong> {new Date(alloc.vacated_at).toLocaleDateString()}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-[10px] font-bold rounded-lg ${
-                          alloc.status === 'Active'
-                            ? 'bg-primary-light text-primary'
-                            : 'bg-slate-100 text-slate-500'
-                        }`}>
-                          {alloc.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
-                        {alloc.status === 'Active' && (
-                          <button
-                            onClick={() => handleVacateRoom(alloc.id, alloc.student_name)}
-                            className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-xl transition-colors cursor-pointer"
-                            title="Mark Vacated"
-                          >
-                            <FiXCircle className="text-sm" />
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleDeleteAllocation(alloc.id)}
-                          className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors cursor-pointer"
-                          title="Delete Log Record"
-                        >
-                          <FiTrash2 className="text-sm" />
-                        </button>
-                      </td>
-                    </tr>
+            <form onSubmit={handleAllocateSubmit} className="space-y-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Select Student</label>
+                <select
+                  required
+                  value={allocStudentId}
+                  onChange={(e) => setAllocStudentId(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                >
+                  <option value="">-- Choose Student --</option>
+                  {students.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} ({s.gender || 'Unspecified'}) - Reg: {s.registration_number || s.id}
+                    </option>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Select Available Seat</label>
+                <select
+                  required
+                  value={allocSeatId}
+                  onChange={(e) => setAllocSeatId(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                >
+                  <option value="">-- Choose Available Seat --</option>
+                  {availableSeats.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      Seat {s.seat_code} - {s.hostel_name} ({s.hostel_gender || 'Both'} Hall, Floor {s.floor}, Room {s.room_number})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs text-amber-900 space-y-1">
+                <p className="font-bold flex items-center gap-1">
+                  <FiDollarSign /> Gender & Cashier Billing Note:
+                </p>
+                <p className="text-[11px] leading-relaxed">
+                  Student gender must match the designated hostel gender. Allocating seat will send fee invoices to Cashier.
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAllocateModal(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-5 py-2 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {submitting ? 'Allocating...' : 'Allocate Seat & Invoiced'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* TRANSFER MODAL */}
+      {showTransferModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-100 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <FiRepeat className="text-primary" /> Transfer Student Seat
+              </h3>
+              <button
+                onClick={() => setShowTransferModal(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <FiX />
+              </button>
+            </div>
+
+            <form onSubmit={handleTransferSubmit} className="space-y-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Student with Active Seat</label>
+                <select
+                  required
+                  value={transferStudentId}
+                  onChange={(e) => setTransferStudentId(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                >
+                  <option value="">-- Choose Student --</option>
+                  {allocations.map((a) => (
+                    <option key={a.student_id} value={a.student_id}>
+                      {a.student_name} (Current: Seat {a.seat_code} in {a.hostel_name})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Target New Seat</label>
+                <select
+                  required
+                  value={transferTargetSeatId}
+                  onChange={(e) => setTransferTargetSeatId(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                >
+                  <option value="">-- Choose Target Seat --</option>
+                  {availableSeats.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      Seat {s.seat_code} - {s.hostel_name} ({s.hostel_gender || 'Both'} Hall, Floor {s.floor}, Room {s.room_number})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Transfer Reason</label>
+                <textarea
+                  rows={2}
+                  placeholder="e.g. Hall transfer request"
+                  value={transferReason}
+                  onChange={(e) => setTransferReason(e.target.value)}
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowTransferModal(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-5 py-2 bg-sky-950 hover:bg-slate-900 text-sky-400 font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {submitting ? 'Transferring...' : 'Transfer Student Seat'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-export default AdminHostelAllocationsPage;
+}

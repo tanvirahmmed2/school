@@ -1,18 +1,31 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiHome, FiPlus, FiEdit, FiTrash2, FiUser, FiMapPin, FiLayers, FiActivity, FiTag, FiBookOpen } from 'react-icons/fi';
+import { 
+  FiHome, 
+  FiPlus, 
+  FiEdit, 
+  FiTrash2, 
+  FiMapPin, 
+  FiLayers, 
+  FiGrid, 
+  FiCheckCircle, 
+  FiUserCheck,
+  FiArrowRight,
+  FiBookOpen
+} from 'react-icons/fi';
 import TiptapEditor from '@/component/helper/TiptapEditor';
 
-const AdminHostelsPage = () => {
-  const [activeTab, setActiveTab] = useState('hostels'); // 'hostels' or 'provosts'
+export default function AdminHostelsPage() {
   const [hostels, setHostels] = useState([]);
-  const [teachers, setTeachers] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [seats, setSeats] = useState([]);
+  const [allocations, setAllocations] = useState([]);
   const [provosts, setProvosts] = useState([]);
-  const [loadingHostels, setLoadingHostels] = useState(true);
-  const [loadingProvosts, setLoadingProvosts] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // Hostel form states
   const [name, setName] = useState('');
@@ -25,16 +38,32 @@ const AdminHostelsPage = () => {
   const [editId, setEditId] = useState(null);
   const [submittingHostel, setSubmittingHostel] = useState(false);
 
-  // Provost form states
-  const [selectedHostelId, setSelectedHostelId] = useState('');
-  const [selectedTeacherId, setSelectedTeacherId] = useState('');
-  const [submittingProvost, setSubmittingProvost] = useState(false);
-
   useEffect(() => {
-    fetchHostels();
-    fetchTeachers();
-    fetchProvosts();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [resH, resR, resS, resA, resP] = await Promise.all([
+        axios.get('/api/hostels'),
+        axios.get('/api/hostel-rooms'),
+        axios.get('/api/hostel-seats'),
+        axios.get('/api/hostel-allocations'),
+        axios.get('/api/hostel-provost')
+      ]);
+
+      setHostels(resH.data.payload?.hostels || resH.data.paylod?.hostels || []);
+      setRooms(resR.data.payload?.rooms || resR.data.paylod?.rooms || []);
+      setSeats(resS.data.payload?.seats || resS.data.paylod?.seats || []);
+      setAllocations(resA.data.payload?.allocations || resA.data.paylod?.allocations || []);
+      setProvosts(resP.data.payload?.provosts || resP.data.paylod?.provosts || []);
+    } catch (error) {
+      toast.error('Failed to load hostel data.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -46,7 +75,6 @@ const AdminHostelsPage = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       setImage(reader.result);
-      imagePreview && setImagePreview(reader.result);
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
@@ -55,39 +83,6 @@ const AdminHostelsPage = () => {
   const handleClearImage = () => {
     setImage('');
     setImagePreview('');
-  };
-
-  const fetchHostels = async () => {
-    setLoadingHostels(true);
-    try {
-      const response = await axios.get('/api/hostels');
-      setHostels(response.data.paylod.hostels || []);
-    } catch (error) {
-      toast.error('Failed to load hostels.');
-    } finally {
-      setLoadingHostels(false);
-    }
-  };
-
-  const fetchTeachers = async () => {
-    try {
-      const response = await axios.get('/api/teachers');
-      setTeachers(response.data.paylod.teachers || []);
-    } catch (error) {
-      console.error('Failed to load teachers for provost assignment:', error);
-    }
-  };
-
-  const fetchProvosts = async () => {
-    setLoadingProvosts(true);
-    try {
-      const response = await axios.get('/api/hostel-provost');
-      setProvosts(response.data.paylod.provosts || []);
-    } catch (error) {
-      toast.error('Failed to load provost assignments.');
-    } finally {
-      setLoadingProvosts(false);
-    }
   };
 
   const handleHostelSubmit = async (e) => {
@@ -111,14 +106,13 @@ const AdminHostelsPage = () => {
       if (editId) {
         const response = await axios.put(`/api/hostels/${editId}`, payload);
         toast.success(response.data.message || 'Hostel updated successfully!');
-        setEditId(null);
       } else {
         const response = await axios.post('/api/hostels', payload);
-        toast.success(response.data.message || 'Hostel created successfully!');
+        toast.success(response.data.message || 'Hostel registered successfully!');
       }
 
       clearHostelForm();
-      fetchHostels();
+      fetchData();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     } finally {
@@ -146,58 +140,17 @@ const AdminHostelsPage = () => {
     setGender(hostel.gender || 'Male');
     setImage(hostel.image || '');
     setImagePreview(hostel.image || '');
-    setActiveTab('hostels');
   };
 
   const handleDeleteHostel = async (id, hostelName) => {
-    const confirm = window.confirm(`Are you sure you want to delete "${hostelName}"? This will permanently delete all rooms, allocations, fees, and provosts associated with it.`);
+    const confirm = window.confirm(`Are you sure you want to delete "${hostelName}"? This will permanently delete all associated rooms, seats, and allocations.`);
     if (!confirm) return;
 
     try {
       const response = await axios.delete(`/api/hostels/${id}`);
       toast.success(response.data.message || 'Hostel deleted.');
-      fetchHostels();
-      fetchProvosts(); // Refresh provosts in case they were cascadingly deleted
-      if (editId === id) {
-        clearHostelForm();
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.error || err.message);
-    }
-  };
-
-  const handleProvostSubmit = async (e) => {
-    e.preventDefault();
-    if (!selectedHostelId || !selectedTeacherId) {
-      toast.error('Please select both a Hostel and a Teacher.');
-      return;
-    }
-
-    setSubmittingProvost(true);
-    try {
-      const response = await axios.post('/api/hostel-provost', {
-        hostel_id: selectedHostelId,
-        teacher_id: selectedTeacherId
-      });
-      toast.success(response.data.message || 'Provost assigned successfully!');
-      setSelectedHostelId('');
-      setSelectedTeacherId('');
-      fetchProvosts();
-    } catch (err) {
-      toast.error(err.response?.data?.error || err.message);
-    } finally {
-      setSubmittingProvost(false);
-    }
-  };
-
-  const handleDeleteProvost = async (id, teacherName, hostelName) => {
-    const confirm = window.confirm(`Remove ${teacherName} from being the provost of ${hostelName}?`);
-    if (!confirm) return;
-
-    try {
-      const response = await axios.delete(`/api/hostel-provost/${id}`);
-      toast.success(response.data.message || 'Provost assignment removed.');
-      setProvosts(prev => prev.filter(p => p.id !== id));
+      fetchData();
+      if (editId === id) clearHostelForm();
     } catch (err) {
       toast.error(err.response?.data?.error || err.message);
     }
@@ -208,390 +161,272 @@ const AdminHostelsPage = () => {
       {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiHome className="text-primary" /> Hostels & Residential Housing
+          <FiHome className="text-primary" /> Hostels & Residential Halls Overview
         </h1>
         <p className="text-sm text-slate-500">
-          Manage campus hostels, residential infrastructure, and assign faculty provosts.
+          Manage campus halls of residence, floor rooms, room seats, allocations, and provost assignments.
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-slate-100">
-        <button
-          onClick={() => setActiveTab('hostels')}
-          className={`px-5 py-2.5 font-semibold text-sm transition-all border-b-2 cursor-pointer ${
-            activeTab === 'hostels'
-              ? 'border-primary text-sky-655 text-primary font-bold'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
-          }`}
+      {/* Navigation Quick Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link
+          href="/admin/hostels/rooms"
+          className="bg-white border border-slate-100 rounded-3xl p-5 shadow-xs hover:border-primary transition-all flex items-center justify-between group"
         >
-          Hostels Directory
-        </button>
-        <button
-          onClick={() => setActiveTab('provosts')}
-          className={`px-5 py-2.5 font-semibold text-sm transition-all border-b-2 cursor-pointer ${
-            activeTab === 'provosts'
-              ? 'border-primary text-sky-655 text-primary font-bold'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
-          }`}
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform">
+              <FiGrid />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-slate-900">Rooms & Seats</div>
+              <div className="text-xs font-semibold text-slate-400">{rooms.length} rooms / {seats.length} seats</div>
+            </div>
+          </div>
+          <FiArrowRight className="text-slate-400 group-hover:text-primary transition-colors" />
+        </Link>
+
+        <Link
+          href="/admin/hostels/applications"
+          className="bg-white border border-slate-100 rounded-3xl p-5 shadow-xs hover:border-primary transition-all flex items-center justify-between group"
         >
-          Faculty Provosts
-        </button>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform">
+              <FiBookOpen />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-slate-900">Applications</div>
+              <div className="text-xs font-semibold text-slate-400">Student requests</div>
+            </div>
+          </div>
+          <FiArrowRight className="text-slate-400 group-hover:text-primary transition-colors" />
+        </Link>
+
+        <Link
+          href="/admin/hostels/allocations"
+          className="bg-white border border-slate-100 rounded-3xl p-5 shadow-xs hover:border-primary transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform">
+              <FiCheckCircle />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-slate-900">Seat Allocations</div>
+              <div className="text-xs font-semibold text-slate-400">{allocations.length} active allocations</div>
+            </div>
+          </div>
+          <FiArrowRight className="text-slate-400 group-hover:text-primary transition-colors" />
+        </Link>
+
+        <Link
+          href="/admin/hostels/provosts"
+          className="bg-white border border-slate-100 rounded-3xl p-5 shadow-xs hover:border-primary transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-xl shrink-0 group-hover:scale-110 transition-transform">
+              <FiUserCheck />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-slate-900">Faculty Provosts</div>
+              <div className="text-xs font-semibold text-slate-400">{provosts.length} assigned provosts</div>
+            </div>
+          </div>
+          <FiArrowRight className="text-slate-400 group-hover:text-primary transition-colors" />
+        </Link>
       </div>
 
-      {activeTab === 'hostels' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* Hostel Form */}
-          <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
-            <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <FiPlus className="text-primary" /> 
-              {editId ? 'Modify Hostel Details' : 'Register New Hostel'}
-            </h2>
+      {/* Main Grid: Form + Directory List */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        {/* Hostel Form */}
+        <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-4">
+          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <FiPlus className="text-primary" /> 
+            {editId ? 'Modify Hostel Details' : 'Register New Hostel / Hall'}
+          </h2>
 
-            <form onSubmit={handleHostelSubmit} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Hostel Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-                />
-              </div>
+          <form onSubmit={handleHostelSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-700">Hostel / Hall Name</label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. Bangabandhu Hall"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={submittingHostel}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+              />
+            </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                  <FiMapPin /> Location
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
-                />
-              </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-700">Location / Campus Block</label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. North Campus, Block B"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                disabled={submittingHostel}
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
+              />
+            </div>
 
+            <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                  <FiLayers /> Total Rooms Limit
-                </label>
-                <input
-                  type="number"
-                  value={totalRoom}
-                  onChange={(e) => setTotalRoom(e.target.value)}
-                  disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                  <FiUser className="text-slate-400" /> Designated Gender
-                </label>
+                <label className="text-xs font-bold text-slate-700">Designated Gender</label>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   disabled={submittingHostel}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
                 >
-                  <option value="Male">Male Only</option>
-                  <option value="Female">Female Only</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Both">Co-ed / Both</option>
                 </select>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                  <FiBookOpen /> Description
-                </label>
-                <TiptapEditor
-                  value={description}
-                  onChange={(val) => setDescription(val)}
+                <label className="text-xs font-bold text-slate-700">Rooms Limit</label>
+                <input
+                  type="number"
+                  placeholder="e.g. 50"
+                  value={totalRoom}
+                  onChange={(e) => setTotalRoom(e.target.value)}
+                  disabled={submittingHostel}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-primary"
                 />
               </div>
-
-              {/* Image upload */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Hostel Banner Image
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    disabled={submittingHostel}
-                    onChange={handleImageChange}
-                    className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer w-full"
-                  />
-                  {imagePreview && (
-                    <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
-                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={handleClearImage}
-                        className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-xs font-bold"
-                      >
-                        Clear
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 mt-2">
-                {editId && (
-                  <button
-                    type="button"
-                    onClick={clearHostelForm}
-                    className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  disabled={submittingHostel}
-                  className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                    editId ? 'bg-primary hover:bg-sky-750 w-1/2 bg-primary' : 'bg-sky-650 hover:bg-primary-dark w-full bg-primary'
-                  } disabled:opacity-50`}
-                >
-                  {submittingHostel ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-                  ) : editId ? (
-                    'Update Details'
-                  ) : (
-                    'Register Hostel'
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Hostels List */}
-          <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100">
-              <h2 className="text-base font-bold text-slate-800">
-                Registered Hostels ({hostels.length})
-              </h2>
             </div>
 
-            {loadingHostels ? (
-              <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <span className="text-sm font-semibold text-slate-400">Loading hostels registry...</span>
-              </div>
-            ) : hostels.length === 0 ? (
-              <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-                <span className="text-slate-350 text-5xl mb-3">🏢</span>
-                <h3 className="text-sm font-bold text-slate-655">No Hostels Registered</h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-                  Register halls of residence using the form on the left.
-                </p>
-              </div>
-            ) : (
-              <div className="w-full overflow-x-auto">
-                <table className="w-full border-collapse text-left">
-                  <thead>
-                    <tr className="bg-slate-50/50 border-b border-slate-100">
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Hostel</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Location</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Rooms Limit</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Description</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {hostels.map((hostel) => (
-                      <tr key={hostel.id} className="hover:bg-slate-50/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
-                          <div className="flex items-center gap-3">
-                            {hostel.image ? (
-                              <div className="w-10 h-10 rounded-xl overflow-hidden border border-slate-100 shrink-0">
-                                <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover" />
-                              </div>
-                            ) : (
-                              <div className="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
-                                H
-                              </div>
-                            )}
-                            <div className="flex flex-col">
-                              <div className="flex items-center gap-1.5">
-                                <span>{hostel.name}</span>
-                                <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded-md ${
-                                  hostel.gender === 'Male'
-                                    ? 'bg-primary-light text-primary border border-primary-light'
-                                    : hostel.gender === 'Female'
-                                    ? 'bg-pink-50 text-pink-600 border border-pink-100'
-                                    : 'bg-slate-100 text-slate-655 text-slate-600'
-                                }`}>
-                                  {hostel.gender || 'Unspecified'}
-                                </span>
-                              </div>
-                              <span className="text-[10px] text-slate-400 font-semibold">/{hostel.slug}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-600 flex items-center gap-1 mt-2.5">
-                          <FiMapPin className="text-slate-400" /> {hostel.location}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xs font-bold text-slate-700">
-                          {hostel.total_room || 0} Rooms
-                        </td>
-                        <td className="px-6 py-4 text-xs text-slate-500 max-w-[200px] truncate">
-                          {hostel.description || <span className="italic text-slate-300">No description</span>}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
-                          <button
-                            onClick={() => handleEditClick(hostel)}
-                            className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
-                            title="Edit Hostel"
-                          >
-                            <FiEdit className="text-sm" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteHostel(hostel.id, hostel.name)}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors cursor-pointer"
-                            title="Delete Hostel"
-                          >
-                            <FiTrash2 className="text-sm" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* Provost Assignment Form */}
-          <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
-            <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <FiPlus className="text-primary" /> Assign Provost
-            </h2>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-700">Description</label>
+              <TiptapEditor
+                value={description}
+                onChange={(val) => setDescription(val)}
+                placeholder="Write hostel details and rules..."
+              />
+            </div>
 
-            <form onSubmit={handleProvostSubmit} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Select Hostel
-                </label>
-                <select
-                  required
-                  value={selectedHostelId}
-                  onChange={(e) => setSelectedHostelId(e.target.value)}
-                  disabled={submittingProvost}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-slate-700">Cover Image</label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={submittingHostel}
+                  onChange={handleImageChange}
+                  className="text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer w-full"
+                />
+                {imagePreview && (
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-200 shrink-0">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={handleClearImage}
+                      className="absolute inset-0 bg-black/60 text-white flex items-center justify-center opacity-0 hover:opacity-100 text-[10px] font-bold"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-2">
+              {editId && (
+                <button
+                  type="button"
+                  onClick={clearHostelForm}
+                  className="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
                 >
-                  <option value="">-- Choose Hostel --</option>
-                  {hostels.map(h => (
-                    <option key={h.id} value={h.id}>{h.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Select Faculty / Teacher
-                </label>
-                <select
-                  required
-                  value={selectedTeacherId}
-                  onChange={(e) => setSelectedTeacherId(e.target.value)}
-                  disabled={submittingProvost}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary"
-                >
-                  <option value="">-- Choose Faculty Member --</option>
-                  {teachers.map(t => (
-                    <option key={t.id} value={t.id}>{t.name} ({t.designation || 'Teacher'})</option>
-                  ))}
-                </select>
-              </div>
-
+                  Cancel
+                </button>
+              )}
               <button
                 type="submit"
-                disabled={submittingProvost}
-                className="py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer bg-primary hover:bg-primary-dark w-full disabled:opacity-50 mt-2"
+                disabled={submittingHostel}
+                className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-xs cursor-pointer ${
+                  editId ? 'bg-primary w-1/2' : 'bg-primary w-full'
+                } disabled:opacity-50`}
               >
-                {submittingProvost ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
-                ) : (
-                  'Assign as Provost'
-                )}
+                {submittingHostel ? 'Saving...' : editId ? 'Update Hostel' : 'Register Hostel'}
               </button>
-            </form>
-          </div>
-
-          {/* Provosts List */}
-          <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100">
-              <h2 className="text-base font-bold text-slate-800">
-                Active Provost Assignments ({provosts.length})
-              </h2>
             </div>
-
-            {loadingProvosts ? (
-              <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <span className="text-sm font-semibold text-slate-400">Loading provost mappings...</span>
-              </div>
-            ) : provosts.length === 0 ? (
-              <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-                <span className="text-slate-350 text-5xl mb-3">🎓</span>
-                <h3 className="text-sm font-bold text-slate-655">No Provosts Assigned</h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-                  Map faculty teachers to manage residential halls using the form on the left.
-                </p>
-              </div>
-            ) : (
-              <div className="w-full overflow-x-auto">
-                <table className="w-full border-collapse text-left">
-                  <thead>
-                    <tr className="bg-slate-50/50 border-b border-slate-100">
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Hostel</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Provost Faculty</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Contact Email</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {provosts.map((provost) => (
-                      <tr key={provost.id} className="hover:bg-slate-50/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
-                          {provost.hostel_name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xs font-bold text-slate-700 flex items-center gap-2 mt-2.5">
-                          <FiUser className="text-slate-450" /> {provost.teacher_name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500">
-                          {provost.teacher_email}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end">
-                          <button
-                            onClick={() => handleDeleteProvost(provost.id, provost.teacher_name, provost.hostel_name)}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors cursor-pointer"
-                            title="Remove Provost"
-                          >
-                            <FiTrash2 className="text-sm" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+          </form>
         </div>
-      )}
+
+        {/* Hostels List */}
+        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-xs overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h2 className="text-base font-bold text-slate-800">
+              Registered Hostels / Halls ({hostels.length})
+            </h2>
+          </div>
+
+          {loading ? (
+            <div className="py-16 text-center text-slate-400 text-xs font-semibold">Loading hostels...</div>
+          ) : hostels.length === 0 ? (
+            <div className="py-16 text-center text-slate-400 text-xs">No hostels registered yet.</div>
+          ) : (
+            <div className="w-full overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    <th className="px-6 py-3.5">Hostel Name</th>
+                    <th className="px-6 py-3.5">Location</th>
+                    <th className="px-6 py-3.5">Gender</th>
+                    <th className="px-6 py-3.5">Rooms Limit</th>
+                    <th className="px-6 py-3.5 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {hostels.map((h) => (
+                    <tr key={h.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-3">
+                        {h.image ? (
+                          <img src={h.image} alt={h.name} className="w-9 h-9 rounded-xl object-cover border border-slate-200 shrink-0" />
+                        ) : (
+                          <div className="w-9 h-9 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold shrink-0">
+                            H
+                          </div>
+                        )}
+                        <div>
+                          <div>{h.name}</div>
+                          <div className="text-[10px] text-slate-400 font-semibold">/{h.slug}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-slate-600 flex items-center gap-1 mt-2.5">
+                        <FiMapPin className="text-slate-400" /> {h.location}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-2 py-0.5 rounded-md font-bold text-[10px] bg-slate-100 text-slate-700">
+                          {h.gender}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 font-bold text-slate-800">{h.total_room || 0} Rooms</td>
+                      <td className="px-6 py-4 text-right flex justify-end gap-2">
+                        <button
+                          onClick={() => handleEditClick(h)}
+                          className="p-2 bg-primary-light text-primary hover:bg-primary-light/80 rounded-xl transition-colors cursor-pointer"
+                        >
+                          <FiEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteHostel(h.id, h.name)}
+                          className="p-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl transition-colors cursor-pointer"
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default AdminHostelsPage;
+}

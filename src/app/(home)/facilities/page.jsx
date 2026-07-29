@@ -22,7 +22,7 @@ const FacilitiesPage = () => {
     },
     {
       title: 'Athletic Sports Grounds',
-      desc: 'FIT maintains a major outdoor sports field, athletic running tracks, and dynamic indoor gyms for students.',
+      desc: 'We Maintain a major outdoor sports field, athletic running tracks, and dynamic indoor gyms for students.',
       href: '/about/campus',
       icon: FiActivity,
       color: 'text-primary bg-primary-light'
@@ -31,12 +31,9 @@ const FacilitiesPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+      <div className="w-full">
         <div className="text-center mb-12">
-          <span className="text-xs font-bold text-sky-655 bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest text-primary">
-            FIT Facilities
-          </span>
+          
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Institute Facilities & Services
           </h1>
@@ -45,7 +42,6 @@ const FacilitiesPage = () => {
           </p>
         </div>
 
-        {/* Grid cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {cards.map((card, idx) => {
             const Icon = card.icon;

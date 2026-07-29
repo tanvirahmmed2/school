@@ -2051,3 +2051,115 @@ CREATE TRIGGER update_histories_updated_at
     BEFORE UPDATE ON histories
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+
+-- ============================================================================
+-- HOSTEL MANAGEMENT TABLES
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS hostels (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    total_room INT DEFAULT 0,
+    location VARCHAR(255),
+    gender VARCHAR(50) DEFAULT 'Both',
+    image TEXT,
+    image_id VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_hostels_updated_at ON hostels;
+CREATE TRIGGER update_hostels_updated_at
+    BEFORE UPDATE ON hostels
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+CREATE TABLE IF NOT EXISTS hostel_rooms (
+    id BIGSERIAL PRIMARY KEY,
+    hostel_id BIGINT NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+    floor INT DEFAULT 1,
+    room_number VARCHAR(50) NOT NULL,
+    room_type VARCHAR(100) DEFAULT 'Standard',
+    capacity INT DEFAULT 4,
+    availability_status VARCHAR(50) DEFAULT 'Available',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(hostel_id, room_number)
+);
+
+DROP TRIGGER IF EXISTS update_hostel_rooms_updated_at ON hostel_rooms;
+CREATE TRIGGER update_hostel_rooms_updated_at
+    BEFORE UPDATE ON hostel_rooms
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+CREATE TABLE IF NOT EXISTS hostel_seats (
+    id BIGSERIAL PRIMARY KEY,
+    room_id BIGINT NOT NULL REFERENCES hostel_rooms(id) ON DELETE CASCADE,
+    seat_code VARCHAR(50) NOT NULL,
+    one_time_fee NUMERIC(10, 2) DEFAULT 0.00,
+    monthly_fee NUMERIC(10, 2) DEFAULT 0.00,
+    status VARCHAR(50) DEFAULT 'available',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(room_id, seat_code)
+);
+
+DROP TRIGGER IF EXISTS update_hostel_seats_updated_at ON hostel_seats;
+CREATE TRIGGER update_hostel_seats_updated_at
+    BEFORE UPDATE ON hostel_seats
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+CREATE TABLE IF NOT EXISTS hostel_allocations (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    seat_id BIGINT REFERENCES hostel_seats(id) ON DELETE CASCADE,
+    allocated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'active',
+    allocated_by_role VARCHAR(50) DEFAULT 'admin',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE hostel_allocations ADD COLUMN IF NOT EXISTS seat_id BIGINT REFERENCES hostel_seats(id) ON DELETE CASCADE;
+ALTER TABLE hostel_allocations ADD COLUMN IF NOT EXISTS allocated_by_role VARCHAR(50) DEFAULT 'admin';
+
+DROP TRIGGER IF EXISTS update_hostel_allocations_updated_at ON hostel_allocations;
+CREATE TRIGGER update_hostel_allocations_updated_at
+    BEFORE UPDATE ON hostel_allocations
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+CREATE TABLE IF NOT EXISTS hostel_transfers (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    from_seat_id BIGINT REFERENCES hostel_seats(id) ON DELETE SET NULL,
+    to_seat_id BIGINT NOT NULL REFERENCES hostel_seats(id) ON DELETE CASCADE,
+    transferred_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    reason TEXT,
+    transferred_by VARCHAR(50) DEFAULT 'admin',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS hostel_applications (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    preferred_hostel_id BIGINT REFERENCES hostels(id) ON DELETE SET NULL,
+    reason TEXT,
+    status VARCHAR(50) DEFAULT 'pending',
+    applied_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at TIMESTAMPTZ,
+    reviewed_by VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS update_hostel_applications_updated_at ON hostel_applications;
+CREATE TRIGGER update_hostel_applications_updated_at
+    BEFORE UPDATE ON hostel_applications
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+

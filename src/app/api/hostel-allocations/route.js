@@ -1,163 +1,243 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, isRegister } from '@/lib/auth';
 
-// GET all allocations
-export async function GET() {
+// GET active allocations
+export async function GET(request) {
   try {
-    const result = await query(`
-      SELECT ha.id, ha.student_id, ha.room_id, ha.allocated_at, ha.vacated_at, ha.status, ha.created_at, 
-             s.name as student_name, s.registration_number as student_reg_number, 
-             hr.room_number, hr.room_type, hr.capacity, 
-             h.name as hostel_name
+    const { searchParams } = new URL(request.url);
+    const studentId = searchParams.get('student_id');
+    const hostelId = searchParams.get('hostel_id');
+    const status = searchParams.get('status') || 'active';
+
+    let sql = `
+      SELECT 
+        ha.id,
+        ha.student_id,
+        ha.seat_id,
+        ha.allocated_at,
+        ha.status AS allocation_status,
+        ha.allocated_by_role,
+        s.name AS student_name,
+        s.registration_number AS student_reg,
+        s.email AS student_email,
+        s.gender AS student_gender,
+        c.name AS class_name,
+        hs.seat_code,
+        hs.one_time_fee,
+        hs.monthly_fee,
+        hr.room_number,
+        hr.floor,
+        hr.room_type,
+        h.id AS hostel_id,
+        h.name AS hostel_name,
+        h.gender AS hostel_gender
       FROM hostel_allocations ha
       JOIN students s ON ha.student_id = s.id
-      JOIN hostel_rooms hr ON ha.room_id = hr.id
+      JOIN classes c ON s.class_id = c.id
+      JOIN hostel_seats hs ON ha.seat_id = hs.id
+      JOIN hostel_rooms hr ON hs.room_id = hr.id
       JOIN hostels h ON hr.hostel_id = h.id
-      ORDER BY ha.status ASC, ha.allocated_at DESC
-    `);
-    const res_data = { allocations: result.rows };
+    `;
+    let params = [];
+    let conditions = [];
+
+    if (status !== 'all') {
+      params.push(status);
+      conditions.push(`ha.status = $${params.length}`);
+    }
+
+    if (studentId) {
+      params.push(studentId);
+      conditions.push(`ha.student_id = $${params.length}`);
+    }
+
+    if (hostelId) {
+      params.push(hostelId);
+      conditions.push(`h.id = $${params.length}`);
+    }
+
+    if (conditions.length > 0) {
+      sql += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    sql += ' ORDER BY ha.allocated_at DESC';
+
+    const result = await query(sql, params);
+
     return NextResponse.json({
       success: true,
-      message: 'Successfully fetched allocations list',
-      paylod: res_data
-    }, { status: 200 });
+      message: 'Successfully fetched hostel allocations',
+      payload: { allocations: result.rows },
+      paylod: { allocations: result.rows }
+    });
   } catch (error) {
-    console.error('Error fetching allocations:', error);
+    console.error('Error fetching hostel allocations:', error);
     return NextResponse.json({
       success: false,
-      message: 'Failed to retrieve allocations list. Internal server error.',
-      error: 'Internal Server Error',
-      paylod: null
+      error: error.message
     }, { status: 500 });
   }
 }
 
-// POST allocate a room
+// POST allocate seat to student
 export async function POST(request) {
   try {
-    const authenticated = await isAdmin();
-    if (!authenticated) {
+    const adminAuth = await isAdmin();
+    const regAuth = await isRegister();
+
+    if (!adminAuth && !regAuth) {
       return NextResponse.json({
         success: false,
-        message: 'Unauthorized. Admins only.',
-        error: 'Unauthorized',
-        paylod: null
+        error: 'Unauthorized. Admins and Registrars only.'
       }, { status: 403 });
     }
 
-    const { student_id, room_id, allocated_at } = await request.json();
+    const roleLabel = adminAuth ? 'admin' : 'registrar';
 
-    if (!student_id || !room_id) {
+    const { student_id, seat_id } = await request.json();
+
+    if (!student_id || !seat_id) {
       return NextResponse.json({
         success: false,
-        message: 'Student and Room selection are required.',
-        error: 'Bad Request',
-        paylod: null
+        error: 'Student ID and Seat ID are required.'
       }, { status: 400 });
     }
 
-    // Gender matching validation check
-    const studentRes = await query('SELECT name, gender FROM students WHERE id = $1', [student_id]);
-    if (studentRes.rows.length === 0) {
-      return NextResponse.json({
-        success: false,
-        message: 'Student record not found.',
-        error: 'Not Found',
-        paylod: null
-      }, { status: 404 });
+    // Check student existence and gender
+    const stCheck = await query('SELECT id, name, registration_number, gender FROM students WHERE id = $1', [student_id]);
+    if (stCheck.rows.length === 0) {
+      return NextResponse.json({ success: false, error: 'Student not found.' }, { status: 404 });
     }
-    const studentGender = studentRes.rows[0].gender;
-    const studentName = studentRes.rows[0].name || 'Unnamed Student';
+    const studentInfo = stCheck.rows[0];
 
-    const hostelRes = await query(`
-      SELECT h.name as hostel_name, h.gender as hostel_gender 
-      FROM hostel_rooms hr 
-      JOIN hostels h ON hr.hostel_id = h.id 
-      WHERE hr.id = $1
-    `, [room_id]);
-    if (hostelRes.rows.length === 0) {
+    // Check existing active allocation for this student
+    const activeAlloc = await query("SELECT id FROM hostel_allocations WHERE student_id = $1 AND status = 'active'", [student_id]);
+    if (activeAlloc.rows.length > 0) {
       return NextResponse.json({
         success: false,
-        message: 'Hostel/Room record not found.',
-        error: 'Not Found',
-        paylod: null
-      }, { status: 404 });
-    }
-    const hostelGender = hostelRes.rows[0].hostel_gender;
-    const hostelName = hostelRes.rows[0].hostel_name;
-
-    if (!studentGender || !hostelGender || studentGender.toLowerCase() !== hostelGender.toLowerCase()) {
-      return NextResponse.json({
-        success: false,
-        message: `Gender mismatch. Student ${studentName} is ${studentGender || 'unspecified'}, but Hostel ${hostelName} is designated for ${hostelGender || 'unspecified'}.`,
-        error: 'Bad Request',
-        paylod: null
+        error: 'This student already has an active hostel seat allocation. Use the Transfer action to move seats.'
       }, { status: 400 });
     }
 
-    // 1. Check if the student already has an active allocation
-    const checkActive = await query(
-      "SELECT id FROM hostel_allocations WHERE student_id = $1 AND status = 'Active'",
-      [student_id]
-    );
-    if (checkActive.rows.length > 0) {
-      return NextResponse.json({
-        success: false,
-        message: 'This student already has an active room allocation.',
-        error: 'Conflict',
-        paylod: null
-      }, { status: 400 });
-    }
-
-    // 2. Check room capacity
-    const roomRes = await query('SELECT capacity FROM hostel_rooms WHERE id = $1', [room_id]);
-    if (roomRes.rows.length === 0) {
-      return NextResponse.json({
-        success: false,
-        message: 'Room not found.',
-        error: 'Not Found',
-        paylod: null
-      }, { status: 404 });
-    }
-    const capacity = roomRes.rows[0].capacity;
-
-    const countRes = await query(
-      "SELECT COUNT(*) as count FROM hostel_allocations WHERE room_id = $1 AND status = 'Active'",
-      [room_id]
-    );
-    const activeCount = parseInt(countRes.rows[0].count, 10);
-
-    if (activeCount >= capacity) {
-      return NextResponse.json({
-        success: false,
-        message: 'This room is already at full capacity.',
-        error: 'Bad Request',
-        paylod: null
-      }, { status: 400 });
-    }
-
-    // 3. Perform allocation
-    const result = await query(
-      `INSERT INTO hostel_allocations (student_id, room_id, allocated_at, status) 
-       VALUES ($1, $2, $3, 'Active') 
-       RETURNING id, student_id, room_id, allocated_at, status`,
-      [student_id, room_id, allocated_at ? new Date(allocated_at) : new Date()]
+    // Check seat existence, availability, and hostel gender restriction
+    const seatCheck = await query(
+      `SELECT hs.*, hr.room_number, h.name AS hostel_name, h.gender AS hostel_gender 
+       FROM hostel_seats hs
+       JOIN hostel_rooms hr ON hs.room_id = hr.id
+       JOIN hostels h ON hr.hostel_id = h.id
+       WHERE hs.id = $1`,
+      [seat_id]
     );
 
-    const res_data = { message: 'Room allocated successfully.', allocation: result.rows[0] };
+    if (seatCheck.rows.length === 0) {
+      return NextResponse.json({ success: false, error: 'Hostel seat not found.' }, { status: 404 });
+    }
+
+    const seatInfo = seatCheck.rows[0];
+    if (seatInfo.status !== 'available') {
+      return NextResponse.json({
+        success: false,
+        error: `Seat ${seatInfo.seat_code} is not available for allocation (Current status: ${seatInfo.status}).`
+      }, { status: 400 });
+    }
+
+    // Gender Check Validation
+    const studentGender = (studentInfo.gender || '').trim();
+    const hostelGender = (seatInfo.hostel_gender || 'Both').trim();
+
+    const sG = studentGender.toLowerCase();
+    const hG = hostelGender.toLowerCase();
+
+    const isFemaleStudent = sG.includes('female') || sG === 'f' || sG === 'woman';
+    const isMaleStudent = !isFemaleStudent && (sG.includes('male') || sG === 'm' || sG === 'man');
+
+    const isMaleHostel = hG === 'male' || (hG.includes('male') && !hG.includes('female'));
+    const isFemaleHostel = hG === 'female' || hG.includes('female');
+
+    if (isMaleHostel && !isMaleStudent) {
+      return NextResponse.json({
+        success: false,
+        error: `Gender Mismatch Blocked: Only explicitly Male students can be allocated to ${seatInfo.hostel_name} (${hostelGender}-only hall).`
+      }, { status: 400 });
+    }
+
+    if (isFemaleHostel && !isFemaleStudent) {
+      return NextResponse.json({
+        success: false,
+        error: `Gender Mismatch Blocked: Only explicitly Female students can be allocated to ${seatInfo.hostel_name} (${hostelGender}-only hall).`
+      }, { status: 400 });
+    }
+
+    // Insert Allocation Record
+    const allocRes = await query(
+      `INSERT INTO hostel_allocations (student_id, seat_id, allocated_at, status, allocated_by_role)
+       VALUES ($1, $2, CURRENT_TIMESTAMP, 'active', $3)
+       RETURNING *`,
+      [student_id, seat_id, roleLabel]
+    );
+
+    // Update Seat Status
+    await query("UPDATE hostel_seats SET status = 'allocated', updated_at = CURRENT_TIMESTAMP WHERE id = $1", [seat_id]);
+
+    // Fees Integration: Add one-time fee and current monthly fee to student_fees table
+    const generatedFees = [];
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 15); // Due in 15 days
+    const formattedDueDate = dueDate.toISOString().split('T')[0];
+
+    const oneTimeVal = parseFloat(seatInfo.one_time_fee) || 0;
+    const monthlyVal = parseFloat(seatInfo.monthly_fee) || 0;
+
+    if (oneTimeVal > 0) {
+      const feeIns = await query(
+        `INSERT INTO student_fees (student_id, title, amount, paid_amount, due_date, status)
+         VALUES ($1, $2, $3, 0.00, $4, 'unpaid')
+         RETURNING *`,
+        [
+          student_id,
+          `Hostel One-Time Allocation Fee (${seatInfo.hostel_name} - Seat ${seatInfo.seat_code})`,
+          oneTimeVal,
+          formattedDueDate
+        ]
+      );
+      generatedFees.push(feeIns.rows[0]);
+    }
+
+    if (monthlyVal > 0) {
+      const currentMonthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const feeIns = await query(
+        `INSERT INTO student_fees (student_id, title, amount, paid_amount, due_date, status)
+         VALUES ($1, $2, $3, 0.00, $4, 'unpaid')
+         RETURNING *`,
+        [
+          student_id,
+          `Hostel Monthly Fee (${currentMonthYear}) - Seat ${seatInfo.seat_code}`,
+          monthlyVal,
+          formattedDueDate
+        ]
+      );
+      generatedFees.push(feeIns.rows[0]);
+    }
+
     return NextResponse.json({
       success: true,
-      message: res_data.message,
-      paylod: res_data
+      message: `Seat ${seatInfo.seat_code} successfully allocated to student. Fees generated for Cashier clearance.`,
+      payload: {
+        allocation: allocRes.rows[0],
+        fees: generatedFees
+      },
+      paylod: {
+        allocation: allocRes.rows[0],
+        fees: generatedFees
+      }
     }, { status: 201 });
+
   } catch (error) {
-    console.error('Error allocating room:', error);
+    console.error('Error allocating hostel seat:', error);
     return NextResponse.json({
       success: false,
-      message: 'Failed to allocate room. Internal server error.',
-      error: 'Internal Server Error',
-      paylod: null
+      error: error.message
     }, { status: 500 });
   }
 }

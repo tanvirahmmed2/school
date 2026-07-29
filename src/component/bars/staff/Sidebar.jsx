@@ -59,8 +59,9 @@ const Sidebar = () => {
         { label: 'Achievements', href: '/staff/registrar/achievements', icon: FiSliders },
         { label: 'Notice Board', href: '/staff/registrar/notices', icon: FiBookOpen },
         { label: 'Student Attendance', href: '/staff/registrar/student-attendence', icon: FiCalendar },
-        { label: 'Teacher Attendance', href: '/staff/registrar/teacher-attendence', icon: FiCalendar },
-        { label: 'Leave Applications', href: '/staff/registrar/leaves', icon: FiFileText }
+        { label: 'Leave Applications', href: '/staff/registrar/leaves', icon: FiFileText },
+        { label: 'Hostel Applications', href: '/staff/registrar/hostels/applications', icon: FiFileText },
+        { label: 'Hostel Management', href: '/staff/registrar/hostels', icon: FiHome }
       ];
     } else {
       roleLinks = [

@@ -1,5 +1,5 @@
 import pg from 'pg';
-import { PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE } from './secret';
+import { PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE } from './secret.js';
 
 const { Pool } = pg;
 
