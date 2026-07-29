@@ -9,9 +9,10 @@ import { MdOutlineAnnouncement } from 'react-icons/md';
 import { SCHOOL_NAME } from '@/lib/secret';
 
 const Sidebar = () => {
-  const { sidebar, setSidebar, classes, clubs, designations, themeColor } = useContext(Context);
+  const { sidebar, setSidebar, classes, clubs, designations, themeColor, websiteSettings } = useContext(Context);
   const pathname = usePathname();
 
+  const schoolName = websiteSettings?.school_name || SCHOOL_NAME;
   const mainColor = themeColor || '#059669';
 
   const [openSection, setOpenSection] = useState(null);
@@ -41,7 +42,7 @@ const Sidebar = () => {
             <Link href="/" onClick={closeSidebar} className="flex items-center gap-2 group">
               <div className="flex flex-col">
                 <span className="font-semibold text-white text-base leading-tight">
-                  {SCHOOL_NAME}
+                  {schoolName}
                 </span>
               </div>
             </Link>
@@ -104,7 +105,7 @@ const Sidebar = () => {
               >
                 <div className="flex items-center gap-3">
                   <FiInfo className="text-base text-white" />
-                  <span>About FIT</span>
+                  <span>About</span>
                 </div>
                 <FiChevronDown
                   className={`text-xs text-white transition-transform duration-200 ${openSection === 'about' ? 'rotate-180' : ''
@@ -116,11 +117,17 @@ const Sidebar = () => {
                   <Link href="/about" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
                     About Overview
                   </Link>
-                  <Link href="/about/mission-vission" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
-                    Mission & Vision
+                  <Link href="/about/campus" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
+                    My Campus
                   </Link>
-                  <Link href="/about/campus-details" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
-                    Campus Details
+                  <Link href="/about/mission" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
+                    Mission
+                  </Link>
+                  <Link href="/about/vision" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
+                    Vision
+                  </Link>
+                  <Link href="/about/history" onClick={closeSidebar} className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors">
+                    History
                   </Link>
                 </div>
               )}
@@ -184,19 +191,6 @@ const Sidebar = () => {
               <span>Administration</span>
             </Link>
 
-            {/* Programs */}
-            <Link
-              href="/programs"
-              onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/programs')
-                  ? 'bg-primary-dark text-white font-bold'
-                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
-                }`}
-            >
-              <FiGrid className="text-base text-white" />
-              <span>Programs</span>
-            </Link>
-
             {/* Accordion 2: Classes */}
             <div className="flex flex-col">
               <button
@@ -217,6 +211,13 @@ const Sidebar = () => {
               </button>
               {openSection === 'classes' && (
                 <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1 max-h-48 overflow-y-auto">
+                  <Link
+                    href="/classes"
+                    onClick={closeSidebar}
+                    className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors font-bold"
+                  >
+                    All Classes
+                  </Link>
                   {classes && classes.length > 0 ? (
                     classes.map((c) => (
                       <Link
@@ -288,6 +289,13 @@ const Sidebar = () => {
               </button>
               {openSection === 'clubs' && (
                 <div className="pl-11 pr-4 py-1 flex flex-col gap-2 border-l-2 border-emerald-400/40 ml-6 mt-1 max-h-48 overflow-y-auto">
+                  <Link
+                    href="/clubs"
+                    onClick={closeSidebar}
+                    className="text-xs text-white/90 hover:bg-primary-dark/60 hover:text-white py-1 px-2 rounded transition-colors font-bold"
+                  >
+                    All Clubs
+                  </Link>
                   {clubs && clubs.length > 0 ? (
                     clubs.map((c) => (
                       <Link
@@ -306,17 +314,17 @@ const Sidebar = () => {
               )}
             </div>
 
-            {/* News */}
+            {/* Teachers */}
             <Link
-              href="/news"
+              href="/teachers"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/news')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/teachers')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
             >
-              <FiInfo className="text-base text-white" />
-              <span>News Hub</span>
+              <FiBookOpen className="text-base text-white" />
+              <span>Teachers</span>
             </Link>
 
             {/* Staff */}
@@ -332,17 +340,30 @@ const Sidebar = () => {
               <span>Staff Directory</span>
             </Link>
 
-            {/* Result */}
+            {/* News */}
             <Link
-              href="/result"
+              href="/news"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/result')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/news')
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
+                }`}
+            >
+              <FiInfo className="text-base text-white" />
+              <span>News Hub</span>
+            </Link>
+
+            {/* Results */}
+            <Link
+              href="/results"
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/results')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
                 }`}
             >
               <FiGrid className="text-base text-white" />
-              <span>Result Portal</span>
+              <span>Results Portal</span>
             </Link>
 
             {/* Contact */}
@@ -378,7 +399,7 @@ const Sidebar = () => {
             <span>Login</span>
           </Link>
           <Link
-            href="/auth/student/registration"
+            href="/apply"
             onClick={closeSidebar}
             className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl bg-white text-primary hover:bg-primary-light font-bold text-sm shadow-md transition-all"
           >

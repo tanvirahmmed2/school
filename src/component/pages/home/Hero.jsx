@@ -74,7 +74,6 @@ const Hero = () => {
           Welcome to a community dedicated to academic rigor, creative innovation, and global leadership. We provide students the resources and support to excel in their chosen fields.
         </p>
 
-        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto px-4 justify-center">
           <Link
             href="/apply"
@@ -91,7 +90,6 @@ const Hero = () => {
           </Link>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-slate-300/60 w-full">
           
           <div className="flex items-center gap-4 bg-white/90 border border-slate-200/80 hover:border-emerald-300 p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-600/5 group transition-all duration-300 backdrop-blur-xs">

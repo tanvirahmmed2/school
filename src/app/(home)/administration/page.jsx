@@ -1,17 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiUsers } from 'react-icons/fi';
-
-const DESIGNATION_LABELS = {
-  chairman: 'Chairman of Governing Board',
-  director: 'Managing Director',
-  principal: 'Principal / Dean',
-  registrar: 'Registrar',
-  council: 'Academic Council Member',
-  officers: 'Executive Officer',
-  staff: 'Support Staff'
-};
+import { FiUsers, FiAward } from 'react-icons/fi';
+import AuthorityCard from '@/component/cards/AuthorityCard';
 
 const AdministrationPage = () => {
   const [members, setMembers] = useState([]);
@@ -23,10 +14,11 @@ const AdministrationPage = () => {
         const res = await fetch('/api/authorities');
         if (res.ok) {
           const data = await res.json();
-          setMembers(data.paylod.authorities || []);
+          const list = data.payload?.authorities || data.paylod?.authorities || [];
+          setMembers(list);
         }
       } catch (err) {
-        console.error('Failed to fetch authorities:', err);
+        console.error('Failed to fetch authorities in AdministrationPage:', err);
       } finally {
         setLoading(false);
       }
@@ -34,109 +26,91 @@ const AdministrationPage = () => {
     fetchAuthorities();
   }, []);
 
-  const displayMembers = members;
+  // Filter ONLY Chairman and Principal roles
+  const filteredMembers = members.filter((m) => {
+    const slug = (m.designation || '').toLowerCase();
+    const title = (m.designation_title || '').toLowerCase();
+    return (
+      slug.includes('chairman') ||
+      slug.includes('principal') ||
+      title.includes('chairman') ||
+      title.includes('principal')
+    );
+  });
 
-  // Grouping members
-  const executiveRoles = ['chairman', 'director', 'principal', 'registrar'];
-  const executives = displayMembers.filter(m => executiveRoles.includes(m.designation));
-  const councilMembers = displayMembers.filter(m => m.designation === 'council');
-  const supportStaff = displayMembers.filter(m => m.designation === 'officers' || m.designation === 'staff');
+  const chairmanMembers = filteredMembers.filter((m) => {
+    const slug = (m.designation || '').toLowerCase();
+    const title = (m.designation_title || '').toLowerCase();
+    return slug.includes('chairman') || title.includes('chairman');
+  });
 
-  const getInitials = (name) => {
-    return name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'AD';
-  };
-
-  const renderCard = (member) => (
-    <div key={member.id || member.name} className="bg-white border border-slate-100 rounded-2xl p-5 hover:shadow-md transition-all duration-200 flex items-center gap-4 group">
-      {member.image ? (
-        <div className="w-14 h-14 rounded-full overflow-hidden bg-slate-100 shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-200 animate-fade-in">
-          <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <div className="w-14 h-14 rounded-full bg-primaryr from-sky-50 to-indigo-50 text-sky-650 flex items-center justify-center text-lg font-bold shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-200">
-          {getInitials(member.name)}
-        </div>
-      )}
-      <div className="flex flex-col gap-0.5 min-w-0">
-        <h3 className="font-semibold text-slate-900 text-sm md:text-base group-hover:text-primary transition-colors truncate">
-          {member.name}
-        </h3>
-        <span className="text-[10px] font-bold text-primary bg-primary-light px-2 py-0.5 rounded w-fit uppercase tracking-wider">
-          {DESIGNATION_LABELS[member.designation] || member.designation}
-        </span>
-        <div className="flex flex-col gap-0.5 text-[11px] text-slate-500 font-semibold mt-2">
-          {member.email && <span className="truncate">Email: {member.email}</span>}
-          {member.contact && <span>Phone: {member.contact}</span>}
-        </div>
-      </div>
-    </div>
-  );
+  const principalMembers = filteredMembers.filter((m) => {
+    const slug = (m.designation || '').toLowerCase();
+    const title = (m.designation_title || '').toLowerCase();
+    return (
+      (slug.includes('principal') || title.includes('principal')) &&
+      !slug.includes('chairman') &&
+      !title.includes('chairman')
+    );
+  });
 
   return (
-    <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            FIT Administration
-          </span>
+    <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto flex flex-col gap-12">
+
+        <div className="text-center">
+          
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
-            Institutional Administration & Governance
+            Executive Leadership & Administration
           </h1>
-          <p className="text-slate-500 mt-2 max-w-xl mx-auto text-sm md:text-base">
-            Detailed overview of our governing board members, executive management, and support desk staff directories.
+          <p className="text-slate-500 mt-2 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
+            Leading the academic vision, institutional governance, and administrative direction.
           </p>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs animate-pulse flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-slate-200 shrink-0"></div>
-                <div className="flex flex-col gap-2 w-full">
-                  <div className="w-24 h-4 bg-slate-200 rounded"></div>
-                  <div className="w-32 h-3 bg-slate-200 rounded"></div>
-                </div>
+          <div className="flex flex-wrap justify-center gap-6">
+            {[1, 2].map((i) => (
+              <div key={i} className="bg-white w-80 h-96 rounded-xl border border-slate-100 p-4 animate-pulse flex flex-col gap-4">
+                <div className="w-full aspect-square bg-slate-200 rounded-lg"></div>
+                <div className="w-3/4 h-5 bg-slate-200 rounded"></div>
+                <div className="w-1/2 h-4 bg-slate-200 rounded"></div>
               </div>
             ))}
           </div>
+        ) : filteredMembers.length === 0 ? (
+          <div className="w-full text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-xs flex flex-col items-center justify-center gap-3">
+            <FiUsers className="text-4xl text-slate-300" />
+            <p className="text-sm font-semibold text-slate-500">No Chairman or Principal authorities listed yet.</p>
+          </div>
         ) : (
           <div className="flex flex-col gap-12">
-            {/* Executive Management */}
-            {executives.length > 0 && (
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-                  <FiUsers className="text-xl text-primary" />
-                  <h2 className="text-xl font-semibold text-slate-800 tracking-tight">Executive Board & Leadership</h2>
+            {/* Chairman Section */}
+            {chairmanMembers.length > 0 && (
+              <div className="flex flex-col items-center gap-6">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-200 w-full justify-center">
+                  <FiAward className="text-xl text-primary" />
+                  <h2 className="text-xl font-bold text-slate-800 tracking-tight">Chairman</h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {executives.map(renderCard)}
-                </div>
-              </div>
-            )}
-
-            {/* Academic Council */}
-            {councilMembers.length > 0 && (
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-                  <FiUsers className="text-xl text-primary" />
-                  <h2 className="text-xl font-semibold text-slate-800 tracking-tight">Academic Senate & Council</h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {councilMembers.map(renderCard)}
+                <div className="flex flex-wrap justify-center gap-8 w-full">
+                  {chairmanMembers.map((member) => (
+                    <AuthorityCard key={member.id} authority={member} />
+                  ))}
                 </div>
               </div>
             )}
 
-            {/* Support Desk & Executives */}
-            {supportStaff.length > 0 && (
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+            {/* Principal Section */}
+            {principalMembers.length > 0 && (
+              <div className="flex flex-col items-center gap-6">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-200 w-full justify-center">
                   <FiUsers className="text-xl text-primary" />
-                  <h2 className="text-xl font-semibold text-slate-800 tracking-tight">Administrative Support Teams</h2>
+                  <h2 className="text-xl font-bold text-slate-800 tracking-tight">Principal Leadership</h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {supportStaff.map(renderCard)}
+                <div className="flex flex-wrap justify-center gap-8 w-full">
+                  {principalMembers.map((member) => (
+                    <AuthorityCard key={member.id} authority={member} />
+                  ))}
                 </div>
               </div>
             )}
