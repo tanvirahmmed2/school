@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   FiBookOpen, 
@@ -10,10 +10,29 @@ import {
   FiArrowRight, 
   FiHeart, 
   FiShield, 
-  FiSun 
+  FiSun,
+  FiMapPin
 } from 'react-icons/fi';
 
 const CampusPage = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/website-settings');
+        if (res.ok) {
+          const data = await res.json();
+          const loaded = data.payload?.settings || data.paylod?.settings || data.settings;
+          if (loaded) setSettings(loaded);
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings in CampusPage:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
   const facilities = [
     {
       title: 'Central Library',
@@ -56,6 +75,8 @@ const CampusPage = () => {
     }
   ];
 
+  const mapUrl = settings?.map_url;
+
   return (
     <div className="w-full min-h-screen bg-slate-50/50 p-4 md:p-8">
       <div className="w-full flex flex-col gap-10">
@@ -69,6 +90,37 @@ const CampusPage = () => {
             FIT is spread across a modern campus layout designed to stimulate intellectual conversations, collaborative engineering projects, and a healthy lifestyle.
           </p>
         </div>
+
+        {/* Dynamic Campus Map Section */}
+        {mapUrl && (
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs flex flex-col gap-4">
+            <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
+              <FiMapPin className="text-primary text-xl" />
+              <span>Campus Map & Location</span>
+            </div>
+            {mapUrl.includes('<iframe') ? (
+              <div 
+                className="w-full h-80 rounded-2xl overflow-hidden shadow-inner border border-slate-100"
+                dangerouslySetInnerHTML={{ __html: mapUrl }}
+              />
+            ) : (
+              <div className="w-full bg-slate-900 text-white rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="font-semibold text-sm">Interactive Campus Directions</span>
+                  <p className="text-xs text-slate-400">View our exact campus location and navigational markers on Google Maps.</p>
+                </div>
+                <a
+                  href={mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-primary text-secondary font-bold text-xs rounded-xl hover:bg-primary-dark transition-colors shrink-0 flex items-center gap-1.5"
+                >
+                  <FiMapPin /> Open Google Maps
+                </a>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Core Facilities Grid */}
         <div className="flex flex-col gap-6">

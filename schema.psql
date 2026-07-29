@@ -1168,11 +1168,13 @@ CREATE TRIGGER update_assignment_submissions_updated_at
 
 CREATE TABLE IF NOT EXISTS website_settings (
     id BIGSERIAL PRIMARY KEY,
-    site_title VARCHAR(255),
-    logo_id VARCHAR(255),
     contact_phone VARCHAR(50),
     contact_email VARCHAR(255),
     address TEXT,
+    map_url TEXT,
+    motto TEXT,
+    mission TEXT,
+    vission TEXT,
     facebook_url TEXT,
     twitter_url TEXT,
     instagram_url TEXT,

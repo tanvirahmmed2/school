@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Context } from '../helper/Context';
 import { MdMenu } from 'react-icons/md';
-import { SCHOOL_NAME } from '@/lib/secret';
+import { LOGO_URL, SCHOOL_NAME } from '@/lib/secret';
+import Image from 'next/image';
 
 const Navbar = () => {
   const { classes, clubs, designations, sidebar, setSidebar, websiteSettings } = useContext(Context);
   const pathname = usePathname();
 
-  const schoolName = websiteSettings?.school_name || websiteSettings?.site_title || SCHOOL_NAME;
+  const schoolName = websiteSettings?.school_name || SCHOOL_NAME;
 
   const linkStyle = () => `px-3 h-10 flex w-full items-center justify-center transition-all duration-200 cursor-pointer text-xs lg:text-sm font-semibold text-white hover:text-white rounded-lg`;
   const dropdownTriggerStyle = () => `px-3 w-full h-10 flex items-center justify-center transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 text-white hover:text-white rounded-lg`;
@@ -19,7 +20,8 @@ const Navbar = () => {
   return (
     <nav className="relative w-full bg-primary text-secondary flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
       <section className="w-full flex flex-row items-center justify-between h-14 md:h-16">
-        <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight">
+        <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight flex flex-row items-center justify-center gap-3">
+          <span className='w-8 rounded-full overflow-hidden aspect-square'><Image alt={`${SCHOOL_NAME}`} src={LOGO_URL} width={100} height={100} /></span>
           {schoolName}
         </Link>
 

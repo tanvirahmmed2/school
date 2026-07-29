@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   FiEye, 
@@ -13,7 +13,29 @@ import {
   FiBookOpen
 } from 'react-icons/fi';
 
+import { SCHOOL_NAME } from '@/lib/secret';
+
 const MissionPage = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/website-settings');
+        if (res.ok) {
+          const data = await res.json();
+          const loaded = data.payload?.settings || data.paylod?.settings || data.settings;
+          if (loaded) setSettings(loaded);
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings in MissionPage:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  const schoolName = settings?.school_name || SCHOOL_NAME || 'Fontana Institute of Technology';
+
   const strategies = [
     {
       title: 'Practical Curriculum Integration',
@@ -23,7 +45,7 @@ const MissionPage = () => {
     },
     {
       title: 'Holistic Extracurricular Activities',
-      desc: 'FIT coordinates active tech clubs, sports tournaments, and cultural events. These activities cultivate leadership, team coordination, and emotional resilience.',
+      desc: `${schoolName} coordinates active tech clubs, sports tournaments, and cultural events. These activities cultivate leadership, team coordination, and emotional resilience.`,
       icon: FiActivity,
       color: 'text-primary bg-primary-light border-primary-light'
     },
@@ -42,6 +64,9 @@ const MissionPage = () => {
     { target: 'Comprehensive Scholarships', detail: 'Ensuring that 25% of eligible students receive fully-funded financial assistance.' },
   ];
 
+  const missionText = settings?.mission || '';
+  const vissionText = settings?.vission || '';
+
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="w-full flex flex-col gap-10">
@@ -51,39 +76,47 @@ const MissionPage = () => {
             Our Mission & Objectives
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
-            Establishing Fontana Institute of Technology as a hub of academic rigor, character, technical research, and student career placement.
+            {schoolName ? `Establishing ${schoolName} as a hub of academic rigor, character, technical research, and student career placement.` : 'Institutional mission and strategic objectives.'}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
-            <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center shrink-0 border border-primary-light">
-              <FiGlobe className="text-xl" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
-                Institutional Mission
-              </h3>
-              <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-                To equip technical and business scholars with robust practical skills, ethical values, and professional credentials. We achieve this by providing modern computer terminals, clean laboratory equipment, and comfortable residential halls, encouraging collaborative study and safe physical communities.
-              </p>
-            </div>
-          </div>
+        {(missionText || vissionText) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {missionText && (
+              <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
+                <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center shrink-0 border border-primary-light">
+                  <FiGlobe className="text-xl" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
+                    Institutional Mission
+                  </h3>
+                  <div 
+                    className="text-slate-600 text-xs sm:text-sm leading-relaxed prose prose-slate max-w-none"
+                    dangerouslySetInnerHTML={{ __html: missionText }}
+                  />
+                </div>
+              </div>
+            )}
 
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
-              <FiEye className="text-xl" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
-                Institutional Vision
-              </h3>
-              <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-                To revolutionize educational workflow systems. FIT envisions a unified, fully automated academic environment where grading registers, class routines, student progress tracking, hostel logs, and accounting details are secure, error-free, and instantly accessible to learners and trustees.
-              </p>
-            </div>
+            {vissionText && (
+              <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col gap-4 relative">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
+                  <FiEye className="text-xl" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-semibold text-slate-900 text-base sm:text-lg">
+                    Institutional Vision
+                  </h3>
+                  <div 
+                    className="text-slate-600 text-xs sm:text-sm leading-relaxed prose prose-slate max-w-none"
+                    dangerouslySetInnerHTML={{ __html: vissionText }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         <div className="flex flex-col gap-6">
           <h2 className="text-xl font-bold text-slate-900 tracking-tight">

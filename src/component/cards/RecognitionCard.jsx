@@ -27,9 +27,9 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
   return (
     <Link href={targetHref} className="block group h-full">
       <div
-        className={`bg-white items-center justify-center rounded-2xl p-1 border border-slate-100 shadow-xs transition-all duration-300 flex flex-col h-full ${className}`}
+        className={` items-center  justify-center p-1 transition-all duration-300 flex flex-col h-full ${className}`}
       >
-        <div className="w-full aspect-square rounded-xl overflow-hidden bg-slate-100 relative shrink-0">
+        <div className="w-full aspect-square rounded-full hover:shadow-sm overflow-hidden bg-slate-100 relative shrink-0">
           {coverImage ? (
             <Image width={500} height={500}
               src={coverImage}
@@ -51,24 +51,22 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
 
         <div className="pt-3 px-0.5 flex flex-col items-center justify-center flex-1 gap-1.5">
           
-          <h3 className="font-semibold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="font-bold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {cardTitle}
           </h3>
 
           {awardedBy && (
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-600 font-medium mt-auto pt-1">
-              <FiUser className="text-primary text-xs shrink-0" />
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-600 font-medium mt-auto">
+
               <span className="truncate">
-                <span className="text-slate-400">By: </span>
                 <strong className="text-slate-700 font-bold">{awardedBy}</strong>
               </span>
             </div>
           )}
 
-          <div className="pt-2 border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-medium">
+          <div className=" border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-medium">
             {formattedDate ? (
               <span className="flex items-center gap-1">
-                <FiCalendar className="text-primary shrink-0 text-[11px]" />
                 <span>{formattedDate}</span>
               </span>
             ) : (

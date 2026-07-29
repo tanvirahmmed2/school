@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   FiTarget, 
@@ -14,6 +14,24 @@ import {
 } from 'react-icons/fi';
 
 const VisionPage = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/website-settings');
+        if (res.ok) {
+          const data = await res.json();
+          const loaded = data.payload?.settings || data.paylod?.settings || data.settings;
+          if (loaded) setSettings(loaded);
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings in VisionPage:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
   const values = [
     {
       title: 'Academic Excellence',
@@ -41,6 +59,8 @@ const VisionPage = () => {
     }
   ];
 
+  const vissionText = settings?.vission || '';
+
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="w-full flex flex-col gap-10">
@@ -51,29 +71,32 @@ const VisionPage = () => {
             Our Vision & Core Values
           </h1>
           <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
-            FIT is guided by a commitment to academic rigor, green innovation, and social responsibility. Explore our roadmap for student development.
+            Explore our foundational roadmap and core principles for academic development.
           </p>
         </div>
 
-        <div className="relative bg-slate-900 text-white rounded-3xl p-8 overflow-hidden shadow-md border border-slate-800 flex flex-col gap-4">
-          <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-slate-900 to-sky-950/80 z-0" />
-          <div className="relative z-10 flex flex-col sm:flex-row gap-6 items-start">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-sky-400/20 text-sky-400 flex items-center justify-center shrink-0">
-              <FiTarget className="text-xl" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider">
-                The Long-Term Aim
-              </span>
-              <h3 className="font-semibold text-white text-base sm:text-lg">
-                To stand at the global forefront of technical and administrative education.
-              </h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-1">
-                FIT envisions a research-centered, digital-native academy. We cultivate critical thinkers and engineering specialists capable of solving real-world challenges, innovating sustainable technologies, and navigating international market demands.
-              </p>
+        {vissionText && (
+          <div className="relative bg-slate-900 text-white rounded-3xl p-8 overflow-hidden shadow-md border border-slate-800 flex flex-col gap-4">
+            <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-slate-900 to-sky-950/80 z-0" />
+            <div className="relative z-10 flex flex-col sm:flex-row gap-6 items-start">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-sky-400/20 text-sky-400 flex items-center justify-center shrink-0">
+                <FiTarget className="text-xl" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider">
+                  The Long-Term Aim
+                </span>
+                <h3 className="font-semibold text-white text-base sm:text-lg">
+                  To stand at the global forefront of technical and administrative education.
+                </h3>
+                <div 
+                  className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-1 prose prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: vissionText }}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Core Values Section */}
         <div className="flex flex-col gap-6">

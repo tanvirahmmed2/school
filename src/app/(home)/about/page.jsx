@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   FiClock, 
@@ -8,90 +8,197 @@ import {
   FiMap, 
   FiArrowRight, 
   FiBookOpen, 
-  FiUsers, 
-  FiAward, 
-  FiLayers, 
-  FiBriefcase,
   FiMail,
-  FiShield
+  FiPhone,
+  FiShield,
+  FiUserCheck,
+  FiAward
 } from 'react-icons/fi';
+import AuthorityCard from '@/component/cards/AuthorityCard';
 import { SCHOOL_NAME } from '@/lib/secret';
 
 const About = () => {
+  const [statsData, setStatsData] = useState({
+    totalStudents: 0,
+    totalTeachers: 0,
+    totalClubs: 0,
+  });
+  const [chairman, setChairman] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [websiteSettings, setWebsiteSettings] = useState(null);
+  const [schoolName, setSchoolName] = useState(SCHOOL_NAME || 'Fontana Institute of Technology');
+
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      setLoading(true);
+      try {
+        // Fetch Website Settings
+        try {
+          const settingsRes = await fetch('/api/website-settings');
+          if (settingsRes.ok) {
+            const sData = await settingsRes.json();
+            const setObj = sData.payload?.settings || sData.paylod?.settings || sData.settings;
+            if (setObj) {
+              setWebsiteSettings(setObj);
+              if (setObj.school_name) setSchoolName(setObj.school_name);
+            }
+          }
+        } catch (e) {
+          console.error('Failed to load settings:', e);
+        }
+
+        // Fetch Public Stats
+        let studentsCount = 0;
+        let teachersCount = 0;
+        try {
+          const statsRes = await fetch('/api/public/stats');
+          if (statsRes.ok) {
+            const stData = await statsRes.json();
+            const payload = stData.payload || stData.paylod || {};
+            studentsCount = payload.totalStudents || 0;
+            teachersCount = payload.totalTeachers || 0;
+          }
+        } catch (e) {
+          console.error('Failed to load stats:', e);
+        }
+
+        // Fetch Clubs Count
+        let clubsCount = 0;
+        try {
+          const clubsRes = await fetch('/api/clubs');
+          if (clubsRes.ok) {
+            const clData = await clubsRes.json();
+            const payload = clData.payload || clData.paylod || {};
+            const clubsList = payload.clubs || [];
+            clubsCount = clubsList.length;
+          }
+        } catch (e) {
+          console.error('Failed to load clubs:', e);
+        }
+
+        setStatsData({
+          totalStudents: studentsCount,
+          totalTeachers: teachersCount,
+          totalClubs: clubsCount,
+        });
+
+        // Fetch Chairman info from Authorities API
+        try {
+          // First try role endpoint
+          const chairmanRes = await fetch('/api/authorities/role/chairman');
+          if (chairmanRes.ok) {
+            const cData = await chairmanRes.json();
+            const payload = cData.payload || cData.paylod || {};
+            const authList = payload.authorities || [];
+            if (authList.length > 0) {
+              setChairman(authList[0]);
+            } else {
+              // Fallback to searching all authorities
+              const allAuthRes = await fetch('/api/authorities');
+              if (allAuthRes.ok) {
+                const allData = await allAuthRes.json();
+                const allPayload = allData.payload || allData.paylod || {};
+                const allList = allPayload.authorities || [];
+                const foundChairman = allList.find(
+                  (a) =>
+                    (a.designation || '').toLowerCase() === 'chairman' ||
+                    (a.designation_title || '').toLowerCase().includes('chairman') ||
+                    a.is_head === true
+                );
+                if (foundChairman) setChairman(foundChairman);
+              }
+            }
+          }
+        } catch (e) {
+          console.error('Failed to load chairman:', e);
+        }
+      } catch (err) {
+        console.error('Error fetching about page data:', err);
+      }
+      setLoading(false);
+    };
+
+    fetchAboutData();
+  }, []);
+
   const stats = [
-    { value: '5,000+', label: 'Enrolled Students', desc: 'Active scholars across multiple technical and management programs.', color: 'bg-primary text-secondary' },
-    { value: '150+', label: 'Expert Faculty', desc: 'PhD holders, certified mentors, and leading industry professionals.', color: 'from-amber-600 to-orange-500' },
-    { value: '15+', label: 'Active Clubs', desc: 'Nurturing leadership, coding skills, and extra-curricular interests.', color: 'from-rose-600 to-pink-500' },
+    { 
+      value: `${statsData.totalStudents.toLocaleString()}+`, 
+      label: 'Enrolled Students', 
+      desc: 'Active scholars enrolled across multiple academic and technical departments.', 
+      color: 'bg-primary text-secondary' 
+    },
+    { 
+      value: `${statsData.totalTeachers.toLocaleString()}+`, 
+      label: 'Expert Faculty', 
+      desc: 'Qualified educators, PhD holders, and dedicated academic mentors.', 
+      color: 'from-amber-600 to-orange-500' 
+    },
+    { 
+      value: `${statsData.totalClubs.toLocaleString()}+`, 
+      label: 'Active Clubs', 
+      desc: 'Extracurricular clubs cultivating technical skills, leadership, and community engagement.', 
+      color: 'from-rose-600 to-pink-500' 
+    },
   ];
 
   const sections = [
     {
       title: 'Our Historic Journey',
-      desc: 'Explore the major milestones, founding chronicles, and institutional growth of Fontana Institute of Technology since 2015.',
+      desc: `Explore the major milestones, founding chronicles, and institutional growth of ${schoolName}.`,
       href: '/about/history',
       icon: FiClock,
       color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Vision & Core Values',
-      desc: 'Learn about our long-term academic objectives, ethical guidelines, code of conduct, and dedication to advanced research.',
+      desc: 'Learn about our long-term academic objectives, ethical guidelines, code of conduct, and dedication to research.',
       href: '/about/vision',
       icon: FiTarget,
       color: 'text-amber-600 bg-amber-50 border-amber-100'
     },
     {
       title: 'Mission Statement',
-      desc: 'Read our institutional mission detailing progressive teaching frameworks, student care plans, and administrative criteria.',
-      href: '/about/mission-vission',
+      desc: 'Read our institutional mission detailing progressive teaching frameworks and student development criteria.',
+      href: '/about/mission',
       icon: FiBookOpen,
       color: 'text-primary bg-primary-light border-primary-light'
     },
     {
       title: 'Campus & Infrastructure',
-      desc: 'Take a virtual tour of our state-of-the-art libraries, high-tech engineering labs, design studios, and residential hostels.',
+      desc: 'Take a virtual tour of our state-of-the-art libraries, high-tech engineering labs, design studios, and hostels.',
       href: '/about/campus',
       icon: FiMap,
       color: 'text-rose-600 bg-rose-50 border-rose-100'
     }
   ];
 
-  const leaders = [
-    {
-      name: 'Dr. Arthur Pendelton',
-      role: 'Principal & Director',
-      credentials: 'Ph.D. in Computer Science, MIT',
-      bio: 'Dr. Arthur leads the overall academic vision of FIT, bringing over 20 years of research experience in distributed architectures.',
-      email: 'director@fit.edu.bd'
-    },
-    {
-      name: 'Prof. Sarah Jenkins',
-      role: 'Dean of Academics',
-      credentials: 'M.Sc. in Educational Leadership, Oxford',
-      bio: 'Prof. Sarah supervises the course curriculum, standardizes syllabi, and runs international academic collaboration programs.',
-      email: 'academics@fit.edu.bd'
-    },
-    {
-      name: 'Marcus Vance',
-      role: 'Registrar of Admissions',
-      credentials: 'MBA in Strategic Management, IBA',
-      bio: 'Marcus oversees student enrollment, registration compliance, digital registrar records, and corporate placement relationships.',
-      email: 'registrar@fit.edu.bd'
-    }
-  ];
+  const getInitials = (name) => {
+    return name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'CH';
+  };
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="w-full flex flex-col gap-16">
         
+        {/* Banner Section */}
         <div className="relative bg-slate-900 text-white rounded-3xl p-8 md:p-14 overflow-hidden shadow-xl border border-slate-800">
           <div className="absolute inset-0 bg-linear-to-tr from-sky-950/80 via-slate-900 to-indigo-950/80 z-0" />
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
 
           <div className="relative z-10 text-center flex flex-col items-center gap-4">
-            
-            <p className="text-slate-300 max-w-2xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed mt-2">
-              {SCHOOL_NAME} ({SCHOOL_NAME.split(' ').map((w)=>w[0]).join('')}) is a premier academic institution built to inspire, train, and support student success in technology, hardware engineering, and business management fields.
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+              {schoolName}
+            </h1>
+            {websiteSettings?.motto && (
+              <div 
+                className="text-xs sm:text-sm font-semibold text-sky-400 bg-sky-950/80 border border-sky-800/60 px-4 py-1.5 rounded-full tracking-wide prose prose-invert max-w-none [&>p]:m-0 [&>p]:inline-block"
+                dangerouslySetInnerHTML={{ __html: websiteSettings.motto }}
+              />
+            )}
+            <p className="text-slate-300 max-w-2xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed mt-1">
+              {schoolName} ({schoolName.split(' ').map((w)=>w[0]).join('')}) is a premier academic institution built to inspire, train, and support student success in technology, hardware engineering, and business management fields.
             </p>
           </div>
         </div>
@@ -100,8 +207,8 @@ const About = () => {
           {stats.map((stat, idx) => (
             <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-shadow">
               <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r bg-primary text-secondary" />
-              <span className={`text-3xl md:text-4xl font-semibold text-transparent bg-clip-text bg-linear-to-r ${stat.color}`}>
-                {stat.value}
+              <span className={`text-3xl md:text-4xl font-semibold `}>
+                {loading ? '...' : stat.value}
               </span>
               <span className="font-semibold text-slate-800 text-xs sm:text-sm">
                 {stat.label}
@@ -153,52 +260,58 @@ const About = () => {
           </div>
         </div>
 
-        {/* Leadership Section */}
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">
-              Leadership & Administration
-            </h2>
-            <p className="text-slate-500 text-xs sm:text-sm">
-              Meet the administrative directors coordinating student pathways and academic success at FIT.
-            </p>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">
+                Chairman
+              </h2>
+              <p className="text-slate-500 text-xs sm:text-sm">
+                Executive message and governance leadership from the Chairman of the Governing Board.
+              </p>
+            </div>
+            <Link 
+              href="/administration" 
+              className="text-xs font-semibold text-primary hover:underline flex items-center gap-1 shrink-0"
+            >
+              <span>View All Administration</span>
+              <FiArrowRight className="text-xs" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {leaders.map((leader, idx) => (
-              <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs flex flex-col gap-4 relative">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-650 flex items-center justify-center font-bold text-base shrink-0 border border-slate-200">
-                    {leader.name.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-950 text-sm sm:text-base">
-                      {leader.name}
-                    </h4>
-                    <span className="inline-block text-[10px] font-semibold text-primary bg-primary-light px-2 py-0.5 rounded mt-0.5">
-                      {leader.role}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 mt-2">
-                  <span className="text-[11px] font-bold text-slate-700">
-                    {leader.credentials}
-                  </span>
-                  <p className="text-slate-500 text-[11px] sm:text-xs leading-relaxed">
-                    {leader.bio}
-                  </p>
-                </div>
-
-                <div className="mt-auto pt-4 border-t border-slate-50 flex items-center gap-2 text-[10px] text-slate-400 font-semibold">
-                  <FiMail className="shrink-0 text-xs" />
-                  <span>{leader.email}</span>
-                </div>
+          {loading ? (
+            <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-xs animate-pulse flex flex-col md:flex-row gap-6 items-center">
+              <div className="w-24 h-24 rounded-2xl bg-slate-200 shrink-0"></div>
+              <div className="flex flex-col gap-3 w-full">
+                <div className="w-48 h-5 bg-slate-200 rounded"></div>
+                <div className="w-32 h-4 bg-slate-200 rounded"></div>
+                <div className="w-full h-12 bg-slate-200 rounded"></div>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : chairman ? (
+            <div className="w-full flex justify-center items-center flex-wrap">
+              <AuthorityCard authority={chairman} className="w-full max-w-sm" />
+            </div>
+          ) : (
+            <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-xs flex flex-col items-center text-center gap-3">
+              <div className="w-14 h-14 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
+                <FiUserCheck className="text-2xl" />
+              </div>
+              <h3 className="font-semibold text-slate-800 text-base">Chairman Profile</h3>
+              <p className="text-xs text-slate-500 max-w-md leading-relaxed">
+                Chairman details can be updated via the Authority Management module in the admin portal.
+              </p>
+              <Link 
+                href="/administration" 
+                className="mt-2 text-xs font-bold text-primary bg-primary-light px-4 py-2 rounded-xl hover:bg-primary-light transition-colors"
+              >
+                View Governance & Administration Directory
+              </Link>
+            </div>
+          )}
         </div>
 
+        {/* Quality Charter */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col md:flex-row gap-6 items-start relative overflow-hidden">
           <div className="absolute top-0 right-0 w-2 h-full bg-primary" />
           <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center shrink-0 border border-primary-light mt-1">
@@ -209,7 +322,7 @@ const About = () => {
               Charter of Academic Quality
             </h3>
             <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-              We are committed to delivering global standard computer science and business administration courses. Fontana recruits seasoned faculty members, hosts regular career placement seminars, and maintains modern lab setups. By utilizing clean digital registry workflows (student records, results, schedules), we ensure maximum transparency for parents and students alike.
+              We are committed to delivering global standard technical and business administration courses. {schoolName} recruits seasoned faculty members, hosts regular career placement seminars, and maintains modern lab setups. By utilizing clean digital registry workflows, we ensure maximum transparency for students and parents alike.
             </p>
           </div>
         </div>

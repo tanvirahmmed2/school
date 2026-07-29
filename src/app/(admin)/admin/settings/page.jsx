@@ -4,13 +4,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-hot-toast';
 import { FiSave, FiSettings, FiMail, FiPhone, FiMapPin, FiGlobe, FiImage } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
+import TiptapEditor from '@/component/helper/TiptapEditor';
 
 const SettingsPage = () => {
   const context = useContext(Context);
   const [settings, setSettings] = useState({
     school_name: '',
-    site_title: '',
-    logo_url: '',
+    motto: '',
+    map_url: '',
+    mission: '',
+    vission: '',
     contact_phone: '',
     contact_email: '',
     address: '',
@@ -89,10 +92,10 @@ const SettingsPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiSettings className="text-primary animate-spin-slow" /> Website Settings & Branding
+          <FiSettings className="text-primary animate-spin-slow" /> Website Settings & About Content
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Configure site identity, contact information, global headers, metadata, and social media handles.
+          Configure institutional identity, motto, mission, vision, map URL, contact info, and social handles using rich text formatting.
         </p>
       </div>
 
@@ -104,33 +107,59 @@ const SettingsPage = () => {
             {/* School / Organization Information */}
             <div className="flex flex-col gap-4">
               <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
-                <FiGlobe className="text-primary" /> General Identity
+                <FiGlobe className="text-primary" /> General Identity & Motto
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-700">Site Title / Portal Name</label>
-                  <input
-                    type="text"
-                    name="site_title"
-                    value={settings.site_title || ''}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
+                  <label className="text-xs font-bold text-slate-700">Institutional Motto</label>
+                  <TiptapEditor
+                    value={settings.motto || ''}
+                    onChange={(val) => setSettings((prev) => ({ ...prev, motto: val }))}
+                    placeholder="Enter institutional motto statement..."
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-700">Logo Identifier / URL</label>
+                  <label className="text-xs font-bold text-slate-700">Google Map URL / Embed Link</label>
                   <div className="relative flex items-center">
-                    <FiImage className="absolute left-3.5 text-slate-400 text-base" />
+                    <FiMapPin className="absolute left-3.5 text-slate-400 text-base" />
                     <input
                       type="text"
-                      name="logo_id"
-                      value={settings.logo_id || ''}
+                      name="map_url"
+                      placeholder="https://maps.google.com/..."
+                      value={settings.map_url || ''}
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mission & Vision Section */}
+            <div className="flex flex-col gap-4 pt-2">
+              <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
+                <FiGlobe className="text-primary" /> Mission & Vision Content (Rich Text)
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-700">Institutional Mission</label>
+                  <TiptapEditor
+                    value={settings.mission || ''}
+                    onChange={(val) => setSettings((prev) => ({ ...prev, mission: val }))}
+                    placeholder="Enter institutional mission statement..."
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-700">Institutional Vision</label>
+                  <TiptapEditor
+                    value={settings.vission || ''}
+                    onChange={(val) => setSettings((prev) => ({ ...prev, vission: val }))}
+                    placeholder="Enter institutional vision statement..."
+                  />
                 </div>
               </div>
             </div>

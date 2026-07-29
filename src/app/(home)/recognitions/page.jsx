@@ -30,7 +30,6 @@ const RecognitionsPage = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Back Link */}
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-slate-700 transition-colors mb-8"
@@ -39,11 +38,8 @@ const RecognitionsPage = () => {
           Back to Home
         </Link>
 
-        {/* Header */}
         <div className="text-center mb-12">
-          <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3.5 py-1.5 rounded-full uppercase tracking-widest mb-3">
-            Honours &amp; Awards
-          </span>
+         
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
             All Recognitions
           </h1>
@@ -52,7 +48,6 @@ const RecognitionsPage = () => {
           </p>
         </div>
 
-        {/* Content */}
         {loading ? (
           <div className="flex justify-center py-16">
             <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />

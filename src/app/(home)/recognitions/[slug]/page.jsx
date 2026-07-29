@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiAward, FiCalendar, FiUser, FiArrowLeft } from 'react-icons/fi';
 import RichTextDisplay from '@/component/helper/RichTextDisplay';
+import Image from 'next/image';
 
 const RecognitionDetailPage = () => {
   const { slug } = useParams();
@@ -64,8 +65,7 @@ const RecognitionDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        {/* Back Link */}
+      <div className="max-w-7xl mx-auto">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-slate-700 transition-colors mb-8"
@@ -74,12 +74,11 @@ const RecognitionDetailPage = () => {
           Back to Home
         </Link>
 
-        {/* Card */}
-        <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.04)]">
-          {/* Hero Image */}
+        <div className=" overflow-hidden ">
+          
           {recognition.image ? (
-            <div className="w-full h-64 sm:h-80 overflow-hidden bg-slate-100">
-              <img
+            <div className="w-full overflow-hidden bg-slate-100">
+              <Image width={1000} height={1000}
                 src={recognition.image}
                 alt={recognition.name}
                 className="w-full h-full object-cover"
@@ -91,19 +90,12 @@ const RecognitionDetailPage = () => {
             </div>
           )}
 
-          {/* Content */}
-          <div className="p-8 md:p-10">
-            {/* Badge */}
-            <span className="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
-              Recognition &amp; Award
-            </span>
-
-            {/* Title */}
+          <div className="p-4">
+            
             <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight leading-tight mb-5">
               {recognition.name}
             </h1>
 
-            {/* Meta */}
             <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 mb-6">
               <span className="flex items-center gap-1.5">
                 <FiUser className="text-primary" />

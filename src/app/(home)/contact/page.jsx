@@ -20,7 +20,7 @@ const Contact = () => {
       .catch((err) => console.error('Error loading website settings for contact page:', err));
   }, []);
 
-  const schoolName = settings?.school_name || settings?.site_title || SCHOOL_NAME || 'School Academic Office';
+  const schoolName = settings?.school_name || SCHOOL_NAME || 'School Academic Office';
   const address = settings?.address || 'West Campus Road, Section 4, Dhaka, Bangladesh';
   const email = settings?.contact_email || 'support@fontana-edu.org';
   const phone = settings?.contact_phone || '+880 1234 56789';
