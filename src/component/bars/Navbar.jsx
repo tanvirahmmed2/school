@@ -21,12 +21,14 @@ const Navbar = () => {
     <nav className="relative w-full bg-primary text-secondary flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
       <section className="w-full flex flex-row items-center justify-between h-14 md:h-16">
         <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight flex flex-row items-center justify-center gap-3">
-          <span className='w-8 rounded-full overflow-hidden aspect-square'><Image alt={`${SCHOOL_NAME}`} src={LOGO_URL} width={100} height={100} /></span>
+          <span className='w-8 bg-white rounded-full overflow-hidden aspect-square'><Image alt={`${SCHOOL_NAME}`} src={LOGO_URL} width={100} height={100} /></span>
           {schoolName}
         </Link>
 
         <section className="hidden md:flex flex-row items-center justify-end gap-5">
-          <div className="w-auto flex flex-row items-center justify-center gap-4 text-sm font-semibold">
+          <div className="w-auto flex flex-row items-center justify-center gap-8 text-sm font-semibold">
+
+            <Link href={'/gallery'} className="transition-colors text-white hover:text-secondary">Gallery</Link>
             <Link href={'/apply'} className="transition-colors text-white hover:text-secondary">
               Apply
             </Link>
@@ -123,7 +125,6 @@ const Navbar = () => {
         <Link href={'/achievements'} className={linkStyle()}>Achievements</Link>
         <Link href={'/news'} className={linkStyle()}>News</Link>
         <Link href={'/results'} className={linkStyle()}>Results</Link>
-        <Link href={'/notices'} className={linkStyle()}>Notices</Link>
         <Link href={'/contact'} className={linkStyle()}>Contact</Link>
       </section>
     </nav>

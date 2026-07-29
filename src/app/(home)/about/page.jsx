@@ -15,7 +15,8 @@ import {
   FiAward
 } from 'react-icons/fi';
 import AuthorityCard from '@/component/cards/AuthorityCard';
-import { SCHOOL_NAME } from '@/lib/secret';
+import { SCHOOL_NAME, LOGO_URL } from '@/lib/secret';
+import Image from 'next/image';
 
 const About = () => {
   const [statsData, setStatsData] = useState({
@@ -84,7 +85,6 @@ const About = () => {
 
         // Fetch Chairman info from Authorities API
         try {
-          // First try role endpoint
           const chairmanRes = await fetch('/api/authorities/role/chairman');
           if (chairmanRes.ok) {
             const cData = await chairmanRes.json();
@@ -93,40 +93,41 @@ const About = () => {
             if (authList.length > 0) {
               setChairman(authList[0]);
             } else {
-              // Fallback to searching all authorities
               const allAuthRes = await fetch('/api/authorities');
               if (allAuthRes.ok) {
                 const allData = await allAuthRes.json();
                 const allPayload = allData.payload || allData.paylod || {};
-                const allList = allPayload.authorities || [];
-                const foundChairman = allList.find(
-                  (a) =>
-                    (a.designation || '').toLowerCase() === 'chairman' ||
-                    (a.designation_title || '').toLowerCase().includes('chairman') ||
-                    a.is_head === true
+                const allAuths = allPayload.authorities || [];
+                const foundChairman = allAuths.find((a) =>
+                  a.title?.toLowerCase().includes('chairman') ||
+                  a.designation?.toLowerCase().includes('chairman') ||
+                  a.designation_title?.toLowerCase().includes('chairman')
                 );
                 if (foundChairman) setChairman(foundChairman);
               }
             }
           }
         } catch (e) {
-          console.error('Failed to load chairman:', e);
+          console.error('Failed to load chairman authority:', e);
         }
       } catch (err) {
         console.error('Error fetching about page data:', err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchAboutData();
   }, []);
 
+  const logoSrc = websiteSettings?.logo_url || LOGO_URL;
+
   const stats = [
     { 
       value: `${statsData.totalStudents.toLocaleString()}+`, 
       label: 'Enrolled Students', 
-      desc: 'Active scholars enrolled across multiple academic and technical departments.', 
-      color: 'bg-primary text-secondary' 
+      desc: 'Active learners pursuing academic programs across primary, secondary, and higher secondary tracks.', 
+      color: 'from-sky-600 to-indigo-600' 
     },
     { 
       value: `${statsData.totalTeachers.toLocaleString()}+`, 
@@ -179,15 +180,26 @@ const About = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="w-full flex flex-col gap-16">
+      <div className="w-full flex flex-col gap-16 max-w-7xl mx-auto">
         
-        {/* Banner Section */}
         <div className="relative bg-slate-900 text-white rounded-3xl p-8 md:p-14 overflow-hidden shadow-xl border border-slate-800">
           <div className="absolute inset-0 bg-linear-to-tr from-sky-950/80 via-slate-900 to-indigo-950/80 z-0" />
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
 
-          <div className="relative z-10 text-center flex flex-col items-center gap-4">
+          <div className="relative z-10 text-center flex flex-col items-center gap-5">
+            {logoSrc && (
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white backdrop-blur-md rounded-2xl p-2 border border-white/20 shadow-lg flex items-center justify-center">
+                <Image
+                  src={logoSrc}
+                  alt={`${schoolName} Logo`}
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            )}
+
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
               {schoolName}
             </h1>
@@ -198,7 +210,7 @@ const About = () => {
               />
             )}
             <p className="text-slate-300 max-w-2xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed mt-1">
-              {schoolName} ({schoolName.split(' ').map((w)=>w[0]).join('')}) is a premier academic institution built to inspire, train, and support student success in technology, hardware engineering, and business management fields.
+              Dedicated to academic excellence, innovative education, and holistic student development.
             </p>
           </div>
         </div>
@@ -219,6 +231,22 @@ const About = () => {
             </div>
           ))}
         </div>
+
+        {/* History Section */}
+        {websiteSettings?.history && (
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col gap-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <FiClock className="text-primary text-xl" />
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                Institutional History & Heritage
+              </h2>
+            </div>
+            <div 
+              className="prose prose-slate max-w-none text-slate-700 text-sm md:text-base leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: websiteSettings.history }}
+            />
+          </div>
+        )}
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">

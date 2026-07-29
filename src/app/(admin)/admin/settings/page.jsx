@@ -14,6 +14,7 @@ const SettingsPage = () => {
     map_url: '',
     mission: '',
     vission: '',
+    history: '',
     contact_phone: '',
     contact_email: '',
     address: '',
@@ -134,6 +135,22 @@ const SettingsPage = () => {
                     />
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* History Section */}
+            <div className="flex flex-col gap-4 pt-2">
+              <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
+                <FiGlobe className="text-primary" /> Institutional History & Background (Rich Text)
+              </h2>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">History & Heritage</label>
+                <TiptapEditor
+                  value={settings.history || ''}
+                  onChange={(val) => setSettings((prev) => ({ ...prev, history: val }))}
+                  placeholder="Enter full institutional history and founding background..."
+                />
               </div>
             </div>
 

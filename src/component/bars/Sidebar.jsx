@@ -340,6 +340,19 @@ const Sidebar = () => {
               <span>Staff Directory</span>
             </Link>
 
+            {/* Gallery */}
+            <Link
+              href="/gallery"
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/gallery')
+                  ? 'bg-primary-dark text-white font-bold'
+                  : 'text-white/90 hover:bg-primary-dark hover:text-white'
+                }`}
+            >
+              <FiGrid className="text-base text-white" />
+              <span>Photo Gallery</span>
+            </Link>
+
             {/* News */}
             <Link
               href="/news"

@@ -67,10 +67,10 @@ const Footer = () => {
             <Link href={'/student-fees'} className='hover:text-secondary transition-colors duration-200'>Class Tuition Fees</Link>
           </div>
           <div className='flex flex-col gap-2'>
+            <Link href={'/gallery'} className='hover:text-secondary transition-colors duration-200'>Photo Gallery</Link>
             <Link href={'/news'} className='hover:text-secondary transition-colors duration-200'>News Hub</Link>
             <Link href={'/collaborations'} className='hover:text-secondary transition-colors duration-200'>Collaborations</Link>
             <Link href={'/club-news'} className='hover:text-secondary transition-colors duration-200'>Club News</Link>
-            <Link href={'/admission-status'} className='hover:text-secondary transition-colors duration-200'>Admission Status</Link>
           </div>
           <div className='flex flex-col gap-2'>
             <Link href={'/verify-student'} className='hover:text-secondary transition-colors duration-200'>Verify Student</Link>

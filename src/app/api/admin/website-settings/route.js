@@ -10,7 +10,8 @@ async function ensureWebsiteSettingsColumns() {
       ADD COLUMN IF NOT EXISTS map_url TEXT,
       ADD COLUMN IF NOT EXISTS motto TEXT,
       ADD COLUMN IF NOT EXISTS mission TEXT,
-      ADD COLUMN IF NOT EXISTS vission TEXT;
+      ADD COLUMN IF NOT EXISTS vission TEXT,
+      ADD COLUMN IF NOT EXISTS history TEXT;
     `);
   } catch (err) {
     console.error('Error ensuring website_settings columns in admin API:', err);
@@ -64,6 +65,7 @@ export async function POST(request) {
       motto,
       mission,
       vission,
+      history,
       contact_phone,
       contact_email,
       address,
@@ -81,14 +83,14 @@ export async function POST(request) {
       // Insert
       result = await query(`
         INSERT INTO website_settings (
-          map_url, motto, mission, vission,
+          map_url, motto, mission, vission, history,
           contact_phone, contact_email, address,
           facebook_url, twitter_url, instagram_url, youtube_url
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
         RETURNING *
       `, [
         map_url?.trim() || null, motto?.trim() || null,
-        mission?.trim() || null, vission?.trim() || null,
+        mission?.trim() || null, vission?.trim() || null, history?.trim() || null,
         contact_phone?.trim() || null, contact_email?.trim() || null,
         address?.trim() || null, facebook_url?.trim() || null,
         twitter_url?.trim() || null, instagram_url?.trim() || null,
@@ -99,15 +101,15 @@ export async function POST(request) {
       const id = checkRes.rows[0].id;
       result = await query(`
         UPDATE website_settings SET
-          map_url = $1, motto = $2, mission = $3, vission = $4,
-          contact_phone = $5, contact_email = $6, address = $7,
-          facebook_url = $8, twitter_url = $9, instagram_url = $10, youtube_url = $11,
+          map_url = $1, motto = $2, mission = $3, vission = $4, history = $5,
+          contact_phone = $6, contact_email = $7, address = $8,
+          facebook_url = $9, twitter_url = $10, instagram_url = $11, youtube_url = $12,
           updated_at = CURRENT_TIMESTAMP
-        WHERE id = $12
+        WHERE id = $13
         RETURNING *
       `, [
         map_url?.trim() || null, motto?.trim() || null,
-        mission?.trim() || null, vission?.trim() || null,
+        mission?.trim() || null, vission?.trim() || null, history?.trim() || null,
         contact_phone?.trim() || null, contact_email?.trim() || null,
         address?.trim() || null, facebook_url?.trim() || null,
         twitter_url?.trim() || null, instagram_url?.trim() || null,

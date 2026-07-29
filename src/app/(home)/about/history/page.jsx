@@ -12,6 +12,9 @@ import {
   FiAlertCircle
 } from 'react-icons/fi';
 
+import Image from 'next/image';
+import { LOGO_URL } from '@/lib/secret';
+
 const iconList = [FiFlag, FiAward, FiBookmark, FiStar, FiTrendingUp];
 const colorStyles = [
   'text-primary bg-primary-light border-primary-light',
@@ -21,54 +24,84 @@ const colorStyles = [
   'text-primary bg-primary-light border-primary-light'
 ];
 
-const formatDate = (dateStr) => {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-};
-
 const HistoryPage = () => {
   const [histories, setHistories] = useState([]);
+  const [websiteSettings, setWebsiteSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchHistories = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/histories');
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || 'Failed to load history data');
-      }
-      const list = data.paylod?.histories || data.histories || [];
-      setHistories(list);
-    } catch (err) {
-      console.error('Error fetching histories:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchHistories();
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [histRes, setRes] = await Promise.all([
+          fetch('/api/histories').catch(() => null),
+          fetch('/api/website-settings').catch(() => null)
+        ]);
+
+        if (histRes && histRes.ok) {
+          const hData = await histRes.json();
+          setHistories(hData.payload?.histories || hData.paylod?.histories || hData.histories || []);
+        }
+
+        if (setRes && setRes.ok) {
+          const sData = await setRes.json();
+          setWebsiteSettings(sData.payload?.settings || sData.paylod?.settings || sData.settings || null);
+        }
+      } catch (err) {
+        console.error('Error fetching history page data:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  const logoSrc = websiteSettings?.logo_url || LOGO_URL;
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="w-full flex flex-col gap-10 max-w-5xl mx-auto">
         
         {/* Page Header */}
-        <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
+        <div className="text-center flex flex-col items-center gap-4">
+          {logoSrc && (
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white border border-slate-200 rounded-2xl p-2 shadow-xs flex items-center justify-center">
+              <Image
+                src={logoSrc}
+                alt="Institutional Logo"
+                width={80}
+                height={80}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          )}
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Our Historic Journey
           </h1>
-          <p className="text-slate-500 mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
-            Discover the key milestones, foundation, and achievements in our institutional growth.
+          <p className="text-slate-500 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
+            Discover the key milestones, founding background, and achievements in our institutional growth.
           </p>
         </div>
+
+        {/* Dynamic Rich Text History from Website Settings */}
+        {websiteSettings?.history && (
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col gap-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <FiClock className="text-primary text-xl" />
+              <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                Institutional Founding & Heritage
+              </h2>
+            </div>
+            <div 
+              className="prose prose-slate max-w-none text-slate-700 text-sm md:text-base leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: websiteSettings.history }}
+            />
+          </div>
+        )}
 
       
         {loading ? (

@@ -51,7 +51,7 @@ const Hero = () => {
 
   return (
     <section className="relative w-full min-h-[85vh] flex items-center justify-center overflow-hidden bg-slate-50 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-slate-100">
-      
+
       <video
         autoPlay
         loop
@@ -63,8 +63,8 @@ const Hero = () => {
       </video>
 
       <div className="mx-auto w-full max-w-5xl relative z-10 flex flex-col items-center text-center space-y-6">
-        
-        
+
+
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-tight text-white max-w-4xl">
           {schoolName || SCHOOL_NAME}
@@ -90,8 +90,8 @@ const Hero = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-slate-300/60 w-full">
-          
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-slate-300/60 w-full">
+
           <div className="flex items-center gap-4 bg-white/90 border border-slate-200/80 hover:border-emerald-300 p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-600/5 group transition-all duration-300 backdrop-blur-xs">
             <div className="w-12 h-12 bg-primary-light border border-primary-light rounded-xl flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform duration-300">
               <FiUsers className="w-6 h-6" />

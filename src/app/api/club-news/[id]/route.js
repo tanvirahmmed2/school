@@ -3,27 +3,38 @@ import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
+function generateSlug(text, id) {
+  if (!text) return String(id || '');
+  const clean = text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return clean || String(id || '');
+}
+
 // GET single club news article by ID or slug
 export async function GET(request, { params }) {
   try {
     const { id } = await params;
     const isNum = /^\d+$/.test(id);
     let result;
+
     if (isNum) {
       result = await query(`
         SELECT cn.*, c.name as club_name, c.slug as club_slug 
         FROM club_news cn
         JOIN clubs c ON cn.club_id = c.id
-        WHERE cn.id = $1
-      `, [parseInt(id, 10)]);
+        WHERE cn.id = $1 OR LOWER(cn.slug) = LOWER($2)
+      `, [parseInt(id, 10), id.toLowerCase()]);
     } else {
       const formattedTitle = id.replace(/-/g, ' ');
       result = await query(`
         SELECT cn.*, c.name as club_name, c.slug as club_slug 
         FROM club_news cn
         JOIN clubs c ON cn.club_id = c.id
-        WHERE LOWER(cn.title) LIKE $1 OR LOWER(cn.title) = $2
-      `, [`%${formattedTitle.toLowerCase()}%`, formattedTitle.toLowerCase()]);
+        WHERE LOWER(cn.slug) = LOWER($1) OR LOWER(cn.title) = LOWER($2) OR LOWER(cn.title) LIKE $3
+      `, [id.toLowerCase(), formattedTitle.toLowerCase(), `%${formattedTitle.toLowerCase()}%`]);
     }
 
     if (result.rows.length === 0) {
@@ -31,14 +42,22 @@ export async function GET(request, { params }) {
         success: false,
         message: 'Club news article not found',
         error: 'Not Found',
-        paylod: null
+        paylod: null,
+        payload: null
       }, { status: 404 });
     }
+
+    const row = result.rows[0];
+    const clubNews = {
+      ...row,
+      slug: row.slug || generateSlug(row.title, row.id)
+    };
 
     return NextResponse.json({
       success: true,
       message: 'Successfully fetched club news article',
-      paylod: { clubNews: result.rows[0] }
+      paylod: { clubNews },
+      payload: { clubNews }
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching single club news article:', error);

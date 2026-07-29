@@ -9,7 +9,8 @@ async function ensureWebsiteSettingsColumns() {
       ADD COLUMN IF NOT EXISTS map_url TEXT,
       ADD COLUMN IF NOT EXISTS motto TEXT,
       ADD COLUMN IF NOT EXISTS mission TEXT,
-      ADD COLUMN IF NOT EXISTS vission TEXT;
+      ADD COLUMN IF NOT EXISTS vission TEXT,
+      ADD COLUMN IF NOT EXISTS history TEXT;
     `);
   } catch (err) {
     console.error('Error ensuring website_settings columns:', err);

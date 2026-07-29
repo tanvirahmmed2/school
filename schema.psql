@@ -1175,6 +1175,7 @@ CREATE TABLE IF NOT EXISTS website_settings (
     motto TEXT,
     mission TEXT,
     vission TEXT,
+    history TEXT,
     facebook_url TEXT,
     twitter_url TEXT,
     instagram_url TEXT,
