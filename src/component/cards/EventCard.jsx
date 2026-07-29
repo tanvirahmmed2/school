@@ -3,26 +3,38 @@
 import React from 'react';
 import { FiCalendar, FiMapPin, FiClock, FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const EventCard = ({ event, href, className = '' }) => {
   if (!event) return null;
 
-  const { id, title, description, event_date, location, image } = event;
-  const dateObj = event_date ? new Date(event_date) : null;
-  const day = dateObj ? dateObj.getDate() : '';
-  const month = dateObj ? dateObj.toLocaleDateString(undefined, { month: 'short' }) : '';
-  const time = dateObj ? dateObj.toLocaleTimeString(undefined, { timeStyle: 'short' }) : '';
+  const { id, slug, title, description, event_date, location, image } = event;
 
-  const targetHref = href || `/events/${id}`;
+  const parseDate = (d) => {
+    if (!d) return null;
+    let date = new Date(d);
+    if (isNaN(date.getTime()) && typeof d === 'string') {
+      date = new Date(d.replace(' ', 'T'));
+    }
+    return isNaN(date.getTime()) ? null : date;
+  };
+
+  const dateObj = parseDate(event_date);
+  const day = dateObj ? dateObj.getUTCDate() : '';
+  const month = dateObj ? dateObj.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }) : '';
+  const time = dateObj
+    ? dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' })
+    : '';
+
+  const targetHref = href || `/events/${slug || id}`;
 
   const card = (
     <div
-      className={`bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-primary transition-all duration-250 flex flex-col sm:flex-row group h-full ${className}`}
+      className={`bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-primary transition-all duration-250 flex flex-col group h-full ${className}`}
     >
-      {/* Cover Image or Calendar Badge */}
       {image ? (
-        <div className="w-full sm:w-48 h-48 overflow-hidden bg-slate-100 shrink-0 relative">
-          <img
+        <div className="w-full aspect-video object-cover overflow-hidden bg-slate-100 shrink-0 relative">
+          <Image width={500} height={500}
             src={image}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -43,7 +55,6 @@ const EventCard = ({ event, href, className = '' }) => {
         </div>
       )}
 
-      {/* Info Container */}
       <div className="p-5 flex flex-col justify-between gap-3 flex-1">
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">

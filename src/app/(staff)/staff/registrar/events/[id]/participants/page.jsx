@@ -73,7 +73,7 @@ const RegistrarEventParticipantsPage = () => {
               <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 pt-1">
                 <span className="flex items-center gap-1.5">
                   <FiCalendar className="text-primary" />
-                  {new Date(event.event_date).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                  {new Date(event.event_date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <FiMapPin className="text-primary" />

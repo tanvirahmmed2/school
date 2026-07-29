@@ -127,7 +127,7 @@ const RegistrarEventsPage = () => {
                     )}
                     <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
                       <FiCalendar />
-                      <span>{d.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                      <span>{d.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}</span>
                     </div>
                   </div>
 
@@ -147,7 +147,7 @@ const RegistrarEventsPage = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <FiClock className="text-primary" />
-                        {d.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                        {d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' })}
                       </span>
                     </div>
                   </div>

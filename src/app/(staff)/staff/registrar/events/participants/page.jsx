@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FiUsers, FiArrowLeft, FiCalendar, FiMapPin, FiMail, FiUserCheck, FiSearch, FiFilter } from 'react-icons/fi';
+import { FiUsers, FiArrowLeft, FiCalendar, FiMapPin, FiMail, FiUserCheck, FiSearch, FiFilter, FiDownload, FiHash, FiBookOpen } from 'react-icons/fi';
+import * as XLSX from 'xlsx';
 
 const RegistrarParticipantsContent = () => {
   const searchParams = useSearchParams();
@@ -24,7 +25,7 @@ const RegistrarParticipantsContent = () => {
       setLoadingEvents(true);
       try {
         const res = await axios.get('/api/events');
-        const list = res.data?.paylod?.events || [];
+        const list = res.data?.paylod?.events || res.data?.payload?.events || [];
         setEvents(list);
         if (!selectedEventId && list.length > 0) {
           setSelectedEventId(String(list[0].id));
@@ -50,7 +51,7 @@ const RegistrarParticipantsContent = () => {
       setLoadingParticipants(true);
       try {
         const res = await axios.get(`/api/events/${selectedEventId}/participants`);
-        setParticipants(res.data?.paylod?.participants || []);
+        setParticipants(res.data?.paylod?.participants || res.data?.payload?.participants || []);
       } catch (err) {
         console.error('Error fetching event participants:', err);
         toast.error('Failed to load event participants.');
@@ -64,11 +65,49 @@ const RegistrarParticipantsContent = () => {
 
   const selectedEvent = events.find((e) => String(e.id) === String(selectedEventId));
 
-  const filteredParticipants = participants.filter((p) =>
-    p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.registration_number?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredParticipants = participants.filter((p) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      p.name?.toLowerCase().includes(term) ||
+      p.email?.toLowerCase().includes(term) ||
+      p.registration_number?.toLowerCase().includes(term) ||
+      p.class_name?.toLowerCase().includes(term) ||
+      p.section_name?.toLowerCase().includes(term) ||
+      String(p.roll || '').toLowerCase().includes(term)
+    );
+  });
+
+  const handleDownloadXLSX = () => {
+    if (!filteredParticipants || filteredParticipants.length === 0) {
+      toast.error('No participants to download.');
+      return;
+    }
+
+    const sheetData = [
+      ['#', 'Student Name', 'Class', 'Section', 'Roll No.', 'Registration No.', 'Email', 'Registration Time'],
+      ...filteredParticipants.map((p, idx) => [
+        idx + 1,
+        p.name || '',
+        p.class_name || 'N/A',
+        p.section_name || 'N/A',
+        p.roll !== null && p.roll !== undefined ? p.roll : 'N/A',
+        p.registration_number || 'N/A',
+        p.email || '',
+        p.joined_at ? new Date(p.joined_at).toLocaleString() : 'N/A'
+      ])
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(sheetData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Participants');
+
+    const eventTitle = selectedEvent?.title || 'Event';
+    const cleanTitle = eventTitle.replace(/[^a-zA-Z0-9_\-]/g, '_');
+    const fileName = `${cleanTitle}_Participants.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+    toast.success('Downloaded participants list as .xlsx');
+  };
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 p-4 md:p-8">
@@ -129,7 +168,7 @@ const RegistrarParticipantsContent = () => {
               <p className="text-slate-500 text-xs line-clamp-2">{selectedEvent.description}</p>
               <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 pt-1">
                 <span className="flex items-center gap-1 text-primary">
-                  <FiCalendar /> {new Date(selectedEvent.event_date).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                  <FiCalendar /> {new Date(selectedEvent.event_date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })}
                 </span>
                 <span className="flex items-center gap-1 text-primary">
                   <FiMapPin /> {selectedEvent.location}
@@ -142,15 +181,27 @@ const RegistrarParticipantsContent = () => {
           </div>
         )}
 
-        {/* Search */}
-        <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-100 shadow-xs">
-          <FiSearch className="text-slate-400 text-lg" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
-          />
+        {/* Search & Download Controls */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex-1 flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-100 shadow-xs w-full">
+            <FiSearch className="text-slate-400 text-lg" />
+            <input
+              type="text"
+              placeholder="Search by student name, class, roll, reg number, or email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+            />
+          </div>
+
+          <button
+            onClick={handleDownloadXLSX}
+            disabled={filteredParticipants.length === 0}
+            className="inline-flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs rounded-2xl shadow-xs transition-colors shrink-0 cursor-pointer w-full sm:w-auto justify-center"
+          >
+            <FiDownload className="text-sm" />
+            <span>Download List (.xlsx)</span>
+          </button>
         </div>
 
         {/* Participants Table */}
@@ -167,6 +218,8 @@ const RegistrarParticipantsContent = () => {
                   <tr>
                     <th className="px-6 py-3.5">#</th>
                     <th className="px-6 py-3.5">Student Name</th>
+                    <th className="px-6 py-3.5">Class</th>
+                    <th className="px-6 py-3.5">Roll No.</th>
                     <th className="px-6 py-3.5">Reg. Number</th>
                     <th className="px-6 py-3.5">Email</th>
                     <th className="px-6 py-3.5">Registration Time</th>
@@ -179,6 +232,18 @@ const RegistrarParticipantsContent = () => {
                       <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">
                         <FiUserCheck className="text-primary text-sm" />
                         <span>{p.name}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center gap-1 font-semibold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md text-[11px]">
+                          <FiBookOpen className="text-primary text-xs" />
+                          {p.class_name || 'N/A'} {p.section_name ? `(${p.section_name})` : ''}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center gap-1 font-bold text-primary bg-primary-light/60 px-2.5 py-1 rounded-md text-[11px]">
+                          <FiHash className="text-xs" />
+                          {p.roll !== null && p.roll !== undefined ? p.roll : 'N/A'}
+                        </span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="bg-slate-100 text-slate-800 font-semibold px-2.5 py-1 rounded-md text-[11px]">

@@ -50,7 +50,7 @@ const Events = () => {
             <p className="text-slate-400 text-xs font-medium">No events scheduled at the moment.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

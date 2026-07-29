@@ -8,6 +8,7 @@ import {
   FiPlus, FiCalendar, FiMapPin, FiImage, FiEdit3, 
   FiTrash2, FiUsers, FiClock, FiSearch, FiEye
 } from 'react-icons/fi';
+import Image from 'next/image';
 
 const AdminEventsPage = () => {
   const [events, setEvents] = useState([]);
@@ -83,7 +84,6 @@ const AdminEventsPage = () => {
           </div>
         </div>
 
-        {/* Search bar */}
         <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-100 shadow-xs">
           <FiSearch className="text-slate-400 text-lg" />
           <input
@@ -94,9 +94,8 @@ const AdminEventsPage = () => {
           />
         </div>
 
-        {/* Events Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {[1, 2, 3].map((i) => (
               <div key={i} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs animate-pulse flex flex-col gap-4">
                 <div className="w-full h-40 bg-slate-200 rounded-xl"></div>
@@ -106,15 +105,15 @@ const AdminEventsPage = () => {
             ))}
           </div>
         ) : filteredEvents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {filteredEvents.map((item) => {
               const d = new Date(item.event_date);
               return (
                 <div key={item.id} className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden flex flex-col justify-between hover:border-primary-light transition-all group">
-                  {/* Poster Image */}
+                  
                   <div className="relative w-full h-48 bg-slate-100 overflow-hidden">
                     {item.image ? (
-                      <img
+                      <Image width={500} height={500}
                         src={item.image}
                         alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -127,7 +126,7 @@ const AdminEventsPage = () => {
                     )}
                     <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
                       <FiCalendar />
-                      <span>{d.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                      <span>{d.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}</span>
                     </div>
                   </div>
 
@@ -147,7 +146,7 @@ const AdminEventsPage = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <FiClock className="text-primary" />
-                        {d.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                        {d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' })}
                       </span>
                     </div>
                   </div>

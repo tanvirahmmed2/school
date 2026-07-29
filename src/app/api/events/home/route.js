@@ -3,7 +3,7 @@ import { query } from '@/lib/db';
 
 export async function GET() {
   try {
-    const result = await query('SELECT * FROM events ORDER BY event_date ASC LIMIT 2');
+    const result = await query('SELECT * FROM events ORDER BY event_date ASC LIMIT 3');
     const res_data = { events: result.rows };
     return NextResponse.json({
       success: true,

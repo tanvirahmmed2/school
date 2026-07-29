@@ -27,16 +27,14 @@ const Sidebar = () => {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 transition-opacity duration-300 md:hidden ${
-          sidebar ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 transition-opacity duration-300 md:hidden ${sidebar ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={closeSidebar}
       />
 
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-primary text-secondary z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
-          sidebar ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-primary text-secondary z-50 flex flex-col justify-between py-6 px-4 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${sidebar ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between pb-4 border-b border-emerald-400/40">
@@ -60,11 +58,10 @@ const Sidebar = () => {
             <Link
               href="/"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiHome className="text-base text-white" />
               <span>Home</span>
@@ -74,11 +71,10 @@ const Sidebar = () => {
             <Link
               href="/events"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/events')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/events')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiCalendar className="text-base text-white" />
               <span>Events</span>
@@ -88,11 +84,10 @@ const Sidebar = () => {
             <Link
               href="/notices"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/notices')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/notices')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <MdOutlineAnnouncement className="text-base text-white" />
               <span>Notices</span>
@@ -102,20 +97,18 @@ const Sidebar = () => {
             <div className="flex flex-col">
               <button
                 onClick={() => toggleSection('about')}
-                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  openSection === 'about'
+                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${openSection === 'about'
                     ? 'bg-primary-dark text-white'
                     : 'text-white/90 hover:bg-primary-dark hover:text-white'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <FiInfo className="text-base text-white" />
                   <span>About FIT</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs text-white transition-transform duration-200 ${
-                    openSection === 'about' ? 'rotate-180' : ''
-                  }`}
+                  className={`text-xs text-white transition-transform duration-200 ${openSection === 'about' ? 'rotate-180' : ''
+                    }`}
                 />
               </button>
               {openSection === 'about' && (
@@ -137,20 +130,18 @@ const Sidebar = () => {
             <div className="flex flex-col">
               <button
                 onClick={() => toggleSection('authorities')}
-                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  openSection === 'authorities'
+                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${openSection === 'authorities'
                     ? 'bg-primary-dark text-white'
                     : 'text-white/90 hover:bg-primary-dark hover:text-white'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <FiShield className="text-base text-white" />
                   <span>Authorities</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs text-white transition-transform duration-200 ${
-                    openSection === 'authorities' ? 'rotate-180' : ''
-                  }`}
+                  className={`text-xs text-white transition-transform duration-200 ${openSection === 'authorities' ? 'rotate-180' : ''
+                    }`}
                 />
               </button>
               {openSection === 'authorities' && (
@@ -184,11 +175,10 @@ const Sidebar = () => {
             <Link
               href="/administration"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/administration')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/administration')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiBookOpen className="text-base text-white" />
               <span>Administration</span>
@@ -198,11 +188,10 @@ const Sidebar = () => {
             <Link
               href="/programs"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/programs')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/programs')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiGrid className="text-base text-white" />
               <span>Programs</span>
@@ -212,20 +201,18 @@ const Sidebar = () => {
             <div className="flex flex-col">
               <button
                 onClick={() => toggleSection('classes')}
-                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  openSection === 'classes'
+                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${openSection === 'classes'
                     ? 'bg-primary-dark text-white'
                     : 'text-white/90 hover:bg-primary-dark hover:text-white'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <FiBookOpen className="text-base text-white" />
                   <span>Classes</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs text-white transition-transform duration-200 ${
-                    openSection === 'classes' ? 'rotate-180' : ''
-                  }`}
+                  className={`text-xs text-white transition-transform duration-200 ${openSection === 'classes' ? 'rotate-180' : ''
+                    }`}
                 />
               </button>
               {openSection === 'classes' && (
@@ -252,20 +239,18 @@ const Sidebar = () => {
             <div className="flex flex-col">
               <button
                 onClick={() => toggleSection('facilities')}
-                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  openSection === 'facilities'
+                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${openSection === 'facilities'
                     ? 'bg-primary-dark text-white'
                     : 'text-white/90 hover:bg-primary-dark hover:text-white'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <FiGrid className="text-base text-white" />
                   <span>Facilities</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs text-white transition-transform duration-200 ${
-                    openSection === 'facilities' ? 'rotate-180' : ''
-                  }`}
+                  className={`text-xs text-white transition-transform duration-200 ${openSection === 'facilities' ? 'rotate-180' : ''
+                    }`}
                 />
               </button>
               {openSection === 'facilities' && (
@@ -287,20 +272,18 @@ const Sidebar = () => {
             <div className="flex flex-col">
               <button
                 onClick={() => toggleSection('clubs')}
-                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-                  openSection === 'clubs'
+                className={`flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${openSection === 'clubs'
                     ? 'bg-primary-dark text-white'
                     : 'text-white/90 hover:bg-primary-dark hover:text-white'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <FiInfo className="text-base text-white" />
                   <span>Clubs</span>
                 </div>
                 <FiChevronDown
-                  className={`text-xs text-white transition-transform duration-200 ${
-                    openSection === 'clubs' ? 'rotate-180' : ''
-                  }`}
+                  className={`text-xs text-white transition-transform duration-200 ${openSection === 'clubs' ? 'rotate-180' : ''
+                    }`}
                 />
               </button>
               {openSection === 'clubs' && (
@@ -327,11 +310,10 @@ const Sidebar = () => {
             <Link
               href="/news"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/news')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/news')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiInfo className="text-base text-white" />
               <span>News Hub</span>
@@ -341,11 +323,10 @@ const Sidebar = () => {
             <Link
               href="/staffs"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/staffs')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/staffs')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiBookOpen className="text-base text-white" />
               <span>Staff Directory</span>
@@ -355,11 +336,10 @@ const Sidebar = () => {
             <Link
               href="/result"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/result')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/result')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiGrid className="text-base text-white" />
               <span>Result Portal</span>
@@ -369,11 +349,10 @@ const Sidebar = () => {
             <Link
               href="/contact"
               onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                isActive('/contact')
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${isActive('/contact')
                   ? 'bg-primary-dark text-white font-bold'
                   : 'text-white/90 hover:bg-primary-dark hover:text-white'
-              }`}
+                }`}
             >
               <FiMail className="text-base text-white" />
               <span>Contact Us</span>

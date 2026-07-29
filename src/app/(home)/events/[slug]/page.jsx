@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { FiArrowLeft, FiCalendar, FiMapPin, FiClock, FiCheckCircle, FiUserPlus, FiUserMinus } from 'react-icons/fi';
+import { FiArrowLeft, FiCalendar, FiMapPin, FiClock, FiUserPlus, FiUserMinus } from 'react-icons/fi';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import Image from 'next/image';
 
-const EventDetailPage = () => {
-  const { id } = useParams();
+const EventDetailPage = ({ params: paramsPromise }) => {
+  const params = use(paramsPromise);
+  const slug = params?.slug;
+
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isJoined, setIsJoined] = useState(false);
@@ -19,23 +21,24 @@ const EventDetailPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/events/${id}`);
+        const res = await fetch(`/api/events/${encodeURIComponent(slug)}`);
         if (res.ok) {
           const data = await res.json();
-          setEvent(data.paylod?.event || null);
-        }
+          const fetchedEvent = data.paylod?.event || data.payload?.event || null;
+          setEvent(fetchedEvent);
 
-        // Check if student is logged in and check participation status
-        try {
-          const studentRes = await axios.get('/api/student/events');
-          if (studentRes.data?.success) {
-            setIsStudentUser(true);
-            const joinedIds = studentRes.data.paylod?.joinedEventIds || [];
-            setIsJoined(joinedIds.includes(String(id)));
+          if (fetchedEvent?.id) {
+            try {
+              const studentRes = await axios.get('/api/student/events');
+              if (studentRes.data?.success) {
+                setIsStudentUser(true);
+                const joinedIds = studentRes.data.paylod?.joinedEventIds || studentRes.data.payload?.joinedEventIds || [];
+                setIsJoined(joinedIds.includes(String(fetchedEvent.id)));
+              }
+            } catch (e) {
+              setIsStudentUser(false);
+            }
           }
-        } catch (e) {
-          // Not logged in as student, ignore
-          setIsStudentUser(false);
         }
       } catch (err) {
         console.error('Error fetching event details:', err);
@@ -44,21 +47,22 @@ const EventDetailPage = () => {
       }
     };
 
-    if (id) fetchData();
-  }, [id]);
+    if (slug) fetchData();
+  }, [slug]);
 
   const handleToggleParticipation = async () => {
+    if (!event?.id) return;
     setActionLoading(true);
     const action = isJoined ? 'leave' : 'join';
 
     try {
       const res = await axios.post('/api/student/events', {
-        event_id: id,
+        event_id: event.id,
         action
       });
 
       if (res.data?.success) {
-        toast.success(res.data.paylod?.message || (isJoined ? 'Registration cancelled.' : 'Registration successful!'));
+        toast.success(res.data.paylod?.message || res.data.payload?.message || (isJoined ? 'Registration cancelled.' : 'Registration successful!'));
         setIsJoined(!isJoined);
       }
     } catch (err) {
@@ -101,9 +105,8 @@ const EventDetailPage = () => {
   const eventDate = new Date(event.event_date);
 
   return (
-    <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Navigation */}
+    <div className="w-full min-h-screen bg-slate-50/50 py-12 p-4">
+      <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <Link
             href="/events"
@@ -114,11 +117,10 @@ const EventDetailPage = () => {
           </Link>
         </div>
 
-        {/* Event Detail Article */}
-        <article className="bg-white rounded-3xl border border-slate-100 shadow-xs overflow-hidden">
+        <article className="overflow-hidden w-full flex flex-col gap-4">
           {event.image && (
-            <div className="w-full h-64 md:h-96 bg-slate-100 overflow-hidden relative">
-              <img
+            <div className="w-full  bg-slate-100 overflow-hidden relative">
+              <Image width={1000} height={1000}
                 src={event.image}
                 alt={event.title}
                 className="w-full h-full object-cover"
@@ -126,25 +128,22 @@ const EventDetailPage = () => {
             </div>
           )}
 
-          <div className="p-6 md:p-10 space-y-6">
+          <div className="w-full flex flex-col gap-4">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-wider w-fit">
-                <FiCalendar /> Institutional Event
-              </div>
+             
 
               <h1 className="text-2xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-snug">
                 {event.title}
               </h1>
 
-              {/* Event Metadata Banner */}
               <div className="flex flex-wrap gap-6 items-center bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs font-bold text-slate-700">
                 <span className="flex items-center gap-2">
                   <FiCalendar className="text-primary text-base" />
-                  {eventDate.toLocaleDateString(undefined, { dateStyle: 'full' })}
+                  {eventDate.toLocaleDateString('en-US', { dateStyle: 'full', timeZone: 'UTC' })}
                 </span>
                 <span className="flex items-center gap-2">
                   <FiClock className="text-primary text-base" />
-                  {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                  {eventDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' })}
                 </span>
                 <span className="flex items-center gap-2">
                   <FiMapPin className="text-primary text-base" />

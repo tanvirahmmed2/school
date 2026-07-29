@@ -3,11 +3,41 @@ import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 
-// GET single event
+function slugify(text) {
+  return String(text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+}
+
+// GET single event (by ID or slug)
 export async function GET(request, { params }) {
   try {
+    await query('ALTER TABLE events ADD COLUMN IF NOT EXISTS slug VARCHAR(255);');
     const { id } = await params;
-    const result = await query('SELECT * FROM events WHERE id = $1', [id]);
+    const isNum = !isNaN(parseInt(id, 10)) && String(parseInt(id, 10)) === String(id).trim();
+
+    let result;
+    if (isNum) {
+      result = await query(
+        `SELECT * FROM events 
+         WHERE id = $1 
+            OR slug = $2 
+            OR LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(title, '[^a-zA-Z0-9]+', '-', 'g'))) = LOWER($2)`,
+        [parseInt(id, 10), id]
+      );
+    } else {
+      result = await query(
+        `SELECT * FROM events 
+         WHERE slug = $1 
+            OR CAST(id AS TEXT) = $1 
+            OR LOWER(TRIM(BOTH '-' FROM REGEXP_REPLACE(title, '[^a-zA-Z0-9]+', '-', 'g'))) = LOWER($1)`,
+        [id]
+      );
+    }
+
     if (result.rows.length === 0) {
       return NextResponse.json({
         success: false,
@@ -16,10 +46,19 @@ export async function GET(request, { params }) {
         paylod: null
       }, { status: 404 });
     }
+
+    const ev = result.rows[0];
+    const generatedSlug = slugify(ev.title) || String(ev.id);
+    if (!ev.slug) {
+      ev.slug = generatedSlug;
+      await query('UPDATE events SET slug = $1 WHERE id = $2 AND (slug IS NULL OR slug = \'\')', [generatedSlug, ev.id]).catch(err => console.error('Error updating event slug:', err));
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Successfully fetched event',
-      paylod: { event: result.rows[0] }
+      paylod: { event: ev },
+      payload: { event: ev }
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching event:', error);

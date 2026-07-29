@@ -134,7 +134,7 @@ const StudentEventsPage = () => {
 
                     <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-lg text-xs font-bold shadow-md flex items-center gap-1.5">
                       <FiCalendar />
-                      <span>{eventDate.toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                      <span>{eventDate.toLocaleDateString('en-US', { dateStyle: 'medium', timeZone: 'UTC' })}</span>
                     </div>
 
                     {isJoined && (
@@ -161,7 +161,7 @@ const StudentEventsPage = () => {
                       </span>
                       <span className="flex items-center gap-1.5">
                         <FiClock className="text-primary text-sm" />
-                        {eventDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                        {eventDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' })}
                       </span>
                     </div>
                   </div>

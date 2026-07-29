@@ -38,10 +38,9 @@ const EventsPage = () => {
           </p>
         </div>
 
-        {/* Loading State */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
               <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs animate-pulse flex flex-col gap-4">
                 <div className="w-24 h-4 bg-slate-200 rounded"></div>
                 <div className="w-3/4 h-6 bg-slate-200 rounded"></div>
@@ -51,7 +50,7 @@ const EventsPage = () => {
             ))}
           </div>
         ) : events.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

@@ -19,9 +19,19 @@ export async function GET(request, { params }) {
     const { id } = await params;
 
     const result = await query(
-      `SELECT s.id, s.name, s.email, s.registration_number, ep.joined_at 
+      `SELECT 
+         s.id, 
+         s.name, 
+         s.email, 
+         s.registration_number, 
+         s.roll,
+         c.name AS class_name,
+         sec.name AS section_name,
+         ep.joined_at 
        FROM event_participants ep 
        JOIN students s ON ep.student_id = s.id 
+       LEFT JOIN classes c ON s.class_id = c.id
+       LEFT JOIN sections sec ON s.section_id = sec.id
        WHERE ep.event_id = $1
        ORDER BY ep.joined_at DESC`,
       [id]
@@ -31,7 +41,8 @@ export async function GET(request, { params }) {
     return NextResponse.json({
       success: true,
       message: res_data_755?.message || 'Successfully fetched event participants',
-      paylod: res_data_755
+      paylod: res_data_755,
+      payload: res_data_755
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching event participants:', error);

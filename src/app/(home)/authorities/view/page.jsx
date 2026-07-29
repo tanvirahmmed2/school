@@ -57,7 +57,6 @@ const AuthorityViewContent = () => {
     <div className="w-full min-h-screen bg-slate-50/60 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto space-y-6">
         
-        {/* Navigation Bar */}
         <div className="flex items-center justify-between">
           <Link
             href="/authorities"
@@ -68,7 +67,6 @@ const AuthorityViewContent = () => {
         </div>
 
         {loading ? (
-          /* Loading Skeleton */
           <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-2xs space-y-6 animate-pulse">
             <div className="flex flex-col sm:flex-row gap-6 items-center">
               <div className="w-28 h-28 bg-slate-200 rounded-2xl shrink-0" />
@@ -97,11 +95,9 @@ const AuthorityViewContent = () => {
         ) : authority ? (
           <div className="space-y-6">
             
-            {/* Header Hero Card */}
             <div className="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-8 shadow-2xs space-y-6 relative overflow-hidden">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 
-                {/* Photo / Avatar */}
                 <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-slate-100 border border-slate-200/80 overflow-hidden shrink-0 shadow-xs relative">
                   {authority.image ? (
                     <Image width={400} height={400}
@@ -121,11 +117,6 @@ const AuthorityViewContent = () => {
                       <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
                         {authority.name}
                       </h1>
-                      {authority.is_head && (
-                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[10px] font-bold rounded-full uppercase">
-                          Head of Institution
-                        </span>
-                      )}
                     </div>
                     <p className="text-xs sm:text-sm text-primary font-bold flex items-center justify-center sm:justify-start gap-1.5">
                       <FiBriefcase className="text-primary text-xs" />
