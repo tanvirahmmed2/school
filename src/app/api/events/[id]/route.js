@@ -15,7 +15,6 @@ function slugify(text) {
 // GET single event (by ID or slug)
 export async function GET(request, { params }) {
   try {
-    await query('ALTER TABLE events ADD COLUMN IF NOT EXISTS slug VARCHAR(255);');
     const { id } = await params;
     const isNum = !isNaN(parseInt(id, 10)) && String(parseInt(id, 10)) === String(id).trim();
 

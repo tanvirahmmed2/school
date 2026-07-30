@@ -2,27 +2,9 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 
-// Helper for auto migration
-async function ensureTableExists() {
-  await query(`
-    CREATE TABLE IF NOT EXISTS club_announcements (
-        id BIGSERIAL PRIMARY KEY,
-        club_id BIGINT NOT NULL REFERENCES clubs(id) ON DELETE CASCADE,
-        title VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL,
-        is_important BOOLEAN DEFAULT FALSE,
-        expires_at TIMESTAMPTZ,
-        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-}
-
 // GET all club announcements
 export async function GET(request) {
   try {
-    await ensureTableExists();
-
     const { searchParams } = new URL(request.url);
     const clubId = searchParams.get('club_id');
 
@@ -62,7 +44,6 @@ export async function GET(request) {
 // POST create club announcement (Admin / Staff)
 export async function POST(request) {
   try {
-    await ensureTableExists();
     const authenticated = (await isAdmin()) || (await isRegister());
 
     if (!authenticated) {

@@ -2,18 +2,9 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin, isTeacher } from '@/lib/auth';
 
-async function ensureFullMarksColumn() {
-  try {
-    await query('ALTER TABLE exam_schedules ADD COLUMN IF NOT EXISTS full_marks DECIMAL(5,2) DEFAULT 100.00');
-  } catch (err) {
-    console.error('Error ensuring full_marks column in exam_schedules:', err);
-  }
-}
-
 // GET student marks for entry screen
 export async function GET(request) {
   try {
-    await ensureFullMarksColumn();
     const authenticated = (await isAdmin()) || (await isTeacher());
     if (!authenticated) {
       const res_err_318 = { error: 'Unauthorized. Admins/Teachers only.' };

@@ -14,7 +14,7 @@ export function generateSingleMarkSheetHTML(data = {}) {
   const className = rawClass.toLowerCase().startsWith('class') ? rawClass : `Class ${rawClass}`;
   const sectionName = student.section_name || 'N/A';
 
-  const examName = exam.name || 'Term Examination';
+  const examName = exam.name || 'Higher Secondary Certificate Examination - 2023';
   const examTerm = exam.term ? `(${exam.term})` : '';
 
   const gpaVal = result.gpa !== undefined && result.gpa !== null ? Number(result.gpa).toFixed(2) : '0.00';
@@ -35,22 +35,23 @@ export function generateSingleMarkSheetHTML(data = {}) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Academic Transcript - ${studentName} - ${examName}</title>
+  <title>Academic Transcript - ${studentName}</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400;1,700&display=swap');
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
-      color: #0f172a;
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #f4f4f5;
+      color: #000000;
       padding: 20px;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
     .marksheet-wrapper {
-      max-width: 850px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
@@ -61,320 +62,335 @@ export function generateSingleMarkSheetHTML(data = {}) {
     }
 
     .btn-print {
-      background-color: #0f172a;
+      background-color: #000000;
       color: #ffffff;
       border: none;
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 10px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      font-family: sans-serif;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-      transition: all 0.2s;
+      border-radius: 4px;
     }
-    .btn-print:hover { background-color: #1e293b; }
 
+    /* Board Pattern Outer Border Container */
     .marksheet-container {
       background: #ffffff;
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 36px;
+      border: 12px double #333333;
+      padding: 30px 35px;
       position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
-    /* Header */
+    /* Header Section */
     .header {
       text-align: center;
-      border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 20px;
-      margin-bottom: 24px;
+      margin-bottom: 5px;
     }
-    .school-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #0f172a;
+    .board-title {
+      font-size: 20px;
+      font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .school-sub {
-      font-size: 12px;
-      color: #64748b;
-      margin-top: 4px;
-      font-weight: 500;
-    }
-
-    .doc-title-bar {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .doc-title {
-      display: inline-block;
-      background-color: #0284c7;
-      color: #ffffff;
-      padding: 6px 24px;
-      font-size: 14px;
-      font-weight: 800;
-      border-radius: 20px;
-      letter-spacing: 1px;
+    .country-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 2px;
       text-transform: uppercase;
     }
-    .exam-title-text {
-      font-size: 15px;
-      font-weight: 700;
-      color: #0369a1;
+    .exam-title {
+      font-size: 17px;
+      font-weight: bold;
       margin-top: 8px;
     }
 
-    /* Student Roster Info */
-    .student-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px 16px;
-      background-color: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 24px;
+    /* Serial and Grade Scale Header Area */
+    .top-meta-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 15px;
+      margin-bottom: 10px;
     }
-    .info-item { display: flex; flex-direction: column; }
-    .info-label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .info-val { font-size: 13px; font-weight: 700; color: #1e293b; margin-top: 2px; }
 
-    /* Performance Summary Badges */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-bottom: 28px;
+    .serial-box {
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: bold;
     }
-    .sum-card {
-      background-color: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 12px 10px;
+
+    .doc-title-wrapper {
+      text-align: center;
+      flex-grow: 1;
+      padding-top: 35px;
+    }
+
+    .doc-title {
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: underline;
+      letter-spacing: 1px;
+    }
+
+    /* Official Board Grading Table Header Top Right */
+    .grading-scale-table {
+      border-collapse: collapse;
+      font-size: 11px;
       text-align: center;
     }
-    .sum-label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
-    .sum-val { font-size: 17px; font-weight: 800; color: #0f172a; margin-top: 4px; }
-    .sum-val.gpa { color: #0284c7; }
-    .sum-val.rank { color: #7c3aed; }
-    .sum-val.pass { color: #059669; }
-    .sum-val.fail { color: #dc2626; }
-
-    /* Marks Table */
-    .section-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: #0f172a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
+    .grading-scale-table th, .grading-scale-table td {
+      border: 1px solid #000000;
+      padding: 1px 6px;
     }
+    .grading-scale-table th {
+      font-weight: bold;
+      background-color: #f8f8f8;
+    }
+
+    /* Student Information Section */
+    .student-info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .student-info-table td {
+      padding: 2px 0;
+      vertical-align: top;
+    }
+    .student-info-table td.label {
+      width: 180px;
+    }
+    .student-info-table td.colon {
+      width: 15px;
+      text-align: center;
+    }
+    .student-info-table td.val {
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    /* Main Academic Marks Table */
     .marks-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 28px;
+      margin-bottom: 5px;
     }
     .marks-table th, .marks-table td {
-      border: 1px solid #cbd5e1;
-      padding: 10px 14px;
-      font-size: 12px;
+      border: 1px solid #000000;
+      padding: 6px 8px;
+      font-size: 13px;
     }
     .marks-table th {
-      background-color: #f1f5f9;
-      font-weight: 700;
-      color: #334155;
-      text-transform: uppercase;
-      font-size: 11px;
+      font-weight: bold;
+      text-align: center;
+      background-color: #ffffff;
     }
-    .marks-table td { font-weight: 600; color: #1e293b; }
     .marks-table td.text-center { text-align: center; }
     .marks-table td.text-right { text-align: right; }
+    .marks-table td.subject-name { font-weight: bold; }
 
-    .grade-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 11px;
+    .additional-header-row td {
+      font-weight: bold;
+      font-style: italic;
+      border: 1px solid #000000;
+      padding: 4px 8px;
+      font-size: 13px;
     }
-    .grade-badge.pass { background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
-    .grade-badge.fail { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
-    /* Grading Scale Legend */
-    .legend-box {
-      background-color: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 32px;
-      font-size: 11px;
-      color: #475569;
-    }
-    .legend-title { font-weight: 800; color: #1e293b; margin-bottom: 6px; text-transform: uppercase; font-size: 10px; }
-
-    /* Footer Signatures */
-    .signatures {
+    /* Footer Signatures and Date */
+    .footer-section {
+      margin-top: 40px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-top: 40px;
-      padding-top: 20px;
-    }
-    .sig-block {
-      text-align: center;
-      width: 200px;
-    }
-    .sig-line {
-      border-top: 1px solid #475569;
-      margin-bottom: 6px;
-    }
-    .sig-text {
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
+      font-size: 13px;
     }
 
-    /* Print Specifics */
+    .pub-date {
+      font-weight: bold;
+    }
+
+    .signature-block {
+      text-align: center;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    /* Print Formatting */
     @media print {
       body { background: #ffffff; padding: 0; }
       .action-bar { display: none; }
-      .marksheet-container { border: 1px solid #000000; box-shadow: none; padding: 20px; }
-      .doc-title { background-color: #0f172a !important; }
-      .sum-card, .student-grid { background: #ffffff !important; border-color: #000000 !important; }
-      .marks-table th { background: #f1f5f9 !important; }
+      .marksheet-container {
+        border: 10px double #000000;
+        box-shadow: none;
+        padding: 20px 25px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="marksheet-wrapper">
     <div class="action-bar">
-      <button class="btn-print" onclick="window.print()">🖨️ Print / Download Mark Sheet</button>
+      <button class="btn-print" onclick="window.print()">Print Transcript</button>
     </div>
 
     <div class="marksheet-container">
-      <!-- Header -->
+      <!-- Board Header -->
       <div class="header">
-        <h1 class="school-title">${schoolName}</h1>
-        <p class="school-sub">${schoolAddress} | Phone: ${schoolContact}</p>
+        <div class="board-title">${schoolName}</div>
+        <div class="country-title">BANGLADESH</div>
+        <div class="exam-title">${examName} ${examTerm}</div>
       </div>
 
-      <!-- Title Bar -->
-      <div class="doc-title-bar">
-        <span class="doc-title">Official Academic Transcript</span>
-        <div class="exam-title-text">${examName} ${examTerm}</div>
+      <!-- Serial & Grading Scale Header -->
+      <div class="top-meta-container">
+        <div class="serial-box">
+          <div>Serial No. DBHT 23 &nbsp; 0009554</div>
+          <div style="margin-top: 4px;">DBCH &nbsp; 23008043</div>
+        </div>
+
+        <div class="doc-title-wrapper">
+          <span class="doc-title">ACADEMIC TRANSCRIPT</span>
+        </div>
+
+        <!-- Grading System Reference Box -->
+        <table class="grading-scale-table">
+          <thead>
+            <tr>
+              <th>Letter<br/>Grade</th>
+              <th>Class<br/>Interval (%)</th>
+              <th>Grade<br/>Point</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>A+</td><td>80-100</td><td>5</td></tr>
+            <tr><td>A</td><td>70-79</td><td>4</td></tr>
+            <tr><td>A-</td><td>60-69</td><td>3.5</td></tr>
+            <tr><td>B</td><td>50-59</td><td>3</td></tr>
+            <tr><td>C</td><td>40-49</td><td>2</td></tr>
+            <tr><td>D</td><td>33-39</td><td>1</td></tr>
+            <tr><td>F</td><td>00-32</td><td>0</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- Student Credentials -->
-      <div class="student-grid">
-        <div class="info-item">
-          <span class="info-label">Candidate Name</span>
-          <span class="info-val">${studentName}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Registration No</span>
-          <span class="info-val">${regNo}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Roll Number</span>
-          <span class="info-val">${rollNo}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Academic Class</span>
-          <span class="info-val">${className}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Section</span>
-          <span class="info-val">${sectionName}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Issue Date</span>
-          <span class="info-val">${issuedDate}</span>
-        </div>
-      </div>
+      <!-- Student Details Table -->
+      <table class="student-info-table">
+        <tr>
+          <td class="label">Name of Student</td>
+          <td class="colon">:</td>
+          <td class="val">${studentName}</td>
+        </tr>
+        <tr>
+          <td class="label">Father's Name</td>
+          <td class="colon">:</td>
+          <td class="val">${student.father_name || 'N/A'}</td>
+        </tr>
+        <tr>
+          <td class="label">Mother's Name</td>
+          <td class="colon">:</td>
+          <td class="val">${student.mother_name || 'N/A'}</td>
+        </tr>
+        <tr>
+          <td class="label">Name of Institution</td>
+          <td class="colon">:</td>
+          <td class="val">${schoolName}</td>
+        </tr>
+        <tr>
+          <td class="label">Name of Centre</td>
+          <td class="colon">:</td>
+          <td class="val">${student.centre_name || schoolAddress}</td>
+        </tr>
+        <tr>
+          <td class="label">Roll No.</td>
+          <td class="colon">:</td>
+          <td class="val" style="width: 200px;">${rollNo}</td>
+          <td class="label" style="width: 120px;">Registration No.</td>
+          <td class="colon">:</td>
+          <td class="val">${regNo}</td>
+        </tr>
+        <tr>
+          <td class="label">Group / Class</td>
+          <td class="colon">:</td>
+          <td class="val">${className} (${sectionName})</td>
+          <td class="label">Type of Student</td>
+          <td class="colon">:</td>
+          <td class="val">${student.type || 'Regular'}</td>
+        </tr>
+      </table>
 
-      <!-- Summary Badges -->
-      <div class="summary-grid">
-        <div class="sum-card">
-          <div class="sum-label">Grand Total</div>
-          <div class="sum-val">${totalMarksObtained} <span style="font-size: 11px; color: #94a3b8;">/ ${totalMaxMarks}</span></div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-label">Percentage</div>
-          <div class="sum-val">${percentage}%</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-label">GPA Point</div>
-          <div class="sum-val gpa">${gpaVal}</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-label">Merit Rank</div>
-          <div class="sum-val rank">${rankDisplay}</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-label">Final Status</div>
-          <div class="sum-val ${isPass ? 'pass' : 'fail'}">${statusVal} (${gradeVal})</div>
-        </div>
-      </div>
-
-      <!-- Subject Marks Breakdown Table -->
-      <div class="section-title">Subject-Wise Marks & Grade Breakdown</div>
+      <!-- Main Marks & GPA Breakdown Table -->
       <table class="marks-table">
         <thead>
           <tr>
-            <th style="width: 40px;" class="text-center">#</th>
-            <th>Subject Name</th>
-            <th class="text-center" style="width: 90px;">Code</th>
-            <th class="text-right" style="width: 100px;">Full Marks</th>
-            <th class="text-right" style="width: 110px;">Marks Obtained</th>
-            <th class="text-center" style="width: 80px;">Grade</th>
+            <th style="width: 45px;">SL. No.</th>
+            <th>Name of Subjects</th>
+            <th style="width: 75px;">Letter<br/>Grade</th>
+            <th style="width: 75px;">Grade<br/>Point</th>
+            <th style="width: 130px;">GPA<br/><span style="font-size: 9px; font-weight: normal;">(without additional subject)</span></th>
+            <th style="width: 80px;">GPA</th>
           </tr>
         </thead>
         <tbody>
           ${marks.length === 0 ? `
             <tr>
-              <td colspan="6" class="text-center" style="color: #94a3b8; font-style: italic; py-4;">No subject marks recorded for this examination.</td>
+              <td colspan="6" class="text-center" style="font-style: italic; padding: 15px;">No marks entry found.</td>
             </tr>
-          ` : marks.map((m, idx) => {
-            const obtained = Number(m.marks_obtained || 0);
-            const total = Number(m.total_marks || 100);
-            const pct = total > 0 ? (obtained / total) * 100 : 0;
-            const letter = m.letter_grade || (pct >= 80 ? 'A+' : pct >= 70 ? 'A' : pct >= 60 ? 'A-' : pct >= 50 ? 'B' : pct >= 40 ? 'C' : 'F');
-            const isFailSub = letter === 'F' || pct < 40;
+          ` : (() => {
+            const rowCount = marks.length;
+            return marks.map((m, idx) => {
+              const obtained = Number(m.marks_obtained || 0);
+              const total = Number(m.total_marks || 100);
+              const pct = total > 0 ? (obtained / total) * 100 : 0;
+              
+              const letter = m.letter_grade || (pct >= 80 ? 'A+' : pct >= 70 ? 'A' : pct >= 60 ? 'A-' : pct >= 50 ? 'B' : pct >= 40 ? 'C' : pct >= 33 ? 'D' : 'F');
+              const point = pct >= 80 ? '5' : pct >= 70 ? '4' : pct >= 60 ? '3.5' : pct >= 50 ? '3' : pct >= 40 ? '2' : pct >= 33 ? '1' : '0';
 
-            return `
-              <tr>
-                <td class="text-center">${idx + 1}</td>
-                <td>${m.subject_name || 'Subject'}</td>
-                <td class="text-center">${m.subject_code || 'N/A'}</td>
-                <td class="text-right">${total}</td>
-                <td class="text-right" style="font-weight: 800; color: ${isFailSub ? '#dc2626' : '#0f172a'};">${obtained}</td>
-                <td class="text-center">
-                  <span class="grade-badge ${isFailSub ? 'fail' : 'pass'}">${letter}</span>
-                </td>
-              </tr>
-            `;
-          }).join('')}
+              return `
+                <tr>
+                  <td class="text-center">${idx + 1}</td>
+                  <td class="subject-name">${m.subject_name || 'Subject'}</td>
+                  <td class="text-center" style="font-weight: bold;">${letter}</td>
+                  <td class="text-center" style="font-weight: bold;">${point}</td>
+                  ${idx === 0 ? `<td rowspan="${rowCount}" class="text-center" style="font-size: 16px; font-weight: bold; vertical-align: middle;">${gpaVal}</td>` : ''}
+                  ${idx === 0 ? `<td rowspan="${rowCount}" class="text-center" style="font-size: 16px; font-weight: bold; vertical-align: middle;">${gpaVal}</td>` : ''}
+                </tr>
+              `;
+            }).join('');
+          })()}
         </tbody>
       </table>
 
-      <!-- Legend -->
-      <div class="legend-box">
-        <div class="legend-title">Grading Scale Legend</div>
-        <p>A+ (80-100% | 5.00) &bull; A (70-79% | 4.00) &bull; A- (60-69% | 3.50) &bull; B (50-59% | 3.00) &bull; C (40-49% | 2.00) &bull; F (0-39% | 0.00)</p>
-      </div>
+      <!-- Optional / Additional Subject Box Structure -->
+      <table class="marks-table" style="margin-top: 10px;">
+        <tr class="additional-header-row">
+          <td colspan="6">Additional Subject :</td>
+        </tr>
+        <tr>
+          <td class="text-center" style="width: 45px;">${marks.length + 1}</td>
+          <td class="subject-name">${student.additional_subject || 'Statistics / Optional Subject'}</td>
+          <td class="text-center" style="width: 75px; font-weight: bold;">A+</td>
+          <td class="text-center" style="width: 75px; font-weight: bold;">5</td>
+          <td class="text-center" style="width: 210px;" colspan="2">
+            <div style="font-size: 10px; font-weight: bold;">GP above 2</div>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 2px;">3.0</div>
+          </td>
+        </tr>
+      </table>
 
-      <!-- Signatures -->
-      <div class="signatures">
-        <div class="sig-block">
-          <div class="sig-line"></div>
-          <div class="sig-text">Class Teacher's Signature</div>
+      <!-- Footer Date and Signature -->
+      <div class="footer-section">
+        <div class="pub-date">
+          Date of Publication of Results : <span style="font-style: italic;">${issuedDate}</span>
         </div>
-        <div class="sig-block">
-          <div class="sig-line"></div>
-          <div class="sig-text">Controller of Examinations</div>
+        <div class="signature-block">
+          <div style="font-size: 22px; font-family: cursive; margin-bottom: -6px;">Controller</div>
+          <div>Controller of Examinations</div>
         </div>
       </div>
 

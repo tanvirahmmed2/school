@@ -1,8 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { toast } from 'react-hot-toast';
-import { FiSearch, FiLayers, FiCheckCircle, FiXCircle, FiClock, FiAlertCircle, FiAward, FiFileText, FiPrinter } from 'react-icons/fi';
+import {
+  FiSearch, FiCheckCircle, FiXCircle, FiClock,
+  FiAward, FiPrinter, FiUser, FiMail, FiPhone, FiMapPin, FiLayers, FiFileText
+} from 'react-icons/fi';
 import { printAdmissionFeeReceipt } from '@/lib/receipts/admission_fee';
 
 const AdmissionStatusPage = () => {
@@ -14,7 +18,7 @@ const AdmissionStatusPage = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!query.trim()) {
-      toast.error('Please enter your Application ID or Email.');
+      toast.error('Please enter your candidate Email address or Application ID.');
       return;
     }
 
@@ -28,231 +32,267 @@ const AdmissionStatusPage = () => {
         setApplication(data.paylod.application);
       } else {
         setApplication(null);
-        toast.error(data.error || 'No matching application found.');
+        toast.error(data.error || 'No matching application found for that email address.');
       }
     } catch (err) {
       setApplication(null);
-      toast.error('Failed to lookup admission application.');
+      toast.error('Failed to lookup admission application status.');
     } finally {
       setLoading(false);
     }
   };
 
-  const getReviewStatusBadge = (status) => {
+  const isSelected = (status) => {
     const s = (status || '').toLowerCase();
-    switch (s) {
-      case 'approved':
-      case 'accepted':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <FiCheckCircle /> Selected / Approved
-          </span>
-        );
-      case 'rejected':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-100">
-            <FiXCircle /> Rejected! Try again
-          </span>
-        );
-      case 'pending':
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-            <FiClock /> Result will be published soon
-          </span>
-        );
-      case 'incomplete':
-      default:
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-            <FiClock /> Incomplete (Fee / Photo Upload Pending)
-          </span>
-        );
+    return s === 'selected' || s === 'approved';
+  };
+
+  const getStatusBadge = (status, isPublished) => {
+    const s = (status || '').toLowerCase();
+    if (isSelected(s)) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <FiCheckCircle /> Selected
+        </span>
+      );
     }
+    if (s === 'rejected' || s === 'disqualified') {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200">
+          <FiXCircle /> Disqualified
+        </span>
+      );
+    }
+    if (isPublished) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200">
+          <FiXCircle /> Disqualified
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+        <FiClock /> Pending Review
+      </span>
+    );
   };
 
   const getPaymentStatusBadge = (status) => {
     const s = (status || '').toLowerCase();
     if (s === 'paid') {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-green-50 text-green-600 border border-green-100">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
           Paid
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-600 border border-rose-100">
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">
         Unpaid
       </span>
     );
   };
 
-  const formatClass = (cls) => {
-    if (!cls) return 'N/A';
-    const str = String(cls).trim();
-    return str.toLowerCase().startsWith('class') ? str : `Class ${str}`;
-  };
-
   return (
-    <div className="w-full min-h-[70vh] py-12 px-4 md:px-8 max-w-3xl mx-auto flex flex-col gap-8 animate-fade-up">
-      {/* Header */}
+    <div className="w-full min-h-[70vh] py-12 px-4 md:px-8 max-w-4xl mx-auto flex flex-col gap-8">
+      {/* Page Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight flex items-center justify-center gap-2">
-          <FiAward className="text-primary animate-pulse" /> Admission Status &amp; Results
+        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mx-auto mb-3 border border-emerald-100 shadow-2xs">
+          <FiAward />
+        </div>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+          Admission Results &amp; Application Status
         </h1>
-        <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
-          Look up your admission intake application status, verification reviews, and final results index.
+        <p className="text-xs md:text-sm text-slate-500 mt-1 max-w-md mx-auto">
+          Search by candidate Email address or Application ID to check your selection status.
         </p>
       </div>
 
-      {/* Input Search Box */}
+      {/* Email / Application ID Search Form */}
       <div className="w-full max-w-xl mx-auto">
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
-            <FiSearch className="absolute left-4 top-3.5 text-slate-400 text-base" />
+            <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
             <input
               type="text"
-              placeholder="Enter Application ID (e.g. 10008) or Email..."
+              placeholder="Search by Email address (e.g. candidate@example.com)..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 shadow-2xs focus:outline-none focus:border-emerald-600 transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-2xl text-sm font-bold shadow-md shadow-sky-500/10 hover:shadow-sky-500/25 transition-all cursor-pointer disabled:opacity-60"
+            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-2xs transition-colors cursor-pointer disabled:opacity-60 shrink-0"
           >
-            {loading ? 'Searching...' : 'Lookup Status'}
+            {loading ? 'Searching...' : 'Search Status'}
           </button>
         </form>
       </div>
 
       {loading ? (
         <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-          <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs font-semibold text-slate-400">Verifying registry file...</span>
+          <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs font-semibold text-slate-400">Verifying candidate application index...</span>
         </div>
       ) : application ? (
-        <div className="flex flex-col gap-6 animate-fade-up">
-          {/* Main Info Card */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-50 pb-5 gap-4">
+        <div className="flex flex-col gap-5">
+          
+          {/* Status Result Card */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs flex flex-col gap-6">
+            
+            {/* Top Row: Candidate Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4 gap-3">
               <div>
-                <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full inline-block mb-1.5">
                   Circular: {application.circular_name || 'General Admission'}
                 </span>
-                <h2 className="text-xl font-semibold text-slate-800">{application.candidate_name}</h2>
-                <p className="text-xs text-slate-450 mt-0.5">Email: {application.candidate_email}</p>
+                <h2 className="text-xl font-bold text-slate-800">{application.candidate_name}</h2>
+                <div className="text-xs text-slate-500 flex flex-wrap items-center gap-3 mt-1 font-medium">
+                  <span className="flex items-center gap-1"><FiMail /> {application.candidate_email}</span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1"><FiPhone /> {application.candidate_phone}</span>
+                </div>
               </div>
+
               <div className="sm:text-right flex flex-col sm:items-end gap-1">
-                <span className="text-xs text-slate-400 font-bold block">Application ID: #{application.application_id}</span>
-                <span className="text-xs text-slate-450 block font-semibold">Applied on: {new Date(application.created_at).toLocaleDateString()}</span>
+                <span className="text-xs font-bold text-slate-700">App ID: #{application.application_id}</span>
+                <span className="text-[10px] text-slate-400">Applied: {new Date(application.created_at).toLocaleDateString()}</span>
                 <button
                   onClick={() => printAdmissionFeeReceipt(application)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer mt-1"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-2xs transition-colors cursor-pointer mt-1"
                 >
-                  <FiPrinter /> Print / Download Receipt
+                  <FiPrinter className="text-xs" /> Print Receipt
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 font-semibold">
+            {/* Candidate & Family Summary */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-medium bg-slate-50 p-4 rounded-xl border border-slate-100">
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Class</span>
-                <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-1 rounded-full">
-                  <FiLayers className="text-sky-400 text-xs" />
-                  {formatClass(application.class_name)}
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Target Class</span>
+                <span className="font-bold text-slate-800 flex items-center gap-1">
+                  <FiLayers className="text-emerald-600" /> {application.class_name || 'N/A'}
                 </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Status</span>
-                <div>{getReviewStatusBadge(application.application_status)}</div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Blood Group &amp; DOB</span>
+                <span className="font-bold text-slate-800">
+                  {application.blood_group ? `${application.blood_group} • ` : ''}{application.date_of_birth ? new Date(application.date_of_birth).toLocaleDateString() : 'N/A'}
+                </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Admission Fee</span>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-sm font-semibold text-slate-700">BDT {parseFloat(application.fee_amount || 0).toFixed(2)}</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Fee Payment Status</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-800">BDT {parseFloat(application.fee_amount || 0).toFixed(2)}</span>
                   {getPaymentStatusBadge(application.payment_status)}
                 </div>
               </div>
+
+              {application.father_name && (
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Father Details</span>
+                  <span className="font-bold text-slate-800 block">{application.father_name}</span>
+                  <span className="text-[10px] text-slate-500 block">{application.father_phone}</span>
+                </div>
+              )}
+
+              {application.mother_name && (
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Mother Details</span>
+                  <span className="font-bold text-slate-800 block">{application.mother_name}</span>
+                  <span className="text-[10px] text-slate-500 block">{application.mother_phone}</span>
+                </div>
+              )}
+
+              {application.address && (
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Address</span>
+                  <span className="font-semibold text-slate-700 block truncate">{application.address}</span>
+                </div>
+              )}
             </div>
 
-            {/* Results publication section */}
-            <div className="mt-4 pt-6 border-t border-slate-100">
-              {application.is_result_published ? (
-                <div>
-                  {['approved', 'accepted'].includes((application.application_status || '').toLowerCase()) ? (
-                    <div className="p-6 bg-primary-light border border-primary-light rounded-2xl flex flex-col gap-3">
-                      <div className="flex items-center gap-2 text-primary font-semibold">
-                        <FiCheckCircle className="text-xl" />
-                        <span>Congratulations! Admission Selected</span>
-                      </div>
-                      <p className="text-xs text-primary leading-relaxed font-semibold">
-                        Your application for {formatClass(application.class_name)} has been approved. Below are your assigned academic credentials:
-                      </p>
-                      <div className="grid grid-cols-2 gap-4 mt-2 max-w-sm text-xs font-bold">
-                        <div className="bg-white border border-primary-light p-3 rounded-xl">
-                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Class Section</span>
-                          <span className="text-slate-800 text-sm font-semibold">{application.section_name || 'Assigning...'}</span>
-                        </div>
-                        <div className="bg-white border border-primary-light p-3 rounded-xl">
-                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block mb-0.5">Roll Number</span>
-                          <span className="text-primary text-sm font-semibold">{application.roll_number || 'Assigning...'}</span>
-                        </div>
-                      </div>
+            {/* Selection Result Status Banner */}
+            <div className="pt-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Final Admission Selection Result</span>
+
+              {isSelected(application.application_status) ? (
+                <div className="p-5 bg-emerald-50 border border-emerald-200/80 rounded-2xl flex flex-col gap-3">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold text-base">
+                    <FiCheckCircle className="text-emerald-600 text-xl shrink-0" />
+                    <span>Selection Result: Selected</span>
+                  </div>
+                  <p className="text-xs text-emerald-900 leading-relaxed font-semibold">
+                    Congratulations! Candidate <strong>{application.candidate_name}</strong> has been officially <strong>Selected</strong> for admission in <strong>{application.class_name}</strong>.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1">
+                    <div className="bg-white border border-emerald-200/60 p-3 rounded-xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Assigned Reg No.</span>
+                      <span className="text-xs font-bold text-emerald-700 font-mono mt-0.5 block">
+                        {application.registration_number || 'Generated on publication'}
+                      </span>
                     </div>
-                  ) : (application.application_status || '').toLowerCase() === 'rejected' ? (
-                    <div className="p-6 bg-rose-50 border border-rose-100 rounded-2xl flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-rose-700 font-semibold">
-                        <FiXCircle className="text-xl text-rose-500" />
-                        <span>Rejected! Try again</span>
-                      </div>
-                      <p className="text-xs text-rose-600 leading-relaxed font-medium">
-                        We regret to inform you that your application was not selected for admission in this term. We appreciate your interest in our institution and wish you the best in your future academic activities.
-                      </p>
+
+                    <div className="bg-white border border-emerald-200/60 p-3 rounded-xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Assigned Roll</span>
+                      <span className="text-xs font-bold text-slate-800 font-mono mt-0.5 block">
+                        {application.roll_number ? `#${application.roll_number}` : 'Generated on publication'}
+                      </span>
                     </div>
-                  ) : (
-                    <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-amber-700 font-semibold">
-                        <FiClock className="text-xl" />
-                        <span>Result will be published soon</span>
-                      </div>
-                      <p className="text-xs text-amber-800 leading-relaxed font-medium">
-                        Your application is under review by the admissions committee. The circular results will be published soon.
-                      </p>
+
+                    <div className="bg-white border border-emerald-200/60 p-3 rounded-xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Target Class</span>
+                      <span className="text-xs font-bold text-slate-800 mt-0.5 block">
+                        {application.class_name}
+                      </span>
+                    </div>
+                  </div>
+
+                  {application.registration_number && (
+                    <div className="mt-2 flex items-center justify-end">
+                      <Link
+                        href="/auth/student/registration"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs"
+                      >
+                        <FiUser /> Complete Student Account Setup
+                      </Link>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-amber-700 font-semibold">
-                    <FiClock className="text-xl text-amber-600" />
-                    <span>Result will be published soon</span>
+                <div className="p-5 bg-rose-50 border border-rose-200 rounded-2xl flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-rose-700 font-bold text-base">
+                    <FiXCircle className="text-rose-600 text-xl shrink-0" />
+                    <span>Selection Result: Disqualified</span>
                   </div>
-                  <p className="text-xs text-amber-800 leading-relaxed font-medium">
-                    The admissions circular selection results for {formatClass(application.class_name)} have not been published by the administration yet. Result will be published soon.
+                  <p className="text-xs text-rose-800 leading-relaxed font-semibold">
+                    The candidate was not selected for admission in this drive. We appreciate your interest in our institution.
                   </p>
                 </div>
               )}
+
             </div>
+
           </div>
+
         </div>
       ) : hasSearched ? (
-        <div className="w-full max-w-md mx-auto p-8 bg-rose-50 border border-rose-100 rounded-3xl text-center flex flex-col items-center gap-3 animate-fade-up">
-          <FiAlertCircle className="text-rose-500 text-3xl" />
-          <div>
-            <h3 className="text-sm font-bold text-rose-800">No Application Found</h3>
-            <p className="text-xs text-rose-650 mt-1">
-              No admission application corresponds to that Application ID or candidate email address.
-            </p>
-          </div>
+        <div className="w-full max-w-md mx-auto p-6 bg-rose-50 border border-rose-200 rounded-2xl text-center flex flex-col items-center gap-2">
+          <FiXCircle className="text-rose-500 text-3xl" />
+          <h3 className="text-xs font-bold text-rose-800">No Admission Record Found</h3>
+          <p className="text-xs text-rose-600">
+            No application corresponds to that email address. Please verify your email and try again.
+          </p>
         </div>
       ) : (
-        <div className="w-full max-w-md mx-auto p-8 border border-dashed border-slate-200 rounded-3xl text-center text-slate-400 flex flex-col items-center gap-2 animate-fade-up">
-          <span>🎓</span>
-          <p className="text-xs font-semibold">Enter your credentials above to check admission application status.</p>
+        <div className="w-full max-w-md mx-auto p-8 border border-dashed border-slate-200 rounded-2xl text-center text-slate-400 flex flex-col items-center gap-2">
+          <span className="text-3xl">🎓</span>
+          <p className="text-xs font-semibold">Enter your candidate email address above to view your admission selection result.</p>
         </div>
       )}
     </div>

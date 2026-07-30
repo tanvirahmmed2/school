@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { FiUser, FiBriefcase, FiMail, FiPhone, FiMapPin, FiShield } from 'react-icons/fi';
+import Link from 'next/link';
+import { FiUser, FiMail, FiPhone, FiMapPin, FiShield } from 'react-icons/fi';
 
 const StaffCard = ({ staff, className = '' }) => {
   const formatRole = (role) => {
@@ -10,7 +11,8 @@ const StaffCard = ({ staff, className = '' }) => {
   };
 
   return (
-    <div
+    <Link
+      href={`/staffs/${staff.username}`}
       className={`group bg-white rounded-2xl border border-slate-100 hover:border-primary hover:shadow-md transition-all duration-250 overflow-hidden flex ${className}`}
     >
       {/* Left: Image / Avatar Panel */}
@@ -53,10 +55,10 @@ const StaffCard = ({ staff, className = '' }) => {
               <span className="truncate">{staff.email}</span>
             </div>
           )}
-          {staff.number && (
+          {(staff.phone || staff.number) && (
             <div className="flex items-center gap-1.5 truncate">
               <FiPhone className="text-slate-400 shrink-0 text-xs" />
-              <span className="truncate">{staff.number}</span>
+              <span className="truncate">{staff.phone || staff.number}</span>
             </div>
           )}
           {staff.address && (
@@ -67,7 +69,7 @@ const StaffCard = ({ staff, className = '' }) => {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

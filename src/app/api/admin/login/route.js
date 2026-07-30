@@ -19,9 +19,6 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Ensure columns exist
-    await query('ALTER TABLE admins ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT TRUE;');
-
     // Find admin
     const result = await query('SELECT * FROM admins WHERE email = $1', [email]);
     if (result.rows.length === 0) {

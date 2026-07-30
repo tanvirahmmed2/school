@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { 
   FiArrowLeft, FiUser, FiMail, FiPhone, FiCalendar, 
-  FiMapPin, FiAward, FiBook, FiCheck, FiX, FiLayers, FiImage, FiFileText, FiDollarSign
+  FiMapPin, FiAward, FiBook, FiCheck, FiX, FiLayers, FiImage, FiFileText, FiDollarSign, FiHeart
 } from 'react-icons/fi';
 
 const ApplicantDetailsContent = () => {
@@ -58,7 +58,7 @@ const ApplicantDetailsContent = () => {
   };
 
   const handleProcess = async (status) => {
-    const confirm = window.confirm(`Are you sure you want to ${status.toLowerCase()} this application?`);
+    const confirm = window.confirm(`Are you sure you want to change status to "${status}"?`);
     if (!confirm) return;
 
     setProcessing(true);
@@ -70,13 +70,14 @@ const ApplicantDetailsContent = () => {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        toast.success(data.message || `Application ${status.toLowerCase()} successfully!`);
-        router.push('/admin/students/admissions');
+        toast.success(data.message || `Application status updated to ${status}!`);
+        setApplicant(prev => ({ ...prev, status }));
       } else {
         throw new Error(data.error || 'Failed to process application.');
       }
     } catch (err) {
       toast.error(err.message);
+    } finally {
       setProcessing(false);
     }
   };
@@ -84,8 +85,8 @@ const ApplicantDetailsContent = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-sm font-semibold text-slate-400">Loading applicant details...</span>
+        <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-xs font-semibold text-slate-400">Loading applicant details...</span>
       </div>
     );
   }
@@ -93,14 +94,14 @@ const ApplicantDetailsContent = () => {
   if (!applicant) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
-        <span className="text-5xl mb-4">🔍</span>
-        <h3 className="text-lg font-bold text-slate-700">Applicant Not Found</h3>
-        <p className="text-sm text-slate-450 text-slate-450 mt-1">
+        <span className="text-4xl mb-3">🔍</span>
+        <h3 className="text-sm font-bold text-slate-700">Applicant Not Found</h3>
+        <p className="text-xs text-slate-400 mt-1">
           The requested admission candidate details could not be loaded.
         </p>
         <button
           onClick={() => router.push('/admin/students/admissions')}
-          className="mt-6 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+          className="mt-4 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
         >
           Go Back
         </button>
@@ -108,124 +109,124 @@ const ApplicantDetailsContent = () => {
     );
   }
 
+  const isSelected = ['selected', 'approved'].includes((applicant.status || '').toLowerCase());
+  const isDisqualified = ['disqualified', 'rejected'].includes((applicant.status || '').toLowerCase());
+
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-fade-up">
-      {/* Back to list */}
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-5">
+      {/* Back button */}
       <button
         onClick={() => router.push('/admin/students/admissions')}
-        className="self-start flex items-center gap-2 px-4 py-2 border border-slate-100 bg-white hover:bg-slate-50 text-slate-500 rounded-2xl text-xs font-bold transition-all shadow-[0_5px_15px_rgba(0,0,0,0.01)] cursor-pointer"
+        className="self-start flex items-center gap-2 px-3.5 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
       >
         <FiArrowLeft className="text-sm" /> Back to Application Registry
       </button>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
         {/* Left Column: Visual Assets */}
-        <div className="md:col-span-1 flex flex-col gap-6">
+        <div className="md:col-span-1 flex flex-col gap-5">
           {/* Candidate Image Card */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col items-center text-center gap-4">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-start flex items-center gap-1.5">
-              <FiImage className="text-xs text-primary" /> Candidate Photo
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col items-center text-center gap-3">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider self-start flex items-center gap-1.5">
+              <FiImage className="text-xs text-emerald-600" /> Photo (500 x 500 px)
             </p>
             {applicant.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img 
                 src={applicant.image} 
                 alt="Candidate Profile" 
-                className="w-40 h-40 rounded-2xl object-cover border border-slate-150 shadow-md bg-slate-50"
+                className="w-40 h-40 rounded-xl object-cover border border-slate-200 shadow-2xs bg-slate-50"
               />
             ) : (
-              <div className="w-40 h-40 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold">
+              <div className="w-40 h-40 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold">
                 No Photo Provided
               </div>
             )}
             <div>
-              <h2 className="text-base font-semibold text-slate-800">{applicant.applicant_name}</h2>
-              <span className="inline-flex mt-1.5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-50 text-primary border border-emerald-200/60">
+              <h2 className="text-base font-bold text-slate-800">{applicant.applicant_name}</h2>
+              <span className="inline-flex mt-1 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                 Class: {applicant.class_name}
               </span>
             </div>
           </div>
 
           {/* Candidate Signature Card */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col items-center text-center gap-4">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-start flex items-center gap-1.5">
-              <FiFileText className="text-xs text-primary" /> Signature
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col items-center text-center gap-3">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider self-start flex items-center gap-1.5">
+              <FiFileText className="text-xs text-emerald-600" /> Signature (150 x 30 px)
             </p>
             {applicant.signature ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img 
                 src={applicant.signature} 
                 alt="Candidate Signature" 
-                className="w-full max-w-[200px] h-20 rounded-xl object-contain border border-slate-100 bg-white p-2 shadow-inner"
+                className="w-full max-w-[200px] h-12 rounded-lg object-contain border border-slate-200 bg-white p-1"
               />
             ) : (
-              <div className="w-full h-20 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-semibold">
+              <div className="w-full h-12 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-semibold">
                 No Signature Provided
               </div>
             )}
           </div>
 
           {/* Admission Fee Card */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col gap-4">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-start flex items-center gap-1.5">
-              <FiDollarSign className="text-xs text-amber-500" /> Admission Fee Status
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col gap-3">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+              <FiDollarSign className="text-xs text-emerald-600" /> Admission Fee Status
             </p>
             <div className="w-full flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-semibold text-slate-500">Fee Amount:</span>
-                <span className="text-sm font-bold text-slate-800">BDT {parseFloat(applicant.fee_amount || applicant.admission_fees_amount || 0).toFixed(2)}</span>
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-semibold text-slate-500">Fee Amount:</span>
+                <span className="font-bold text-slate-800">BDT {parseFloat(applicant.fee_amount || applicant.admission_fees_amount || 0).toFixed(2)}</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-semibold text-slate-500">Status:</span>
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-semibold text-slate-500">Status:</span>
                 <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                  applicant.fee_status === 'Paid'
-                    ? 'bg-green-50 text-green-600 border-green-100'
-                    : applicant.fee_status === 'Cancelled' || applicant.fee_status === 'Cancel'
-                    ? 'bg-red-50 text-red-600 border-red-100'
-                    : 'bg-amber-50 text-amber-600 border-amber-100'
+                  applicant.fee_status === 'Paid' || applicant.fee_status === 'paid'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                    : 'bg-amber-50 text-amber-700 border-amber-200'
                 }`}>
                   {applicant.fee_status || 'Pending'}
                 </span>
               </div>
-              {applicant.status === 'Pending' && (
-                <div className="mt-3 pt-3 border-t border-slate-50 flex flex-col gap-1.5">
-                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Update Payment Status</label>
-                  <select
-                    value={applicant.fee_status || 'Pending'}
-                    onChange={(e) => handleUpdateFeeStatus(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Paid">Paid</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </div>
-              )}
+
+              <div className="mt-2 pt-2 border-t border-slate-100 flex flex-col gap-1">
+                <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Update Fee Status</label>
+                <select
+                  value={applicant.fee_status || 'Pending'}
+                  onChange={(e) => handleUpdateFeeStatus(e.target.value)}
+                  className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs outline-none focus:border-emerald-600 cursor-pointer"
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Detailed Text Information */}
-        <div className="md:col-span-2 flex flex-col gap-6">
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_15px_40px_rgba(0,0,0,0.01)] flex flex-col gap-6">
+        {/* Right Column: Candidate & Parents Information */}
+        <div className="md:col-span-2 flex flex-col gap-5">
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-2xs flex flex-col gap-5">
             
             {/* Header info */}
-            <div className="flex justify-between items-start gap-4 pb-4 border-b border-slate-50">
+            <div className="flex justify-between items-start gap-4 pb-4 border-b border-slate-100">
               <div>
-                <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide ${
-                  applicant.status === 'Pending' 
-                    ? 'bg-amber-50 text-amber-600 border border-amber-100' 
-                    : applicant.status === 'Approved'
-                    ? 'bg-green-50 text-green-600 border border-green-100'
-                    : 'bg-red-50 text-red-600 border border-red-100'
+                <span className={`inline-flex px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border ${
+                  isSelected 
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60' 
+                    : isDisqualified
+                    ? 'bg-rose-50 text-rose-700 border-rose-200'
+                    : 'bg-amber-50 text-amber-700 border-amber-200'
                 }`}>
-                  {applicant.status} Application
+                  {isSelected ? 'Selected' : isDisqualified ? 'Disqualified' : 'Pending Review'}
                 </span>
                 {applicant.admission_title && (
-                  <p className="text-xs text-slate-400 font-bold mt-1.5 uppercase tracking-wider">
-                    {applicant.admission_title}
+                  <p className="text-xs text-slate-400 font-semibold mt-1">
+                    Circular: {applicant.admission_title}
                   </p>
                 )}
               </div>
@@ -236,100 +237,130 @@ const ApplicantDetailsContent = () => {
 
             {/* Profile Fields */}
             <div>
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">1. Personal Profile</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">1. Candidate Profile</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-xs">
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiUser className="text-slate-400" /> Candidate Name
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiUser /> Candidate Name
                   </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.applicant_name}</p>
+                  <p className="font-bold text-slate-800">{applicant.applicant_name}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiCalendar className="text-slate-400" /> Date of Birth
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiCalendar /> Date of Birth &amp; Gender
                   </p>
-                  <p className="text-sm font-bold text-slate-700">
-                    {new Date(applicant.date_of_birth).toLocaleDateString()} (Gender: {applicant.gender})
+                  <p className="font-bold text-slate-800">
+                    {new Date(applicant.date_of_birth).toLocaleDateString()} ({applicant.gender})
                   </p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiAward className="text-slate-400" /> Birth Registration No
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiAward /> Birth Certificate No.
                   </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.birth_regi_number || 'N/A'}</p>
+                  <p className="font-bold text-slate-800">{applicant.birth_regi_number || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiBook className="text-slate-400" /> Previous Institution
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiHeart /> Blood Group
                   </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.previous_school || 'None / Fresh Enrollment'}</p>
+                  <p className="font-bold text-slate-800">{applicant.blood_group || 'N/A'}</p>
                 </div>
               </div>
             </div>
 
-            {/* Contact Details */}
-            <div className="border-t border-slate-50 pt-5">
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">2. Contact & Address</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+            {/* Contact & Address */}
+            <div className="border-t border-slate-100 pt-4">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">2. Contact &amp; Address</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-xs">
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiPhone className="text-slate-400" /> Contact Phone
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiPhone /> Contact Phone
                   </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.phone}</p>
+                  <p className="font-bold text-slate-800">{applicant.phone}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiMail className="text-slate-400" /> Registered Email
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiMail /> Candidate Email
                   </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.email}</p>
+                  <p className="font-bold text-slate-800">{applicant.email}</p>
                 </div>
                 <div className="sm:col-span-2">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiMapPin className="text-slate-400" /> Residential Address
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mb-0.5">
+                    <FiMapPin /> Address
                   </p>
-                  <p className="text-sm font-bold text-slate-700 leading-relaxed">{applicant.address}</p>
+                  <p className="font-semibold text-slate-800 leading-relaxed">{applicant.address}</p>
                 </div>
               </div>
             </div>
 
-            {/* Parents Details */}
-            <div className="border-t border-slate-50 pt-5">
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">3. Guardian Metadata</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
-                <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiUser className="text-slate-400" /> Guardian Full Name
-                  </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.guardian_name}</p>
+            {/* Father & Mother Details */}
+            <div className="border-t border-slate-100 pt-4">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">3. Parents Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Father Details</p>
+                  <p className="font-bold text-slate-800">{applicant.father_name || applicant.guardian_name}</p>
+                  <p className="text-[10px] text-slate-500 font-medium">{applicant.father_phone || applicant.guardian_phone}</p>
+                  {applicant.father_occupation && <p className="text-[10px] text-slate-400 font-medium">Occupation: {applicant.father_occupation}</p>}
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                    <FiPhone className="text-slate-400" /> Guardian Phone
-                  </p>
-                  <p className="text-sm font-bold text-slate-700">{applicant.guardian_phone}</p>
+
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Mother Details</p>
+                  <p className="font-bold text-slate-800">{applicant.mother_name || 'N/A'}</p>
+                  <p className="text-[10px] text-slate-500 font-medium">{applicant.mother_phone || 'N/A'}</p>
+                  {applicant.mother_occupation && <p className="text-[10px] text-slate-400 font-medium">Occupation: {applicant.mother_occupation}</p>}
                 </div>
               </div>
             </div>
 
-            {/* Action buttons (only if Pending) */}
-            {applicant.status === 'Pending' && (
-              <div className="flex justify-end gap-3 border-t border-slate-50 pt-6 mt-4">
-                <button
-                  disabled={processing}
-                  onClick={() => handleProcess('Rejected')}
-                  className="px-5 py-2.5 border border-red-100 hover:bg-red-50 text-red-600 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <FiX /> Reject Application
-                </button>
-                <button
-                  disabled={processing}
-                  onClick={() => handleProcess('Approved')}
-                  className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-2xl text-xs font-bold transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
-                >
-                  <FiCheck /> Approve Admission
-                </button>
+            {/* Past School & Special Notes */}
+            {(applicant.past_school_name || applicant.special_note) && (
+              <div className="border-t border-slate-100 pt-4 text-xs">
+                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">4. Past School &amp; Special Note</h3>
+                <div className="flex flex-col gap-2">
+                  {applicant.past_school_name && (
+                    <p className="font-semibold text-slate-700">
+                      Past School: <strong>{applicant.past_school_name}</strong> (Class: {applicant.past_school_class || 'N/A'}, Result: {applicant.past_school_result || 'N/A'})
+                    </p>
+                  )}
+                  {applicant.special_note && (
+                    <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-900">
+                      <p className="text-[10px] font-bold uppercase tracking-wider mb-0.5">Special Note / Remarks</p>
+                      <p className="text-xs font-medium leading-relaxed">{applicant.special_note}</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
+
+            {/* Status Change Controls (Admin / Registrar Overrides at any time) */}
+            <div className="flex items-center justify-end gap-2 border-t border-slate-100 pt-4 mt-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-auto">Admin Selection Control:</span>
+              
+              <button
+                disabled={processing}
+                onClick={() => handleProcess('pending')}
+                className="px-3.5 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Mark Pending
+              </button>
+
+              <button
+                disabled={processing}
+                onClick={() => handleProcess('disqualified')}
+                className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1"
+              >
+                <FiX className="text-xs" /> Disqualify / Reject
+              </button>
+
+              <button
+                disabled={processing}
+                onClick={() => handleProcess('selected')}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer flex items-center gap-1"
+              >
+                <FiCheck className="text-xs" /> Select / Approve Candidate
+              </button>
+            </div>
 
           </div>
         </div>
@@ -343,8 +374,8 @@ const ApplicantDetailsPage = () => {
   return (
     <Suspense fallback={
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-sm font-semibold text-slate-400">Preparing candidate profile...</span>
+        <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-xs font-semibold text-slate-400">Preparing candidate profile...</span>
       </div>
     }>
       <ApplicantDetailsContent />

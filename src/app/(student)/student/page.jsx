@@ -143,17 +143,28 @@ const StudentHomePage = () => {
         <div className="absolute right-1/3 -top-20 w-48 h-48 bg-emerald-500/10 rounded-full blur-xl pointer-events-none" />
         
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-emerald-100 backdrop-blur-md mb-3 border border-white/10">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Academic Portal
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
-              {welcomeMessage()}, {profile?.name || 'Student'} 👋
-            </h1>
-            <p className="text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal">
-              Welcome back to your dashboard. Stay on top of your class routine, track attendance, and manage assignments seamlessly.
-            </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/20 text-white border border-white/30 flex items-center justify-center text-3xl font-bold shrink-0 overflow-hidden shadow-inner">
+              {profile?.image ? (
+                <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
+              ) : profile?.name ? (
+                profile.name.charAt(0).toUpperCase()
+              ) : (
+                <FiUser />
+              )}
+            </div>
+            <div className="max-w-xl">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-emerald-100 backdrop-blur-md mb-2 border border-white/10">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Academic Portal
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1">
+                {welcomeMessage()}, {profile?.name || 'Student'} 👋
+              </h1>
+              <p className="text-emerald-100/90 text-xs sm:text-sm leading-relaxed font-normal">
+                Welcome back to your dashboard. Stay on top of your class routine, track attendance, and manage assignments seamlessly.
+              </p>
+            </div>
           </div>
 
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 min-w-[220px] shadow-inner">

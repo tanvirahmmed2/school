@@ -19,11 +19,6 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Migration check
-    await query('ALTER TABLE staffs ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE;');
-    await query('ALTER TABLE staffs ADD COLUMN IF NOT EXISTS two_factor_code VARCHAR(10);');
-    await query('ALTER TABLE staffs ADD COLUMN IF NOT EXISTS two_factor_expires TIMESTAMPTZ;');
-
     // Direct DB lookup
     const result = await query('SELECT * FROM staffs WHERE email = $1', [email.trim()]);
 

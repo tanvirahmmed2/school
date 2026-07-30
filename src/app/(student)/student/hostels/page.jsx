@@ -163,14 +163,16 @@ export default function StudentHostelsPage() {
                         <option value="">-- No Preference (Any Eligible Hall) --</option>
                         {hostels
                           .filter((h) => {
-                            const hG = (h.gender || 'Both').toLowerCase();
-                            if (hG === 'both') return true;
-                            const sG = (studentGender || '').toLowerCase();
-                            const isFemaleStudent = sG.includes('female') || sG === 'f';
-                            const isMaleStudent = !isFemaleStudent && (sG.includes('male') || sG === 'm');
+                            const hG = String(h.gender || 'both').trim().toLowerCase();
+                            if (hG === 'both' || hG === 'all') return true;
+
+                            const sG = String(studentGender || '').trim().toLowerCase();
+                            const isFemaleStudent = sG === 'female' || sG === 'f' || sG.includes('female');
+
                             const isMaleHostel = hG === 'male' || (hG.includes('male') && !hG.includes('female'));
                             const isFemaleHostel = hG === 'female' || hG.includes('female');
-                            if (isMaleHostel && !isMaleStudent) return false;
+
+                            if (isMaleHostel && isFemaleStudent) return false;
                             if (isFemaleHostel && !isFemaleStudent) return false;
                             return true;
                           })

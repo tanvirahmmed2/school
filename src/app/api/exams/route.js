@@ -126,13 +126,6 @@ export async function POST(request) {
       console.error('Failed to auto-generate student fees for exam:', feeErr);
     }
 
-    // Ensure full_marks column exists
-    try {
-      await query('ALTER TABLE exam_schedules ADD COLUMN IF NOT EXISTS full_marks DECIMAL(5,2) DEFAULT 100.00');
-    } catch (colErr) {
-      console.error('Column full_marks check error:', colErr);
-    }
-
     // If schedule routines were provided, insert them bound to the target class
     if (schedules && Array.isArray(schedules) && schedules.length > 0) {
       const targetClassId = parseInt(class_id, 10);

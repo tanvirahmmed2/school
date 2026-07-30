@@ -264,8 +264,8 @@ export async function PUT(request) {
       // Insert new guardian
       await query(
         `INSERT INTO student_guardians (student_id, name, relationship, phone)
-         VALUES ($1, $2, 'Parent', $3)`,
-        [studentId, parentName || 'Parent', parentContact || phone]
+         VALUES ($1, $2, 'Relative', $3)`,
+        [studentId, parentName || 'Relative', parentContact || phone]
       );
     }
 

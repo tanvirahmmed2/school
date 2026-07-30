@@ -89,15 +89,6 @@ function slugify(text) {
     .replace(/\-\-+/g, '-');
 }
 
-// Ensure motto column exists in clubs table
-async function ensureMottoColumn() {
-  try {
-    await query('ALTER TABLE clubs ADD COLUMN IF NOT EXISTS motto TEXT');
-  } catch (err) {
-    console.error('Failed to ensure motto column on clubs table:', err);
-  }
-}
-
 // PUT update a club
 export async function PUT(request, { params }) {
   try {
@@ -111,7 +102,6 @@ export async function PUT(request, { params }) {
       }, { status: 403 });
     }
 
-    await ensureMottoColumn();
     const { id } = await params;
     const { name, motto, description, image } = await request.json();
 

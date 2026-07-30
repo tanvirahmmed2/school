@@ -8,7 +8,7 @@ import Image from 'next/image';
 const TeacherCard = ({ teacher, className = '' }) => {
   return (
     <Link
-          href={`/teachers/${teacher.id}`}
+          href={`/teachers/${teacher.username}`}
       className={`group bg-white w-full rounded-xl border border-slate-100 flex-col  hover:border-primary shadow-sm hover:shadow-md transition-all duration-250 overflow-hidden flex ${className}`}
     >
       <div className="w-full shrink-0 relative bg-primary-light overflow-hidden">

@@ -14,15 +14,7 @@ export async function GET() {
         error: 'Unauthorized',
         paylod: null
       }, { status: 401 });
-    }
-
-    try {
-      await query('ALTER TABLE clubs ADD COLUMN IF NOT EXISTS notice_info TEXT');
-    } catch (e) {
-      console.error('Column notice_info check:', e);
-    }
-
-    // Check club assignments in club_admin
+    }    // Check club assignments in club_admin
     const assignedClubsRes = await query(
       `SELECT c.id, c.name, c.slug, c.motto, c.description, c.notice_info, c.image, c.image_id, ca.designation as admin_designation
        FROM club_admin ca

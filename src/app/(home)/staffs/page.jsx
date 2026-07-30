@@ -29,11 +29,8 @@ export default function PublicStaffPage() {
   return (
     <div className="w-full min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
-        {/* Header */}
         <div className="text-center">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest inline-flex items-center gap-1.5 border border-primary-light">
-            <FiBriefcase className="text-xs" /> Support & Administration
-          </span>
+         
           <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 mt-3 tracking-tight">
             Institutional Staff Directory
           </h1>

@@ -5,9 +5,6 @@ import { isAdmin } from '@/lib/auth';
 // GET all designations
 export async function GET() {
   try {
-    // Ensure column exists
-    await query('ALTER TABLE authority_designations ADD COLUMN IF NOT EXISTS is_head BOOLEAN DEFAULT FALSE;');
-
     const result = await query('SELECT * FROM authority_designations ORDER BY id ASC');
     const res_data = { designations: result.rows };
     return NextResponse.json({

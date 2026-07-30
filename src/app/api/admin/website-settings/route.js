@@ -3,26 +3,9 @@ import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 import { SCHOOL_NAME, LOGO_URL, META_TITLE, META_DESCRIPTION } from '@/lib/secret';
 
-async function ensureWebsiteSettingsColumns() {
-  try {
-    await query(`
-      ALTER TABLE website_settings 
-      ADD COLUMN IF NOT EXISTS map_url TEXT,
-      ADD COLUMN IF NOT EXISTS motto TEXT,
-      ADD COLUMN IF NOT EXISTS mission TEXT,
-      ADD COLUMN IF NOT EXISTS vission TEXT,
-      ADD COLUMN IF NOT EXISTS history TEXT;
-    `);
-  } catch (err) {
-    console.error('Error ensuring website_settings columns in admin API:', err);
-  }
-}
-
 // GET Website Settings
 export async function GET() {
   try {
-    await ensureWebsiteSettingsColumns();
-
     const res = await query('SELECT * FROM website_settings ORDER BY id ASC LIMIT 1');
     
     const dbSettings = res.rows[0] || {};
@@ -56,8 +39,6 @@ export async function POST(request) {
     if (!authenticated) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 403 });
     }
-
-    await ensureWebsiteSettingsColumns();
 
     const body = await request.json();
     const {

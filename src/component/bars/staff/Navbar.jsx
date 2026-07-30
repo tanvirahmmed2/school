@@ -80,8 +80,12 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-655 text-xs font-semibold">
-          <FiUser className="text-sm text-slate-400" />
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-650 text-xs font-semibold">
+          {staff?.image ? (
+            <img src={staff.image} alt={staff.name} className="w-5 h-5 rounded-full object-cover border border-slate-200" />
+          ) : (
+            <FiUser className="text-sm text-slate-400" />
+          )}
           {loading ? (
             <span className="w-16 h-3 bg-slate-200 animate-pulse rounded"></span>
           ) : (

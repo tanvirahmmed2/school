@@ -52,18 +52,9 @@ export async function GET() {
   }
 }
 
-async function ensureFullMarksColumn() {
-  try {
-    await query('ALTER TABLE exam_schedules ADD COLUMN IF NOT EXISTS full_marks DECIMAL(5,2) DEFAULT 100.00');
-  } catch (err) {
-    console.error('Error ensuring full_marks column in exam_schedules:', err);
-  }
-}
-
 // POST toggle publication status & compile marks
 export async function POST(request) {
   try {
-    await ensureFullMarksColumn();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err_2297 = { error: 'Unauthorized. Admins only.' };

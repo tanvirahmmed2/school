@@ -2,20 +2,9 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
-async function ensureGradeTableColumns() {
-  try {
-    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS point DECIMAL(5,2) NOT NULL DEFAULT 0.00');
-    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP');
-    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP');
-  } catch (err) {
-    console.error('Error ensuring columns in mark_grades:', err);
-  }
-}
-
 // GET all grades
 export async function GET() {
   try {
-    await ensureGradeTableColumns();
     const result = await query('SELECT * FROM mark_grades ORDER BY min_mark DESC');
     const res_data = { grades: result.rows };
     return NextResponse.json({
@@ -25,11 +14,10 @@ export async function GET() {
     }, { status: 200 });
   } catch (error) {
     console.error('Error fetching grades:', error);
-    const res_err = { error: 'Failed to retrieve grades. Internal server error.' };
     return NextResponse.json({
       success: false,
-      message: res_err.error,
-      error: res_err.error,
+      message: 'Failed to retrieve grades.',
+      error: 'Internal Server Error',
       paylod: null
     }, { status: 500 });
   }
@@ -38,7 +26,6 @@ export async function GET() {
 // POST create grade (Admin only)
 export async function POST(request) {
   try {
-    await ensureGradeTableColumns();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err = { error: 'Unauthorized. Admins only.' };

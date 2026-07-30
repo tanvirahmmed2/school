@@ -2,20 +2,9 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 
-async function ensureGradeTableColumns() {
-  try {
-    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS point DECIMAL(5,2) NOT NULL DEFAULT 0.00');
-    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP');
-    await query('ALTER TABLE mark_grades ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP');
-  } catch (err) {
-    console.error('Error ensuring columns in mark_grades:', err);
-  }
-}
-
 // PUT update a grade (Admin only)
 export async function PUT(request, { params }) {
   try {
-    await ensureGradeTableColumns();
     const authenticated = await isAdmin();
     if (!authenticated) {
       const res_err = { error: 'Unauthorized. Admins only.' };

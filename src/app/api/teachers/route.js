@@ -20,6 +20,7 @@ export async function GET() {
         t.is_registered, 
         t.is_permanent, 
         t.image, 
+        t.username,
         t.created_at,
         t.grade_id,
         tps.name AS grade_name

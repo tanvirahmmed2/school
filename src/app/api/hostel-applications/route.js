@@ -166,29 +166,29 @@ export async function POST(request) {
     if (preferred_hostel_id) {
       const hostelRes = await query('SELECT id, name, gender FROM hostels WHERE id = $1', [preferred_hostel_id]);
       if (hostelRes.rows.length > 0) {
-        const studentGender = (stRes.rows[0]?.gender || '').trim();
-        const hostelGender = (hostelRes.rows[0]?.gender || 'Both').trim();
+        const studentGender = stRes.rows[0]?.gender || '';
+        const hostelGender = hostelRes.rows[0]?.gender || 'Both';
 
-        const sG = studentGender.toLowerCase();
-        const hG = hostelGender.toLowerCase();
+        const sG = String(studentGender).trim().toLowerCase();
+        const hG = String(hostelGender).trim().toLowerCase();
 
-        const isFemaleStudent = sG.includes('female') || sG === 'f' || sG === 'woman';
-        const isMaleStudent = !isFemaleStudent && (sG.includes('male') || sG === 'm' || sG === 'man');
+        const isFemaleStudent = sG === 'female' || sG === 'f' || sG.includes('female');
+        const isMaleStudent = !isFemaleStudent; // Male or default
 
         const isMaleHostel = hG === 'male' || (hG.includes('male') && !hG.includes('female'));
         const isFemaleHostel = hG === 'female' || hG.includes('female');
 
-        if (isMaleHostel && !isMaleStudent) {
+        if (isMaleHostel && isFemaleStudent) {
           return NextResponse.json({
             success: false,
-            error: `Gender Mismatch Blocked: Only explicitly Male students can apply for ${hostelRes.rows[0].name} (${hostelGender}-only hall).`
+            error: `Gender Mismatch Blocked: Female students cannot apply for ${hostelRes.rows[0].name} (${hostelGender}-only hall).`
           }, { status: 400 });
         }
 
         if (isFemaleHostel && !isFemaleStudent) {
           return NextResponse.json({
             success: false,
-            error: `Gender Mismatch Blocked: Only explicitly Female students can apply for ${hostelRes.rows[0].name} (${hostelGender}-only hall).`
+            error: `Gender Mismatch Blocked: Male students cannot apply for ${hostelRes.rows[0].name} (${hostelGender}-only hall).`
           }, { status: 400 });
         }
       }

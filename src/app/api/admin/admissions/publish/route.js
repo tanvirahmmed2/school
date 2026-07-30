@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import pool, { query } from '@/lib/db';
+import pool from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
 import { sendEmail } from '@/lib/brevo';
-import { deleteImage } from '@/lib/cloudinary';
 import { triggerMonthlyFeeGeneration } from '@/lib/fees';
 
 // POST publish admission results (Admin only)
@@ -43,7 +42,7 @@ export async function POST(request) {
     const classInfoRes = await client.query('SELECT max_seats FROM classes WHERE id = $1', [circular.class_id]);
     const maxSeats = classInfoRes.rows[0]?.max_seats || 40;
 
-    // 2. Fetch all approved applications for this circular
+    // 2. Fetch all selected/approved applications for this circular
     const approvedCandidatesRes = await client.query(`
       SELECT 
         sa.id as student_admission_id,
@@ -54,8 +53,19 @@ export async function POST(request) {
         sa.phone,
         sa.date_of_birth,
         sa.gender,
+        sa.blood_group,
         sa.address,
         sa.birth_regi_number,
+        sa.father_name,
+        sa.father_occupation,
+        sa.father_phone,
+        sa.mother_name,
+        sa.mother_occupation,
+        sa.mother_phone,
+        sa.past_school_name,
+        sa.past_school_class,
+        sa.past_school_result,
+        sa.special_note,
         sa.guardian_name,
         sa.guardian_phone,
         sa.image,
@@ -66,24 +76,22 @@ export async function POST(request) {
         c.numeric_name AS class_numeric_name
       FROM student_admissions sa
       JOIN classes c ON sa.applied_class_id = c.id
-      WHERE sa.admission_id = $1 AND LOWER(sa.status) = 'approved'
+      WHERE sa.admission_id = $1 AND LOWER(sa.status) IN ('approved', 'selected')
       ORDER BY sa.id ASC
     `, [admission_id]);
 
-    // Limit to max seats of the class
     const candidates = approvedCandidatesRes.rows.slice(0, maxSeats);
 
     const academicYear = new Date().getFullYear();
     let registeredCount = 0;
 
-    // Get current student count in this class for sequential roll generation
     const countRes = await client.query(
       'SELECT COUNT(*) as count FROM students WHERE class_id = $1',
       [circular.class_id]
     );
     let currentStudentSeq = parseInt(countRes.rows[0]?.count || 0, 10);
 
-    // 3. Register each approved candidate as an official student
+    // 3. Register each approved candidate as an official student without deleting applicant records
     for (const cand of candidates) {
       currentStudentSeq++;
       const match = String(cand.class_numeric_name || cand.class_name || '').match(/\d+/);
@@ -93,12 +101,12 @@ export async function POST(request) {
 
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
       const codeExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-      const parentsInfo = `Parent Name: ${cand.guardian_name}, Contact: ${cand.guardian_phone}`;
+      const parentsInfo = `Father: ${cand.father_name || cand.guardian_name} (${cand.father_phone || cand.guardian_phone}), Mother: ${cand.mother_name || 'N/A'}`;
 
       const classNumeric = cand.class_numeric_name || 0;
       const regPrefix = `${academicYear}-${classNumeric}`;
 
-      // Calculate sequential registration number
+      // Sequential registration number
       const maxRegRes = await client.query(
         `SELECT registration_number 
          FROM students 
@@ -134,7 +142,7 @@ export async function POST(request) {
         }
       }
 
-      // Check if student with email already exists
+      // Insert or Update student record
       const existingStudentRes = await client.query('SELECT id FROM students WHERE LOWER(email) = LOWER($1)', [cand.email.trim()]);
       
       let studentId = null;
@@ -149,16 +157,27 @@ export async function POST(request) {
             address = $5,
             gender = $6,
             birth_certificate_number = $7,
-            parents_info = $8,
-            verification_code = $9,
-            verification_code_expires = $10,
-            image = $11,
-            image_id = $12,
-            signature = $13,
-            signature_id = $14,
-            roll = $15,
+            blood_group = $8,
+            father_name = $9,
+            father_occupation = $10,
+            father_phone = $11,
+            mother_name = $12,
+            mother_occupation = $13,
+            mother_phone = $14,
+            past_school_name = $15,
+            past_school_class = $16,
+            past_school_result = $17,
+            special_note = $18,
+            parents_info = $19,
+            verification_code = $20,
+            verification_code_expires = $21,
+            image = $22,
+            image_id = $23,
+            signature = $24,
+            signature_id = $25,
+            roll = $26,
             updated_at = CURRENT_TIMESTAMP
-          WHERE id = $16
+          WHERE id = $27
         `, [
           cand.applicant_name,
           cand.phone,
@@ -167,6 +186,17 @@ export async function POST(request) {
           cand.address,
           cand.gender,
           cand.birth_regi_number,
+          cand.blood_group,
+          cand.father_name,
+          cand.father_occupation,
+          cand.father_phone,
+          cand.mother_name,
+          cand.mother_occupation,
+          cand.mother_phone,
+          cand.past_school_name,
+          cand.past_school_class,
+          cand.past_school_result,
+          cand.special_note,
           parentsInfo,
           verificationCode,
           codeExpires,
@@ -181,10 +211,18 @@ export async function POST(request) {
         const studentRes = await client.query(`
           INSERT INTO students (
             name, email, phone, registration_number, class_id, date_of_birth, address,
-            gender, birth_certificate_number, parents_info, is_active, is_registered,
+            gender, birth_certificate_number, blood_group,
+            father_name, father_occupation, father_phone,
+            mother_name, mother_occupation, mother_phone,
+            past_school_name, past_school_class, past_school_result, special_note,
+            parents_info, is_active, is_registered,
             verification_code, verification_code_expires, image, image_id, signature, signature_id,
             roll
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, FALSE, FALSE, $11, $12, $13, $14, $15, $16, $17)
+          ) VALUES (
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+            $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+            $21, FALSE, FALSE, $22, $23, $24, $25, $26, $27, $28
+          )
           RETURNING id
         `, [
           cand.applicant_name,
@@ -196,6 +234,17 @@ export async function POST(request) {
           cand.address,
           cand.gender,
           cand.birth_regi_number,
+          cand.blood_group,
+          cand.father_name,
+          cand.father_occupation,
+          cand.father_phone,
+          cand.mother_name,
+          cand.mother_occupation,
+          cand.mother_phone,
+          cand.past_school_name,
+          cand.past_school_class,
+          cand.past_school_result,
+          cand.special_note,
           parentsInfo,
           verificationCode,
           codeExpires,
@@ -209,50 +258,59 @@ export async function POST(request) {
         studentId = studentRes.rows[0].id;
       }
 
-      // Create guardian record
-      await client.query(`
-        INSERT INTO student_guardians (
-          student_id, name, relationship, phone
-        ) VALUES ($1, $2, 'Guardian', $3)
-      `, [studentId, cand.guardian_name, cand.guardian_phone]);
-
-      // Create student enrollment record
-      try {
+      // Save Father details into student_guardians
+      if (cand.father_name && cand.father_phone) {
         await client.query(`
-          INSERT INTO student_enrollments (
-            student_id, class_id, session_year, roll_number
-          ) VALUES ($1, $2, $3, $4)
-          ON CONFLICT (student_id, session_year) DO NOTHING
-        `, [studentId, cand.class_id, String(academicYear), nextRoll]);
-      } catch (enrollErr) {
-        console.error('Failed to create student enrollment:', enrollErr);
+          INSERT INTO student_guardians (
+            student_id, name, relationship, email, phone, occupation
+          ) VALUES ($1, $2, 'Father', $3, $4, $5)
+        `, [
+          studentId,
+          cand.father_name,
+          cand.email,
+          cand.father_phone,
+          cand.father_occupation || null
+        ]);
       }
 
-      // Send student registration & verification email
+      // Save Mother details into student_guardians
+      if (cand.mother_name && cand.mother_phone) {
+        await client.query(`
+          INSERT INTO student_guardians (
+            student_id, name, relationship, email, phone, occupation
+          ) VALUES ($1, $2, 'Mother', $3, $4, $5)
+        `, [
+          studentId,
+          cand.mother_name,
+          cand.email,
+          cand.mother_phone,
+          cand.mother_occupation || null
+        ]);
+      }
+
+      // Send setup email
       try {
         const setupLink = `${request.headers.get('origin') || 'http://localhost:3000'}/auth/student/registration`;
         await sendEmail({
           to: cand.email,
           toName: cand.applicant_name,
-          subject: `Admission Approved & Student Setup Code - ${circular.title}`,
+          subject: `Admission Selected & Registration Code - ${circular.title}`,
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f1f5f9; border-radius: 16px;">
-              <h2 style="color: #0284c7;">Congratulations ${cand.applicant_name}!</h2>
-              <p>You have been officially admitted to Class <strong>${cand.class_name}</strong> under circular "<strong>${circular.title}</strong>".</p>
-              <p>Your official student credentials have been created. Please configure your student portal password using the credentials below:</p>
+              <h2 style="color: #059669;">Congratulations ${cand.applicant_name}!</h2>
+              <p>You have been <strong>SELECTED</strong> for admission to Class <strong>${cand.class_name}</strong> under circular "<strong>${circular.title}</strong>".</p>
+              <p>Your official student registration credentials are ready below:</p>
               
               <div style="background-color: #f8fafc; padding: 16px; border-radius: 12px; margin: 20px 0; border: 1px solid #e2e8f0;">
-                <p style="margin: 6px 0;"><strong>Registration Number:</strong> <code style="color: #0284c7; font-size: 16px; font-weight: bold;">${regNo}</code></p>
-                <p style="margin: 6px 0;"><strong>Verification Code:</strong> <code style="color: #0284c7; font-size: 16px; font-weight: bold;">${verificationCode}</code></p>
+                <p style="margin: 6px 0;"><strong>Registration Number:</strong> <code style="color: #059669; font-size: 16px; font-weight: bold;">${regNo}</code></p>
+                <p style="margin: 6px 0;"><strong>Verification Code:</strong> <code style="color: #059669; font-size: 16px; font-weight: bold;">${verificationCode}</code></p>
               </div>
 
               <p style="text-align: center; margin: 24px 0;">
-                <a href="${setupLink}" style="background-color: #0284c7; color: white; padding: 12px 28px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">
-                  Complete Student Registration
+                <a href="${setupLink}" style="background-color: #059669; color: white; padding: 12px 28px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">
+                  Complete Student Portal Setup
                 </a>
               </p>
-              
-              <p style="font-size: 12px; color: #64748b;">Note: Verification code expires in 24 hours.</p>
             </div>
           `
         });
@@ -261,35 +319,20 @@ export async function POST(request) {
       }
 
       registeredCount++;
-      nextRoll++;
     }
 
-    // 4. Update circular status to published
+    // Update circular status to published (DO NOT DELETE student_admissions RECORDS!)
     await client.query('UPDATE admissions SET is_result_published = TRUE WHERE id = $1', [admission_id]);
 
-    // 5. Create Notice board post
+    // Create Notice board post
     await client.query(`
       INSERT INTO notices (title, link, is_pinned)
-      VALUES ($1, '/auth/student/registration', FALSE)
-    `, [`Admission Results Published: ${circular.title}`]);
-
-    // 6. Clean up Cloudinary assets and DELETE ALL applicant data for this circular
-    const allAppsRes = await client.query('SELECT image_id, signature_id FROM student_admissions WHERE admission_id = $1', [admission_id]);
-    for (const appRow of allAppsRes.rows) {
-      if (appRow.image_id) {
-        try { await deleteImage(appRow.image_id); } catch(err) { console.error('Error deleting Cloudinary image:', err); }
-      }
-      if (appRow.signature_id) {
-        try { await deleteImage(appRow.signature_id); } catch(err) { console.error('Error deleting Cloudinary signature:', err); }
-      }
-    }
-
-    await client.query('DELETE FROM student_admissions WHERE admission_id = $1', [admission_id]);
+      VALUES ($1, '/admission-status', FALSE)
+    `, [`Admission Selection Results Published: ${circular.title}`]);
 
     await client.query('COMMIT');
     client.release();
 
-    // Auto-generate current month fee for newly registered students
     try {
       await triggerMonthlyFeeGeneration();
     } catch (feeErr) {
@@ -298,7 +341,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: `Admission results published successfully. Registered ${registeredCount} students and cleared temporary applicant records.`
+      message: `Admission selection results published successfully. ${registeredCount} candidate records registered into official student accounts. Applicant data preserved.`
     });
   } catch (error) {
     if (client) {

@@ -7,7 +7,7 @@ export async function GET() {
     // 1. Query staff from staffs table
     const staffsResult = await query(`
       SELECT 
-        id, name, email, number, role, address, image, created_at
+        id, name, email, username, COALESCE(phone, number) AS phone, number, role, address, image, created_at
       FROM staffs 
       WHERE is_active = TRUE OR is_registered = TRUE
       ORDER BY name ASC

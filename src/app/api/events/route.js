@@ -15,7 +15,6 @@ function slugify(text) {
 // GET all events
 export async function GET() {
   try {
-    await query('ALTER TABLE events ADD COLUMN IF NOT EXISTS slug VARCHAR(255);');
     const result = await query('SELECT * FROM events ORDER BY event_date ASC');
     const events = await Promise.all(
       result.rows.map(async (ev) => {
@@ -49,7 +48,6 @@ export async function GET() {
 // POST create event (Admin or Registrar)
 export async function POST(request) {
   try {
-    await query('ALTER TABLE events ADD COLUMN IF NOT EXISTS slug VARCHAR(255);');
     const authenticated = (await isAdmin()) || (await isRegister());
     if (!authenticated) {
       const res_err_1158 = { error: 'Unauthorized. Admins or Registrars only.' };

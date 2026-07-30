@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FiUploadCloud, FiCheckCircle, FiAlertCircle, FiArrowLeft, FiUser, FiFileText } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
+import { validateImageDimensions } from '@/lib/imageResizer';
 
 const CandidateUploadPage = () => {
   const params = useParams();
@@ -48,35 +49,44 @@ const CandidateUploadPage = () => {
     fetchApplicant();
   }, [id]);
 
-  const handleFileChange = (e, setPreview) => {
+  const handlePhotoChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select a valid image file (PNG, JPG, JPEG).');
-      return;
+    try {
+      // Frontend validation: exactly 500x500 px
+      const base64Str = await validateImageDimensions(file, 500, 500, 'Candidate Photo');
+      setImagePreview(base64Str);
+      toast.success('Candidate photo dimensions verified (500x500 px)!');
+    } catch (err) {
+      toast.error(err.message);
+      e.target.value = ''; // Reset input
     }
+  };
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size must be under 5MB.');
-      return;
+  const handleSignatureChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Frontend validation: exactly 150x30 px
+      const base64Str = await validateImageDimensions(file, 150, 30, 'Candidate Signature');
+      setSignaturePreview(base64Str);
+      toast.success('Candidate signature dimensions verified (150x30 px)!');
+    } catch (err) {
+      toast.error(err.message);
+      e.target.value = ''; // Reset input
     }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(reader.result);
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!imagePreview) {
-      toast.error('Please upload candidate profile photo.');
+      toast.error('Please upload candidate profile photo (500x500 px).');
       return;
     }
     if (!signaturePreview) {
-      toast.error('Please upload candidate signature.');
+      toast.error('Please upload candidate signature (150x30 px).');
       return;
     }
 
@@ -147,7 +157,7 @@ const CandidateUploadPage = () => {
               Upload Photo &amp; Signature
             </h1>
             <p className="text-slate-500 text-xs mt-1">
-              Provide candidate passport photo and signature to complete your admission review.
+              Provide candidate photo (500x500 px) and signature (150x30 px) to complete your admission review.
             </p>
           </div>
 
@@ -187,14 +197,14 @@ const CandidateUploadPage = () => {
               <div className="flex justify-center gap-6 mt-6 pt-4 border-t border-green-200/60">
                 {imagePreview && (
                   <div className="text-center">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">Candidate Photo</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">Candidate Photo (500x500)</p>
                     <img src={imagePreview} alt="Candidate" className="w-24 h-24 object-cover rounded-xl border border-slate-200 shadow-xs mx-auto" />
                   </div>
                 )}
                 {signaturePreview && (
                   <div className="text-center">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">Candidate Signature</p>
-                    <img src={signaturePreview} alt="Signature" className="w-24 h-20 object-contain rounded-xl border border-slate-200 bg-white shadow-xs p-1 mx-auto" />
+                    <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">Candidate Signature (150x30)</p>
+                    <img src={signaturePreview} alt="Signature" className="w-28 h-10 object-contain rounded-xl border border-slate-200 bg-white shadow-xs p-1 mx-auto" />
                   </div>
                 )}
               </div>
@@ -203,9 +213,14 @@ const CandidateUploadPage = () => {
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               {/* Profile Photo Upload */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  1. Candidate Profile Photo <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    1. Candidate Profile Photo <span className="text-red-500">*</span>
+                  </label>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 font-mono">
+                    Required Size: 500 x 500 px
+                  </span>
+                </div>
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <div className="w-32 h-32 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0">
                     {imagePreview ? (
@@ -217,8 +232,8 @@ const CandidateUploadPage = () => {
                   <div className="flex-1">
                     <input
                       type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, setImagePreview)}
+                      accept="image/png, image/jpeg, image/jpg"
+                      onChange={handlePhotoChange}
                       className="hidden"
                       id="candidate-photo-input"
                     />
@@ -227,20 +242,25 @@ const CandidateUploadPage = () => {
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer transition-colors"
                     >
                       <FiUploadCloud />
-                      <span>{imagePreview ? 'Change Photo' : 'Select Photo'}</span>
+                      <span>{imagePreview ? 'Change Photo' : 'Select Photo (500x500)'}</span>
                     </label>
-                    <p className="text-[11px] text-slate-400 mt-2">Passport style clear face photo (JPG, PNG max 5MB).</p>
+                    <p className="text-[11px] text-slate-400 mt-2">Image must be exactly 500x500 pixels (JPG or PNG).</p>
                   </div>
                 </div>
               </div>
 
               {/* Signature Upload */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  2. Candidate Signature <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    2. Candidate Signature <span className="text-red-500">*</span>
+                  </label>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 font-mono">
+                    Required Size: 150 x 30 px
+                  </span>
+                </div>
                 <div className="flex flex-col sm:flex-row items-center gap-4">
-                  <div className="w-48 h-24 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 p-1">
+                  <div className="w-48 h-20 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 p-1">
                     {signaturePreview ? (
                       <img src={signaturePreview} alt="Signature Preview" className="w-full h-full object-contain" />
                     ) : (
@@ -250,8 +270,8 @@ const CandidateUploadPage = () => {
                   <div className="flex-1">
                     <input
                       type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, setSignaturePreview)}
+                      accept="image/png, image/jpeg, image/jpg"
+                      onChange={handleSignatureChange}
                       className="hidden"
                       id="candidate-signature-input"
                     />
@@ -260,9 +280,9 @@ const CandidateUploadPage = () => {
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer transition-colors"
                     >
                       <FiUploadCloud />
-                      <span>{signaturePreview ? 'Change Signature' : 'Select Signature'}</span>
+                      <span>{signaturePreview ? 'Change Signature' : 'Select Signature (150x30)'}</span>
                     </label>
-                    <p className="text-[11px] text-slate-400 mt-2">Clear signature scan on white paper background.</p>
+                    <p className="text-[11px] text-slate-400 mt-2">Signature image must be exactly 150x30 pixels (JPG or PNG).</p>
                   </div>
                 </div>
               </div>

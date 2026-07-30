@@ -146,6 +146,13 @@ CREATE TABLE IF NOT EXISTS teachers (
     grade_id BIGINT REFERENCES teacher_pay_scale(id) ON DELETE SET NULL,
     verification_token VARCHAR(255),
     verification_token_expires TIMESTAMPTZ,
+    date_of_birth DATE,
+    nationality VARCHAR(100),
+    blood_group VARCHAR(10),
+    gender VARCHAR(20),
+    nid_number VARCHAR(100),
+    bio TEXT,
+    username VARCHAR(255) UNIQUE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -460,6 +467,17 @@ CREATE TABLE IF NOT EXISTS students (
     date_of_birth DATE,
     address TEXT,
     parents_info TEXT,
+    blood_group VARCHAR(10),
+    father_name VARCHAR(255),
+    father_occupation VARCHAR(255),
+    father_phone VARCHAR(50),
+    mother_name VARCHAR(255),
+    mother_occupation VARCHAR(255),
+    mother_phone VARCHAR(50),
+    past_school_name VARCHAR(255),
+    past_school_class VARCHAR(50),
+    past_school_result VARCHAR(100),
+    special_note TEXT,
     birth_certificate_number VARCHAR(100) UNIQUE,
     gender VARCHAR(20) CHECK (gender IN ('Male', 'Female', 'Other')),
     roll INT CHECK (roll > 0),
@@ -1222,15 +1240,10 @@ CREATE TABLE IF NOT EXISTS student_guardians (
     id BIGSERIAL PRIMARY KEY,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
-    relationship VARCHAR(100) NOT NULL,
+    relationship VARCHAR(100) NOT NULL CHECK (relationship IN ('Father', 'Mother', 'Relative')),
     email VARCHAR(255),
     phone VARCHAR(50) NOT NULL,
     occupation VARCHAR(255),
-    address TEXT,
-    password_hash VARCHAR(255),
-    recovery_token VARCHAR(255),
-    recovery_token_expires TIMESTAMPTZ,
-    is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -1280,8 +1293,19 @@ CREATE TABLE IF NOT EXISTS student_admissions (
     phone VARCHAR(50) NOT NULL,
     date_of_birth DATE NOT NULL,
     gender VARCHAR(20) NOT NULL CHECK (gender IN ('Male', 'Female', 'Other')),
+    blood_group VARCHAR(10),
     address TEXT NOT NULL,
     applied_class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    father_name VARCHAR(255),
+    father_occupation VARCHAR(255),
+    father_phone VARCHAR(50),
+    mother_name VARCHAR(255),
+    mother_occupation VARCHAR(255),
+    mother_phone VARCHAR(50),
+    past_school_name VARCHAR(255),
+    past_school_class VARCHAR(50),
+    past_school_result VARCHAR(100),
+    special_note TEXT,
     previous_school TEXT,
     guardian_name VARCHAR(255) NOT NULL,
     guardian_phone VARCHAR(50) NOT NULL,
@@ -1290,7 +1314,7 @@ CREATE TABLE IF NOT EXISTS student_admissions (
     image_id VARCHAR(255),
     signature TEXT,
     signature_id VARCHAR(255),
-    status VARCHAR(50) DEFAULT 'incomplete' CHECK (status IN ('incomplete', 'pending', 'approved', 'rejected')),
+    status VARCHAR(50) DEFAULT 'incomplete' CHECK (status IN ('incomplete', 'pending', 'approved', 'rejected', 'selected', 'disqualified')),
     applied_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
@@ -2190,6 +2214,82 @@ CREATE TABLE IF NOT EXISTS activity_logs (
     details TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ============================================================================
+-- STAFFS TABLE
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS staffs (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    role VARCHAR(100) NOT NULL DEFAULT 'staff',
+    address TEXT,
+    password_hash VARCHAR(255),
+    recovery_token VARCHAR(255),
+    recovery_token_expires TIMESTAMPTZ,
+    two_factor_code VARCHAR(10),
+    two_factor_expires TIMESTAMPTZ,
+    is_active BOOLEAN DEFAULT TRUE,
+    is_registered BOOLEAN DEFAULT TRUE,
+    is_two_factor_enabled BOOLEAN DEFAULT FALSE,
+    image TEXT,
+    image_id VARCHAR(255),
+    date_of_birth DATE,
+    nationality VARCHAR(100),
+    blood_group VARCHAR(10),
+    gender VARCHAR(20),
+    nid_number VARCHAR(100),
+    bio TEXT,
+    username VARCHAR(255) UNIQUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================================
+-- EXPERIENCES TABLES
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS teacher_experiences (
+    id BIGSERIAL PRIMARY KEY,
+    teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    organization VARCHAR(255) NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    is_current BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS staff_experiences (
+    id BIGSERIAL PRIMARY KEY,
+    staff_id BIGINT NOT NULL REFERENCES staffs(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    organization VARCHAR(255) NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    is_current BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS admin_experiences (
+    id BIGSERIAL PRIMARY KEY,
+    admin_id BIGINT NOT NULL REFERENCES admins(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    organization VARCHAR(255) NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    is_current BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
 
 
 DROP TRIGGER IF EXISTS update_hostel_applications_updated_at ON hostel_applications;

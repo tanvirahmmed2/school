@@ -14,18 +14,9 @@ function generateSlug(text, id) {
   return clean || String(id || '');
 }
 
-async function ensureClubNewsSlugColumn() {
-  try {
-    await query(`ALTER TABLE club_news ADD COLUMN IF NOT EXISTS slug TEXT;`);
-  } catch (err) {
-    console.error('Error adding slug column to club_news:', err);
-  }
-}
-
 // GET all club news
 export async function GET() {
   try {
-    await ensureClubNewsSlugColumn();
     const result = await query(`
       SELECT cn.*, c.name as club_name 
       FROM club_news cn
@@ -67,8 +58,6 @@ export async function POST(request) {
         paylod: null
       }, { status: 403 });
     }
-
-    await ensureClubNewsSlugColumn();
 
     const { club_id, title, content, image } = await request.json();
 
