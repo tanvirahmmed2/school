@@ -259,7 +259,7 @@ const AdminClassSubjectsPage = () => {
                       <td className="px-5 py-2.5 text-xs font-semibold text-slate-400">{idx + 1}</td>
                       <td className="px-5 py-2.5">
                         <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-lg bg-primary-light border border-primary-light flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0">
                             <FiBook className="text-primary text-xs" />
                           </div>
                           <span className="text-xs font-bold text-slate-800">{item.subject_name}</span>
@@ -269,7 +269,7 @@ const AdminClassSubjectsPage = () => {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => handleStartEdit(item)}
-                            className="p-1.5 bg-primary-light hover:bg-primary/10 text-primary rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 bg-emerald-50 hover:bg-primary/10 text-primary rounded-lg transition-colors cursor-pointer"
                             title="Edit Allocation"
                           >
                             <FiEdit2 className="text-xs" />

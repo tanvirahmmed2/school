@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { FiAward, FiPlus, FiTrash2, FiEdit2, FiArrowLeft, FiCheck, FiUsers } from 'react-icons/fi';
+import {
+  FiAward, FiPlus, FiTrash2, FiEdit2, FiArrowLeft, FiCheck, FiUser, FiSearch
+} from 'react-icons/fi';
 import Link from 'next/link';
 
 export default function AdminTeacherQualificationsPage() {
@@ -25,7 +27,7 @@ export default function AdminTeacherQualificationsPage() {
     passing_year: '',
     result: ''
   });
-  const [editMode, setEditMode] = useState(null); // id of qualification being edited
+  const [editMode, setEditMode] = useState(null);
 
   useEffect(() => {
     fetchTeachers();
@@ -43,7 +45,7 @@ export default function AdminTeacherQualificationsPage() {
     setListLoading(true);
     try {
       const res = await axios.get('/api/teachers');
-      setTeachers(res.data.paylod.teachers || []);
+      setTeachers(res.data.paylod?.teachers || []);
     } catch (err) {
       toast.error('Failed to load teachers lookup.');
     } finally {
@@ -55,7 +57,7 @@ export default function AdminTeacherQualificationsPage() {
     setLoading(true);
     try {
       const res = await axios.get(`/api/teachers/qualifications?teacher_id=${teacherId}`);
-      setQualifications(res.data.paylod.qualifications || []);
+      setQualifications(res.data.paylod?.qualifications || []);
     } catch (err) {
       toast.error('Failed to retrieve teacher qualifications.');
     } finally {
@@ -132,138 +134,137 @@ export default function AdminTeacherQualificationsPage() {
   const selectedTeacherDetails = teachers.find(t => String(t.id) === String(selectedTeacherId));
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up max-w-4xl mx-auto">
-      {/* Back Link */}
-      <div>
+    <div className="w-full max-w-7xl mx-auto space-y-6 animate-fade-up">
+      
+      {/* Header & Title */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <FiAward className="text-primary" /> Qualifications Manager
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Manage degrees, graduation credentials, and certifications for academic instructors.
+          </p>
+        </div>
+
         <Link
           href="/admin/teachers/list"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-wider"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors shadow-2xs"
         >
-          <FiArrowLeft className="text-sm" /> Back to Teachers List
+          <FiArrowLeft className="text-xs" /> Back to Teachers List
         </Link>
       </div>
 
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiAward className="text-primary" /> Manage Teacher Qualifications
-        </h1>
-        <p className="text-sm text-slate-500 font-medium">
-          Manage degrees, graduation credentials, and certifications for academic instructors.
-        </p>
-      </div>
-
       {/* Selector and Form Split Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left selector */}
-        <div className="md:col-span-1 flex flex-col gap-4">
-          <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Select Instructor</label>
-              {listLoading ? (
-                <div className="h-10 bg-slate-50 animate-pulse rounded-xl mt-1.5"></div>
-              ) : (
-                <select
-                  value={selectedTeacherId}
-                  onChange={(e) => {
-                    setSelectedTeacherId(e.target.value);
-                    router.replace(`/admin/teachers/qualification?teacher_id=${e.target.value}`);
-                  }}
-                  className="w-full px-3 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-xs text-slate-805 outline-none focus:bg-white focus:border-primary bg-slate-50 mt-1.5 font-bold text-slate-800"
-                >
-                  <option value="">-- Choose Instructor --</option>
-                  {teachers.map(t => (
-                    <option key={t.id} value={t.id}>
-                      {t.name} ({t.designation || 'Instructor'})
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-
-            {selectedTeacherDetails && (
-              <div className="border-t border-slate-50 pt-4 flex flex-col items-center text-center gap-3">
-                <div className="w-16 h-16 rounded-full overflow-hidden border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 text-lg font-bold shadow-inner">
-                  <FiUsers className="text-xl text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 text-xs">{selectedTeacherDetails.name}</h3>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block mt-0.5">{selectedTeacherDetails.designation || 'Instructor'}</span>
-                  <span className="text-[9px] text-slate-400 font-medium block mt-0.5 truncate">{selectedTeacherDetails.email}</span>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left Teacher Selector Card */}
+        <div className="lg:col-span-1 bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs h-fit space-y-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Select Teacher</label>
+            {listLoading ? (
+              <div className="h-9 bg-slate-100 animate-pulse rounded-xl"></div>
+            ) : (
+              <select
+                value={selectedTeacherId}
+                onChange={(e) => {
+                  setSelectedTeacherId(e.target.value);
+                  router.replace(`/admin/teachers/qualification?teacher_id=${e.target.value}`);
+                }}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 outline-none focus:bg-white focus:border-primary transition-all cursor-pointer"
+              >
+                <option value="">-- Select Teacher --</option>
+                {teachers.map(t => (
+                  <option key={t.id} value={t.id}>
+                    {t.name} ({t.designation || 'Teacher'})
+                  </option>
+                ))}
+              </select>
             )}
           </div>
+
+          {selectedTeacherDetails && (
+            <div className="border-t border-slate-100 pt-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 font-bold text-sm shrink-0">
+                {selectedTeacherDetails.name ? selectedTeacherDetails.name.charAt(0).toUpperCase() : <FiUser />}
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-bold text-slate-800 text-xs truncate">{selectedTeacherDetails.name}</h3>
+                <p className="text-[10px] text-slate-400 font-medium truncate">{selectedTeacherDetails.designation || 'Teacher'}</p>
+                <p className="text-[10px] text-slate-500 font-mono truncate">{selectedTeacherDetails.email}</p>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Right Forms & list */}
-        <div className="md:col-span-2 flex flex-col gap-6">
+        {/* Right Forms & Qualifications List */}
+        <div className="lg:col-span-2 space-y-6">
           {selectedTeacherId ? (
             <>
-              {/* Form Block */}
-              <div className="bg-white border border-slate-100 rounded-3xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-4">
-                <h3 className="text-xs font-semibold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-50 pb-3">
-                  <FiAward className="text-primary" /> {editMode ? 'Edit Qualification Record' : 'Add Teacher Qualification'}
-                </h3>
-                <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-                  {/* Degree Name */}
-                  <div className="col-span-2 flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Degree Title *</label>
+              {/* Form Card */}
+              <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs space-y-4">
+                <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-3 flex items-center gap-2">
+                  <FiAward className="text-primary" /> {editMode ? 'Edit Qualification' : 'Add New Qualification'}
+                </h2>
+
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="sm:col-span-2 flex flex-col gap-1.5">
+                    <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Degree Title *</label>
                     <input
                       type="text"
                       name="degree"
                       value={formData.degree}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
+                      placeholder="e.g. M.Sc. in Physics"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
                       required
                     />
                   </div>
 
-                  {/* Institution Name */}
-                  <div className="col-span-2 flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">University / Board *</label>
+                  <div className="sm:col-span-2 flex flex-col gap-1.5">
+                    <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">University / Institution *</label>
                     <input
                       type="text"
                       name="institution"
                       value={formData.institution}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
+                      placeholder="e.g. University of Dhaka"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
                       required
                     />
                   </div>
 
-                  {/* Passing Year */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Graduation Year *</label>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Passing Year *</label>
                     <input
                       type="number"
                       name="passing_year"
                       value={formData.passing_year}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
+                      placeholder="e.g. 2020"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
                       required
                     />
                   </div>
 
-                  {/* Result */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Score / CGPA</label>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Result / CGPA</label>
                     <input
                       type="text"
                       name="result"
                       value={formData.result}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-primary outline-none"
+                      placeholder="e.g. CGPA 3.85"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
                     />
                   </div>
 
-                  {/* Submit buttons */}
-                  <div className="col-span-2 flex justify-end gap-2 pt-2 border-t border-slate-50">
+                  <div className="sm:col-span-2 flex justify-end gap-2 pt-2 border-t border-slate-100">
                     {editMode && (
                       <button
                         type="button"
                         onClick={handleCancelEdit}
-                        className="px-3.5 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-600 cursor-pointer"
+                        className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -271,62 +272,67 @@ export default function AdminTeacherQualificationsPage() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:bg-blue-400 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="px-4 py-1.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
                     >
-                      {editMode ? (
-                        <>
-                          <FiCheck className="text-sm" /> Save Update
-                        </>
-                      ) : (
-                        <>
-                          <FiPlus className="text-sm" /> Add Credential
-                        </>
-                      )}
+                      {editMode ? <FiCheck className="text-xs" /> : <FiPlus className="text-xs" />}
+                      {editMode ? 'Save Update' : 'Save Qualification'}
                     </button>
                   </div>
                 </form>
               </div>
 
-              {/* List Block */}
-              <div className="bg-white border border-slate-100 rounded-3xl p-5 md:p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-4">
-                <h3 className="text-xs font-semibold text-slate-800 uppercase tracking-wider border-b border-slate-50 pb-3">
-                  Recorded Teacher Qualifications List
-                </h3>
+              {/* Qualification Records List Card */}
+              <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-2xs">
+                <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                  <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Recorded Qualifications ({qualifications.length})
+                  </h2>
+                </div>
 
                 {loading && qualifications.length === 0 ? (
-                  <div className="py-12 flex justify-center items-center">
-                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-full py-12 flex flex-col items-center justify-center gap-2">
+                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-xs font-medium text-slate-400">Loading qualifications...</span>
                   </div>
                 ) : qualifications.length === 0 ? (
-                  <div className="py-12 text-center text-xs text-slate-400 font-medium">
-                    No academic qualifications recorded for this instructor.
+                  <div className="w-full py-12 flex flex-col items-center justify-center text-center px-4">
+                    <FiAward className="text-slate-300 text-3xl mb-2" />
+                    <p className="text-xs font-semibold text-slate-600">No Qualifications Recorded</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Use the form above to record academic credentials.</p>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-3">
-                    {qualifications.map(q => (
-                      <div key={q.id} className="p-4 border border-slate-100 rounded-2xl flex items-center justify-between hover:border-slate-200 transition-all">
-                        <div className="flex flex-col gap-0.5">
-                          <h4 className="font-semibold text-slate-800 text-xs">{q.degree}</h4>
-                          <span className="text-[10px] text-slate-400 font-bold uppercase block">{q.institution}</span>
+                  <div className="divide-y divide-slate-100">
+                    {qualifications.map((q) => (
+                      <div key={q.id} className="p-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+                        <div>
+                          <h4 className="font-bold text-slate-800 text-xs">{q.degree}</h4>
+                          <p className="text-[11px] text-slate-500 font-medium mt-0.5">{q.institution}</p>
                           <div className="flex items-center gap-2 mt-1.5">
-                            <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">Graduation: {q.passing_year}</span>
+                            <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+                              Year: {q.passing_year}
+                            </span>
                             {q.result && (
-                              <span className="text-[10px] font-bold px-2 py-0.5 bg-primary-light text-primary rounded-full">{q.result}</span>
+                              <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                                {q.result}
+                              </span>
                             )}
                           </div>
                         </div>
+
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleEditClick(q)}
-                            className="p-2 hover:bg-slate-50 hover:text-primary rounded-lg text-slate-400 cursor-pointer"
+                            className="p-1.5 text-slate-500 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors cursor-pointer"
+                            title="Edit Qualification"
                           >
-                            <FiEdit2 className="text-sm" />
+                            <FiEdit2 className="text-xs" />
                           </button>
                           <button
                             onClick={() => handleDelete(q.id)}
-                            className="p-2 hover:bg-red-50 hover:text-red-600 rounded-lg text-slate-400 cursor-pointer"
+                            className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                            title="Delete Qualification"
                           >
-                            <FiTrash2 className="text-sm" />
+                            <FiTrash2 className="text-xs" />
                           </button>
                         </div>
                       </div>
@@ -336,8 +342,8 @@ export default function AdminTeacherQualificationsPage() {
               </div>
             </>
           ) : (
-            <div className="bg-white border border-slate-100 rounded-3xl py-20 px-6 text-center text-slate-400 shadow-[0_10px_30px_rgba(0,0,0,0.01)] font-bold text-sm">
-              Please choose a teacher from the select list to view or edit their academic qualifications list.
+            <div className="bg-white border border-slate-200/80 rounded-2xl py-16 px-6 text-center text-slate-400 shadow-2xs font-medium text-xs">
+              Select a teacher from the dropdown on the left to manage their academic qualifications.
             </div>
           )}
         </div>

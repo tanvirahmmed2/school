@@ -41,7 +41,7 @@ export async function GET(request) {
 
     // Fetch students for the class (and optionally section)
     const studentsRes = await query(
-      `SELECT s.registration_number, s.name as student_name
+      `SELECT s.id, s.registration_number, s.name as student_name
        FROM students s
        WHERE s.class_id = $1
        ${sectionId ? 'AND s.section_id = $2' : ''}

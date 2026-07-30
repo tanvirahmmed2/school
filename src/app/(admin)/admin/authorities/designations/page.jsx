@@ -4,14 +4,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import {
-  FiAward,
-  FiPlus,
-  FiEdit2,
-  FiTrash2,
-  FiSearch,
-  FiX,
-  FiLayers,
-  FiRefreshCw
+  FiAward, FiPlus, FiEdit2, FiTrash2, FiSearch, FiX, FiLayers, FiRefreshCw
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 
@@ -138,87 +131,78 @@ export default function DesignationsManagementPage() {
     }
   };
 
-  // Filtered designations
   const filteredDesignations = useMemo(() => {
     if (!searchQuery.trim()) return designations;
     const query = searchQuery.toLowerCase().trim();
     return designations.filter(
       (d) =>
         (d.title && d.title.toLowerCase().includes(query)) ||
-        (d.slug && d.slug.toLowerCase().includes(query)) ||
         (d.description && d.description.toLowerCase().includes(query))
     );
   }, [designations, searchQuery]);
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-xs">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-xl shrink-0 shadow-xs">
-            <FiAward />
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <h1 className="text-xl md:text-2xl font-semibold text-slate-800 tracking-tight">
-              Designations Management
-            </h1>
-            <p className="text-xs md:text-sm text-slate-500 font-medium">
-              Create, update, and manage official designations for institutional board members and leadership staff.
-            </p>
-          </div>
+    <div className="w-full max-w-7xl mx-auto space-y-6 animate-fade-up">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <FiAward className="text-primary" /> Designations Management
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Create, update, and manage official designations for institutional board members.
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={fetchDesignations}
             disabled={loading}
-            className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all cursor-pointer text-sm"
+            className="p-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
             title="Refresh List"
           >
-            <FiRefreshCw className={loading ? 'animate-spin' : ''} />
+            <FiRefreshCw className={`text-xs ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={() => {
               setIsCreateOpen(true);
               setNewTitle('');
-              setNewSlug('');
               setNewDescription('');
-              setIsSlugUserEdited(false);
+              setNewIsHead(false);
             }}
-            className="px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-[0_4px_12px_rgba(37,99,235,0.15)] flex items-center gap-2 cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
           >
             <FiPlus className="text-sm" /> Add Designation
           </button>
         </div>
       </div>
 
-      {/* Metrics Card & Search Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-100 flex items-center gap-4 shadow-xs">
-          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-lg">
-            <FiLayers />
-          </div>
-          <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Designations</span>
-            <h3 className="text-2xl font-semibold text-slate-800">{designations.length}</h3>
+      {/* Metrics Card & Search Bar Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Designations</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-2xl font-extrabold text-slate-900">{designations.length}</span>
+            <FiLayers className="text-slate-400 text-lg" />
           </div>
         </div>
 
-        <div className="md:col-span-2 bg-white p-4 rounded-2xl border border-slate-100 flex items-center shadow-xs">
-          <div className="relative w-full flex items-center">
-            <FiSearch className="absolute left-4 text-slate-400 text-base" />
+        <div className="sm:col-span-2 bg-white border border-slate-200/80 p-4 rounded-2xl shadow-2xs flex items-center">
+          <div className="relative w-full">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              placeholder="Search designation title or description..."
+              className="w-full pl-8 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 outline-none focus:border-primary focus:bg-white transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 text-slate-400 hover:text-slate-600 cursor-pointer p-1"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
               >
-                <FiX className="text-sm" />
+                ×
               </button>
             )}
           </div>
@@ -226,69 +210,66 @@ export default function DesignationsManagementPage() {
       </div>
 
       {/* Designations Table Card */}
-      <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-xs">
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-2xs">
         {loading ? (
-          <div className="w-full py-20 flex flex-col items-center justify-center gap-3">
-            <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-semibold text-slate-400">Loading designations list...</span>
+          <div className="w-full py-16 flex flex-col items-center justify-center gap-2">
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-medium text-slate-400">Loading designations list...</span>
           </div>
         ) : filteredDesignations.length === 0 ? (
-          <div className="w-full py-20 flex flex-col items-center justify-center gap-2 text-center px-4">
-            <FiAward className="text-4xl text-slate-300 mb-1" />
-            <span className="text-sm font-bold text-slate-500">
-              {searchQuery ? 'No designations found matching your query.' : 'No designations created yet.'}
-            </span>
-            <p className="text-xs text-slate-400 max-w-sm">
-              {searchQuery
-                ? 'Try searching with different keywords or clear the search filter.'
-                : 'Click "Add Designation" button above to create your first official designation.'}
+          <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
+            <FiAward className="text-slate-300 text-3xl mb-2" />
+            <p className="text-xs font-semibold text-slate-600">
+              {searchQuery ? 'No designations found matching query.' : 'No designations created yet.'}
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Click "Add Designation" to register a new designation.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="py-3.5 px-6">#</th>
-                  <th className="py-3.5 px-6">Title</th>
-                  <th className="py-3.5 px-6">Description</th>
-                  <th className="py-3.5 px-6 text-right">Actions</th>
+                <tr className="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3 px-4 w-12">#</th>
+                  <th className="py-3 px-4">Title</th>
+                  <th className="py-3 px-4">Description</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-sm">
+              <tbody className="divide-y divide-slate-100 text-xs">
                 {filteredDesignations.map((des, index) => (
-                  <tr key={des.id} className="hover:bg-slate-50/60 transition-colors group">
-                    <td className="py-4 px-6 text-slate-400 font-mono text-xs">{index + 1}</td>
-                    <td className="py-4 px-6 font-bold text-slate-800">
+                  <tr key={des.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">{index + 1}</td>
+                    <td className="py-3 px-4 font-bold text-slate-800">
                       <div className="flex items-center gap-2">
-                        <FiAward className="text-primary shrink-0 text-base" />
                         <span>{des.title}</span>
                         {des.is_head && (
-                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full text-[10px] font-bold uppercase">
+                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-bold">
                             Head Role
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-slate-500 max-w-xs truncate">
+                    <td className="py-3 px-4 text-slate-500 max-w-xs truncate">
                       {des.description || <span className="text-slate-300 italic">No description provided</span>}
                     </td>
-                    <td className="py-4 px-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(des)}
-                          className="p-2 bg-slate-100 hover:bg-primary-light hover:text-primary text-slate-600 rounded-xl transition-all cursor-pointer"
+                          className="p-1.5 hover:bg-slate-100 text-slate-600 rounded-lg transition-colors cursor-pointer"
                           title="Edit Designation"
                         >
-                          <FiEdit2 className="text-sm" />
+                          <FiEdit2 className="text-xs" />
                         </button>
                         <button
                           onClick={() => handleDelete(des.id)}
                           disabled={deletingId === des.id}
-                          className="p-2 bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                          className="p-1.5 hover:bg-rose-50 text-rose-600 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
                           title="Delete Designation"
                         >
-                          <FiTrash2 className="text-sm" />
+                          <FiTrash2 className="text-xs" />
                         </button>
                       </div>
                     </td>
@@ -302,81 +283,69 @@ export default function DesignationsManagementPage() {
 
       {/* CREATE MODAL */}
       {isCreateOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
-            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-primary-light text-primary flex items-center justify-center">
-                  <FiPlus className="text-lg" />
-                </div>
-                <h3 className="font-semibold text-slate-800 text-lg">Add New Designation</h3>
-              </div>
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col">
+            <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-slate-800 text-sm">Add New Designation</h3>
               <button
                 onClick={() => setIsCreateOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
               >
-                <FiX className="text-lg" />
+                <FiX className="text-base" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateSubmit} className="p-6 flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Title <span className="text-red-500">*</span>
+            <form onSubmit={handleCreateSubmit} className="p-5 flex flex-col gap-3 text-xs">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Title <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
                 />
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Description</label>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description</label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all resize-none"
                 />
               </div>
 
-              <div className="flex items-center gap-2.5 pt-1">
+              <div className="flex items-center gap-2 py-1">
                 <input
                   type="checkbox"
                   id="newIsHead"
                   checked={newIsHead}
                   onChange={(e) => setNewIsHead(e.target.checked)}
-                  className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
+                  className="w-3.5 h-3.5 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
                 />
-                <label htmlFor="newIsHead" className="text-xs font-bold text-slate-700 cursor-pointer">
+                <label htmlFor="newIsHead" className="text-xs font-medium text-slate-700 cursor-pointer select-none">
                   Set as Head / Principal Designation
                 </label>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2.5 text-slate-600 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createLoading}
-                  className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
-                  {createLoading ? (
-                    <>
-                      <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Creating...</span>
-                    </>
-                  ) : (
-                    <span>Save Designation</span>
-                  )}
+                  {createLoading ? 'Creating...' : 'Save Designation'}
                 </button>
               </div>
             </form>
@@ -386,81 +355,69 @@ export default function DesignationsManagementPage() {
 
       {/* EDIT MODAL */}
       {editingDesignation && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
-            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                  <FiEdit2 className="text-lg" />
-                </div>
-                <h3 className="font-semibold text-slate-800 text-lg">Edit Designation</h3>
-              </div>
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col">
+            <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-slate-800 text-sm">Edit Designation</h3>
               <button
                 onClick={() => setEditingDesignation(null)}
-                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
               >
-                <FiX className="text-lg" />
+                <FiX className="text-base" />
               </button>
             </div>
 
-            <form onSubmit={handleEditSubmit} className="p-6 flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Title <span className="text-red-500">*</span>
+            <form onSubmit={handleEditSubmit} className="p-5 flex flex-col gap-3 text-xs">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Title <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:bg-white focus:border-primary transition-all"
                 />
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Description</label>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description</label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all resize-none"
                 />
               </div>
 
-              <div className="flex items-center gap-2.5 pt-1">
+              <div className="flex items-center gap-2 py-1">
                 <input
                   type="checkbox"
                   id="editIsHead"
                   checked={editIsHead}
                   onChange={(e) => setEditIsHead(e.target.checked)}
-                  className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
+                  className="w-3.5 h-3.5 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
                 />
-                <label htmlFor="editIsHead" className="text-xs font-bold text-slate-700 cursor-pointer">
+                <label htmlFor="editIsHead" className="text-xs font-medium text-slate-700 cursor-pointer select-none">
                   Set as Head / Principal Designation
                 </label>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setEditingDesignation(null)}
-                  className="px-4 py-2.5 text-slate-600 hover:bg-slate-100 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updateLoading}
-                  className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
-                  {updateLoading ? (
-                    <>
-                      <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Updating...</span>
-                    </>
-                  ) : (
-                    <span>Update Designation</span>
-                  )}
+                  {updateLoading ? 'Updating...' : 'Update Designation'}
                 </button>
               </div>
             </form>

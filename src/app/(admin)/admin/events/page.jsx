@@ -56,7 +56,7 @@ const AdminEventsPage = () => {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit mb-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit mb-2">
               <FiCalendar /> Admin Portal
             </div>
             <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">
@@ -109,7 +109,7 @@ const AdminEventsPage = () => {
             {filteredEvents.map((item) => {
               const d = new Date(item.event_date);
               return (
-                <div key={item.id} className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden flex flex-col justify-between hover:border-primary-light transition-all group">
+                <div key={item.id} className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden flex flex-col justify-between hover:border-emerald-200/60 transition-all group">
                   
                   <div className="relative w-full h-48 bg-slate-100 overflow-hidden">
                     {item.image ? (
@@ -155,7 +155,7 @@ const AdminEventsPage = () => {
                   <div className="p-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between gap-2">
                     <Link
                       href={`/admin/events/participants?eventId=${item.id}`}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-light hover:bg-primary-light text-primary text-xs font-bold rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-50 text-primary text-xs font-bold rounded-lg transition-colors"
                     >
                       <FiEye />
                       <span>View</span>

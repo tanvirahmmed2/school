@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiBook, FiLayers, FiInfo } from 'react-icons/fi';
+import { FiBook, FiLayers } from 'react-icons/fi';
+import Link from 'next/link';
 
 const SubjectsPage = () => {
   const [subjects, setSubjects] = useState([]);
@@ -21,79 +22,62 @@ const SubjectsPage = () => {
         setLoading(false);
       }
     };
-
     fetchSubjects();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col gap-8 w-full mx-auto">
-      {/* Title */}
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-800 mb-2">My Subjects</h1>
-        <p className="text-slate-500 text-sm font-medium">View the list of subjects you are assigned to teach across class sections.</p>
+    <div className="w-full max-w-7xl mx-auto space-y-5">
+      {/* Header */}
+      <div className="pb-3 border-b border-slate-200">
+        <h1 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <FiBook className="text-primary" /> My Subjects
+        </h1>
+        <p className="text-xs text-slate-500 mt-0.5">Subjects you are assigned to teach across class sections.</p>
       </div>
 
-      {subjects.length === 0 ? (
-        <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-          <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-4">
-            <FiInfo className="text-3xl" />
-          </div>
-          <h3 className="font-bold text-slate-800 text-base mb-1">No Subjects Assigned</h3>
-          <p className="text-slate-400 text-xs font-medium max-w-xs">You are not assigned to teach any subjects currently.</p>
+      {loading ? (
+        <div className="w-full py-10 text-center text-xs text-slate-400">Loading subjects...</div>
+      ) : subjects.length === 0 ? (
+        <div className="bg-white border border-slate-200 rounded-xl py-12 text-center text-xs text-slate-400">
+          No subjects assigned yet.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {subjects.map((sub) => (
-            <div
-              key={sub.id}
-              className="bg-white border border-slate-100 hover:border-slate-200 hover:shadow-md transition-all duration-200 rounded-3xl p-6 flex flex-col justify-between"
-            >
-              <div>
-                <div className="p-3 bg-primary-light text-primary rounded-xl w-fit mb-4">
-                  <FiBook className="text-xl" />
-                </div>
-                <h3 className="font-bold text-slate-800 text-base mb-1">{sub.subject_name}</h3>
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block mb-4">Code: {sub.subject_code}</span>
-              </div>
-
-              <div className="border-t border-slate-100 pt-4 flex flex-col gap-3">
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
-                    <span className="flex items-center gap-1.5"><FiLayers className="text-slate-400" /> Class: {sub.class_name}</span>
-                    {sub.section_name && <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md text-[10px]">Sec: {sub.section_name}</span>}
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  <a
-                    href={`/teacher/lessons?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex flex-col items-center justify-center p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors text-center text-[10px] font-bold"
-                  >
-                    Lessons
-                  </a>
-                  <a
-                    href={`/teacher/materials?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex flex-col items-center justify-center p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors text-center text-[10px] font-bold"
-                  >
-                    Materials
-                  </a>
-                  <a
-                    href={`/teacher/assignments?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex flex-col items-center justify-center p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors text-center text-[10px] font-bold"
-                  >
-                    Assignments
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+          <table className="w-full border-collapse text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-semibold text-slate-500 uppercase">
+                <th className="px-4 py-2.5">#</th>
+                <th className="px-4 py-2.5">Subject Name</th>
+                <th className="px-4 py-2.5">Code</th>
+                <th className="px-4 py-2.5">Class</th>
+                <th className="px-4 py-2.5">Section</th>
+                <th className="px-4 py-2.5">Links</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {subjects.map((sub, idx) => (
+                <tr key={sub.id} className="hover:bg-slate-50/50">
+                  <td className="px-4 py-2.5 text-slate-400 font-medium">{idx + 1}</td>
+                  <td className="px-4 py-2.5 font-semibold text-slate-800">{sub.subject_name}</td>
+                  <td className="px-4 py-2.5 font-mono text-[11px] text-slate-500">{sub.subject_code}</td>
+                  <td className="px-4 py-2.5 text-slate-600">
+                    <span className="flex items-center gap-1"><FiLayers className="text-slate-400 text-[10px]" /> Class {sub.class_name}</span>
+                  </td>
+                  <td className="px-4 py-2.5 text-slate-500">{sub.section_name || '—'}</td>
+                  <td className="px-4 py-2.5">
+                    <div className="flex gap-1.5">
+                      <Link href={`/teacher/lessons?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                        className="px-2 py-0.5 bg-primary/5 text-primary rounded text-[10px] font-semibold hover:bg-primary/10">Lessons</Link>
+                      <Link href={`/teacher/materials?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                        className="px-2 py-0.5 bg-primary/5 text-primary rounded text-[10px] font-semibold hover:bg-primary/10">Materials</Link>
+                      <Link href={`/teacher/assignments?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
+                        className="px-2 py-0.5 bg-primary/5 text-primary rounded text-[10px] font-semibold hover:bg-primary/10">Assignments</Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

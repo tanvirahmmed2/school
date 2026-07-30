@@ -65,15 +65,21 @@ export async function POST(request) {
     let saved = 0;
     const errors = [];
 
-    for (const rec of records) {
-      const { student_id, status, remarks } = rec;
-      if (!student_id || !status) continue;
+    const normalizeStatus = (rawStatus) => {
+      if (!rawStatus) return 'Present';
+      const s = String(rawStatus).trim().toUpperCase();
+      if (s === 'P' || s === 'PRESENT' || s === '1') return 'Present';
+      if (s === 'A' || s === 'ABSENT' || s === '0') return 'Absent';
+      if (s === 'L' || s === 'LATE') return 'Late';
+      if (s === 'V' || s === 'LEAVE' || s === 'ON LEAVE') return 'On Leave';
+      return 'Present';
+    };
 
-      const validStatuses = ['Present', 'Absent', 'Late'];
-      if (!validStatuses.includes(status)) {
-        errors.push(`Invalid status "${status}" for student_id ${student_id}. Skipped.`);
-        continue;
-      }
+    for (const rec of records) {
+      const { student_id, status: rawStatus, remarks } = rec;
+      if (!student_id || !rawStatus) continue;
+
+      const status = normalizeStatus(rawStatus);
 
       try {
         await query(

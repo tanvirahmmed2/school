@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, getAdminUser } from '@/lib/auth';
 import { sendEmail } from '@/lib/brevo';
+import { recordActivityLog } from '@/lib/logger';
 import crypto from 'crypto';
 
 // GET all teachers
@@ -122,11 +123,25 @@ export async function POST(request) {
       ]
     );
 
+    const createdTeacher = newTeacher.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Record Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_TEACHER',
+      entityType: 'teacher',
+      entityId: createdTeacher.id,
+      details: `Registered new teacher: ${createdTeacher.name} (${createdTeacher.email}, ${createdTeacher.designation})`
+    });
+
     // Construct the verification URL (use NEXT_PUBLIC_BASE_URL if set, else fall back)
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const verificationUrl = `${baseUrl}/auth/access/teacher/verify?token=${verificationToken}`;
 
-    // Send verification email via Brevo (non-blocking — don't fail the request if email fails)
+    // Send verification email via Brevo
     try {
       await sendEmail({
         to: email.trim().toLowerCase(),
@@ -167,9 +182,10 @@ export async function POST(request) {
 
     const res_data = { 
       message: 'Teacher profile pre-created successfully. A verification link has been sent to the teacher\'s email.', 
-      teacher: newTeacher.rows[0],
+      teacher: createdTeacher,
       verification_link_sent: true
     };
+
     return NextResponse.json({
       success: true,
       message: res_data.message,

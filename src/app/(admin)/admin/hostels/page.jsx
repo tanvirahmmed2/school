@@ -316,7 +316,7 @@ export default function AdminHostelsPage() {
                   accept="image/*"
                   disabled={submittingHostel}
                   onChange={handleImageChange}
-                  className="text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer w-full"
+                  className="text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-50 cursor-pointer w-full"
                 />
                 {imagePreview && (
                   <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-200 shrink-0">
@@ -387,7 +387,7 @@ export default function AdminHostelsPage() {
                         {h.image ? (
                           <img src={h.image} alt={h.name} className="w-9 h-9 rounded-xl object-cover border border-slate-200 shrink-0" />
                         ) : (
-                          <div className="w-9 h-9 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold shrink-0">
+                          <div className="w-9 h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center font-bold shrink-0">
                             H
                           </div>
                         )}
@@ -408,7 +408,7 @@ export default function AdminHostelsPage() {
                       <td className="px-6 py-4 text-right flex justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(h)}
-                          className="p-2 bg-primary-light text-primary hover:bg-primary-light/80 rounded-xl transition-colors cursor-pointer"
+                          className="p-2 bg-emerald-50 text-primary hover:bg-emerald-50/80 rounded-xl transition-colors cursor-pointer"
                         >
                           <FiEdit />
                         </button>

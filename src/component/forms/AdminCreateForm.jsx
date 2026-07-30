@@ -30,7 +30,7 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to register admin.');
+        throw new Error(data.error || data.message || 'Failed to register admin.');
       }
 
       toast.success(data.message || 'Admin registered successfully!');
@@ -64,7 +64,8 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
+            placeholder="John Doe"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -78,7 +79,8 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
+            placeholder="admin@school.com"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -92,7 +94,8 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
             value={number}
             onChange={(e) => setNumber(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
+            placeholder="+1 234 567 890"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -106,7 +109,8 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
+            placeholder="••••••••"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
           />
         </div>
 
@@ -120,7 +124,8 @@ const AdminCreateForm = ({ onSuccess, onCancel }) => {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50 resize-none"
+            placeholder="123 Campus Administrative Block, Building A"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 resize-none"
           />
         </div>
 

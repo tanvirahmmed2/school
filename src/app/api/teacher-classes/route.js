@@ -50,10 +50,10 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { teacher_id, class_id, section_id, academic_year } = await request.json();
+    const { teacher_id, class_id, section_id } = await request.json();
 
-    if (!teacher_id || !class_id || !academic_year) {
-      const res_err = { error: 'Teacher ID, Class ID, and Academic Year are required.' };
+    if (!teacher_id || !class_id) {
+      const res_err = { error: 'Teacher ID and Class ID are required.' };
       return NextResponse.json({
         success: false,
         message: res_err.error,
@@ -65,24 +65,23 @@ export async function POST(request) {
     const teachId = parseInt(teacher_id, 10);
     const clsId = parseInt(class_id, 10);
     const sectId = section_id ? parseInt(section_id, 10) : null;
-    const acadYear = academic_year.trim();
 
-    // Verify uniqueness for class_id, section_id, academic_year
+    // Verify uniqueness for class_id and section_id
     let checkDup;
     if (sectId === null) {
       checkDup = await query(
-        'SELECT id FROM teacher_classes WHERE class_id = $1 AND section_id IS NULL AND academic_year = $2',
-        [clsId, acadYear]
+        'SELECT id FROM teacher_classes WHERE class_id = $1 AND section_id IS NULL',
+        [clsId]
       );
     } else {
       checkDup = await query(
-        'SELECT id FROM teacher_classes WHERE class_id = $1 AND section_id = $2 AND academic_year = $3',
-        [clsId, sectId, acadYear]
+        'SELECT id FROM teacher_classes WHERE class_id = $1 AND section_id = $2',
+        [clsId, sectId]
       );
     }
 
     if (checkDup.rows.length > 0) {
-      const res_err = { error: 'A class teacher is already assigned to this class/section for this academic year.' };
+      const res_err = { error: 'A class teacher is already assigned to this class/section.' };
       return NextResponse.json({
         success: false,
         message: res_err.error,
@@ -92,10 +91,10 @@ export async function POST(request) {
     }
 
     const newAssignment = await query(
-      `INSERT INTO teacher_classes (teacher_id, class_id, section_id, academic_year) 
-       VALUES ($1, $2, $3, $4) 
+      `INSERT INTO teacher_classes (teacher_id, class_id, section_id) 
+       VALUES ($1, $2, $3) 
        RETURNING *`,
-      [teachId, clsId, sectId, acadYear]
+      [teachId, clsId, sectId]
     );
 
     const res_data = { message: 'Class teacher assigned successfully.', assignment: newAssignment.rows[0] };

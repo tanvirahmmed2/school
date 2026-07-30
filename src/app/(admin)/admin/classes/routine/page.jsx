@@ -165,7 +165,7 @@ const AdminClassRoutinePage = () => {
               onClick={() => handleToggleDayStatus(day.id, day.status)}
               className={`px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                 day.status === 'on'
-                  ? 'bg-primary-light text-primary border-primary-light'
+                  ? 'bg-emerald-50 text-primary border-emerald-200/60'
                   : 'bg-rose-50 text-rose-600 border-rose-100 line-through opacity-70'
               }`}
             >
@@ -289,7 +289,7 @@ const AdminClassRoutinePage = () => {
                         <tr key={slot.id} className="hover:bg-slate-50/60 transition-colors">
                           <td className="px-5 py-3 whitespace-nowrap">
                             <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-md">
+                              <span className="text-[10px] font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-md">
                                 {slot.subject_code}
                               </span>
                               <span className="text-xs font-bold text-slate-800">{slot.subject_name}</span>
@@ -320,7 +320,7 @@ const AdminClassRoutinePage = () => {
                             <div className="flex items-center justify-end gap-1.5">
                               <button
                                 onClick={() => handleStartEdit(slot)}
-                                className="p-1.5 bg-primary-light hover:bg-primary/10 text-primary rounded-lg transition-colors cursor-pointer"
+                                className="p-1.5 bg-emerald-50 hover:bg-primary/10 text-primary rounded-lg transition-colors cursor-pointer"
                                 title="Edit Slot"
                               >
                                 <FiEdit2 className="text-xs" />

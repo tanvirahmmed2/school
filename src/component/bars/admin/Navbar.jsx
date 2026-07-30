@@ -6,6 +6,8 @@ import { FiMenu, FiLogOut, FiUser } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import { Context } from '@/component/helper/Context';
 
+import Link from 'next/link';
+
 const Navbar = () => {
   const router = useRouter();
   const { adminSidebar, setAdminSidebar } = useContext(Context);
@@ -48,11 +50,15 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Logged in admin info profile placeholder */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-600 text-xs font-semibold">
-          <FiUser className="text-sm text-slate-400" />
-          <span>Administrator</span>
-        </div>
+        {/* Logged in admin info profile button */}
+        <Link
+          href="/admin/profile"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-colors border border-slate-200/60"
+        >
+          <FiUser className="text-sm text-primary" />
+          <span>Administrator Profile</span>
+        </Link>
+
 
         {/* Logout Button */}
         <button

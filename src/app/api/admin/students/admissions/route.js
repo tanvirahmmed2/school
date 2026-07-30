@@ -3,6 +3,7 @@ import { query } from '@/lib/db';
 import { isAdmin, isRegister, isCashier } from '@/lib/auth';
 import { uploadImage, deleteImage } from '@/lib/cloudinary';
 import { sendEmail } from '@/lib/brevo';
+import { recordActivityLog } from '@/lib/logger';
 
 // GET Admissions (Admin/Registrar/Cashier only)
 export async function GET(request) {
@@ -207,6 +208,18 @@ export async function POST(request) {
     ]);
 
     const applicant = result.rows[0];
+
+    // Log Activity
+    await recordActivityLog({
+      userId: null,
+      userType: 'system',
+      userName: applicant.applicant_name,
+      action: 'CREATE_ADMISSION_APPLICATION',
+      entityType: 'admission',
+      entityId: applicant.id,
+      details: `Candidate admission application submitted by ${applicant.applicant_name} (${applicant.email})`
+    });
+
     const applicantNumber = `APP-1000${applicant.id}`;
     const admissionFeeAmount = circular.fees || 0.00;
 

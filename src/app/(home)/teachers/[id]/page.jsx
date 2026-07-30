@@ -229,11 +229,6 @@ const TeacherDetailPage = () => {
                             Class: <strong className="text-slate-700">{a.class_name}</strong>
                             {a.section_name && <span> • Section {a.section_name}</span>}
                           </p>
-                          {a.academic_year && (
-                            <span className="inline-block mt-1 text-[10px] text-slate-400 font-semibold">
-                              Academic Year: {a.academic_year}
-                            </span>
-                          )}
                         </div>
 
                         <div className="px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-[10px] font-bold">

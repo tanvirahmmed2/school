@@ -166,7 +166,7 @@ const CircularsPage = () => {
         ) : circulars.length === 0 ? (
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
             <span className="text-slate-355 text-5xl mb-3">📢</span>
-            <h3 className="text-sm font-bold text-slate-650">No Active Circulars</h3>
+            <h3 className="text-sm font-bold text-slate-600">No Active Circulars</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
               Setup circular brackets to start accepting application profiles.
             </p>
@@ -206,7 +206,7 @@ const CircularsPage = () => {
                     <td className="px-6 py-4 text-xs font-semibold text-slate-750">
                       BDT {parseFloat(c.fees || 0).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-650 font-bold">
+                    <td className="px-6 py-4 text-xs text-slate-600 font-bold">
                       {c.min_age !== null || c.max_age !== null ? (
                         <span>{c.min_age || 0} to {c.max_age || '∞'} yrs</span>
                       ) : (
@@ -217,7 +217,7 @@ const CircularsPage = () => {
                       <div className="text-[10px] text-slate-500 flex flex-col gap-0.5 font-semibold">
                         <div>Starts: {new Date(c.admission_start_date).toLocaleDateString()}</div>
                         <div>Closes: {new Date(c.finish_date).toLocaleDateString()}</div>
-                        {c.result_date && <div className="text-blue-650 font-bold">Result: {new Date(c.result_date).toLocaleDateString()}</div>}
+                        {c.result_date && <div className="text-blue-600 font-bold">Result: {new Date(c.result_date).toLocaleDateString()}</div>}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -235,7 +235,7 @@ const CircularsPage = () => {
                           <button
                             disabled={publishingId !== null}
                             onClick={() => handlePublishResults(c.id)}
-                            className="px-2.5 py-1 bg-primary-light hover:bg-primary-light text-primary rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold"
+                            className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-[10px] font-bold"
                             title="Publish Results"
                           >
                             <FiCheckCircle />

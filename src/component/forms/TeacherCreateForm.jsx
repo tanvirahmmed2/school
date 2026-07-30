@@ -64,8 +64,8 @@ const TeacherCreateForm = ({ onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
-      <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+    <div className="w-full bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-2xs animate-fade-up">
+      <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
         <FiUserPlus className="text-primary" /> Pre-create Teacher Profile
       </h2>
 

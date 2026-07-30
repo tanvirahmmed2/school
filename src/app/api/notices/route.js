@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin, isRegister } from '@/lib/auth';
+import { isAdmin, isRegister, getAdminUser } from '@/lib/auth';
+import { recordActivityLog } from '@/lib/logger';
 
 // GET all notices
 export async function GET() {
@@ -57,7 +58,22 @@ export async function POST(request) {
       [title.trim(), link.trim(), !!is_pinned]
     );
 
-    const res_data_1488 = { message: 'Notice created successfully.', notice: result.rows[0] };
+    const createdNotice = result.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_NOTICE',
+      entityType: 'notice',
+      entityId: createdNotice.id,
+      details: `Published institutional notice: ${createdNotice.title}`
+    });
+
+    const res_data_1488 = { message: 'Notice created successfully.', notice: createdNotice };
+
       return NextResponse.json({
         success: true,
         message: res_data_1488?.message || 'Successfully fecthed data',

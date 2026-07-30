@@ -188,7 +188,7 @@ const AdminClubsAssignPage = () => {
                         key={t.id} 
                         className={`flex flex-col gap-1.5 p-3 rounded-xl border text-xs font-semibold transition-all duration-150 ${
                           isChecked 
-                            ? 'bg-primary-light/50 border-primary-light text-blue-850' 
+                            ? 'bg-emerald-50/50 border-emerald-200/60 text-blue-850' 
                             : 'bg-white border-slate-100 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
@@ -247,7 +247,7 @@ const AdminClubsAssignPage = () => {
                         key={st.id} 
                         className={`flex items-center gap-3 p-3 rounded-xl border text-xs font-semibold cursor-pointer transition-all duration-155 ${
                           isChecked 
-                            ? 'bg-primary-light/50 border-primary-light text-primary' 
+                            ? 'bg-emerald-50/50 border-emerald-200/60 text-primary' 
                             : 'bg-white border-slate-100 text-slate-600 hover:bg-slate-50'
                         }`}
                       >

@@ -142,7 +142,7 @@ const ApplicantDetailsContent = () => {
             )}
             <div>
               <h2 className="text-base font-semibold text-slate-800">{applicant.applicant_name}</h2>
-              <span className="inline-flex mt-1.5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-primary-light text-primary border border-primary-light">
+              <span className="inline-flex mt-1.5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-50 text-primary border border-emerald-200/60">
                 Class: {applicant.class_name}
               </span>
             </div>

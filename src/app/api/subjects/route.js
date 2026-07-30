@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, getAdminUser } from '@/lib/auth';
+import { recordActivityLog } from '@/lib/logger';
 
 // GET all subjects
 export async function GET() {
@@ -85,7 +86,22 @@ export async function POST(request) {
       [name.trim(), code.trim().toUpperCase()]
     );
 
-    const res_data_2053 = { message: 'Subject created successfully.', subject: newSubject.rows[0] };
+    const createdSubject = newSubject.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_SUBJECT',
+      entityType: 'subject',
+      entityId: createdSubject.id,
+      details: `Created subject: ${createdSubject.name} (${createdSubject.code})`
+    });
+
+    const res_data_2053 = { message: 'Subject created successfully.', subject: createdSubject };
+
       return NextResponse.json({
         success: true,
         message: res_data_2053?.message || 'Successfully fecthed data',

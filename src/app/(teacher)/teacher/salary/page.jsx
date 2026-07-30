@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiDollarSign, FiClock, FiCheck, FiInfo } from 'react-icons/fi';
+import { FiDollarSign, FiCheck, FiClock } from 'react-icons/fi';
 
 const SalaryHistoryPage = () => {
   const [salaries, setSalaries] = useState([]);
@@ -24,98 +24,68 @@ const SalaryHistoryPage = () => {
     fetchSalary();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  // Calculate summaries
   const paidSalaries = salaries.filter((s) => s.status === 'Paid');
-  const totalEarned = paidSalaries.reduce((sum, s) => sum + (parseFloat(s.basic) + parseFloat(s.allowance) - parseFloat(s.deductions)), 0);
+  const totalEarned = paidSalaries.reduce((sum, s) => sum + parseFloat(s.basic) + parseFloat(s.allowance) - parseFloat(s.deductions), 0);
   const totalPending = salaries.filter((s) => s.status !== 'Paid').length;
 
-  const stats = [
-    { label: 'Total Earnings Credited', value: `৳${totalEarned.toFixed(2)}`, color: 'bg-primary-light text-primary border-primary-light', icon: FiCheck },
-    { label: 'Pending Credits', value: totalPending, color: totalPending > 0 ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-slate-50 text-slate-500 border-slate-100', icon: FiClock }
-  ];
-
   return (
-    <div className="flex flex-col gap-8 w-full mx-auto">
-      {/* Title */}
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-800 mb-2">Salary Ledger History</h1>
-        <p className="text-slate-500 text-sm font-medium">Verify your monthly basic pays, allowances, tax/benefit deductions, and payment status.</p>
+    <div className="w-full max-w-7xl mx-auto space-y-5">
+      {/* Header */}
+      <div className="pb-3 border-b border-slate-200">
+        <h1 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <FiDollarSign className="text-primary" /> Salary Ledger
+        </h1>
+        <p className="text-xs text-slate-500 mt-0.5">Monthly basic pay, allowances, deductions, and payment status.</p>
       </div>
 
-      {/* Stats summaries */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {stats.map((stat, idx) => {
-          const Icon = stat.icon;
-          return (
-            <div key={idx} className={`p-6 rounded-3xl border ${stat.color} flex items-center justify-between`}>
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider opacity-85 block mb-1">{stat.label}</span>
-                <span className="text-2xl md:text-3xl font-semibold">{stat.value}</span>
-              </div>
-              <div className="p-4 rounded-2xl bg-white/20 border border-white/10">
-                <Icon className="text-2xl" />
-              </div>
-            </div>
-          );
-        })}
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-white border border-slate-200 rounded-xl p-4">
+          <span className="text-[10px] font-semibold text-slate-500 uppercase block mb-1">Total Earned</span>
+          <span className="text-xl font-bold text-emerald-600">৳{totalEarned.toFixed(2)}</span>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-4">
+          <span className="text-[10px] font-semibold text-slate-500 uppercase block mb-1">Pending Credits</span>
+          <span className={`text-xl font-bold ${totalPending > 0 ? 'text-amber-600' : 'text-slate-400'}`}>{totalPending}</span>
+        </div>
       </div>
 
-      {/* Salary history Log */}
-      <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
-        <h2 className="text-base font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiDollarSign className="text-primary" /> Salary History
-        </h2>
-
-        {salaries.length === 0 ? (
-          <p className="text-slate-400 text-xs font-semibold text-center py-12">No salary entries registered yet.</p>
+      {/* Table */}
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        {loading ? (
+          <div className="py-10 text-center text-xs text-slate-400">Loading salary records...</div>
+        ) : salaries.length === 0 ? (
+          <div className="py-10 text-center text-xs text-slate-400">No salary entries registered yet.</div>
         ) : (
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Billing Month</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Payment Status</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Basic Pay</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Allowances</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Deductions</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Net Credited</th>
+                <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-semibold text-slate-500 uppercase">
+                  <th className="px-4 py-2.5">Billing Month</th>
+                  <th className="px-4 py-2.5">Status</th>
+                  <th className="px-4 py-2.5 text-right">Basic Pay</th>
+                  <th className="px-4 py-2.5 text-right">Allowances</th>
+                  <th className="px-4 py-2.5 text-right">Deductions</th>
+                  <th className="px-4 py-2.5 text-right">Net Credited</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {salaries.map((salary) => {
                   const net = parseFloat(salary.basic) + parseFloat(salary.allowance) - parseFloat(salary.deductions);
                   return (
-                    <tr key={salary.id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors">
-                      <td className="py-4 text-sm font-bold text-slate-800">
-                        {salary.month}
-                      </td>
-                      <td className="py-4">
+                    <tr key={salary.id} className="hover:bg-slate-50/50">
+                      <td className="px-4 py-2.5 font-semibold text-slate-800">{salary.month}</td>
+                      <td className="px-4 py-2.5">
                         {salary.status === 'Paid' ? (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Paid</span>
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100"><FiCheck className="text-[9px]" /> Paid</span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100"><FiClock /> Pending</span>
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-100"><FiClock className="text-[9px]" /> Pending</span>
                         )}
                       </td>
-                      <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                        ৳{parseFloat(salary.basic).toFixed(2)}
-                      </td>
-                      <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                        +৳{parseFloat(salary.allowance).toFixed(2)}
-                      </td>
-                      <td className="py-4 text-sm font-bold text-slate-500 text-right">
-                        -৳{parseFloat(salary.deductions).toFixed(2)}
-                      </td>
-                      <td className="py-4 text-sm font-semibold text-slate-800 text-right">
-                        ৳{net.toFixed(2)}
-                      </td>
+                      <td className="px-4 py-2.5 text-right text-slate-600 font-mono text-[11px]">৳{parseFloat(salary.basic).toFixed(2)}</td>
+                      <td className="px-4 py-2.5 text-right text-emerald-600 font-mono text-[11px]">+৳{parseFloat(salary.allowance).toFixed(2)}</td>
+                      <td className="px-4 py-2.5 text-right text-rose-600 font-mono text-[11px]">-৳{parseFloat(salary.deductions).toFixed(2)}</td>
+                      <td className="px-4 py-2.5 text-right font-bold text-slate-800 font-mono text-[11px]">৳{net.toFixed(2)}</td>
                     </tr>
                   );
                 })}

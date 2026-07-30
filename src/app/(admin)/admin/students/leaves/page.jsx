@@ -139,7 +139,7 @@ const LeavesPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-xs text-slate-650 font-bold flex items-center gap-1">
+                        <span className="text-xs text-slate-600 font-bold flex items-center gap-1">
                           {new Date(lv.start_date).toLocaleDateString()}
                           <FiChevronRight className="text-slate-400" />
                           {new Date(lv.end_date).toLocaleDateString()}
@@ -179,7 +179,7 @@ const LeavesPage = () => {
         ) : processedLeaves.length === 0 ? (
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
             <span className="text-slate-355 text-5xl mb-3">📁</span>
-            <h3 className="text-sm font-bold text-slate-650">Archive Log Empty</h3>
+            <h3 className="text-sm font-bold text-slate-600">Archive Log Empty</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
               No processed leave logs found.
             </p>

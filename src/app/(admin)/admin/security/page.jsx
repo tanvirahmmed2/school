@@ -107,7 +107,7 @@ const SecurityAuditPage = () => {
         ) : filteredLogs.length === 0 ? (
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
             <span className="text-slate-300 text-5xl mb-3">🛡️</span>
-            <h3 className="text-sm font-bold text-slate-650">Logs Sheet Clean</h3>
+            <h3 className="text-sm font-bold text-slate-600">Logs Sheet Clean</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
               No matching authentication logs registered in security system.
             </p>
@@ -131,7 +131,7 @@ const SecurityAuditPage = () => {
                     <td className="px-6 py-4">
                       <div>
                         <p className="text-sm font-bold text-slate-800">User #{log.user_id}</p>
-                        <span className="inline-flex items-center text-[10px] font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full mt-0.5 uppercase">
+                        <span className="inline-flex items-center text-[10px] font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full mt-0.5 uppercase">
                           {log.user_role}
                         </span>
                       </div>

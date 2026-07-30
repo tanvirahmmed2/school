@@ -226,7 +226,7 @@ const StudentMarksPage = () => {
               <h2 className="text-sm font-bold text-slate-800">
                 Grade Sheet ({marksList.length} Students)
               </h2>
-              <span className="text-[11px] bg-primary-light text-primary font-bold px-2 py-0.5 rounded-full">
+              <span className="text-[11px] bg-emerald-50 text-primary font-bold px-2 py-0.5 rounded-full">
                 Marks Entry Form
               </span>
             </div>

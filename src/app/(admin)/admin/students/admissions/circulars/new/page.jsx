@@ -74,7 +74,7 @@ const NewCircularPage = () => {
         </button>
         <div>
           <h1 className="text-base font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiPlus className="text-blue-650" /> Publish Admission Circular
+            <FiPlus className="text-blue-600" /> Publish Admission Circular
           </h1>
           <p className="text-xs text-slate-400">Specify requirements and timelines for the new drive.</p>
         </div>

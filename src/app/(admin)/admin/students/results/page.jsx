@@ -118,7 +118,7 @@ const StudentResultsPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full ${
                           ex.is_published 
-                            ? 'bg-primary-light text-primary border border-primary-light' 
+                            ? 'bg-emerald-50 text-primary border border-emerald-200/60' 
                             : 'bg-rose-50 text-rose-600 border border-rose-100'
                         }`}>
                           {ex.is_published ? 'Released / Published' : 'Draft / Unpublished'}
@@ -131,7 +131,7 @@ const StudentResultsPage = () => {
                           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold cursor-pointer transition-colors duration-150 ${
                             ex.is_published
                               ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
-                              : 'bg-primary-light text-primary hover:bg-primary-light'
+                              : 'bg-emerald-50 text-primary hover:bg-emerald-50'
                           }`}
                         >
                           {ex.is_published ? (

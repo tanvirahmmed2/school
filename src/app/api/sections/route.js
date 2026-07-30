@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, getAdminUser } from '@/lib/auth';
+import { recordActivityLog } from '@/lib/logger';
 
 // GET sections
 export async function GET(request) {
@@ -113,7 +114,22 @@ export async function POST(request) {
       [class_id, name.trim(), capVal, room_number ? room_number.trim() : null]
     );
 
-    const res_data_2784 = { message: 'Section created successfully.', section: newSection.rows[0] };
+    const createdSection = newSection.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_SECTION',
+      entityType: 'section',
+      entityId: createdSection.id,
+      details: `Created section ${createdSection.name} for class ID #${class_id}`
+    });
+
+    const res_data_2784 = { message: 'Section created successfully.', section: createdSection };
+
       return NextResponse.json({
         success: true,
         message: res_data_2784?.message || 'Successfully fecthed data',

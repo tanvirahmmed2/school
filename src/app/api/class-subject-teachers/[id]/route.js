@@ -16,27 +16,29 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = await params;
-    const { class_subject_id, section_id, teacher_id, academic_year } = await request.json();
+    const { class_subject_id, section_id, teacher_id } = await request.json();
 
-    if (!class_subject_id || !section_id || !teacher_id || !academic_year) {
+    if (!class_subject_id || !teacher_id) {
       return NextResponse.json({
         success: false,
-        message: 'Class Subject, Section, Teacher, and Academic Year are required.',
+        message: 'Class Subject and Teacher are required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
     }
 
+    const resolvedSectionId = section_id ? parseInt(section_id, 10) : null;
+
     // Check duplicate mapping (excluding current mapping)
     const checkDup = await query(
-      'SELECT id FROM class_subject_teachers WHERE class_subject_id = $1 AND section_id = $2 AND academic_year = $3 AND id <> $4',
-      [class_subject_id, section_id, academic_year, id]
+      'SELECT id FROM class_subject_teachers WHERE class_subject_id = $1 AND COALESCE(section_id, -1) = COALESCE($2, -1) AND id <> $3',
+      [class_subject_id, resolvedSectionId, id]
     );
 
     if (checkDup.rows.length > 0) {
       return NextResponse.json({
         success: false,
-        message: 'This subject is already mapped to this section for the selected academic year.',
+        message: 'This subject is already mapped to this section/class.',
         error: 'Conflict',
         paylod: null
       }, { status: 400 });
@@ -44,10 +46,10 @@ export async function PUT(request, { params }) {
 
     const updatedMapping = await query(
       `UPDATE class_subject_teachers 
-       SET class_subject_id = $1, section_id = $2, teacher_id = $3, academic_year = $4, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $5 
+       SET class_subject_id = $1, section_id = $2, teacher_id = $3, updated_at = CURRENT_TIMESTAMP 
+       WHERE id = $4 
        RETURNING *`,
-      [class_subject_id, section_id, teacher_id, academic_year, id]
+      [class_subject_id, resolvedSectionId, teacher_id, id]
     );
 
     if (updatedMapping.rowCount === 0) {

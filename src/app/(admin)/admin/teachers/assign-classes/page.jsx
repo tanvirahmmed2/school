@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiPlus, FiTrash2, FiX, FiAward, FiLayers, FiGrid, FiBook, FiUser, FiCalendar } from 'react-icons/fi';
+import {
+  FiPlus, FiTrash2, FiX, FiAward, FiLayers, FiGrid,
+  FiBook, FiUser, FiCalendar, FiUsers, FiRefreshCw
+} from 'react-icons/fi';
 import ClassSubjectAssignForm from '@/component/forms/ClassSubjectAssignForm';
 import ClassTeacherAssignForm from '@/component/forms/ClassTeacherAssignForm';
 
@@ -19,6 +22,7 @@ const AdminAssignClassesPage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       // Fetch classes
       const classesRes = await fetch('/api/classes');
@@ -85,10 +89,10 @@ const AdminAssignClassesPage = () => {
     }
   };
 
-  const handleDeleteClassTeacher = async (id, teacherName, className, sectionName, year) => {
+  const handleDeleteClassTeacher = async (id, teacherName, className, sectionName) => {
     const sectionText = sectionName ? `Section ${sectionName}` : 'All Sections';
     const confirm = window.confirm(
-      `Are you sure you want to remove ${teacherName} as Class Teacher of ${className} (${sectionText}) for academic year ${year}?`
+      `Are you sure you want to remove ${teacherName} as Class Teacher of ${className} (${sectionText})?`
     );
     if (!confirm) return;
 
@@ -110,52 +114,95 @@ const AdminAssignClassesPage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="w-full max-w-7xl mx-auto space-y-6 animate-fade-up">
+      {/* Header & Title */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <FiAward className="text-primary" /> Teacher & Class Assignments
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Assign teachers to subject routines or designate homeroom Class Teachers.
+          <p className="text-xs text-slate-500 mt-0.5">
+            Assign subject teachers to routines or designate homeroom Class Teachers.
           </p>
         </div>
 
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer"
-        >
-          {showAddForm ? (
-            <>
-              <FiX className="text-lg" /> Close Drawer
-            </>
-          ) : (
-            <>
-              <FiPlus className="text-lg" /> {activeTab === 'subjects' ? 'Assign Subject' : 'Assign Class Teacher'}
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={fetchData}
+            className="flex items-center justify-center gap-2 px-3.5 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
+          >
+            <FiRefreshCw className={`text-xs ${loading ? 'animate-spin' : ''}`} /> Refresh Mappings
+          </button>
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer"
+          >
+            {showAddForm ? (
+              <>
+                <FiX className="text-xs" /> Close Drawer
+              </>
+            ) : (
+              <>
+                <FiPlus className="text-xs" /> {activeTab === 'subjects' ? 'Assign Subject Teacher' : 'Assign Class Teacher'}
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Summary Metrics Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Subject Mappings</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-slate-800">{assignments.length}</span>
+            <FiBook className="text-slate-400 text-sm" />
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Homeroom Teachers</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-primary">{classTeacherAssignments.length}</span>
+            <FiUser className="text-primary text-sm" />
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Academic Classes</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-emerald-600">{classes.length}</span>
+            <FiLayers className="text-emerald-500 text-sm" />
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Teachers</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-lg font-bold text-amber-600">{teachers.length}</span>
+            <FiUsers className="text-amber-500 text-sm" />
+          </div>
+        </div>
       </div>
 
       {/* Tab Switcher */}
-      <div className="flex gap-5 border-b border-slate-100 pb-px">
+      <div className="bg-white border border-slate-200/80 rounded-2xl p-2 flex gap-2">
         <button
           onClick={() => { setActiveTab('subjects'); setShowAddForm(false); }}
-          className={`pb-3 text-sm font-bold border-b-2 transition-all duration-150 cursor-pointer ${
+          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'subjects'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-slate-400 hover:text-slate-655'
+              ? 'bg-primary text-white shadow-xs'
+              : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
           }`}
         >
-          Subject Teacher Assignments
+          Subject Teacher Mappings
         </button>
         <button
           onClick={() => { setActiveTab('classes'); setShowAddForm(false); }}
-          className={`pb-3 text-sm font-bold border-b-2 transition-all duration-150 cursor-pointer ${
+          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'classes'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-slate-400 hover:text-slate-655'
+              ? 'bg-primary text-white shadow-xs'
+              : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
           }`}
         >
           Homeroom Class Teachers
@@ -187,92 +234,62 @@ const AdminAssignClassesPage = () => {
         />
       )}
 
-      {/* Registry Tables */}
-      <div className="w-full bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
+      {/* Registry Tables Card */}
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-2xs">
         {loading ? (
-          <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-semibold text-slate-400">Loading assignments...</span>
+          <div className="w-full py-12 flex flex-col items-center justify-center gap-2">
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-medium text-slate-400">Loading assignments...</span>
           </div>
         ) : activeTab === 'subjects' ? (
           // SUBJECT TEACHERS TABLE
           <>
-            <div className="px-6 py-5 border-b border-slate-100">
-              <h2 className="text-base font-bold text-slate-800">
+            <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                 Active Subject Mappings Registry ({assignments.length})
               </h2>
             </div>
             {assignments.length === 0 ? (
-              <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-                <span className="text-slate-300 text-5xl mb-3">🎓</span>
-                <h3 className="text-sm font-bold text-slate-650">No Mappings Found</h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-                  Map subjects to classes and assign subject teachers to build your registry.
-                </p>
+              <div className="w-full py-12 flex flex-col items-center justify-center text-center px-4">
+                <FiBook className="text-slate-300 text-3xl mb-2" />
+                <p className="text-xs font-semibold text-slate-600">No Mappings Found</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Map subjects to classes and assign subject teachers.</p>
               </div>
             ) : (
               <div className="w-full overflow-x-auto">
                 <table className="w-full border-collapse text-left">
                   <thead>
-                    <tr className="bg-slate-50/50 border-b border-slate-100">
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Class</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Section</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Subject</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Teacher</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Academic Year</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                    <tr className="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                      <th className="px-4 py-3">Class</th>
+                      <th className="px-4 py-3">Section</th>
+                      <th className="px-4 py-3">Subject</th>
+                      <th className="px-4 py-3">Assigned Teacher</th>
+                      <th className="px-4 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 text-xs">
                     {assignments.map((assign) => (
-                      <tr key={assign.id} className="hover:bg-slate-50/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
-                            <FiLayers className="text-xs text-blue-400" />
-                            {assign.class_name}
-                          </span>
+                      <tr key={assign.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-4 py-3 whitespace-nowrap font-bold text-slate-800">
+                          {assign.class_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
-                            <FiGrid className="text-slate-400" />
-                            {assign.section_name || (
-                              <span className="text-[10px] font-bold text-primary bg-primary-light border border-primary-light px-1.5 py-0.5 rounded-full">
-                                All Sections
-                              </span>
-                            )}
-                          </span>
+                        <td className="px-4 py-3 whitespace-nowrap text-slate-600">
+                          {assign.section_name || 'All Sections'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="text-sm font-bold text-slate-800 flex items-center gap-1">
-                              <FiBook className="text-slate-400 text-xs" />
-                              {assign.subject_name}
-                            </p>
-                            <span className="text-[10px] text-slate-400 font-bold uppercase">
-                              Code: {assign.subject_code}
-                            </span>
-                          </div>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <p className="font-semibold text-slate-800">{assign.subject_name}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">Code: {assign.subject_code}</p>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                            <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
-                              <FiUser className="text-xs" />
-                            </span>
-                            {assign.teacher_name}
-                          </span>
+                        <td className="px-4 py-3 whitespace-nowrap text-slate-700 font-medium">
+                          {assign.teacher_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-655 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
-                            <FiCalendar className="text-xs text-slate-400" /> {assign.academic_year}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <td className="px-4 py-3 whitespace-nowrap text-right">
                           <button
                             onClick={() => handleDeleteAssignment(assign.id, assign.subject_name, assign.class_name)}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                            className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                             title="Remove Mapping"
                           >
-                            <FiTrash2 className="text-sm" />
+                            <FiTrash2 className="text-xs" />
                           </button>
                         </td>
                       </tr>
@@ -285,66 +302,47 @@ const AdminAssignClassesPage = () => {
         ) : (
           // CLASS TEACHERS TABLE
           <>
-            <div className="px-6 py-5 border-b border-slate-100">
-              <h2 className="text-base font-bold text-slate-800">
+            <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                 Active Class Teachers Registry ({classTeacherAssignments.length})
               </h2>
             </div>
             {classTeacherAssignments.length === 0 ? (
-              <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
-                <span className="text-slate-300 text-5xl mb-3">👨‍🏫</span>
-                <h3 className="text-sm font-bold text-slate-650">No Class Teachers Assigned</h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-[240px]">
-                  Designate homeroom class teachers for classes and sections.
-                </p>
+              <div className="w-full py-12 flex flex-col items-center justify-center text-center px-4">
+                <FiUser className="text-slate-300 text-3xl mb-2" />
+                <p className="text-xs font-semibold text-slate-600">No Class Teachers Assigned</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Designate homeroom class teachers for classes and sections.</p>
               </div>
             ) : (
               <div className="w-full overflow-x-auto">
                 <table className="w-full border-collapse text-left">
                   <thead>
-                    <tr className="bg-slate-50/50 border-b border-slate-100">
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Class</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Section</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Class Teacher</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Academic Year</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                    <tr className="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                      <th className="px-4 py-3">Class</th>
+                      <th className="px-4 py-3">Section</th>
+                      <th className="px-4 py-3">Assigned Class Teacher</th>
+                      <th className="px-4 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 text-xs">
                     {classTeacherAssignments.map((assign) => (
-                      <tr key={assign.id} className="hover:bg-slate-50/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
-                            <FiLayers className="text-xs text-blue-400" />
-                            {assign.class_name}
-                          </span>
+                      <tr key={assign.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-4 py-3 whitespace-nowrap font-bold text-slate-800">
+                          {assign.class_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
-                            <FiGrid className="text-slate-400" />
-                            {assign.section_name || 'All Sections'}
-                          </span>
+                        <td className="px-4 py-3 whitespace-nowrap text-slate-600">
+                          {assign.section_name || 'All Sections'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                            <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
-                              <FiUser className="text-xs" />
-                            </span>
-                            {assign.teacher_name}
-                          </span>
+                        <td className="px-4 py-3 whitespace-nowrap text-slate-700 font-medium">
+                          {assign.teacher_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                            <FiCalendar className="text-xs text-slate-400" /> {assign.academic_year}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <td className="px-4 py-3 whitespace-nowrap text-right">
                           <button
-                            onClick={() => handleDeleteClassTeacher(assign.id, assign.teacher_name, assign.class_name, assign.section_name, assign.academic_year)}
-                            className="p-2 bg-red-50 hover:bg-red-100 text-red-655 text-red-600 rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                            onClick={() => handleDeleteClassTeacher(assign.id, assign.teacher_name, assign.class_name, assign.section_name)}
+                            className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                             title="Remove Class Teacher"
                           >
-                            <FiTrash2 className="text-sm" />
+                            <FiTrash2 className="text-xs" />
                           </button>
                         </td>
                       </tr>

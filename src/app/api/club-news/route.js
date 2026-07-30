@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin, isRegister } from '@/lib/auth';
+import { isAdmin, isRegister, getAdminUser } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
+import { recordActivityLog } from '@/lib/logger';
 
 function generateSlug(text, id) {
   if (!text) return String(id || '');
@@ -113,6 +114,19 @@ export async function POST(request) {
       slug: result.rows[0].slug || slug
     };
 
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_CLUB_NEWS',
+      entityType: 'club_news',
+      entityId: newsItem.id,
+      details: `Published club news: ${newsItem.title}`
+    });
+
     const res_data_2207 = { message: 'Club news created successfully.', clubNews: newsItem };
     return NextResponse.json({
       success: true,
@@ -120,6 +134,7 @@ export async function POST(request) {
       paylod: res_data_2207,
       payload: res_data_2207
     }, { status: 201 });
+
   } catch (error) {
     console.error('Error creating club news:', error);
     return NextResponse.json({

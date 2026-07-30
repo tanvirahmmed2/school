@@ -44,39 +44,43 @@ const AdminHomePage = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-9 h-9 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-sm font-semibold text-slate-500">Loading Admin Control Dashboard...</span>
+        <div className="w-9 h-9 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-xs font-semibold text-slate-400">Loading Admin Control Dashboard...</span>
       </div>
     );
   }
 
   return (
-    <div className="w-full flex flex-col gap-8 max-w-7xl mx-auto animate-fade-up pb-12">
+    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
       
       {/* Top Banner / Welcome Header */}
-      <div className="w-full bg-linear-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-primary-light/10 pointer-events-none" />
-
+      <div className="w-full bg-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-slate-800">
         <div className="flex flex-col gap-2 z-10">
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">
-            Welcome back, System Administrator
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider">
+              Control Panel
+            </span>
+            <span className="text-xs text-slate-400">• {todayDate}</span>
+          </div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
+            System Administrator Control
           </h1>
-          <p className="text-slate-300 text-xs md:text-sm max-w-xl">
-            {todayDate} • Monitor active campus metrics, admissions, financial ledgers, and operational activity.
+          <p className="text-slate-400 text-xs md:text-sm max-w-xl">
+            Monitor active campus metrics, admissions, financial ledgers, and operational activity.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3 z-10 w-full md:w-auto">
           <Link
-            href="/admin/students"
-            className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-secondary px-5 py-3 rounded-xl text-xs font-bold transition-all shadow-md"
+            href="/admin/students/lists"
+            className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors shadow-xs"
           >
             <FiUserPlus className="text-sm" />
             <span>Manage Students</span>
           </Link>
           <Link
             href="/admin/settings"
-            className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-5 py-3 rounded-xl text-xs font-bold transition-all"
+            className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white border border-white/10 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors"
           >
             <FiSettings className="text-sm" />
             <span>Settings</span>
@@ -85,76 +89,76 @@ const AdminHomePage = () => {
       </div>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Stat 1: Total Students */}
-        <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between gap-4 group">
+        <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col justify-between gap-4 group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Students</span>
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Students</span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center text-base">
               <FiUsers />
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
               {stats.totalStudents ? stats.totalStudents.toLocaleString() : '0'}
             </h2>
-            <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
-              <FiTrendingUp /> Active Enrolled Students
+            <p className="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-1">
+              <FiTrendingUp /> Enrolled Active Students
             </p>
           </div>
         </div>
 
         {/* Stat 2: Total Teachers */}
-        <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between gap-4 group">
+        <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col justify-between gap-4 group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Expert Faculty</span>
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Faculty Members</span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center text-base">
               <FiBriefcase />
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
               {stats.totalTeachers ? stats.totalTeachers.toLocaleString() : '0'}
             </h2>
-            <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
+            <p className="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-1">
               <FiCheckCircle /> Verified Teachers
             </p>
           </div>
         </div>
 
         {/* Stat 3: Total Staff */}
-        <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between gap-4 group">
+        <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col justify-between gap-4 group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Support Staff</span>
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Support Staff</span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center text-base">
               <FiUsers />
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
               {stats.totalStaff ? stats.totalStaff.toLocaleString() : '0'}
             </h2>
-            <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
-              <FiActivity /> Operations & Cashiers
+            <p className="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-1">
+              <FiActivity /> Operations & Desks
             </p>
           </div>
         </div>
 
         {/* Stat 4: Academic Classes */}
-        <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between gap-4 group">
+        <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col justify-between gap-4 group">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Academic Classes</span>
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Academic Classes</span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center text-base">
               <FiLayers />
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
               {stats.totalClasses ? stats.totalClasses.toLocaleString() : '0'}
             </h2>
-            <p className="text-xs text-primary font-semibold flex items-center gap-1 mt-1">
-              <FiBook /> Active Class Units
+            <p className="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-1">
+              <FiBook /> Active Classes & Sections
             </p>
           </div>
         </div>
@@ -162,47 +166,47 @@ const AdminHomePage = () => {
       </div>
 
       {/* Analytics & Overview Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         
         {/* Admissions Overview */}
-        <div className="lg:col-span-6 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col justify-between gap-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="lg:col-span-6 bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col justify-between gap-5">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center text-base">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm">
                 <FiUserPlus />
               </div>
-              <h3 className="font-semibold text-slate-900 text-base">Admissions Overview</h3>
+              <h3 className="font-bold text-slate-800 text-sm">Admissions Overview</h3>
             </div>
-            <Link href="/staff/registrar/admissions" className="text-xs font-bold text-primary flex items-center gap-1">
-              View All <FiArrowRight />
+            <Link href="/admin/students/admissions" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+              View Admissions <FiArrowRight />
             </Link>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-              <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Total Applications</p>
-              <p className="text-2xl font-semibold text-slate-900 mt-1">{admissions.total}</p>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Applications</p>
+              <p className="text-xl font-bold text-slate-900 mt-1">{admissions.total}</p>
             </div>
-            <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-100">
-              <p className="text-xs text-amber-700 font-bold uppercase tracking-wider">Pending Review</p>
-              <p className="text-2xl font-semibold text-amber-700 mt-1">{admissions.pending}</p>
+            <div className="p-3 bg-amber-50 rounded-xl border border-amber-100">
+              <p className="text-[10px] text-amber-700 font-bold uppercase tracking-wider">Pending Review</p>
+              <p className="text-xl font-bold text-amber-700 mt-1">{admissions.pending}</p>
             </div>
-            <div className="p-4 bg-primary-light rounded-2xl border border-primary-light">
-              <p className="text-xs text-primary font-bold uppercase tracking-wider">Approved</p>
-              <p className="text-2xl font-semibold text-primary mt-1">{admissions.approved}</p>
+            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+              <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Approved</p>
+              <p className="text-xl font-bold text-emerald-700 mt-1">{admissions.approved}</p>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-600">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
               <span>Admission Processing Rate</span>
               <span>
                 {admissions.total > 0 ? Math.round((admissions.approved / admissions.total) * 100) : 0}%
               </span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-primary rounded-full transition-all duration-500"
+                className="h-full bg-emerald-600 rounded-full transition-all duration-500"
                 style={{
                   width: `${admissions.total > 0 ? Math.round((admissions.approved / admissions.total) * 100) : 0}%`
                 }}
@@ -212,35 +216,35 @@ const AdminHomePage = () => {
         </div>
 
         {/* Finance Overview */}
-        <div className="lg:col-span-6 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col justify-between gap-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="lg:col-span-6 bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col justify-between gap-5">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center text-base">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm">
                 <FiDollarSign />
               </div>
-              <h3 className="font-semibold text-slate-900 text-base">Financial Overview</h3>
+              <h3 className="font-bold text-slate-800 text-sm">Financial Overview</h3>
             </div>
-            <Link href="/staff/cashier/transactions" className="text-xs font-bold text-primary flex items-center gap-1">
-              Cashier Ledger <FiArrowRight />
+            <Link href="/admin/finance" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+              General Finance <FiArrowRight />
             </Link>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="p-4 bg-primary-light rounded-2xl border border-primary-light">
-              <p className="text-xs text-primary font-bold uppercase tracking-wider">Total Income</p>
-              <p className="text-lg md:text-xl font-semibold text-primary mt-1">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+              <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Total Income</p>
+              <p className="text-base md:text-lg font-bold text-emerald-700 mt-1">
                 ৳{finance.totalIncome.toLocaleString()}
               </p>
             </div>
-            <div className="p-4 bg-rose-50/60 rounded-2xl border border-rose-100">
-              <p className="text-xs text-rose-700 font-bold uppercase tracking-wider">Expenses</p>
-              <p className="text-lg md:text-xl font-semibold text-rose-700 mt-1">
+            <div className="p-3 bg-rose-50 rounded-xl border border-rose-100">
+              <p className="text-[10px] text-rose-700 font-bold uppercase tracking-wider">Expenses</p>
+              <p className="text-base md:text-lg font-bold text-rose-700 mt-1">
                 ৳{finance.totalExpenses.toLocaleString()}
               </p>
             </div>
-            <div className="p-4 bg-primary-light rounded-2xl border border-primary-light">
-              <p className="text-xs text-primary font-bold uppercase tracking-wider">Net Balance</p>
-              <p className="text-lg md:text-xl font-semibold text-primary mt-1">
+            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+              <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Net Balance</p>
+              <p className="text-base md:text-lg font-bold text-emerald-700 mt-1">
                 ৳{finance.netBalance.toLocaleString()}
               </p>
             </div>
@@ -248,119 +252,119 @@ const AdminHomePage = () => {
 
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
             <span>Aggregated cashier records & fee transactions</span>
-            <span className="font-bold text-slate-700">Audit Status: Verified</span>
+            <span className="font-semibold text-slate-700">Audit Status: Verified</span>
           </div>
         </div>
 
       </div>
 
       {/* Quick Action Navigation Tiles */}
-      <div className="flex flex-col gap-4">
-        <h3 className="text-lg font-semibold text-slate-900 tracking-tight flex items-center gap-2">
-          <FiLayers className="text-primary" /> Admin Module Shortcuts
+      <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+          <FiLayers className="text-emerald-600" /> Admin Shortcuts
         </h3>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <Link
-            href="/admin/classes"
-            className="p-4 bg-white border border-slate-100 hover:border-primary hover:shadow-md rounded-2xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
+            href="/admin/classes/class"
+            className="p-3.5 bg-white border border-slate-200/80 hover:border-emerald-500 rounded-xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center text-sm transition-colors">
               <FiBook />
             </div>
-            <span className="text-xs font-bold text-slate-800">Classes</span>
+            <span className="text-xs font-semibold text-slate-700">Classes</span>
           </Link>
 
           <Link
-            href="/admin/teachers"
-            className="p-4 bg-white border border-slate-100 hover:border-primary hover:shadow-md rounded-2xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
+            href="/admin/teachers/list"
+            className="p-3.5 bg-white border border-slate-200/80 hover:border-emerald-500 rounded-xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center text-sm transition-colors">
               <FiBriefcase />
             </div>
-            <span className="text-xs font-bold text-slate-800">Teachers</span>
+            <span className="text-xs font-semibold text-slate-700">Teachers</span>
           </Link>
 
           <Link
-            href="/staff/registrar/admissions"
-            className="p-4 bg-white border border-slate-100 hover:border-primary hover:shadow-md rounded-2xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
+            href="/admin/students/admissions"
+            className="p-3.5 bg-white border border-slate-200/80 hover:border-emerald-500 rounded-xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center text-sm transition-colors">
               <FiUserPlus />
             </div>
-            <span className="text-xs font-bold text-slate-800">Admissions</span>
+            <span className="text-xs font-semibold text-slate-700">Admissions</span>
           </Link>
 
           <Link
-            href="/staff/registrar/events"
-            className="p-4 bg-white border border-slate-100 hover:border-primary hover:shadow-md rounded-2xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
+            href="/admin/events"
+            className="p-3.5 bg-white border border-slate-200/80 hover:border-emerald-500 rounded-xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center text-sm transition-colors">
               <FiCalendar />
             </div>
-            <span className="text-xs font-bold text-slate-800">Events</span>
+            <span className="text-xs font-semibold text-slate-700">Events</span>
           </Link>
 
           <Link
-            href="/staff/cashier/transactions"
-            className="p-4 bg-white border border-slate-100 hover:border-primary hover:shadow-md rounded-2xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
+            href="/admin/finance"
+            className="p-3.5 bg-white border border-slate-200/80 hover:border-emerald-500 rounded-xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center text-sm transition-colors">
               <FiDollarSign />
             </div>
-            <span className="text-xs font-bold text-slate-800">Finance</span>
+            <span className="text-xs font-semibold text-slate-700">Finance</span>
           </Link>
 
           <Link
             href="/admin/settings"
-            className="p-4 bg-white border border-slate-100 hover:border-primary hover:shadow-md rounded-2xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
+            className="p-3.5 bg-white border border-slate-200/80 hover:border-emerald-500 rounded-xl flex flex-col items-center justify-center text-center gap-2 transition-all group cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center text-sm transition-colors">
               <FiSettings />
             </div>
-            <span className="text-xs font-bold text-slate-800">Site Settings</span>
+            <span className="text-xs font-semibold text-slate-700">Site Settings</span>
           </Link>
         </div>
       </div>
 
       {/* Data Tables Row: Recent Admissions & Security Logs */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         
         {/* Recent Admissions Table */}
-        <div className="lg:col-span-7 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col gap-4">
+        <div className="lg:col-span-7 bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h3 className="font-semibold text-slate-900 text-base flex items-center gap-2">
-              <FiUserPlus className="text-primary" /> Recent Admission Applications
+            <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+              <FiUserPlus className="text-emerald-600" /> Recent Admission Applications
             </h3>
-            <Link href="/staff/registrar/admissions" className="text-xs font-bold text-primary">
+            <Link href="/admin/students/admissions" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700">
               View All
             </Link>
           </div>
 
           {stats.recentAdmissions && stats.recentAdmissions.length > 0 ? (
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto border border-slate-100 rounded-xl">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="text-slate-400 font-bold uppercase tracking-wider border-b border-slate-100">
-                    <th className="pb-3 px-2">Applicant</th>
-                    <th className="pb-3 px-2">Contact</th>
-                    <th className="pb-3 px-2">Date</th>
-                    <th className="pb-3 px-2 text-right">Status</th>
+                  <tr className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200/80">
+                    <th className="py-2.5 px-3">Applicant</th>
+                    <th className="py-2.5 px-3">Contact</th>
+                    <th className="py-2.5 px-3">Date</th>
+                    <th className="py-2.5 px-3 text-right">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50 font-semibold text-slate-700">
+                <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
                   {stats.recentAdmissions.map((adm) => (
-                    <tr key={adm.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-3 px-2 font-bold text-slate-900">{adm.student_name || 'N/A'}</td>
-                      <td className="py-3 px-2 text-slate-500">{adm.guardian_phone || '—'}</td>
-                      <td className="py-3 px-2 text-slate-400">
+                    <tr key={adm.id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="py-2.5 px-3 font-bold text-slate-900">{adm.student_name || 'N/A'}</td>
+                      <td className="py-2.5 px-3 text-slate-500">{adm.guardian_phone || '—'}</td>
+                      <td className="py-2.5 px-3 text-slate-400">
                         {adm.created_at ? new Date(adm.created_at).toLocaleDateString() : '—'}
                       </td>
-                      <td className="py-3 px-2 text-right">
-                        <span className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold capitalize ${
+                      <td className="py-2.5 px-3 text-right">
+                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold capitalize ${
                           adm.status === 'approved'
-                            ? 'bg-primary-light text-primary border border-primary-light'
-                            : 'bg-amber-50 text-amber-600 border border-amber-200'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
+                            : 'bg-amber-50 text-amber-700 border border-amber-200'
                         }`}>
                           {adm.status || 'Pending'}
                         </span>
@@ -376,22 +380,22 @@ const AdminHomePage = () => {
         </div>
 
         {/* Security & System Activity Logs */}
-        <div className="lg:col-span-5 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs flex flex-col gap-4">
+        <div className="lg:col-span-5 bg-white border border-slate-200/80 p-5 rounded-2xl shadow-2xs flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h3 className="font-semibold text-slate-900 text-base flex items-center gap-2">
-              <FiShield className="text-primary" /> Security Login Logs
+            <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+              <FiShield className="text-emerald-600" /> Security Login Logs
             </h3>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200/60">
               Live Feed
             </span>
           </div>
 
           {stats.loginLogs && stats.loginLogs.length > 0 ? (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5">
               {stats.loginLogs.map((log) => (
-                <div key={log.id} className="flex items-center justify-between p-3 bg-slate-50/70 border border-slate-100 rounded-xl text-xs">
+                <div key={log.id} className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center text-sm font-bold shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 border border-emerald-100">
                       <FiClock />
                     </div>
                     <div className="flex flex-col">

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin, isRegister } from '@/lib/auth';
+import { isAdmin, isRegister, getAdminUser } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
+import { recordActivityLog } from '@/lib/logger';
 
 function slugify(text) {
   return text
@@ -101,7 +102,22 @@ export async function POST(request) {
       [title.trim(), finalSlug, content.trim(), imageUrl, imageId]
     );
 
-    const res_data_2706 = { message: 'News article created successfully.', news: result.rows[0] };
+    const createdNews = result.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_NEWS',
+      entityType: 'news',
+      entityId: createdNews.id,
+      details: `Published news article: ${createdNews.title}`
+    });
+
+    const res_data_2706 = { message: 'News article created successfully.', news: createdNews };
+
       return NextResponse.json({
         success: true,
         message: res_data_2706?.message || 'Successfully fecthed data',

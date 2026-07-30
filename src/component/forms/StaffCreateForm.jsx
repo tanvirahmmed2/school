@@ -44,7 +44,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
         grade_id: gradeId || null
       });
 
-      toast.success(response.data.message || 'Staff profile placeholder created successfully!');
+      toast.success(response.data.message || 'Staff profile created successfully!');
       const createdEmail = email.trim();
       setName('');
       setEmail('');
@@ -60,25 +60,25 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] animate-fade-up">
-      <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+    <div className="w-full bg-white border border-slate-200/80 rounded-2xl p-5 md:p-6 shadow-2xs animate-fade-up">
+      <h2 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2 uppercase tracking-wider">
         <FiUserPlus className="text-primary" /> Pre-create Staff Profile
       </h2>
 
       {/* Verification link sent notice */}
       {verificationSentTo && (
-        <div className="mb-5 flex items-start gap-3 p-4 bg-primary-light border border-primary-light rounded-2xl">
-          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-            <FiMail className="text-primary text-sm" />
+        <div className="mb-4 flex items-start gap-3 p-3.5 bg-blue-50 border border-blue-100 rounded-xl">
+          <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+            <FiMail className="text-blue-600 text-xs" />
           </div>
           <div>
-            <p className="text-sm font-bold text-primary">Verification Link Sent!</p>
-            <p className="text-xs text-primary mt-0.5 leading-relaxed">
-              A secure setup verification link has been emailed to <strong>{verificationSentTo}</strong>. The staff member must click this link within 72 hours to complete their profile registration.
+            <p className="text-xs font-bold text-blue-800">Verification Link Sent!</p>
+            <p className="text-[11px] text-blue-700 mt-0.5 leading-relaxed">
+              A setup verification link has been emailed to <strong>{verificationSentTo}</strong>. The staff member must click this link within 72 hours to complete their profile registration.
             </p>
             <button
               onClick={() => { setVerificationSentTo(''); if (onSuccess) onSuccess(); }}
-              className="mt-2 text-[11px] font-bold text-primary underline cursor-pointer"
+              className="mt-1 text-[10px] font-bold text-blue-800 underline cursor-pointer"
             >
               Dismiss
             </button>
@@ -86,9 +86,9 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Full Name *
           </label>
           <input
@@ -96,12 +96,12 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all"
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Email Address *
           </label>
           <input
@@ -109,12 +109,12 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all"
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Phone Number *
           </label>
           <input
@@ -122,34 +122,34 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
             required
             value={number}
             onChange={(e) => setNumber(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all"
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Portal Role *
           </label>
           <select
             required
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:bg-white focus:border-primary transition-all cursor-pointer"
           >
             <option value="staff">General Staff</option>
             <option value="cashier">Cashier (Finance Desk)</option>
-            <option value="registrar">Registrar (Admissions & Enrollments)</option>
+            <option value="registrar">Registrar (Admissions Desk)</option>
           </select>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="flex flex-col gap-1 sm:col-span-2">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Salary Pay Grade
           </label>
           <select
             value={gradeId}
             onChange={(e) => setGradeId(e.target.value)}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-primary transition-all"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:bg-white focus:border-primary transition-all cursor-pointer"
           >
             <option value="">Unassigned</option>
             {payScales.map((scale) => (
@@ -160,12 +160,12 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           </select>
         </div>
 
-        <div className="flex items-center justify-end gap-3 mt-4 md:col-span-2 border-t border-slate-50 pt-5">
+        <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2 border-t border-slate-100 pt-4">
           {onCancel && (
             <button
               type="button"
               onClick={onCancel}
-              className="px-5 py-2.5 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer"
+              className="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -173,7 +173,7 @@ const StaffCreateForm = ({ onSuccess, onCancel }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-secondary rounded-xl text-xs font-semibold transition-colors disabled:opacity-60 cursor-pointer shadow-xs"
+            className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-semibold transition-colors disabled:opacity-60 cursor-pointer shadow-2xs"
           >
             {submitting ? 'Creating...' : 'Register Staff Account'}
           </button>

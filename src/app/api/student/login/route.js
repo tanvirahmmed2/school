@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { query } from '@/lib/db';
 import { comparePassword, signJWT } from '@/lib/auth';
+import { recordLoginLog } from '@/lib/logger';
 
 export async function POST(request) {
   try {
@@ -65,6 +66,15 @@ export async function POST(request) {
       }, { status: 401 });
     }
 
+    // Record login log for student
+    await recordLoginLog({
+      userType: 'student',
+      name: student.name,
+      email: student.email || student.registration_number,
+      req: request,
+      status: 'success'
+    });
+
     // Generate JWT token
     const token = signJWT({
       id: student.id,
@@ -73,6 +83,7 @@ export async function POST(request) {
       name: student.name,
       role: 'student'
     });
+
 
     // Set cookie
     const cookieStore = await cookies();

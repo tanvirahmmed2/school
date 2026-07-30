@@ -360,111 +360,84 @@ const MarksEntryPage = () => {
   const filteredSubjects = subjects.filter((s) => String(s.class_id) === String(classId));
 
   return (
-    <div className="flex flex-col gap-8 w-full mx-auto animate-fade-up">
-      {/* Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="w-full max-w-7xl mx-auto space-y-5">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-800 mb-1 flex items-center gap-2">
-            <FiAward className="text-primary" /> Student Subject Marks Evaluation
+          <h1 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <FiAward className="text-primary" /> Student Marks Evaluation
           </h1>
-          <p className="text-slate-500 text-sm font-medium">Record and update student exam marks via manual roster or Excel spreadsheet upload.</p>
+          <p className="text-xs text-slate-500 mt-0.5">Record and update student exam marks via manual roster or Excel spreadsheet upload.</p>
         </div>
 
         {/* Mode Selector Tabs */}
-        <div className="flex items-center gap-1.5 bg-white border border-slate-100 p-1.5 rounded-2xl w-fit">
+        <div className="flex gap-1 bg-slate-100 p-1 rounded-lg w-fit">
           <button
             onClick={() => setActiveMode('manual')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeMode === 'manual'
-                ? 'bg-primary text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-50'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+              activeMode === 'manual' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            <FiEdit3 className="text-sm" /> Manual Roster
+            <FiEdit3 className="text-xs" /> Manual
           </button>
           <button
             onClick={() => setActiveMode('spreadsheet')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeMode === 'spreadsheet'
-                ? 'bg-primary text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-50'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+              activeMode === 'spreadsheet' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
             }`}
           >
-            <FiUploadCloud className="text-sm" /> Spreadsheet Upload
+            <FiUploadCloud className="text-xs" /> Sheet Upload
           </button>
         </div>
       </div>
 
-      {/* Shared Dropdowns Selection Bar */}
-      <div className="bg-white border border-slate-100 rounded-3xl p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-end gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.01)]">
-        <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Exam</label>
-          <select
-            value={examId}
-            onChange={(e) => setExamId(e.target.value)}
-            disabled={loadingDropdowns}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-          >
-            <option value="">-- Choose Exam --</option>
-            {exams.map((e) => (
-              <option key={e.id} value={e.id}>{e.name} ({e.term || 'General'})</option>
-            ))}
-          </select>
-        </div>
+      {/* Shared Control Bar */}
+      <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-2xs grid grid-cols-2 sm:grid-cols-5 gap-2">
+        <select
+          value={examId}
+          onChange={(e) => setExamId(e.target.value)}
+          disabled={loadingDropdowns}
+          className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 outline-none focus:border-primary col-span-2 sm:col-span-1"
+        >
+          <option value="">— Select Exam —</option>
+          {exams.map((e) => (<option key={e.id} value={e.id}>{e.name} ({e.term || 'General'})</option>))}
+        </select>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Class</label>
-          <select
-            value={classId}
-            onChange={(e) => {
-              setClassId(e.target.value);
-              setSubjectId('');
-            }}
-            disabled={loadingDropdowns}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-          >
-            <option value="">-- Choose Class --</option>
-            {classes.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
-        </div>
+        <select
+          value={classId}
+          onChange={(e) => { setClassId(e.target.value); setSubjectId(''); }}
+          disabled={loadingDropdowns}
+          className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 outline-none focus:border-primary"
+        >
+          <option value="">— Select Class —</option>
+          {classes.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
+        </select>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Section</label>
-          <select
-            value={sectionId}
-            onChange={(e) => setSectionId(e.target.value)}
-            disabled={!classId}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-          >
-            <option value="">-- All Sections --</option>
-            {sections.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
-        </div>
+        <select
+          value={sectionId}
+          onChange={(e) => setSectionId(e.target.value)}
+          disabled={!classId}
+          className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 outline-none focus:border-primary disabled:opacity-60"
+        >
+          <option value="">— All Sections —</option>
+          {sections.map((s) => (<option key={s.id} value={s.id}>{s.name}</option>))}
+        </select>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Subject</label>
-          <select
-            value={subjectId}
-            onChange={(e) => setSubjectId(e.target.value)}
-            disabled={!classId}
-            className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-          >
-            <option value="">-- Choose Subject --</option>
-            {filteredSubjects.map((s) => (
-              <option key={s.subject_id || s.id} value={s.subject_id || s.id}>{s.subject_name || s.name}</option>
-            ))}
-          </select>
-        </div>
+        <select
+          value={subjectId}
+          onChange={(e) => setSubjectId(e.target.value)}
+          disabled={!classId}
+          className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-800 outline-none focus:border-primary disabled:opacity-60"
+        >
+          <option value="">— Select Subject —</option>
+          {filteredSubjects.map((s) => (<option key={s.subject_id || s.id} value={s.subject_id || s.id}>{s.subject_name || s.name}</option>))}
+        </select>
 
         {activeMode === 'manual' ? (
           <button
             onClick={handleLoadStudents}
             disabled={!examId || !classId || !subjectId || loadingStudents}
-            className="px-6 py-3 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer h-[46px]"
+            className="px-3 py-1.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-lg text-xs font-medium transition-colors"
           >
             {loadingStudents ? 'Loading...' : 'Load Students'}
           </button>
@@ -472,82 +445,70 @@ const MarksEntryPage = () => {
           <button
             onClick={handleDownloadTemplate}
             disabled={!examId || !classId || !subjectId || downloadingTemplate}
-            className="px-6 py-3 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md transition-all cursor-pointer h-[46px] flex items-center justify-center gap-1.5"
+            className="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 inline-flex items-center gap-1 justify-center"
           >
-            <FiDownload className="text-base" />
-            <span>{downloadingTemplate ? 'Downloading...' : 'Get Template'}</span>
+            <FiDownload className="text-xs text-primary" />
+            {downloadingTemplate ? 'Downloading...' : 'Get Template'}
           </button>
         )}
       </div>
 
       {/* MODE 1: MANUAL ENTRY */}
       {activeMode === 'manual' && (
-        <>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           {students.length === 0 ? (
-            <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-              <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-4">
-                <FiLayers className="text-3xl" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-base mb-1">Load Marks Sheet</h3>
-              <p className="text-slate-400 text-xs font-medium max-w-xs">Select exam, class, and subject parameters, then click Load Students to record marks.</p>
+            <div className="py-12 text-center text-xs text-slate-400">
+              Select exam, class, and subject above, then click &quot;Load Students&quot;.
             </div>
           ) : (
-            <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                <h2 className="text-base font-bold text-slate-800">Grades Ledger Sheet ({students.length} Students)</h2>
+            <>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-50">
+                <span className="text-xs font-semibold text-slate-600">{students.length} Students Loaded</span>
                 <button
                   onClick={handleSaveMarks}
                   disabled={saving}
-                  className="flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md shadow-indigo-500/10 cursor-pointer"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 rounded-lg text-xs font-medium transition-colors"
                 >
-                  <FiSave className="text-sm" />
-                  <span>{saving ? 'Saving...' : 'Save Marks'}</span>
+                  <FiSave className="text-xs" />
+                  {saving ? 'Saving...' : 'Save Marks'}
                 </button>
               </div>
-
-              <div className="overflow-x-auto w-full">
-                <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-100">
-                      <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Student</th>
-                      <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-center w-36">Marks Obtained</th>
-                      <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest text-center w-36">Total Marks</th>
-                      <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Remarks</th>
+                    <tr className="text-[10px] font-semibold text-slate-500 uppercase border-b border-slate-200">
+                      <th className="px-4 py-2.5">Student</th>
+                      <th className="px-4 py-2.5 text-center w-28">Marks Obtained</th>
+                      <th className="px-4 py-2.5 text-center w-28">Total Marks</th>
+                      <th className="px-4 py-2.5">Remarks</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-slate-100">
                     {students.map((s) => (
-                      <tr key={s.student_id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors">
-                        <td className="py-4">
-                          <p className="text-sm font-bold text-slate-800">{s.name}</p>
-                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Reg: {s.registration_number}</span>
+                      <tr key={s.student_id} className="hover:bg-slate-50/50">
+                        <td className="px-4 py-2.5">
+                          <p className="font-semibold text-slate-800">{s.name}</p>
+                          <span className="text-[10px] font-mono text-slate-400">{s.registration_number}</span>
                         </td>
-                        <td className="py-4 text-center">
-                          <input
-                            type="number"
-                            min="0"
-                            step="0.01"
+                        <td className="px-4 py-2.5 text-center">
+                          <input type="number" min="0" step="0.01"
                             value={s.marks_obtained !== null && s.marks_obtained !== undefined ? s.marks_obtained : ''}
                             onChange={(e) => handleMarkChange(s.student_id, e.target.value)}
-                            className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-700 outline-none focus:border-primary transition-colors"
+                            className="w-20 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-center text-xs font-bold text-slate-700 outline-none focus:border-primary"
                           />
                         </td>
-                        <td className="py-4 text-center">
-                          <input
-                            type="number"
-                            min="1"
-                            step="0.01"
+                        <td className="px-4 py-2.5 text-center">
+                          <input type="number" min="1" step="0.01"
                             value={s.total_marks !== null && s.total_marks !== undefined ? s.total_marks : 100}
                             onChange={(e) => handleTotalMarkChange(s.student_id, e.target.value)}
-                            className="w-24 mx-auto p-2 bg-slate-50 border border-slate-100 rounded-xl text-center text-sm font-bold text-slate-400 outline-none focus:border-primary transition-colors"
+                            className="w-20 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-center text-xs font-bold text-slate-400 outline-none focus:border-primary"
                           />
                         </td>
-                        <td className="py-4">
-                          <input
-                            type="text"
+                        <td className="px-4 py-2.5">
+                          <input type="text"
                             value={s.remarks || ''}
                             onChange={(e) => handleRemarksChange(s.student_id, e.target.value)}
-                            className="w-full p-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
+                            className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 outline-none focus:border-primary"
                           />
                         </td>
                       </tr>
@@ -555,182 +516,96 @@ const MarksEntryPage = () => {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </>
           )}
-        </>
+        </div>
       )}
 
       {/* MODE 2: SPREADSHEET UPLOAD */}
       {activeMode === 'spreadsheet' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: File Dropzone & Instructions */}
-          <div className="lg:col-span-1 flex flex-col gap-4">
-            <div
-              onDragEnter={handleDrag}
-              onDragOver={handleDrag}
-              onDragLeave={handleDrag}
-              onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-              className={`flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-3xl cursor-pointer transition-all duration-200 min-h-[220px] text-center bg-white ${
-                dragActive ? 'border-primary bg-primary-light/20' : 'border-slate-200 hover:border-slate-300'
-              }`}
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept=".xlsx,.xls,.csv"
-                className="hidden"
-              />
-              <div className="p-4 bg-primary-light border border-primary-light text-primary rounded-2xl mb-4">
-                <FiUploadCloud className="text-3xl" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm mb-1">
-                {fileName ? 'Change File' : 'Upload Spreadsheet Marks Sheet'}
-              </h3>
-              <p className="text-slate-400 text-xs font-semibold max-w-[220px]">
-                Drag &amp; drop Excel (.xlsx, .xls) or CSV, or click to browse
-              </p>
-              {fileName && (
-                <span className="mt-4 px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-[11px] font-bold truncate max-w-full">
-                  {fileName}
-                </span>
-              )}
-            </div>
-
-            <div className="bg-emerald-50/60 border border-emerald-100 rounded-2xl p-4 flex gap-3">
-              <FiInfo className="text-base text-emerald-700 shrink-0 mt-0.5" />
-              <div className="flex flex-col gap-1 text-xs">
-                <h4 className="font-bold text-emerald-800">Spreadsheet Columns Required</h4>
-                <p className="leading-relaxed font-medium text-emerald-700">
-                  Ensure the spreadsheet contains columns:<br />
-                  • <strong>Subject Code</strong> (e.g. <code>MATH101</code>)<br />
-                  • <strong>Student Registration Number</strong> (e.g. <code>REG-001</code>)<br />
-                  • <strong>Mark</strong> (Obtained score)<br />
-                  • <strong>Exam ID</strong> (Target exam ID number)
-                </p>
-              </div>
+        <div className="flex flex-col gap-4">
+          {/* Upload bar */}
+          <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs text-slate-500">Required columns: <strong>Subject Code</strong>, <strong>Student Registration Number</strong>, <strong>Mark</strong>, <strong>Exam ID</strong></p>
+            <div className="flex items-center gap-2">
+              <label
+                className="px-3.5 py-1.5 bg-primary hover:bg-primary-dark text-white rounded-lg text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1.5"
+              >
+                <FiUploadCloud className="text-xs" />
+                {fileName ? fileName.slice(0, 20) + (fileName.length > 20 ? '...' : '') : 'Upload Sheet'}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  onDragEnter={handleDrag}
+                  onDragOver={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDrop={handleDrop}
+                  accept=".xlsx,.xls,.csv"
+                  className="hidden"
+                />
+              </label>
             </div>
           </div>
 
-          {/* Right Column: Preview / Summary */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
-            {parsedRecords.length > 0 && (
-              <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                  <div>
-                    <h2 className="text-base font-bold text-slate-800">Parsed Spreadsheet Preview</h2>
-                    <p className="text-slate-400 text-xs font-medium mt-0.5">{parsedRecords.length} records parsed from sheet.</p>
-                  </div>
-                  <button
-                    onClick={handleSaveSpreadsheetMarks}
-                    disabled={saving}
-                    className="flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-xs font-bold transition-all shadow-md cursor-pointer"
-                  >
-                    <FiCheck className="text-sm" />
-                    <span>{saving ? 'Uploading...' : 'Submit & Register Marks'}</span>
+          <div className="flex flex-col gap-4">
+            {parsedRecords.length === 0 && !uploadSummary ? (
+              <div className="bg-white border border-slate-200 rounded-xl py-12 text-center text-xs text-slate-400">
+                Upload a marks sheet above to preview and submit.
+              </div>
+            ) : parsedRecords.length > 0 ? (
+              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-50">
+                  <span className="text-xs font-semibold text-slate-600">{parsedRecords.length} records parsed</span>
+                  <button onClick={handleSaveSpreadsheetMarks} disabled={saving}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 rounded-lg text-xs font-medium">
+                    <FiCheck className="text-xs" />
+                    {saving ? 'Uploading...' : 'Submit Marks'}
                   </button>
                 </div>
-
-                <div className="overflow-x-auto w-full max-h-[360px]">
-                  <table className="w-full text-left border-collapse">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-100 bg-slate-50/50">
-                        <th className="py-2.5 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">#</th>
-                        <th className="py-2.5 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Sub Code</th>
-                        <th className="py-2.5 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Registration No.</th>
-                        <th className="py-2.5 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Mark</th>
-                        <th className="py-2.5 px-3 text-xs font-bold text-slate-400 uppercase tracking-wider text-center">Exam ID</th>
+                      <tr className="text-[10px] font-semibold text-slate-500 uppercase border-b border-slate-200">
+                        <th className="px-4 py-2">#</th>
+                        <th className="px-4 py-2">Sub Code</th>
+                        <th className="px-4 py-2">Registration No.</th>
+                        <th className="px-4 py-2 text-center">Mark</th>
+                        <th className="px-4 py-2 text-center">Exam ID</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-slate-100">
                       {parsedRecords.map((row, idx) => (
-                        <tr key={idx} className="border-b border-slate-50 hover:bg-slate-50/40 transition-colors">
-                          <td className="py-2.5 px-3 text-xs font-bold text-slate-400">{idx + 1}</td>
-                          <td className="py-2.5 px-3 text-xs font-bold text-slate-700">{row.subject_code}</td>
-                          <td className="py-2.5 px-3 text-xs font-bold text-slate-800">{row.registration_number}</td>
-                          <td className="py-2.5 px-3 text-xs font-bold text-emerald-600 text-center">{row.mark}</td>
-                          <td className="py-2.5 px-3 text-xs font-semibold text-slate-500 text-center">{row.exam_id}</td>
+                        <tr key={idx} className="hover:bg-slate-50/50">
+                          <td className="px-4 py-2 text-slate-400">{idx + 1}</td>
+                          <td className="px-4 py-2 font-mono text-[11px] text-slate-600">{row.subject_code}</td>
+                          <td className="px-4 py-2 font-semibold text-slate-800">{row.registration_number}</td>
+                          <td className="px-4 py-2 font-bold text-emerald-600 text-center">{row.mark}</td>
+                          <td className="px-4 py-2 text-slate-500 text-center">{row.exam_id}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               </div>
-            )}
-
-            {parsedRecords.length === 0 && !uploadSummary && (
-              <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center flex flex-col items-center justify-center min-h-[320px]">
-                <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-4">
-                  <FiFileText className="text-3xl" />
-                </div>
-                <h3 className="font-bold text-slate-800 text-base mb-1">Upload Marks Spreadsheet</h3>
-                <p className="text-slate-400 text-xs font-medium max-w-xs">
-                  Select parameters → click Get Template → fill marks → upload file here to batch register.
-                </p>
-              </div>
-            )}
-
-            {/* Execution summary log */}
-            {uploadSummary && (
-              <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
-                <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-4">
-                  <FiCheck className="text-primary text-lg" /> Spreadsheet Processing Execution Summary
+            ) : uploadSummary && (
+              <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
+                <h3 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                  <FiCheck className="text-emerald-600" /> Upload Summary
                 </h3>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-center">
-                    <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block mb-1">Successfully Saved</span>
-                    <span className="text-2xl font-semibold text-emerald-600">{uploadSummary.successCount}</span>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 text-center">
+                    <span className="text-[10px] font-semibold text-emerald-700 uppercase block mb-1">Saved</span>
+                    <span className="text-xl font-bold text-emerald-600">{uploadSummary.successCount}</span>
                   </div>
-                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Warnings / Errors</span>
-                    <span className={`text-2xl font-semibold ${uploadSummary.warningCount > 0 ? 'text-amber-500' : 'text-slate-400'}`}>
-                      {uploadSummary.warningCount}
-                    </span>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-center">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase block mb-1">Warnings</span>
+                    <span className={`text-xl font-bold ${uploadSummary.warningCount > 0 ? 'text-amber-500' : 'text-slate-400'}`}>{uploadSummary.warningCount}</span>
                   </div>
                 </div>
-
                 {uploadSummary.warnings?.length > 0 && (
-                  <div className="flex flex-col gap-2">
-                    <h4 className="text-xs font-bold text-amber-700 flex items-center gap-1.5">
-                      <FiAlertCircle className="text-sm" /> Import Warning Logs
-                    </h4>
-                    <div className="p-4 bg-amber-50/40 border border-amber-100 rounded-2xl max-h-[140px] overflow-y-auto flex flex-col gap-1.5">
-                      {uploadSummary.warnings.map((w, i) => (
-                        <p key={i} className="text-xs font-semibold text-amber-800/80 leading-relaxed">• {w}</p>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {uploadSummary.savedRecords?.length > 0 && (
-                  <div className="flex flex-col gap-2">
-                    <h4 className="text-xs font-bold text-primary flex items-center gap-1.5">
-                      <FiLayers className="text-sm" /> Registered Student Marks
-                    </h4>
-                    <div className="overflow-x-auto w-full max-h-[220px]">
-                      <table className="w-full text-left border-collapse">
-                        <thead>
-                          <tr className="border-b border-slate-100">
-                            <th className="pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Student Name</th>
-                            <th className="pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Registration</th>
-                            <th className="pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subject</th>
-                            <th className="pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Score</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {uploadSummary.savedRecords.map((rec, i) => (
-                            <tr key={i} className="border-b border-slate-50">
-                              <td className="py-2 text-xs font-bold text-slate-800">{rec.student_name}</td>
-                              <td className="py-2 text-xs font-medium text-slate-500">{rec.registration_number}</td>
-                              <td className="py-2 text-xs font-semibold text-slate-600">{rec.subject_name} ({rec.subject_code})</td>
-                              <td className="py-2 text-xs font-bold text-emerald-600 text-center">{rec.marks_obtained}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                  <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg text-xs text-amber-800 space-y-1 max-h-32 overflow-y-auto">
+                    {uploadSummary.warnings.map((w, i) => <p key={i}>• {w}</p>)}
                   </div>
                 )}
               </div>

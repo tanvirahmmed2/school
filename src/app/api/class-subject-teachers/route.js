@@ -15,7 +15,6 @@ export async function GET(request) {
         cst.class_subject_id,
         cst.section_id,
         cst.teacher_id,
-        cst.academic_year,
         c.id AS class_id,
         c.name AS class_name,
         c.code AS class_code,
@@ -81,13 +80,12 @@ export async function POST(request) {
       }, { status: 403 });
     }
 
-    const { class_subject_id, section_id, teacher_id, academic_year } = await request.json();
+    const { class_subject_id, section_id, teacher_id } = await request.json();
 
-    // section_id is now optional — only class_subject_id, teacher_id, and academic_year are required
-    if (!class_subject_id || !teacher_id || !academic_year) {
+    if (!class_subject_id || !teacher_id) {
       return NextResponse.json({
         success: false,
-        message: 'Class Subject, Teacher, and Academic Year are required.',
+        message: 'Class Subject and Teacher are required.',
         error: 'Bad Request',
         paylod: null
       }, { status: 400 });
@@ -99,26 +97,25 @@ export async function POST(request) {
     const checkDup = await query(
       `SELECT id FROM class_subject_teachers 
        WHERE class_subject_id = $1 
-         AND academic_year = $2 
-         AND COALESCE(section_id, -1) = COALESCE($3, -1)`,
-      [class_subject_id, academic_year, resolvedSectionId]
+         AND COALESCE(section_id, -1) = COALESCE($2, -1)`,
+      [class_subject_id, resolvedSectionId]
     );
 
     if (checkDup.rows.length > 0) {
       const scopeLabel = resolvedSectionId ? 'this section' : 'this class (all sections)';
       return NextResponse.json({
         success: false,
-        message: `This subject is already mapped to a teacher for ${scopeLabel} in the selected academic year.`,
+        message: `This subject is already mapped to a teacher for ${scopeLabel}.`,
         error: 'Conflict',
         paylod: null
       }, { status: 400 });
     }
 
     const newMapping = await query(
-      `INSERT INTO class_subject_teachers (class_subject_id, section_id, teacher_id, academic_year) 
-       VALUES ($1, $2, $3, $4) 
+      `INSERT INTO class_subject_teachers (class_subject_id, section_id, teacher_id) 
+       VALUES ($1, $2, $3) 
        RETURNING *`,
-      [class_subject_id, resolvedSectionId, teacher_id, academic_year]
+      [class_subject_id, resolvedSectionId, teacher_id]
     );
 
     const res_data = { message: 'Teacher assigned to subject successfully.', assignment: newMapping.rows[0] };

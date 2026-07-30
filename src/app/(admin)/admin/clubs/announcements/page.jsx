@@ -168,7 +168,7 @@ const AdminClubAnnouncementsPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
@@ -196,7 +196,7 @@ const AdminClubAnnouncementsPage = () => {
           </div>
         ) : announcements.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-xs text-slate-650">
+            <table className="w-full border-collapse text-left text-xs text-slate-600">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
                   <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pl-6">Club</th>
@@ -210,7 +210,7 @@ const AdminClubAnnouncementsPage = () => {
                 {announcements.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/40 transition-colors">
                     <td className="p-4 pl-6">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary bg-primary-light px-2.5 py-1 rounded-md uppercase tracking-wider">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
                         <FiUsers className="text-xs" />
                         {item.club_name}
                       </span>

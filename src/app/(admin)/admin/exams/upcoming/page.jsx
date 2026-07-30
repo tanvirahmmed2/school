@@ -123,17 +123,17 @@ const AdminUpcomingExamsPage = () => {
                     </h2>
                     <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 mt-1">
                       {exam.term && (
-                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                           {exam.term}
                         </span>
                       )}
                       {exam.class_name && (
-                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                           Class: {exam.class_name}
                         </span>
                       )}
                       {exam.exam_fee !== undefined && (
-                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                           Exam Fee: {exam.exam_fee} BDT
                         </span>
                       )}
@@ -146,7 +146,7 @@ const AdminUpcomingExamsPage = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setEditExamId(exam.id)}
-                      className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer inline-flex items-center justify-center"
+                      className="p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-colors cursor-pointer inline-flex items-center justify-center"
                       title="Edit Exam and Routine"
                     >
                       <FiEdit2 className="text-sm" />

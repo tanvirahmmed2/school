@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, getAdminUser } from '@/lib/auth';
+import { recordActivityLog } from '@/lib/logger';
 
 // GET Admissions circular list (public or admin)
 export async function GET() {
@@ -69,6 +70,21 @@ export async function POST(request) {
       fees ? parseFloat(fees) : 0.00,
       description || null
     ]);
+
+    const createdCircular = result.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_CIRCULAR',
+      entityType: 'circular',
+      entityId: createdCircular.id,
+      details: `Created admission circular: ${createdCircular.title}`
+    });
+
 
     // Create a public notice board entry
     try {

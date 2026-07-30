@@ -8,7 +8,6 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
   const [classId, setClassId] = useState('');
   const [sectionId, setSectionId] = useState('');
   const [teacherId, setTeacherId] = useState('');
-  const [academicYear, setAcademicYear] = useState('2026');
   const [submitting, setSubmitting] = useState(false);
 
   const [filteredSections, setFilteredSections] = useState([]);
@@ -35,8 +34,8 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!classId || !teacherId || !academicYear) {
-      toast.error('Class, Teacher, and Academic Year are required.');
+    if (!classId || !teacherId) {
+      toast.error('Class and Teacher are required.');
       return;
     }
 
@@ -49,7 +48,6 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
           class_id: classId,
           section_id: sectionId || null,
           teacher_id: teacherId,
-          academic_year: academicYear.trim(),
         }),
       });
 
@@ -63,7 +61,6 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
       setClassId('');
       setSectionId('');
       setTeacherId('');
-      setAcademicYear('2026');
       if (onSuccess) onSuccess();
     } catch (err) {
       toast.error(err.message);
@@ -78,7 +75,7 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
         <FiFolderPlus className="text-primary" /> Assign Class Teacher
       </h2>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {/* Class Selection */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
@@ -89,7 +86,7 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={classId}
             onChange={(e) => setClassId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
           >
             <option value="">Select a class...</option>
             {classes.map((cls) => (
@@ -109,7 +106,7 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
             disabled={submitting || !classId}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50 disabled:opacity-60"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary disabled:opacity-60"
           >
             <option value="">Select a section...</option>
             {filteredSections.map((sec) => (
@@ -130,7 +127,7 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
             value={teacherId}
             onChange={(e) => setTeacherId(e.target.value)}
             disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 bg-slate-50"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 outline-none transition-all duration-200 focus:bg-white focus:border-primary"
           >
             <option value="">Assign a teacher...</option>
             {teachers.map((teach) => (
@@ -141,22 +138,7 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
           </select>
         </div>
 
-        {/* Academic Year */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <FiCalendar className="text-slate-400" /> Academic Year *
-          </label>
-          <input
-            type="text"
-            required
-            value={academicYear}
-            onChange={(e) => setAcademicYear(e.target.value)}
-            disabled={submitting}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5"
-          />
-        </div>
-
-        <div className="flex justify-end gap-3 md:col-span-4 mt-2">
+        <div className="flex justify-end gap-3 sm:col-span-3 mt-2">
           <button
             type="button"
             onClick={onCancel}
@@ -167,7 +149,7 @@ const ClassTeacherAssignForm = ({ classes, teachers, onSuccess, onCancel }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-xs"
           >
             {submitting ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

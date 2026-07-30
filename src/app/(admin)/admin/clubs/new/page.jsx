@@ -197,7 +197,7 @@ const AdminClubsNewPage = () => {
                   accept="image/*"
                   disabled={submitting}
                   onChange={handleImageChange}
-                  className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer w-full"
+                  className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-50 cursor-pointer w-full"
                 />
                 {imagePreview && (
                   <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
@@ -301,7 +301,7 @@ const AdminClubsNewPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(club)}
-                          className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors cursor-pointer"
+                          className="p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-colors cursor-pointer"
                           title="Edit & Update Club info"
                         >
                           <FiEdit className="text-sm" />

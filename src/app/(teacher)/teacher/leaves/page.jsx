@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiCalendar, FiPlus, FiCheck, FiX, FiClock, FiFileText } from 'react-icons/fi';
+import { FiCalendar, FiPlus, FiCheck, FiX, FiClock } from 'react-icons/fi';
 import TiptapEditor from '@/component/helper/TiptapEditor';
 import RichTextDisplay from '@/component/helper/RichTextDisplay';
 
@@ -10,14 +10,12 @@ const LeavesPage = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reloadTrigger, setReloadTrigger] = useState(0);
-
-  // Form states
   const [type, setType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchLeaves = async () => {
@@ -39,190 +37,84 @@ const LeavesPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const cleanReason = reason.replace(/<[^>]*>/g, '').trim();
-    if (!type || !startDate || !endDate || !reason || !cleanReason) {
+    if (!type || !startDate || !endDate || !cleanReason) {
       toast.error('Please fill in all fields.');
       return;
     }
-
     setSubmitting(true);
     try {
       const res = await fetch('/api/teacher/leaves', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type,
-          start_date: startDate,
-          end_date: endDate,
-          reason
-        })
+        body: JSON.stringify({ type, start_date: startDate, end_date: endDate, reason })
       });
-
       if (res.ok) {
-        toast.success('Leave application submitted successfully!');
-        setType('');
-        setStartDate('');
-        setEndDate('');
-        setReason('');
-        setShowApplyModal(false);
-        setReloadTrigger((prev) => prev + 1);
+        toast.success('Leave application submitted!');
+        setType(''); setStartDate(''); setEndDate(''); setReason('');
+        setShowModal(false);
+        setReloadTrigger((p) => p + 1);
       } else {
         const err = await res.json();
-        toast.error(err.error || 'Failed to submit application.');
+        toast.error(err.error || 'Failed to submit.');
       }
-    } catch (err) {
-      toast.error('An error occurred.');
-    } finally {
-      setSubmitting(false);
-    }
+    } catch { toast.error('An error occurred.'); }
+    finally { setSubmitting(false); }
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'Approved':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-primary-light text-primary border border-primary-light"><FiCheck /> Approved</span>;
-      case 'Rejected':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100"><FiX /> Rejected</span>;
-      case 'Pending':
-      default:
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100"><FiClock /> Pending</span>;
-    }
+  const statusBadge = (status) => {
+    if (status === 'Approved') return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100"><FiCheck className="text-[9px]" /> Approved</span>;
+    if (status === 'Rejected') return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-100"><FiX className="text-[9px]" /> Rejected</span>;
+    return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-100"><FiClock className="text-[9px]" /> Pending</span>;
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-primary-light border-t-indigo-650 border-t-indigo-600 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
 
   return (
-    <div className="flex flex-col gap-8 w-full mx-auto">
-      {/* Title & Apply action */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+    <div className="w-full max-w-7xl mx-auto space-y-5">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-800 mb-2">Leave Applications</h1>
-          <p className="text-slate-500 text-sm font-medium">Apply for new leaves and monitor your historical submissions status.</p>
+          <h1 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <FiCalendar className="text-primary" /> Leave Applications
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">Apply for leaves and monitor your application status.</p>
         </div>
         <button
-          onClick={() => setShowApplyModal(true)}
-          className="flex items-center justify-center gap-1.5 px-5 py-3 bg-primary hover:bg-primary-dark text-white rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer w-fit"
+          onClick={() => setShowModal(true)}
+          className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary hover:bg-primary-dark text-white rounded-lg text-xs font-medium shadow-2xs transition-colors"
         >
-          <FiPlus className="text-lg" />
-          <span>Apply Leave</span>
+          <FiPlus /> Apply Leave
         </button>
       </div>
 
-      {/* Leave Apply Modal */}
-      {showApplyModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-xl flex flex-col gap-6 animate-fade-down duration-200">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-              <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <FiFileText className="text-primary" /> New Leave Application
-              </h2>
-              <button
-                onClick={() => setShowApplyModal(false)}
-                className="p-1.5 hover:bg-slate-50 text-slate-400 rounded-lg transition-colors cursor-pointer"
-              >
-                <FiX className="text-lg" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Leave Type</label>
-                <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-                  required
-                >
-                  <option value="">-- Choose Type --</option>
-                  <option value="Casual Leave">Casual Leave</option>
-                  <option value="Medical/Sick Leave">Medical/Sick Leave</option>
-                  <option value="Maternity/Paternity Leave">Maternity/Paternity Leave</option>
-                  <option value="Duty Leave">Duty Leave</option>
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Start Date</label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">End Date</label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full p-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold text-slate-700 outline-none focus:border-primary transition-colors"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Reason for Leave</label>
-                <TiptapEditor
-                  value={reason}
-                  onChange={(val) => setReason(val)}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-3.5 bg-primary hover:bg-primary-dark disabled:bg-slate-100 text-white disabled:text-slate-400 rounded-2xl text-sm font-bold shadow-md shadow-indigo-500/10 hover:shadow-lg transition-all cursor-pointer mt-2"
-              >
-                {submitting ? 'Submitting...' : 'Submit Application'}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Applications Log */}
-      <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
-        <h2 className="text-base font-bold text-slate-800 mb-6">Leave History</h2>
-
-        {applications.length === 0 ? (
-          <p className="text-slate-400 text-xs font-semibold text-center py-12">No leave applications submitted yet.</p>
+      {/* Table */}
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        {loading ? (
+          <div className="py-10 text-center text-xs text-slate-400">Loading...</div>
+        ) : applications.length === 0 ? (
+          <div className="py-10 text-center text-xs text-slate-400">No leave applications submitted yet.</div>
         ) : (
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Date Applied</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Leave Type</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Duration</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Status</th>
-                  <th className="pb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Reason</th>
+                <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-semibold text-slate-500 uppercase">
+                  <th className="px-4 py-2.5">Applied</th>
+                  <th className="px-4 py-2.5">Type</th>
+                  <th className="px-4 py-2.5">Duration</th>
+                  <th className="px-4 py-2.5">Status</th>
+                  <th className="px-4 py-2.5">Reason</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {applications.map((app) => (
-                  <tr key={app.id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors">
-                    <td className="py-4 text-xs font-semibold text-slate-400">
+                  <tr key={app.id} className="hover:bg-slate-50/50">
+                    <td className="px-4 py-2.5 text-slate-400 font-mono text-[11px]">
                       {new Date(app.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </td>
-                    <td className="py-4 text-sm font-bold text-slate-800">
-                      {app.type}
+                    <td className="px-4 py-2.5 font-semibold text-slate-800">{app.type}</td>
+                    <td className="px-4 py-2.5 text-slate-600">
+                      {new Date(app.start_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })} – {new Date(app.end_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </td>
-                    <td className="py-4 text-sm font-semibold text-slate-600">
-                      {new Date(app.start_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })} — {new Date(app.end_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </td>
-                    <td className="py-4">
-                      {getStatusBadge(app.status)}
-                    </td>
-                    <td className="py-4 text-xs font-semibold text-slate-500 max-w-xs">
+                    <td className="px-4 py-2.5">{statusBadge(app.status)}</td>
+                    <td className="px-4 py-2.5 text-slate-500 max-w-xs">
                       <RichTextDisplay html={app.reason} className="line-clamp-2 text-xs" />
                     </td>
                   </tr>
@@ -232,6 +124,57 @@ const LeavesPage = () => {
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-5 w-full max-w-lg shadow-xl flex flex-col gap-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h2 className="text-sm font-bold text-slate-800">New Leave Application</h2>
+              <button onClick={() => setShowModal(false)} className="p-1 text-slate-400 hover:text-slate-600 rounded">
+                <FiX />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-semibold text-slate-500 uppercase">Leave Type</label>
+                <select value={type} onChange={(e) => setType(e.target.value)} required
+                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-primary">
+                  <option value="">-- Choose Type --</option>
+                  <option>Casual Leave</option>
+                  <option>Medical/Sick Leave</option>
+                  <option>Maternity/Paternity Leave</option>
+                  <option>Duty Leave</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-semibold text-slate-500 uppercase">Start Date</label>
+                  <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required
+                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-primary" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-semibold text-slate-500 uppercase">End Date</label>
+                  <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required
+                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-primary" />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-semibold text-slate-500 uppercase">Reason</label>
+                <TiptapEditor value={reason} onChange={(val) => setReason(val)} />
+              </div>
+
+              <button type="submit" disabled={submitting}
+                className="w-full py-2 bg-primary hover:bg-primary-dark text-white rounded-lg text-xs font-semibold disabled:opacity-50 transition-colors">
+                {submitting ? 'Submitting...' : 'Submit Application'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import {
   FiUsers, FiFileText, FiTrash2, FiEdit2, FiSave,
-  FiAlertCircle
+  FiAlertCircle, FiShield
 } from 'react-icons/fi';
 
 const StudentClubModeratorPage = () => {
@@ -129,38 +129,55 @@ const StudentClubModeratorPage = () => {
 
   if (loading) {
     return (
-      <div className="w-full min-h-[300px] flex items-center justify-center">
-        <span className="text-xs text-slate-400">Loading Moderator Dashboard...</span>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
+        <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+        <p className="text-sm font-medium text-slate-400">Loading moderator dashboard...</p>
       </div>
     );
   }
 
   if (!isClubModerator || clubs.length === 0) {
     return (
-      <div className="w-full bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-2">
-        <FiAlertCircle className="text-2xl text-slate-400 mx-auto" />
-        <h2 className="text-sm font-bold text-slate-800">Not Assigned as Moderator</h2>
-        <p className="text-xs text-slate-500">You are not currently assigned as a Club Moderator.</p>
+      <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-8">
+        <div className="bg-white border border-slate-200/70 rounded-3xl p-12 text-center flex flex-col items-center justify-center shadow-xs">
+          <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-3">
+            <FiAlertCircle className="text-3xl text-slate-400" />
+          </div>
+          <h2 className="text-lg font-bold text-slate-800 mb-1">Not Assigned as Moderator</h2>
+          <p className="text-slate-400 text-xs max-w-xs">You are not currently assigned as a Club Moderator.</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full space-y-6">
-      {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-8">
+      {/* Header Banner */}
+      <div className="bg-white border border-slate-200/70 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">{currentClub?.name}</h1>
-          <p className="text-xs text-slate-500">
-            Role: <span className="font-semibold text-slate-700">{currentClub?.moderator_designation || 'Club Moderator'}</span> (Club News Updates)
-          </p>
+          <div className="flex items-center gap-2.5">
+            <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100">
+              <FiShield className="text-xl" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-bold text-slate-800">{currentClub?.name}</h1>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  Moderator Panel
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
+                Designation: <strong className="text-slate-700">{currentClub?.moderator_designation || 'Club Moderator'}</strong>
+              </p>
+            </div>
+          </div>
         </div>
 
         {clubs.length > 1 && (
           <select
             value={selectedClubId}
             onChange={(e) => setSelectedClubId(e.target.value)}
-            className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none"
+            className="px-3.5 py-2 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none"
           >
             {clubs.map(c => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -169,14 +186,14 @@ const StudentClubModeratorPage = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         {/* News Article Form */}
         <div className="lg:col-span-1">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+          <div className="bg-white border border-slate-200/70 rounded-3xl p-6 shadow-xs flex flex-col gap-4">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
               <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                <FiFileText /> {editingNewsId ? 'Edit Article' : 'Publish Article'}
+                <FiFileText className="text-emerald-600" /> {editingNewsId ? 'Edit Article' : 'Publish Article'}
               </h2>
               {editingNewsId && (
                 <button
@@ -186,26 +203,28 @@ const StudentClubModeratorPage = () => {
                     setNewsContent('');
                     setNewsImage('');
                   }}
-                  className="text-xs text-slate-400 hover:text-slate-600"
+                  className="text-xs text-slate-400 hover:text-slate-600 font-medium"
                 >
                   Cancel
                 </button>
               )}
             </div>
 
-            <form onSubmit={handleSaveNews} className="space-y-3">
+            <form onSubmit={handleSaveNews} className="flex flex-col gap-3">
               <input
                 type="text"
+                placeholder="Article Title..."
                 value={newsTitle}
                 onChange={(e) => setNewsTitle(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none"
               />
 
               <textarea
                 rows={5}
+                placeholder="Article Content..."
                 value={newsContent}
                 onChange={(e) => setNewsContent(e.target.value)}
-                className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none resize-none"
+                className="w-full p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none resize-none"
               />
 
               <input
@@ -218,7 +237,7 @@ const StudentClubModeratorPage = () => {
               <button
                 type="submit"
                 disabled={savingNews}
-                className="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-50"
+                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-50 transition-colors shadow-xs"
               >
                 {savingNews ? 'Publishing...' : editingNewsId ? 'Update Article' : 'Publish Article'}
               </button>
@@ -228,22 +247,22 @@ const StudentClubModeratorPage = () => {
 
         {/* News List */}
         <div className="lg:col-span-2">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
-            <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2">
+          <div className="bg-white border border-slate-200/70 rounded-3xl p-6 shadow-xs flex flex-col gap-4">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-3">
               Published News Articles
             </h2>
 
-            <div className="space-y-3">
+            <div className="flex flex-col gap-3">
               {currentClub?.news?.map(item => (
-                <div key={item.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <div key={item.id} className="p-4 bg-slate-50/60 rounded-2xl border border-slate-200/60 flex flex-col gap-2">
                   <div className="flex justify-between items-start">
                     <h3 className="text-sm font-bold text-slate-800">{item.title}</h3>
                     <div className="flex gap-2">
-                      <button onClick={() => handleEditNewsClick(item)} className="p-1 text-slate-500 hover:text-slate-800">
-                        <FiEdit2 />
+                      <button onClick={() => handleEditNewsClick(item)} className="p-1 text-slate-400 hover:text-slate-700">
+                        <FiEdit2 className="text-sm" />
                       </button>
-                      <button onClick={() => handleDeleteNews(item.id)} className="p-1 text-slate-500 hover:text-red-600">
-                        <FiTrash2 />
+                      <button onClick={() => handleDeleteNews(item.id)} className="p-1 text-slate-400 hover:text-rose-600">
+                        <FiTrash2 className="text-sm" />
                       </button>
                     </div>
                   </div>
@@ -252,7 +271,9 @@ const StudentClubModeratorPage = () => {
               ))}
 
               {(!currentClub?.news || currentClub.news.length === 0) && (
-                <p className="text-center text-xs text-slate-400 py-6">No articles published yet.</p>
+                <p className="text-center text-xs text-slate-400 py-8 border border-dashed border-slate-200 rounded-2xl">
+                  No articles published yet.
+                </p>
               )}
             </div>
           </div>

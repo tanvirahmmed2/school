@@ -118,7 +118,7 @@ const MasterMarkSheetContent = () => {
   if (loading && !data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] gap-3">
-        <div className="w-12 h-12 border-4 border-primary-light border-t-primary rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-emerald-200/60 border-t-primary rounded-full animate-spin"></div>
         <span className="text-sm font-semibold text-slate-500">Compiling Master Examination Mark Sheet...</span>
       </div>
     );

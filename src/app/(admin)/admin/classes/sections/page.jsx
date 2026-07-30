@@ -171,7 +171,7 @@ const AdminSectionsPage = () => {
                   <tr key={sec.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center font-bold text-sm">
+                        <div className="w-9 h-9 bg-emerald-50 text-primary border border-emerald-200/60 rounded-xl flex items-center justify-center font-bold text-sm">
                           {sec.name.substring(0, 2).toUpperCase()}
                         </div>
                         <div>
@@ -183,19 +183,19 @@ const AdminSectionsPage = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                         <FiLayers className="text-xs text-blue-400" />
                         {sec.class_name}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-xs text-slate-650 font-semibold flex items-center gap-1 text-slate-600">
+                      <span className="text-xs text-slate-600 font-semibold flex items-center gap-1 text-slate-600">
                         <FiMapPin className="text-slate-400" />
                         {sec.room_number || 'N/A'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-xs text-slate-650 font-semibold flex items-center gap-1 text-slate-600">
+                      <span className="text-xs text-slate-600 font-semibold flex items-center gap-1 text-slate-600">
                         <FiUsers className="text-slate-400" />
                         {sec.capacity} students
                       </span>
@@ -203,7 +203,7 @@ const AdminSectionsPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleStartEdit(sec)}
-                        className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Edit Section"
                       >
                         <FiEdit2 className="text-sm" />

@@ -7,15 +7,15 @@ import {
   FiHome, FiShield, FiLayers, FiGrid, FiBook,
   FiUserPlus, FiUsers, FiAward, FiCalendar, FiDollarSign, FiFileText, FiUserCheck,
   FiChevronDown, FiChevronRight, FiClock, FiPlus, FiCpu, FiBell,
-  FiSettings, FiShoppingBag, FiTrendingUp, FiTrendingDown
+  FiSettings, FiShoppingBag, FiTrendingUp, FiTrendingDown,
+  FiUser, FiActivity
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { adminSidebar, setAdminSidebar, themeColor } = useContext(Context);
-  const mainColor = themeColor || '#059669';
+  const { adminSidebar, setAdminSidebar } = useContext(Context);
 
   // Dynamic collapsible state
   const [classesOpen, setClassesOpen] = useState(pathname.startsWith('/admin/classes'));
@@ -30,6 +30,8 @@ const Sidebar = () => {
   const [recognitionsOpen, setRecognitionsOpen] = useState(pathname.startsWith('/admin/recognition'));
   const [eventsOpen, setEventsOpen] = useState(pathname.startsWith('/admin/events'));
   const [historyOpen, setHistoryOpen] = useState(pathname.startsWith('/admin/history'));
+  const [hostelsOpen, setHostelsOpen] = useState(pathname.startsWith('/admin/hostels'));
+  const [staffOpen, setStaffOpen] = useState(pathname.startsWith('/admin/staff'));
 
   const historyLinks = [
     { label: 'History Milestones', href: '/admin/history', icon: FiClock },
@@ -41,11 +43,12 @@ const Sidebar = () => {
     { label: 'Create New Event', href: '/admin/events/new', icon: FiPlus },
     { label: 'Event Participants', href: '/admin/events/participants', icon: FiUsers },
   ];
-  const [hostelsOpen, setHostelsOpen] = useState(pathname.startsWith('/admin/hostels'));
-  const [staffOpen, setStaffOpen] = useState(pathname.startsWith('/admin/staff'));
 
   const systemLinks = [
     { label: 'Dashboard Overview', href: '/admin', icon: FiHome },
+    { label: 'Admin Profile', href: '/admin/profile', icon: FiUser },
+    { label: 'Login Logs', href: '/admin/logs/login', icon: FiClock },
+    { label: 'Activity Audit', href: '/admin/logs/activity', icon: FiActivity },
     { label: 'Website Settings', href: '/admin/settings', icon: FiSettings },
     { label: 'Access Control', href: '/admin/access', icon: FiShield },
     { label: 'Security Audit', href: '/admin/security', icon: FiShield },
@@ -107,11 +110,6 @@ const Sidebar = () => {
     { label: 'Add Recognition', href: '/admin/recognition/new', icon: FiPlus },
   ];
 
-  const collaborationLinks = [
-    { label: 'All Collaborations', href: '/admin/collaborations/list', icon: FiUsers },
-    { label: 'Add Collaboration', href: '/admin/collaborations/new', icon: FiPlus },
-  ];
-
   const teacherLinks = [
     { label: 'New Teacher Account', href: '/admin/teachers/new', icon: FiUserPlus },
     { label: 'Teachers List', href: '/admin/teachers/list', icon: FiUsers },
@@ -153,58 +151,61 @@ const Sidebar = () => {
     { label: 'Faculty Provosts', href: '/admin/hostels/provosts', icon: FiUserCheck },
   ];
 
-  const groupHeaderStyle = "text-[10px] font-bold text-secondary uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5 opacity-90 mt-2";
+  const groupHeaderStyle = "text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1 mt-3 flex items-center gap-1.5";
 
-  const CollapsibleGroup = ({ label, icon: CategoryIcon, isOpen, setIsOpen, prefix, links }) => (
-    <div className="flex flex-col gap-1">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
-          pathname.startsWith(prefix)
-            ? 'bg-primary text-white font-bold'
-            : 'text-white/90 hover:bg-primary-dark hover:text-white'
-        }`}
-      >
-        <div className="flex items-center gap-3">
-          <CategoryIcon className="text-base text-white" />
-          <span>{label}</span>
-        </div>
-        {isOpen ? (
-          <FiChevronDown className="text-white/80 text-sm" />
-        ) : (
-          <FiChevronRight className="text-white/80 text-sm" />
+  const CollapsibleGroup = ({ label, icon: CategoryIcon, isOpen, setIsOpen, prefix, links }) => {
+    const isGroupActive = pathname.startsWith(prefix);
+    return (
+      <div className="flex flex-col gap-1">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 cursor-pointer group ${
+            isGroupActive
+              ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
+              : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <CategoryIcon className={`text-base ${isGroupActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+            <span>{label}</span>
+          </div>
+          {isOpen ? (
+            <FiChevronDown className="text-slate-400 text-xs" />
+          ) : (
+            <FiChevronRight className="text-slate-400 text-xs" />
+          )}
+        </button>
+
+        {isOpen && (
+          <div className="flex flex-col gap-1 pl-4 border-l border-emerald-200 ml-4 my-0.5">
+            {links.map((link) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setAdminSidebar(false)}
+                  className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-150 ${
+                    isActive
+                      ? 'bg-emerald-100/70 text-emerald-800 font-bold'
+                      : 'text-slate-500 font-medium hover:bg-slate-100 hover:text-slate-800'
+                  }`}
+                >
+                  <Icon className={`text-xs ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                  <span>{link.label}</span>
+                </Link>
+              );
+            })}
+          </div>
         )}
-      </button>
-
-      {isOpen && (
-        <div className="flex flex-col gap-1 pl-4 border-l border-emerald-400/40 ml-5 transition-all duration-300">
-          {links.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href;
-
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setAdminSidebar(false)}
-                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
-                  isActive
-                    ? 'text-white font-bold bg-primary-dark'
-                    : 'text-white/80 hover:text-white hover:bg-primary-dark/60'
-                }`}
-              >
-                <Icon className="text-sm text-white" />
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
 
   const NavLinkGroup = ({ links }) => (
-    <nav className="flex flex-col gap-1 mb-1">
+    <nav className="flex flex-col gap-1">
       {links.map((link) => {
         const Icon = link.icon;
         const isActive = pathname === link.href;
@@ -214,13 +215,13 @@ const Sidebar = () => {
             key={link.href}
             href={link.href}
             onClick={() => setAdminSidebar(false)}
-            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-150 relative ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
               isActive
-                ? 'bg-primary-dark text-white font-bold pl-2.5'
-                : 'text-white/90 hover:bg-primary-dark hover:text-white'
+                ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
+                : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <Icon className="text-base text-white" />
+            <Icon className={`text-base ${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
             <span>{link.label}</span>
           </Link>
         );
@@ -233,21 +234,21 @@ const Sidebar = () => {
       {/* Backdrop for mobile view */}
       {adminSidebar && (
         <div
-          className="fixed inset-0 top-16 bg-slate-950/20 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
+          className="fixed inset-0 top-16 bg-slate-900/30 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
           onClick={() => setAdminSidebar(false)}
         />
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-primary text-secondary z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-300 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200/80 z-40 flex flex-col justify-between py-5 px-3 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           adminSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           <Back/>
 
           {/* Group 1: Academics Setup */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <span className={groupHeaderStyle}>
               <FiLayers className="text-xs" /> Academics Setup
             </span>
@@ -257,7 +258,7 @@ const Sidebar = () => {
           </div>
 
           {/* Group 2: Directory Registry */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <span className={groupHeaderStyle}>
               <FiUsers className="text-xs" /> Directory Registry
             </span>
@@ -268,7 +269,7 @@ const Sidebar = () => {
           </div>
 
           {/* Group 3: Finance & Logistics */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <span className={groupHeaderStyle}>
               <FiDollarSign className="text-xs" /> Finance & Logistics
             </span>
@@ -277,20 +278,20 @@ const Sidebar = () => {
           </div>
 
           {/* Group 4: Campus & Co-curricular */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <span className={groupHeaderStyle}>
               <FiUsers className="text-xs" /> Campus & Co-curricular
             </span>
             <CollapsibleGroup label="Clubs" icon={FiUsers} isOpen={clubsOpen} setIsOpen={setClubsOpen} prefix="/admin/clubs" links={clubLinks} />
             <CollapsibleGroup label="Campus News" icon={FiFileText} isOpen={newsOpen} setIsOpen={setNewsOpen} prefix="/admin/news" links={newsLinks} />
-            <CollapsibleGroup label="Achievements" icon={FiAward} isOpen={achievementsOpen} setIsOpen={setAchievementsOpen} prefix="/admin/acheivement" links={achievementLinks} />
+            <CollapsibleGroup label="Achievements" icon={FiAward} isOpen={achievementsOpen} setIsOpen={setAchievementsOpen} prefix="/admin/achievements" links={achievementLinks} />
             <CollapsibleGroup label="Recognitions" icon={FiAward} isOpen={recognitionsOpen} setIsOpen={setRecognitionsOpen} prefix="/admin/recognition" links={recognitionLinks} />
             <CollapsibleGroup label="Events & Seminars" icon={FiCalendar} isOpen={eventsOpen} setIsOpen={setEventsOpen} prefix="/admin/events" links={eventLinks} />
             <CollapsibleGroup label="Institutional History" icon={FiClock} isOpen={historyOpen} setIsOpen={setHistoryOpen} prefix="/admin/history" links={historyLinks} />
           </div>
 
           {/* Group 5: System Gateway */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <span className={groupHeaderStyle}>
               <FiCpu className="text-xs" /> System Gateway
             </span>
@@ -299,11 +300,11 @@ const Sidebar = () => {
 
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6 pt-3 border-t border-slate-100">
           <Link
             href="/"
             onClick={() => setAdminSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-dark hover:bg-primary-dark text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

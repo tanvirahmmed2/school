@@ -510,7 +510,7 @@ const StudentPromotePage = () => {
             
             <div className="flex items-center gap-3">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 ${
-                modalPromotionData.hasFailedSelected ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-primary-light text-primary'
+                modalPromotionData.hasFailedSelected ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-emerald-50 text-primary'
               }`}>
                 {modalPromotionData.hasFailedSelected ? <FiAlertTriangle /> : <FiTrendingUp />}
               </div>

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, getAdminUser } from '@/lib/auth';
 import { sendEmail } from '@/lib/brevo';
+import { recordActivityLog } from '@/lib/logger';
 import crypto from 'crypto';
 
 // GET all staff
@@ -96,8 +97,23 @@ export async function POST(request) {
       grade_id ? parseInt(grade_id, 10) : null
     ]);
 
+    const createdStaff = newStaff.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_STAFF',
+      entityType: 'staff',
+      entityId: createdStaff.id,
+      details: `Created staff member: ${createdStaff.name} (${createdStaff.email}, Role: ${createdStaff.role})`
+    });
+
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const verificationUrl = `${baseUrl}/auth/access/staff/verify?token=${verificationToken}`;
+
 
     // Send verification email via Brevo
     try {

@@ -118,7 +118,7 @@ const AchievementListPage = () => {
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
         <div>
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest border border-primary-light">
+          <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-200/60">
             Recorded Records
           </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
@@ -158,7 +158,7 @@ const AchievementListPage = () => {
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-xs hover:border-primary-light hover:shadow-md transition-all flex flex-col justify-between group"
+                className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-xs hover:border-emerald-200/60 hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 {/* Cover Image */}
                 {item.image_url ? (
@@ -207,7 +207,7 @@ const AchievementListPage = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleOpenEdit(item)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-primary-light transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-emerald-50 transition-colors cursor-pointer"
                       title="Edit Achievement"
                     >
                       <FiEdit3 className="text-sm" />
@@ -292,7 +292,7 @@ const AchievementListPage = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
+                  className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-50 cursor-pointer"
                 />
                 {imagePreview && (
                   <div className="mt-3 relative w-full h-32 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">

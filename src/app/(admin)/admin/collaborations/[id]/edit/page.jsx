@@ -104,7 +104,7 @@ const EditCollaborationPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
@@ -151,7 +151,7 @@ const EditCollaborationPage = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
+                className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-50 cursor-pointer"
               />
               {logoPreview && (
                 <div className="w-24 h-24 relative rounded-xl overflow-hidden border border-slate-100 mt-1">

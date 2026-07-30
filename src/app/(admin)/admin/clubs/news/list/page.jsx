@@ -184,7 +184,7 @@ const AdminClubNewsListPage = () => {
                         )}
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary bg-primary-light px-2.5 py-1 rounded-md uppercase">
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary bg-emerald-50 px-2.5 py-1 rounded-md uppercase">
                           <FiUsers className="text-xs" />
                           {item.club_name || 'Club'}
                         </span>

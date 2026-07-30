@@ -311,7 +311,7 @@ const InventoryPage = () => {
               {items.length === 0 ? (
                 <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
                   <span className="text-slate-350 text-5xl mb-3">📦</span>
-                  <h3 className="text-sm font-bold text-slate-650">Inventory Empty</h3>
+                  <h3 className="text-sm font-bold text-slate-600">Inventory Empty</h3>
                   <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                     No items registered in stocks. Add stock categories and register your inventory item lists using buttons above.
                   </p>
@@ -339,7 +339,7 @@ const InventoryPage = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded">
+                            <span className="text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded">
                               {it.code}
                             </span>
                           </td>
@@ -379,7 +379,7 @@ const InventoryPage = () => {
               {suppliers.length === 0 ? (
                 <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
                   <span className="text-slate-350 text-5xl mb-3">🏢</span>
-                  <h3 className="text-sm font-bold text-slate-650">No Suppliers</h3>
+                  <h3 className="text-sm font-bold text-slate-600">No Suppliers</h3>
                   <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                     No suppliers logged. Register supply partners to create purchase orders directly.
                   </p>
@@ -424,7 +424,7 @@ const InventoryPage = () => {
               {purchases.length === 0 ? (
                 <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
                   <span className="text-slate-350 text-5xl mb-3">🧾</span>
-                  <h3 className="text-sm font-bold text-slate-650">No Purchases Logged</h3>
+                  <h3 className="text-sm font-bold text-slate-600">No Purchases Logged</h3>
                   <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                     No supply purchase histories recorded. Click "Log Purchase PO" to check stocks.
                   </p>
@@ -447,7 +447,7 @@ const InventoryPage = () => {
                       {purchases.map((p) => (
                         <tr key={p.id} className="hover:bg-slate-50/30 transition-colors">
                           <td className="px-6 py-4">
-                            <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded">
+                            <span className="text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded">
                               {p.purchase_number}
                             </span>
                           </td>
@@ -497,7 +497,7 @@ const InventoryPage = () => {
               {movements.length === 0 ? (
                 <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
                   <span className="text-slate-350 text-5xl mb-3">📈</span>
-                  <h3 className="text-sm font-bold text-slate-650">Movement Log Empty</h3>
+                  <h3 className="text-sm font-bold text-slate-600">Movement Log Empty</h3>
                   <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                     No stock issues or incoming audit movements registered yet.
                   </p>
@@ -530,7 +530,7 @@ const InventoryPage = () => {
                             <span className={`inline-flex items-center text-xs font-bold px-2 py-0.5 rounded ${
                               m.movement_type === 'Purchase'
                                 ? 'text-green-600 bg-green-50'
-                                : 'text-primary bg-primary-light'
+                                : 'text-primary bg-emerald-50'
                             }`}>
                               {m.movement_type}
                             </span>
@@ -751,7 +751,7 @@ const InventoryPage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-amber-650 bg-amber-600 text-white rounded-xl text-xs font-semibold cursor-pointer hover:bg-amber-700 disabled:opacity-60"
+                  className="px-4 py-2 bg-amber-600 bg-amber-600 text-white rounded-xl text-xs font-semibold cursor-pointer hover:bg-amber-700 disabled:opacity-60"
                 >
                   Log Category
                 </button>
@@ -799,7 +799,7 @@ const InventoryPage = () => {
                   <button
                     type="button"
                     onClick={handleAddPurchaseLine}
-                    className="text-[10px] font-bold text-primary bg-primary-light hover:bg-primary-light px-2 py-0.5 rounded cursor-pointer"
+                    className="text-[10px] font-bold text-primary bg-emerald-50 hover:bg-emerald-50 px-2 py-0.5 rounded cursor-pointer"
                   >
                     + Add Item Row
                   </button>

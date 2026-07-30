@@ -29,15 +29,21 @@ CREATE TABLE IF NOT EXISTS admins (
     password_hash VARCHAR(255) NOT NULL,
     recovery_token VARCHAR(255),
     recovery_token_expires TIMESTAMPTZ,
+    two_factor_code VARCHAR(10),
+    two_factor_expires TIMESTAMPTZ,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE admins ADD COLUMN IF NOT EXISTS two_factor_code VARCHAR(10);
+ALTER TABLE admins ADD COLUMN IF NOT EXISTS two_factor_expires TIMESTAMPTZ;
+
 DROP TRIGGER IF EXISTS update_admins_updated_at ON admins;
 CREATE TRIGGER update_admins_updated_at
     BEFORE UPDATE ON admins
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 
 
 -- ============================================================================
@@ -193,13 +199,12 @@ CREATE TABLE IF NOT EXISTS class_subject_teachers (
     class_subject_id BIGINT NOT NULL REFERENCES class_subjects(id) ON DELETE CASCADE,
     section_id BIGINT REFERENCES sections(id) ON DELETE CASCADE,
     teacher_id BIGINT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
-    academic_year VARCHAR(50) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS cst_unique_idx
-  ON class_subject_teachers (class_subject_id, academic_year, COALESCE(section_id, -1));
+  ON class_subject_teachers (class_subject_id, COALESCE(section_id, -1));
 
 DROP TRIGGER IF EXISTS update_class_subject_teachers_updated_at ON class_subject_teachers;
 CREATE TRIGGER update_class_subject_teachers_updated_at
@@ -489,7 +494,7 @@ CREATE TABLE IF NOT EXISTS student_attendances (
     subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
     period_id BIGINT NOT NULL REFERENCES periods(id) ON DELETE CASCADE,
     date DATE NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'Present' CHECK (status IN ('Present', 'Absent', 'Late')),
+    status VARCHAR(50) NOT NULL DEFAULT 'Present' CHECK (status IN ('Present', 'Absent', 'Late', 'On Leave')),
     remarks TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -2157,6 +2162,35 @@ CREATE TABLE IF NOT EXISTS hostel_applications (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ============================================================================
+-- SYSTEM AUDIT LOGS TABLES
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS login_logs (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT,
+    user_type VARCHAR(50) NOT NULL, -- 'admin', 'teacher', 'student', 'staff'
+    name VARCHAR(255),
+    email VARCHAR(255),
+    ip_address VARCHAR(100),
+    user_agent TEXT,
+    status VARCHAR(50) DEFAULT 'success',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT,
+    user_type VARCHAR(50) NOT NULL, -- 'admin', 'teacher', 'staff', 'system'
+    user_name VARCHAR(255),
+    action VARCHAR(100) NOT NULL,
+    entity_type VARCHAR(100) NOT NULL, -- 'admin', 'teacher', 'staff', 'admission', 'circular', 'news', 'club', 'class', 'section', 'subject', 'club_news', 'notice'
+    entity_id BIGINT,
+    details TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
 
 DROP TRIGGER IF EXISTS update_hostel_applications_updated_at ON hostel_applications;
 CREATE TRIGGER update_hostel_applications_updated_at

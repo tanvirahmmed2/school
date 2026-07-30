@@ -207,7 +207,7 @@ const AdminSyllabusPage = () => {
                   <tr key={sy.id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center">
+                        <div className="w-9 h-9 bg-emerald-50 text-primary border border-emerald-200/60 rounded-xl flex items-center justify-center">
                           <FiFileText className="text-lg" />
                         </div>
                         <div>
@@ -239,7 +239,7 @@ const AdminSyllabusPage = () => {
                         href={sy.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-light hover:bg-primary-light border border-primary-light text-primary text-xs font-bold rounded-xl transition-all duration-150 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-50 border border-emerald-200/60 text-primary text-xs font-bold rounded-xl transition-all duration-150 cursor-pointer"
                       >
                         <FiExternalLink className="text-sm" /> View Document
                       </a>
@@ -248,7 +248,7 @@ const AdminSyllabusPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleStartEdit(sy)}
-                        className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Edit Syllabus"
                       >
                         <FiEdit2 className="text-sm" />

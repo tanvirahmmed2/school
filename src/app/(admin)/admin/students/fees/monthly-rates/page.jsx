@@ -139,7 +139,7 @@ const MonthlyRatesPage = () => {
                   {fees.map((item) => (
                     <tr key={item.class_id} className="hover:bg-slate-50/40 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                           <FiLayers className="text-blue-400 text-xs" />
                           {item.class_name}
                         </span>

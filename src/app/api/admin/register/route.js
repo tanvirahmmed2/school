@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { hashPassword } from '@/lib/auth';
+import { hashPassword, getAdminUser } from '@/lib/auth';
+import { recordActivityLog } from '@/lib/logger';
 
 export async function POST(request) {
   try {
@@ -40,7 +41,22 @@ export async function POST(request) {
       [name, email, number, address, passwordHash]
     );
 
-    const res_data_1175 = { message: 'Admin account created successfully.', admin: newAdmin.rows[0] };
+    const createdAdmin = newAdmin.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_ADMIN',
+      entityType: 'admin',
+      entityId: createdAdmin.id,
+      details: `Registered new administrator: ${createdAdmin.name} (${createdAdmin.email})`
+    });
+
+    const res_data_1175 = { message: 'Admin account created successfully.', admin: createdAdmin };
+
       return NextResponse.json({
         success: true,
         message: res_data_1175?.message || 'Successfully fecthed data',

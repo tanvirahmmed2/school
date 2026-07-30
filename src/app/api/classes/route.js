@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
-import { uploadImage } from '@/lib/cloudinary';
+import { isAdmin, getAdminUser } from '@/lib/auth';
+import { recordActivityLog } from '@/lib/logger';
 
 // GET all classes
 export async function GET() {
@@ -108,7 +108,22 @@ export async function POST(request) {
       [name, numericVal, code, maxSeatsVal, description ? description.trim() : null]
     );
 
-    const res_data_2247 = { message: 'Class created successfully.', class: newClass.rows[0] };
+    const createdClass = newClass.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_CLASS',
+      entityType: 'class',
+      entityId: createdClass.id,
+      details: `Created new academic class: ${createdClass.name} (Code: ${createdClass.code})`
+    });
+
+    const res_data_2247 = { message: 'Class created successfully.', class: createdClass };
+
       return NextResponse.json({
         success: true,
         message: res_data_2247?.message || 'Successfully fecthed data',

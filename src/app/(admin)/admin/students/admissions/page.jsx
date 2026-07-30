@@ -130,7 +130,7 @@ const AdmissionsPage = () => {
 
         <Link
           href="/admin/students/admissions/circulars"
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary-light hover:bg-primary-light text-primary font-bold rounded-xl text-xs transition-colors self-start md:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-50 text-primary font-bold rounded-xl text-xs transition-colors self-start md:self-auto"
         >
           <FiLayers />
           <span>Manage Circulars</span>
@@ -238,7 +238,7 @@ const AdmissionsPage = () => {
                       <tr
                         key={adm.id}
                         className={`transition-colors ${
-                          isSelected ? 'bg-primary-light/40' : 'hover:bg-slate-50/30'
+                          isSelected ? 'bg-emerald-50/40' : 'hover:bg-slate-50/30'
                         }`}
                       >
                         <td className="px-4 py-4 text-center">
@@ -268,7 +268,7 @@ const AdmissionsPage = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div>
-                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                               <FiLayers className="text-xs text-blue-400" />
                               Class: {adm.class_name}
                             </span>
@@ -294,7 +294,7 @@ const AdmissionsPage = () => {
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                             hasDocuments
-                              ? 'bg-primary-light text-primary border-primary-light'
+                              ? 'bg-emerald-50 text-primary border-emerald-200/60'
                               : 'bg-slate-50 text-slate-400 border-slate-200'
                           }`}>
                             {hasDocuments ? <FiCheckCircle /> : <FiClock />}
@@ -305,7 +305,7 @@ const AdmissionsPage = () => {
                           <div className="flex items-center justify-end gap-2">
                             <Link
                               href={`/admin/students/admissions/applicant?id=${adm.id}`}
-                              className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-all"
+                              className="p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-all"
                               title="Preview Applicant Info"
                             >
                               <FiSearch className="text-sm" />
@@ -338,7 +338,7 @@ const AdmissionsPage = () => {
         ) : processedAdmissions.length === 0 ? (
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
             <span className="text-slate-350 text-5xl mb-3">📁</span>
-            <h3 className="text-sm font-bold text-slate-650">Archive Log Empty</h3>
+            <h3 className="text-sm font-bold text-slate-600">Archive Log Empty</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
               No processed or historic applications logged in records.
             </p>
@@ -366,7 +366,7 @@ const AdmissionsPage = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-xs font-semibold text-slate-650 flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
                         Class: {adm.class_name}
                       </span>
                     </td>
@@ -400,7 +400,7 @@ const AdmissionsPage = () => {
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/admin/students/admissions/applicant?id=${adm.id}`}
-                        className="inline-flex p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-all"
+                        className="inline-flex p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-all"
                         title="Preview Applicant Info"
                       >
                         <FiSearch className="text-sm" />

@@ -106,12 +106,12 @@ const AdminPreviousExamsPage = () => {
                         </span>
                       )}
                       {exam.class_name && (
-                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                           Class: {exam.class_name}
                         </span>
                       )}
                       {exam.exam_fee !== undefined && (
-                        <span className="font-semibold text-primary bg-primary-light border border-primary-light px-2 py-0.5 rounded-full">
+                        <span className="font-semibold text-primary bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                           Exam Fee: {exam.exam_fee} BDT
                         </span>
                       )}

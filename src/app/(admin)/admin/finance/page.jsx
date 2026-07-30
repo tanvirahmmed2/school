@@ -240,7 +240,7 @@ const FinancePage = () => {
       {/* Summary Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex items-center gap-4">
-          <div className="w-12 h-12 bg-primary-light text-primary rounded-2xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-emerald-50 text-primary rounded-2xl flex items-center justify-center">
             <FiTrendingUp className="text-xl" />
           </div>
           <div>
@@ -260,7 +260,7 @@ const FinancePage = () => {
         </div>
 
         <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${netBalance >= 0 ? 'bg-primary-light text-primary' : 'bg-red-50 text-red-600'}`}>
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${netBalance >= 0 ? 'bg-emerald-50 text-primary' : 'bg-red-50 text-red-600'}`}>
             <FiDollarSign className="text-xl" />
           </div>
           <div>
@@ -317,7 +317,7 @@ const FinancePage = () => {
           {transactions.length === 0 ? (
             <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
               <span className="text-slate-350 text-5xl mb-3">🧾</span>
-              <h3 className="text-sm font-bold text-slate-650">Treasury Clean</h3>
+              <h3 className="text-sm font-bold text-slate-600">Treasury Clean</h3>
               <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                 No financial transaction entries found. Payments and cash flow details list inside this audit deck.
               </p>
@@ -339,7 +339,7 @@ const FinancePage = () => {
                   {transactions.map((txn) => (
                     <tr key={txn.id} className="hover:bg-slate-50/30 transition-colors">
                       <td className="px-6 py-4">
-                        <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full">
+                        <span className="text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                           {txn.transaction_number}
                         </span>
                       </td>
@@ -361,7 +361,7 @@ const FinancePage = () => {
                       <td className="px-6 py-4">
                         <span className={`text-xs font-bold ${
                           txn.transaction_type === 'Credit'
-                            ? 'text-primary bg-primary-light border border-primary-light px-2.5 py-0.5 rounded-full'
+                            ? 'text-primary bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full'
                             : 'text-rose-600 bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full'
                         }`}>
                           {txn.transaction_type === 'Credit' ? 'Inflow (+)' : 'Outflow (-)'}
@@ -391,7 +391,7 @@ const FinancePage = () => {
           {incomes.length === 0 ? (
             <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
               <span className="text-slate-350 text-5xl mb-3">💵</span>
-              <h3 className="text-sm font-bold text-slate-650">Incomes Clean</h3>
+              <h3 className="text-sm font-bold text-slate-600">Incomes Clean</h3>
               <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                 No recorded incomes in treasury. Log your first category inflow using the button above.
               </p>
@@ -418,7 +418,7 @@ const FinancePage = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-xs font-semibold text-slate-650">
+                        <span className="text-xs font-semibold text-slate-600">
                           {inc.category_name}
                         </span>
                       </td>
@@ -452,7 +452,7 @@ const FinancePage = () => {
           {expenses.length === 0 ? (
             <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
               <span className="text-slate-350 text-5xl mb-3">💸</span>
-              <h3 className="text-sm font-bold text-slate-650">Expenses Clean</h3>
+              <h3 className="text-sm font-bold text-slate-600">Expenses Clean</h3>
               <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                 No recorded outflow logs. Log new payments or utility slips using the button above.
               </p>
@@ -479,7 +479,7 @@ const FinancePage = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-xs font-semibold text-slate-650">
+                        <span className="text-xs font-semibold text-slate-600">
                           {exp.category_name}
                         </span>
                       </td>

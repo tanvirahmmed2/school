@@ -4,15 +4,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar, FiBookOpen, FiCreditCard, FiClock, FiFileText
+  FiHome, FiDollarSign, FiUsers, FiSliders, FiActivity, FiCalendar, 
+  FiBookOpen, FiCreditCard, FiClock, FiFileText, FiPlus, FiUser
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { staffSidebar, setStaffSidebar, themeColor } = useContext(Context);
-  const mainColor = themeColor || '#059669';
+  const { staffSidebar, setStaffSidebar } = useContext(Context);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,7 @@ const Sidebar = () => {
         const res = await fetch('/api/staff/me');
         if (res.ok) {
           const data = await res.json();
-          setRole(data.paylod.staff.role);
+          setRole(data.paylod?.staff?.role || data.payload?.staff?.role || null);
         }
       } catch (err) {
         console.error('Failed to load role in sidebar:', err);
@@ -69,9 +69,14 @@ const Sidebar = () => {
       ];
     }
 
+    const commonEnd = [
+      { label: 'My Profile', href: '/staff/profile', icon: FiUser }
+    ];
+
     return [
       ...base,
-      ...roleLinks
+      ...roleLinks,
+      ...commonEnd
     ];
   };
 
@@ -81,27 +86,28 @@ const Sidebar = () => {
     <>
       {staffSidebar && (
         <div
-          className="fixed inset-0 top-16 bg-slate-900/20 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
+          className="fixed inset-0 top-16 bg-slate-900/30 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
           onClick={() => setStaffSidebar(false)}
         />
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-primary text-secondary z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200/80 z-40 flex flex-col justify-between py-5 px-3 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           staffSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <Back />
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest px-3 flex items-center gap-1.5 mb-2 mt-2 opacity-90">
-              Staff Navigation
+        <div className="flex flex-col gap-4">
+          <Back />
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 flex items-center gap-1.5 mb-1">
+              Staff Navigation {role ? `(${role})` : ''}
             </span>
 
             {loading ? (
               <div className="flex flex-col gap-2 px-3">
-                <div className="h-8 bg-primary-dark/50 rounded-xl animate-pulse"></div>
-                <div className="h-8 bg-primary-dark/50 rounded-xl animate-pulse"></div>
+                <div className="h-9 bg-slate-100 rounded-xl animate-pulse"></div>
+                <div className="h-9 bg-slate-100 rounded-xl animate-pulse"></div>
+                <div className="h-9 bg-slate-100 rounded-xl animate-pulse"></div>
               </div>
             ) : (
               <nav className="flex flex-col gap-1">
@@ -114,13 +120,13 @@ const Sidebar = () => {
                       key={link.href}
                       href={link.href}
                       onClick={() => setStaffSidebar(false)}
-                      className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
+                      className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
                         isActive
-                          ? 'bg-primary-dark text-white font-bold'
-                          : 'text-white/90 hover:bg-primary-dark hover:text-white'
+                          ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
+                          : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
                       }`}
                     >
-                      <Icon className="text-base text-white" />
+                      <Icon className={`text-base ${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
                       <span>{link.label}</span>
                     </Link>
                   );
@@ -130,11 +136,11 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 pt-3 border-t border-slate-100">
           <Link
             href="/"
             onClick={() => setStaffSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-dark hover:bg-primary-dark text-white text-xs font-bold rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

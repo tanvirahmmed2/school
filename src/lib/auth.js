@@ -53,6 +53,33 @@ export async function isAdmin() {
   }
 }
 
+export async function getAdminUser() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('fit-admin')?.value;
+    if (!token) return null;
+
+    const decoded = verifyJWT(token);
+    if (!decoded || !decoded.id) return null;
+
+    const result = await query(
+      'SELECT id, name, email, number, address, is_active, created_at FROM admins WHERE id = $1',
+      [decoded.id]
+    );
+    if (result.rows.length === 0) return null;
+
+    const admin = result.rows[0];
+    if (admin.is_active) {
+      return admin;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error getting admin user:', error);
+    return null;
+  }
+}
+
+
 
 export async function isTeacher() {
   try {

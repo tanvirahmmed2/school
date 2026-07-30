@@ -4,7 +4,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { FiUserPlus, FiBookOpen, FiMail, FiPhone, FiInfo, FiUpload, FiArrowLeft, FiCamera } from 'react-icons/fi';
+import { FiUserPlus, FiMail, FiPhone, FiInfo, FiUpload, FiArrowLeft, FiCamera } from 'react-icons/fi';
 import Link from 'next/link';
 import { Context } from '@/component/helper/Context';
 
@@ -79,45 +79,41 @@ export default function NewAuthorityPage() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up max-w-3xl mx-auto">
-      {/* Back to List */}
-      <div>
+    <div className="w-full max-w-3xl mx-auto space-y-6 animate-fade-up">
+      {/* Back Link & Header */}
+      <div className="flex flex-col gap-3 pb-2 border-b border-slate-200/60">
         <Link 
           href="/admin/authorities/list"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-wider"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-primary transition-colors"
         >
-          <FiArrowLeft className="text-sm" /> Back to Board List
+          <FiArrowLeft className="text-xs" /> Back to Board Registry
         </Link>
+
+        <div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <FiUserPlus className="text-primary" /> Onboard Board Member
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Pre-register leadership designations, contact details, bios, and upload profile photos.
+          </p>
+        </div>
       </div>
 
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiUserPlus className="text-primary" /> Onboard New Board Member
-        </h1>
-        <p className="text-sm text-slate-500 font-medium">
-          Pre-register leadership designations, contact info, bios, and upload profiles to Cloudinary.
-        </p>
-      </div>
-
-      {/* Form Container */}
-      <form onSubmit={handleSubmit} className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.015)] flex flex-col gap-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Column 1: Profile photo upload preview */}
-          <div className="flex flex-col items-center justify-center border border-dashed border-slate-200 rounded-3xl p-6 bg-slate-50/50">
-            <div className="relative w-36 h-36 rounded-full overflow-hidden border border-slate-200/80 bg-white flex items-center justify-center shadow-inner group">
+      {/* Form Card */}
+      <form onSubmit={handleSubmit} className="bg-white border border-slate-200/80 rounded-2xl p-5 md:p-6 shadow-2xs flex flex-col gap-5 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Photo Preview Upload */}
+          <div className="flex flex-col items-center justify-center border border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50">
+            <div className="w-24 h-24 rounded-full overflow-hidden border border-slate-200 bg-white shadow-2xs flex items-center justify-center text-slate-400 font-bold">
               {preview ? (
                 <img src={preview} alt="Preview" className="w-full h-full object-cover" />
               ) : (
-                <div className="text-slate-400 flex flex-col items-center gap-1.5">
-                  <FiCamera className="text-3xl" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">No Photo</span>
-                </div>
+                <FiCamera className="text-2xl text-slate-400" />
               )}
             </div>
             
-            <label className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:border-slate-350 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm">
-              <FiUpload className="text-sm" /> Upload Photo
+            <label className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all">
+              <FiUpload className="text-xs" /> Upload Photo
               <input
                 type="file"
                 accept="image/*"
@@ -125,14 +121,13 @@ export default function NewAuthorityPage() {
                 className="hidden"
               />
             </label>
-            <p className="text-[10px] text-slate-400 mt-2">JPEG, PNG or WEBP. Max 2MB.</p>
+            <p className="text-[10px] text-slate-400 mt-1">JPEG, PNG or WEBP. Max 2MB.</p>
           </div>
 
-          {/* Column 2: Essential Details */}
-          <div className="flex flex-col gap-4">
-            {/* Name */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+          {/* Details */}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Full Name *
               </label>
               <input
@@ -140,21 +135,20 @@ export default function NewAuthorityPage() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary font-medium"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all font-medium"
                 required
               />
             </div>
 
-            {/* Designation Preset Dropdown */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Official Designation *
               </label>
               <select
                 name="designation"
                 value={formData.designation}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-primary font-semibold"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:bg-white focus:border-primary transition-all cursor-pointer"
                 required
               >
                 {designations && designations.length > 0 ? (
@@ -173,76 +167,56 @@ export default function NewAuthorityPage() {
               </select>
             </div>
 
-            {/* Email Address */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Email Address
               </label>
-              <div className="relative">
-                <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50 font-medium"
-                />
-              </div>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all"
+              />
             </div>
 
-            {/* Contact Number */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                Contact Number
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Contact Phone
               </label>
-              <div className="relative">
-                <FiPhone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
-                <input
-                  type="text"
-                  name="contact"
-                  value={formData.contact}
-                  onChange={handleChange}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-55 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary bg-slate-50 font-medium"
-                />
-              </div>
+              <input
+                type="text"
+                name="contact"
+                value={formData.contact}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all"
+              />
             </div>
           </div>
         </div>
 
         {/* Bio */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            Brief Bio
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Profile Bio
           </label>
-          <div className="relative">
-            <FiInfo className="absolute left-3.5 top-3.5 text-slate-400 text-sm" />
-            <textarea
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              rows={4}
-              className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-primary resize-none font-medium leading-relaxed"
-            />
-          </div>
+          <textarea
+            name="bio"
+            value={formData.bio}
+            onChange={handleChange}
+            rows={3}
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary transition-all resize-none"
+          />
         </div>
 
-        {/* Submit */}
-        <div className="border-t border-slate-100 pt-6 flex justify-end">
+        {/* Submit Button */}
+        <div className="border-t border-slate-100 pt-4 flex justify-end">
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 bg-primary hover:bg-primary-dark disabled:bg-blue-400 text-white rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-[0_4px_12px_rgba(37,99,235,0.2)] flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2 bg-primary hover:bg-primary-dark disabled:opacity-60 text-white rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
           >
-            {loading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Onboarding...
-              </>
-            ) : (
-              <>
-                <FiUserPlus className="text-sm" /> Onboard Member
-              </>
-            )}
+            {loading ? 'Onboarding...' : 'Onboard Member'}
           </button>
         </div>
       </form>

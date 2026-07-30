@@ -63,7 +63,7 @@ export async function POST(request) {
         continue;
       }
 
-      // Map status values: 0: Absent, 1: Present, or fallback
+      // Map status values: P/1: Present, A/0: Absent, L: Late, V/On Leave: On Leave
       let statusStr = 'Present';
       const s = String(rec.status).trim().toLowerCase();
       if (s === '0' || s === 'absent' || s === 'a') {
@@ -72,6 +72,8 @@ export async function POST(request) {
         statusStr = 'Present';
       } else if (s === 'late' || s === 'l') {
         statusStr = 'Late';
+      } else if (s === 'v' || s === 'leave' || s === 'on leave' || s === 'on_leave') {
+        statusStr = 'On Leave';
       }
 
       // Upsert record into student_attendances

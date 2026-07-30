@@ -112,7 +112,7 @@ const NewsListPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight flex items-center gap-2">
@@ -191,14 +191,14 @@ const NewsListPage = () => {
                         <Link
                           href="/news"
                           target="_blank"
-                          className="p-2 text-primary hover:bg-primary-light rounded-xl transition-colors cursor-pointer"
+                          className="p-2 text-primary hover:bg-emerald-50 rounded-xl transition-colors cursor-pointer"
                           title="View public news page"
                         >
                           <FiExternalLink className="text-sm" />
                         </Link>
                         <button
                           onClick={() => handleOpenEdit(item)}
-                          className="p-2 text-primary hover:bg-primary-light rounded-xl transition-colors cursor-pointer"
+                          className="p-2 text-primary hover:bg-emerald-50 rounded-xl transition-colors cursor-pointer"
                           title="Edit news article"
                         >
                           <FiEdit3 className="text-sm" />
@@ -275,7 +275,7 @@ const NewsListPage = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
+                  className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-50 cursor-pointer"
                 />
               </div>
 

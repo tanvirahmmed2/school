@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { isAdmin } from '@/lib/auth';
+import { isAdmin, getAdminUser } from '@/lib/auth';
 import { uploadImage } from '@/lib/cloudinary';
+import { recordActivityLog } from '@/lib/logger';
 
 function slugify(text) {
   return text
@@ -121,11 +122,26 @@ export async function POST(request) {
       [name.trim(), motto ? motto.trim() : null, finalSlug, description ? description.trim() : null, imageUrl, imageId]
     );
 
+    const createdClub = result.rows[0];
+    const sessionAdmin = await getAdminUser();
+
+    // Log Activity
+    await recordActivityLog({
+      userId: sessionAdmin?.id || null,
+      userType: 'admin',
+      userName: sessionAdmin?.name || 'Administrator',
+      action: 'CREATE_CLUB',
+      entityType: 'club',
+      entityId: createdClub.id,
+      details: `Created new club: ${createdClub.name}`
+    });
+
     return NextResponse.json({
       success: true,
       message: 'Club created successfully.',
-      paylod: { club: result.rows[0] }
+      paylod: { club: createdClub }
     }, { status: 201 });
+
   } catch (error) {
     console.error('Error creating club:', error);
     return NextResponse.json({

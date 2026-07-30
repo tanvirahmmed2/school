@@ -290,7 +290,7 @@ const SettingsPage = () => {
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-3.5 bg-primary hover:bg-primary-dark text-secondary font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+            className="w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
           >
             {saving ? (
               <>

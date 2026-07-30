@@ -186,7 +186,7 @@ const AdminGradesPage = () => {
                   <tr key={grade.grade_id} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary-light text-primary border border-primary-light rounded-xl flex items-center justify-center font-semibold text-sm shadow-xs">
+                        <div className="w-10 h-10 bg-emerald-50 text-primary border border-emerald-200/60 rounded-xl flex items-center justify-center font-semibold text-sm shadow-xs">
                           {grade.letter_grade}
                         </div>
                         <div>
@@ -215,7 +215,7 @@ const AdminGradesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right flex justify-end gap-2">
                       <button
                         onClick={() => handleStartEdit(grade)}
-                        className="p-2 bg-primary-light hover:bg-primary-light text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 bg-emerald-50 hover:bg-emerald-50 text-primary rounded-xl transition-colors duration-150 inline-flex items-center justify-center cursor-pointer"
                         title="Edit Grade"
                       >
                         <FiEdit2 className="text-sm" />

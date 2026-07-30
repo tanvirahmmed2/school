@@ -118,7 +118,7 @@ const AdminEditEventPage = () => {
         {/* Card Form */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden">
           <div className="p-6 border-b border-slate-100 bg-slate-50/50">
-            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-primary-light px-3 py-1 rounded-full w-fit mb-1">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit mb-1">
               <FiCalendar /> Admin Portal
             </div>
             <h1 className="text-xl font-bold text-slate-900">Update Event Details</h1>
@@ -187,7 +187,7 @@ const AdminEditEventPage = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary-light file:text-primary hover:file:bg-primary-light cursor-pointer"
+                className="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-50 cursor-pointer"
               />
               {imagePreview && (
                 <div className="mt-3 relative w-full h-48 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">

@@ -103,7 +103,7 @@ const AdminEventParticipantsPage = () => {
               </div>
             )}
             <div className="space-y-2 flex-1">
-              <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full w-fit">
+              <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full w-fit">
                 Event Participants Overview
               </span>
               <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">
@@ -173,7 +173,7 @@ const AdminEventParticipantsPage = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                   {filteredParticipants.map((p, idx) => (
-                    <tr key={p.id || idx} className="hover:bg-primary-light/30 transition-colors">
+                    <tr key={p.id || idx} className="hover:bg-emerald-50/30 transition-colors">
                       <td className="px-6 py-4 font-bold text-slate-400">{idx + 1}</td>
                       <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">
                         <FiUserCheck className="text-primary text-sm" />
@@ -186,7 +186,7 @@ const AdminEventParticipantsPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center gap-1 font-bold text-primary bg-primary-light/60 px-2.5 py-1 rounded-md text-[11px]">
+                        <span className="inline-flex items-center gap-1 font-bold text-primary bg-emerald-50/60 px-2.5 py-1 rounded-md text-[11px]">
                           <FiHash className="text-xs" />
                           {p.roll !== null && p.roll !== undefined ? p.roll : 'N/A'}
                         </span>

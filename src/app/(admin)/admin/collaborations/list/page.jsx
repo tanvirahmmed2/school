@@ -60,7 +60,7 @@ const CollaborationsListPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">
             Control Panel
           </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
@@ -85,7 +85,7 @@ const CollaborationsListPage = () => {
           </div>
         ) : collaborations.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-xs text-slate-650">
+            <table className="w-full border-collapse text-left text-xs text-slate-600">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
                   <th className="p-4 font-semibold uppercase text-[10px] tracking-wider text-slate-400 pl-6 w-24">Logo</th>

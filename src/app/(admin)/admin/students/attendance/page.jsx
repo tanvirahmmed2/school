@@ -335,7 +335,7 @@ const AdminStudentAttendancePage = () => {
                   {students.map((std) => (
                     <tr key={std.student_id} className="hover:bg-slate-50/20 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-xs font-bold text-primary bg-primary-light border border-primary-light px-3 py-1 rounded-xl">
+                        <span className="text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-3 py-1 rounded-xl">
                           {std.registration_number}
                         </span>
                       </td>

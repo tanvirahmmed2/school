@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { 
-  FiUser, FiBookOpen, FiActivity, FiDollarSign, 
-  FiAward, FiCalendar, FiClock 
-} from 'react-icons/fi';
+import { FiUser, FiBookOpen, FiCalendar, FiDollarSign, FiClock, FiAward, FiActivity } from 'react-icons/fi';
 import Link from 'next/link';
 
 const TeacherHomePage = () => {
@@ -15,11 +12,7 @@ const TeacherHomePage = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [profileRes, statsRes] = await Promise.all([
-          fetch('/api/teacher/me'),
-          fetch('/api/teacher/dashboard')
-        ]);
-
+        const [profileRes, statsRes] = await Promise.all([fetch('/api/teacher/me'), fetch('/api/teacher/dashboard')]);
         if (profileRes.ok && statsRes.ok) {
           const profileData = await profileRes.json();
           const statsData = await statsRes.json();
@@ -32,16 +25,11 @@ const TeacherHomePage = () => {
         setLoading(false);
       }
     };
-
     fetchDashboardData();
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="w-12 h-12 border-4 border-primary-light border-t-primary rounded-full animate-spin"></div>
-      </div>
-    );
+    return <div className="w-full py-16 text-center text-xs text-slate-400">Loading dashboard...</div>;
   }
 
   const welcomeMessage = () => {
@@ -52,135 +40,75 @@ const TeacherHomePage = () => {
   };
 
   const statCards = [
-    {
-      title: 'Assigned Subjects',
-      value: stats?.subjectsCount || 0,
-      subText: 'Classes teaching this term',
-      icon: FiBookOpen,
-      color: 'bg-primary-light text-primary border-primary-light',
-      link: '/teacher/subjects'
-    },
-    {
-      title: 'Students Taught',
-      value: stats?.studentsCount || 0,
-      subText: 'Registered class students',
-      icon: FiUser,
-      color: 'bg-primary-light text-primary border-primary-light',
-      link: '/teacher/subjects'
-    },
-    {
-      title: 'Pending Leaves',
-      value: stats?.pendingLeavesCount || 0,
-      subText: 'Applications under review',
-      icon: FiCalendar,
-      color: stats?.pendingLeavesCount > 0 ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-slate-50 text-slate-500 border-slate-100',
-      link: '/teacher/leaves'
-    },
-    {
-      title: 'Salary Received',
-      value: `৳${(stats?.salaryReceived || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      subText: 'Total credited amount',
-      icon: FiDollarSign,
-      color: 'bg-primary-light text-primary border-primary-light',
-      link: '/teacher/salary'
-    }
+    { title: 'Assigned Subjects', value: stats?.subjectsCount || 0, icon: FiBookOpen, link: '/teacher/subjects' },
+    { title: 'Students Taught', value: stats?.studentsCount || 0, icon: FiUser, link: '/teacher/subjects' },
+    { title: 'Pending Leaves', value: stats?.pendingLeavesCount || 0, icon: FiCalendar, link: '/teacher/leaves' },
+    { title: 'Salary Received', value: `৳${(stats?.salaryReceived || 0).toLocaleString()}`, icon: FiDollarSign, link: '/teacher/salary' },
+  ];
+
+  const shortcuts = [
+    { label: 'Class Schedule', sub: 'Daily timetable', icon: FiClock, href: '/teacher/schedule' },
+    { label: 'Attendance', sub: 'Student roll logs', icon: FiCalendar, href: '/teacher/attendance' },
+    { label: 'Evaluate Marks', sub: 'Record exam marks', icon: FiAward, href: '/teacher/marks' },
   ];
 
   return (
-    <div className="flex flex-col gap-8 w-full mx-auto">
-      
-      <div className="bg-primary text-secondary rounded-3xl p-6 md:p-10 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="w-full max-w-7xl mx-auto space-y-5">
+      {/* Welcome Banner */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
+          <h1 className="text-base font-bold text-slate-800">
             {welcomeMessage()}, {profile?.name || 'Teacher'}!
           </h1>
-          <p className="text-secondary/90 text-sm md:text-base font-medium max-w-xl">
-            Welcome to your portal. Check schedules, track student attendance, and evaluate marks with ease.
+          <p className="text-xs text-slate-500 mt-0.5">
+            {profile?.designation || 'Teacher'} · {profile?.email}
           </p>
         </div>
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-50 border border-white/15">
-          <span className="text-[10px] font-bold text-secondary/80 uppercase tracking-widest block mb-1">
-            Teacher Credentials
-          </span>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-bold text-secondary">Designation: {profile?.designation || 'N/A'}</span>
-            <span className="text-xs font-semibold text-secondary/90">Email: {profile?.email}</span>
-            <span className="text-xs font-semibold text-secondary/90">Number: {profile?.number}</span>
-          </div>
-        </div>
+        <span className="text-xs text-slate-400">{profile?.number}</span>
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stat Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {statCards.map((card, idx) => {
           const Icon = card.icon;
           return (
-            <Link 
-              key={idx} 
+            <Link
+              key={idx}
               href={card.link}
-              className="group bg-white border border-slate-100 rounded-2xl p-5 hover:shadow-md hover:border-slate-200 transition-all duration-200 flex flex-col justify-between"
+              className="bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors flex flex-col gap-2"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className={`p-3 rounded-xl border ${card.color} transition-transform duration-200 group-hover:scale-105`}>
-                  <Icon className="text-xl" />
-                </div>
-                <span className="text-xl md:text-2xl font-semibold text-slate-800">
-                  {card.value}
-                </span>
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-800 text-sm mb-1">{card.title}</h3>
-                <p className="text-slate-400 text-xs font-medium">{card.subText}</p>
-              </div>
+              <Icon className="text-primary text-sm" />
+              <span className="text-xl font-bold text-slate-800">{card.value}</span>
+              <span className="text-xs text-slate-500 font-medium">{card.title}</span>
             </Link>
           );
         })}
       </div>
 
-      {/* Quick Access / Shortcuts */}
-      <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8">
-        <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <FiActivity className="text-primary" /> Dashboard Shortcuts
+      {/* Shortcuts */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4">
+        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <FiActivity className="text-primary" /> Quick Access
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Link 
-            href="/teacher/schedule"
-            className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
-          >
-            <div className="p-3 bg-primary-light rounded-xl text-primary">
-              <FiClock className="text-xl" />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-sm">Class Schedule</h4>
-              <p className="text-slate-400 text-xs font-medium">Daily teaching timetable</p>
-            </div>
-          </Link>
-
-          <Link 
-            href="/teacher/attendance"
-            className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
-          >
-            <div className="p-3 bg-primary-light rounded-xl text-primary">
-              <FiCalendar className="text-xl" />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-sm">Register Attendance</h4>
-              <p className="text-slate-400 text-xs font-medium">Student roll logs</p>
-            </div>
-          </Link>
-
-          <Link 
-            href="/teacher/marks"
-            className="flex items-center gap-4 p-4 border border-slate-100 hover:border-slate-200 rounded-2xl hover:bg-slate-50/50 transition-all duration-150"
-          >
-            <div className="p-3 bg-primary-light rounded-xl text-primary">
-              <FiAward className="text-xl" />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-sm">Evaluate Marks</h4>
-              <p className="text-slate-400 text-xs font-medium">Record student exam marks</p>
-            </div>
-          </Link>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {shortcuts.map((s, idx) => {
+            const Icon = s.icon;
+            return (
+              <Link
+                key={idx}
+                href={s.href}
+                className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:border-primary/40 hover:bg-slate-50 transition-colors"
+              >
+                <div className="p-2 bg-primary/5 rounded-lg text-primary">
+                  <Icon className="text-sm" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-800">{s.label}</p>
+                  <p className="text-[10px] text-slate-400">{s.sub}</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
