@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   FiHome, FiCalendar, FiClock, FiFileText, FiBook,
-  FiAward, FiDollarSign, FiUsers, FiUser
+  FiAward, FiDollarSign, FiUsers, FiUser, FiCreditCard
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
@@ -37,6 +37,8 @@ const Sidebar = () => {
     { label: 'Subjects & Syllabus', href: '/student/subjects', icon: FiBook },
     { label: 'Exam Routine', href: '/student/exams', icon: FiCalendar },
     { label: 'Admit Cards', href: '/student/cards', icon: FiFileText },
+    { label: 'My Student ID Card', href: '/student/id-card', icon: FiCreditCard },
+    { label: 'My Testimonial', href: '/student/testimonial', icon: FiAward },
     { label: 'My Marks & Results', href: '/student/results', icon: FiAward },
     { label: 'Fees & Fines', href: '/student/fees', icon: FiDollarSign },
     { label: 'Hostel Accommodation', href: '/student/hostels', icon: FiHome },

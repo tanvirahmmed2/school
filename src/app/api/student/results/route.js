@@ -32,7 +32,7 @@ export async function GET() {
 
     // Fetch student profile details
     const studentRes = await query(`
-      SELECT s.id, s.name, s.registration_number, s.roll, s.class_id, s.section_id,
+      SELECT s.id, s.name, s.father_name, s.mother_name, s.parents_info, s.registration_number, s.roll, s.class_id, s.section_id,
              c.name AS class_name, sec.name AS section_name
       FROM students s
       JOIN classes c ON c.id = s.class_id

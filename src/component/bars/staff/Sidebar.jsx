@@ -50,6 +50,12 @@ const Sidebar = () => {
     } else if (role === 'registrar') {
       roleLinks = [
         { label: 'Admissions Registry', href: '/staff/registrar/admissions', icon: FiUsers },
+        { label: 'Documents Hub', href: '/staff/registrar/documents', icon: FiFileText },
+        { label: 'Transfer Certificates', href: '/staff/registrar/documents/transfer-certificates', icon: FiFileText },
+        { label: 'Exam Admit Cards', href: '/staff/registrar/documents/admit-cards', icon: FiFileText },
+        { label: 'Student ID Cards', href: '/staff/registrar/documents/id-cards', icon: FiCreditCard },
+        { label: 'Testimonials', href: '/staff/registrar/documents/testimonials', icon: FiFileText },
+        { label: 'Transferred Students', href: '/staff/registrar/documents/transferred-students', icon: FiUsers },
         { label: 'Class Routines', href: '/staff/registrar/routine', icon: FiClock },
         { label: 'Campus News', href: '/staff/registrar/news', icon: FiFileText },
         { label: 'Events List', href: '/staff/registrar/events', icon: FiCalendar },

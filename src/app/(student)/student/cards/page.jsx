@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FiFileText, FiPrinter, FiLock, FiCheckCircle, FiInfo, FiDollarSign, FiUser } from 'react-icons/fi';
+import { FiFileText, FiPrinter, FiLock, FiCheckCircle, FiInfo, FiDollarSign, FiUser, FiClock } from 'react-icons/fi';
 import { printAdmitCard } from '@/lib/receipts/admit_card';
 
 const StudentAdmitCardsPage = () => {
@@ -40,23 +40,23 @@ const StudentAdmitCardsPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-8">
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-8 animate-fade-up">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/70 shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/70 shadow-2xs">
         <div>
           <div className="flex items-center gap-2 text-emerald-600 text-xs font-bold uppercase tracking-wider mb-1">
             <FiFileText /> Examination Permits
           </div>
-          <h1 className="text-2xl font-bold text-slate-800">Examination Admit Cards</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Examination Admit Cards</h1>
           <p className="text-slate-500 text-xs sm:text-sm font-normal mt-0.5">
-            Download and print candidate hall tickets for active exam terms once fee requirements are cleared.
+            View and download officially issued admit cards for upcoming term examinations.
           </p>
         </div>
       </div>
 
       {/* Candidate Banner */}
       {student && (
-        <div className="bg-white border border-slate-200/70 rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+        <div className="bg-white border border-slate-200/70 rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-emerald-100/70 text-emerald-700 rounded-2xl flex items-center justify-center font-bold text-lg border border-emerald-200/60 shrink-0">
               {student.name ? student.name.charAt(0).toUpperCase() : <FiUser />}
@@ -85,7 +85,7 @@ const StudentAdmitCardsPage = () => {
 
       {/* Exams Roster Cards */}
       {exams.length === 0 ? (
-        <div className="bg-white border border-slate-200/70 rounded-3xl p-12 text-center flex flex-col items-center justify-center shadow-xs">
+        <div className="bg-white border border-slate-200/70 rounded-3xl p-12 text-center flex flex-col items-center justify-center shadow-2xs">
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 mb-3">
             <FiInfo className="text-3xl" />
           </div>
@@ -95,12 +95,12 @@ const StudentAdmitCardsPage = () => {
       ) : (
         <div className="flex flex-col gap-5">
           {exams.map((exam) => {
-            const startStr = exam.start_date ? new Date(exam.start_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
-            const endStr = exam.end_date ? new Date(exam.end_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
-            const feeAmount = exam.exam_fee ? parseFloat(exam.exam_fee) : 0;
+            const startStr = exam.start_date ? new Date(exam.start_date).toLocaleDateString('en-GB') : 'N/A';
+            const endStr = exam.end_date ? new Date(exam.end_date).toLocaleDateString('en-GB') : 'N/A';
+            const isProvided = exam.isProvided;
 
             return (
-              <div key={exam.id} className="bg-white border border-slate-200/70 rounded-3xl p-6 sm:p-8 flex flex-col gap-6 shadow-xs">
+              <div key={exam.id} className="bg-white border border-slate-200/70 rounded-3xl p-6 sm:p-8 flex flex-col gap-6 shadow-2xs">
                 {/* Header bar */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
                   <div>
@@ -117,15 +117,15 @@ const StudentAdmitCardsPage = () => {
                     </p>
                   </div>
 
-                  {/* Status Badge */}
+                  {/* Issuance Status Badge */}
                   <div className="flex items-center gap-3">
-                    {exam.isPaid ? (
+                    {isProvided ? (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/60 rounded-full text-xs font-semibold">
-                        <FiCheckCircle className="text-emerald-600" /> Fee Cleared / Paid
+                        <FiCheckCircle className="text-emerald-600" /> Admit Card Provided
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-700 border border-rose-200/60 rounded-full text-xs font-semibold">
-                        <FiLock className="text-rose-600" /> Exam Fee Unpaid (৳{feeAmount.toFixed(2)})
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200/60 rounded-full text-xs font-semibold">
+                        <FiClock className="text-amber-600" /> Not Issued by Authority Yet
                       </span>
                     )}
                   </div>
@@ -142,7 +142,7 @@ const StudentAdmitCardsPage = () => {
                       <div className="flex flex-wrap gap-2">
                         {exam.schedules.map((sch) => (
                           <span key={sch.id} className="px-3 py-1.5 bg-slate-50 border border-slate-200/60 rounded-xl text-xs font-medium text-slate-700">
-                            {sch.subject_name} ({sch.subject_code}) &bull; {new Date(sch.exam_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                            {sch.subject_name || 'Subject'} &bull; {sch.exam_date ? new Date(sch.exam_date).toLocaleDateString('en-GB') : 'TBA'}
                           </span>
                         ))}
                       </div>
@@ -151,12 +151,12 @@ const StudentAdmitCardsPage = () => {
 
                   {/* Right: Print / Gate Actions */}
                   <div className="flex flex-col gap-2 shrink-0">
-                    {exam.isPaid ? (
+                    {isProvided ? (
                       <button
                         onClick={() => printAdmitCard(exam, student, exam.schedules)}
                         className="flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-all cursor-pointer"
                       >
-                        <FiPrinter className="text-sm" /> Print / Download Admit Card
+                        <FiPrinter className="text-sm" /> Print / Download Provided Admit Card
                       </button>
                     ) : (
                       <div className="flex flex-col gap-1.5 sm:items-end">
@@ -164,10 +164,10 @@ const StudentAdmitCardsPage = () => {
                           disabled
                           className="flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-100 text-slate-400 rounded-xl text-xs font-semibold cursor-not-allowed border border-slate-200"
                         >
-                          <FiLock className="text-sm text-slate-400" /> Admit Card Locked
+                          <FiLock className="text-sm text-slate-400" /> Admit Card Not Issued Yet
                         </button>
-                        <p className="text-[11px] text-rose-500 font-medium flex items-center gap-1">
-                          <FiInfo className="text-xs shrink-0" /> Pay ৳{feeAmount.toFixed(2)} exam fee to unlock.
+                        <p className="text-[11px] text-amber-600 font-medium flex items-center gap-1">
+                          <FiInfo className="text-xs shrink-0" /> Admin / Registrar will issue your card once fee clearance is verified.
                         </p>
                       </div>
                     )}

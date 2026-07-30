@@ -33,19 +33,7 @@ function numberToWords(num) {
 }
 
 export function generateAdmissionFeeReceiptHTML(application) {
-  const schoolName = SCHOOL_NAME || 'School Management Portal';
-  const schoolAddress = application.school_address || 'Mymensingh, Bangladesh';
-  
-  let schoolContact = '';
-  if (application.school_phone && application.school_email) {
-    schoolContact = `${application.school_phone} | ${application.school_email}`;
-  } else if (application.school_phone) {
-    schoolContact = application.school_phone;
-  } else if (application.school_email) {
-    schoolContact = application.school_email;
-  } else {
-    schoolContact = '+880 1700-000000';
-  }
+  const schoolName = SCHOOL_NAME || 'Star Cadet Academia';
 
   const receiptNo = `APP-1000${application.application_id || application.id}`;
   const studentName = application.candidate_name || application.applicant_name || 'N/A';
@@ -70,7 +58,7 @@ export function generateAdmissionFeeReceiptHTML(application) {
     ? new Date(application.created_at).toLocaleDateString('en-GB')
     : new Date().toLocaleDateString('en-GB');
 
-  const downloadedDate = new Date().toLocaleString('en-GB');
+  const downloadedDate = new Date().toLocaleDateString('en-GB');
 
   const feeAmount = Number(application.fee_amount || application.amount || 0);
   const fees = [
@@ -79,264 +67,252 @@ export function generateAdmissionFeeReceiptHTML(application) {
   const total = fees.reduce((sum, item) => sum + Number(item.amount), 0);
   const amountInWords = numberToWords(total);
 
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Admission Fee Receipt - ${receiptNo}</title>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admission Fee Receipt - ${receiptNo}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #f4f4f5;
+      color: #000000;
+      padding: 20px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
 
-          * { box-sizing: border-box; margin: 0; padding: 0; }
-          body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: #f3f4f6;
-            color: #1e293b;
-            padding: 30px 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
+    .wrapper {
+      max-width: 840px;
+      margin: 0 auto;
+    }
 
-          .receipt-box {
-            width: 100%;
-            max-width: 768px;
-            background-color: #ffffff;
-            border: 4px double #1e293b;
-            border-radius: 8px;
-            padding: 36px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-          }
+    .action-bar {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
 
-          ${isPaid ? `
-          .paid-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-25deg);
-            font-size: 110px;
-            font-weight: 900;
-            color: rgba(22, 163, 74, 0.13);
-            border: 8px solid rgba(22, 163, 74, 0.18);
-            padding: 10px 48px;
-            border-radius: 20px;
-            pointer-events: none;
-            user-select: none;
-            text-transform: uppercase;
-            letter-spacing: 12px;
-            z-index: 1;
-          }
-          ` : ''}
+    .btn-print {
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      font-family: sans-serif;
+      cursor: pointer;
+      border-radius: 4px;
+    }
 
-          .receipt-content {
-            position: relative;
-            z-index: 2;
-          }
+    .container {
+      background: #ffffff;
+      border: 10px double #333333;
+      padding: 30px 35px;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
 
-          /* Header */
-          .header {
-            text-align: center;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 16px;
-          }
+    .header {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    .board-title {
+      font-size: 22px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .country-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-          .header h1 {
-            font-size: 28px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 4px;
-          }
+    .top-meta-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
 
-          .header p {
-            color: #475569;
-            font-size: 14px;
-            margin-top: 2px;
-          }
+    .serial-box {
+      font-size: 12px;
+      line-height: 1.6;
+      font-weight: bold;
+    }
 
-          /* Title */
-          .title {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 24px 0;
-            color: #0f172a;
-          }
+    .doc-title-wrapper {
+      text-align: center;
+      flex-grow: 1;
+    }
 
-          /* Info Grid */
-          .info-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            font-size: 14px;
-            margin-bottom: 24px;
-          }
+    .doc-title {
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: underline;
+      letter-spacing: 1px;
+    }
 
-          .info-grid p {
-            color: #334155;
-          }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .info-table td {
+      padding: 3px 0;
+      vertical-align: top;
+    }
+    .info-table td.label {
+      width: 160px;
+    }
+    .info-table td.colon {
+      width: 15px;
+      text-align: center;
+    }
+    .info-table td.val {
+      font-weight: bold;
+    }
 
-          .info-grid span {
-            font-weight: 600;
-            color: #0f172a;
-          }
+    .fee-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    .fee-table th, .fee-table td {
+      border: 1px solid #000000;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    .fee-table th {
+      font-weight: bold;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
 
-          /* Fee Table */
-          .fee-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #94a3b8;
-            font-size: 14px;
-            margin-bottom: 20px;
-          }
+    .amount-words {
+      font-size: 13px;
+      margin-top: 12px;
+      margin-bottom: 25px;
+      font-style: italic;
+    }
 
-          .fee-table th {
-            background-color: #f1f5f9;
-            border: 1px solid #94a3b8;
-            padding: 10px 12px;
-            font-weight: 700;
-            color: #0f172a;
-          }
+    .footer-section {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 12px;
+    }
 
-          .fee-table td {
-            border: 1px solid #94a3b8;
-            padding: 10px 12px;
-            color: #334155;
-          }
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .action-bar { display: none; }
+      .container {
+        border: 10px double #000000;
+        box-shadow: none;
+        padding: 20px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="action-bar">
+      <button class="btn-print" onclick="window.print()">Print Receipt</button>
+    </div>
 
-          .total-row {
-            font-weight: 700;
-            background-color: #f8fafc;
-          }
+    <div class="container">
+      <div class="header">
+        <div class="board-title">${schoolName}</div>
+        <div class="country-title">BANGLADESH</div>
+      </div>
 
-          /* Amount in Words */
-          .amount-words {
-            font-size: 14px;
-            margin-top: 16px;
-            color: #1e293b;
-          }
-
-          .amount-words span {
-            font-weight: 700;
-          }
-
-          /* Status Badges */
-          .status-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 700;
-          }
-          .pay-paid { background-color: #dcfce7; color: #15803d; }
-          .pay-unpaid { background-color: #fee2e2; color: #b91c1c; }
-
-          /* Footer */
-          .footer {
-            border-top: 1px solid #e2e8f0;
-            margin-top: 36px;
-            padding-top: 16px;
-            text-align: center;
-          }
-
-          .footer p {
-            font-size: 12px;
-            font-style: italic;
-            color: #64748b;
-          }
-
-          .download-meta {
-            font-size: 10px;
-            color: #94a3b8;
-            margin-top: 4px;
-            font-style: normal !important;
-          }
-
-          @media print {
-            body { background: #ffffff; padding: 0; min-height: auto; }
-            .receipt-box { border-width: 4px; box-shadow: none; width: 100%; max-width: 100%; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="receipt-box">
-          ${isPaid ? `<div class="paid-watermark">PAID</div>` : ''}
-
-          <div class="receipt-content">
-            <!-- Header -->
-            <div class="header">
-              <h1>${schoolName}</h1>
-              <p>${schoolAddress}</p>
-              <p>${schoolContact}</p>
-            </div>
-
-            <!-- Title -->
-            <h2 class="title">School Admission Fee Receipt</h2>
-
-            <!-- Student & Application Info -->
-            <div class="info-grid">
-              <p><span>Student Name:</span> ${studentName}</p>
-              <p><span>Date:</span> ${dateStr}</p>
-              <p><span>Class:</span> ${className}</p>
-              <p><span>Receipt No:</span> ${receiptNo}</p>
-              <p><span>Email:</span> ${candidateEmail}</p>
-              <p><span>Payment Status:</span> <span class="status-badge ${isPaid ? 'pay-paid' : 'pay-unpaid'}">${rawPayStatus}</span></p>
-              <p><span>Application Status:</span> ${appStatusDisplay}</p>
-            </div>
-
-            <!-- Fee Table -->
-            <table class="fee-table">
-              <thead>
-                <tr>
-                  <th style="width: 50px; text-align: left;">Sl.</th>
-                  <th style="text-align: left;">Description</th>
-                  <th style="text-align: right;">Amount (৳)</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${fees.map((item, index) => `
-                  <tr>
-                    <td>${index + 1}</td>
-                    <td>${item.description}</td>
-                    <td style="text-align: right;">৳ ${Number(item.amount).toLocaleString()}</td>
-                  </tr>
-                `).join('')}
-                <tr class="total-row">
-                  <td colSpan="2" style="text-align: right;">Total</td>
-                  <td style="text-align: right;">৳ ${total.toLocaleString()}</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <!-- Amount in Words -->
-            <div class="amount-words">
-              <span>Amount in Words:</span> ${amountInWords}
-            </div>
-
-            <!-- Footer -->
-            <div class="footer">
-              <p>This is a computer-generated receipt and does not require a seal.</p>
-              <p class="download-meta">Downloaded / Printed on: ${downloadedDate}</p>
-            </div>
-          </div>
+      <div class="top-meta-container">
+        <div class="serial-box">
+          <div>Receipt No: ${receiptNo}</div>
+          <div style="margin-top: 2px; font-weight: normal; font-size: 11px;">Date: ${dateStr}</div>
         </div>
 
-        <script>
-          window.onload = function() {
-            window.print();
-          };
-        </script>
-      </body>
-    </html>
-  `;
+        <div class="doc-title-wrapper">
+          <span class="doc-title">ADMISSION FEE RECEIPT</span>
+        </div>
+      </div>
+
+      <table class="info-table">
+        <tr>
+          <td class="label">Applicant Name</td>
+          <td class="colon">:</td>
+          <td class="val">${studentName}</td>
+        </tr>
+        <tr>
+          <td class="label">Applying for Class</td>
+          <td class="colon">:</td>
+          <td class="val">${className}</td>
+        </tr>
+        <tr>
+          <td class="label">Applicant Email</td>
+          <td class="colon">:</td>
+          <td class="val">${candidateEmail}</td>
+        </tr>
+        <tr>
+          <td class="label">Payment Status</td>
+          <td class="colon">:</td>
+          <td class="val" style="color: ${isPaid ? '#059669' : '#dc2626'};">${rawPayStatus}</td>
+          <td class="label" style="width: 130px;">Application Status</td>
+          <td class="colon">:</td>
+          <td class="val">${appStatusDisplay}</td>
+        </tr>
+      </table>
+
+      <table class="fee-table">
+        <thead>
+          <tr>
+            <th style="width: 50px;">SL.</th>
+            <th>Description</th>
+            <th style="width: 140px; text-align: right;">Amount (৳)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${fees.map((item, idx) => `
+            <tr>
+              <td style="text-align: center;">${idx + 1}</td>
+              <td style="font-weight: bold;">${item.description}</td>
+              <td style="text-align: right; font-weight: bold;">৳ ${Number(item.amount).toLocaleString()}</td>
+            </tr>
+          `).join('')}
+          <tr style="font-weight: bold; background-color: #f9f9f9;">
+            <td colspan="2" style="text-align: right;">Total Amount</td>
+            <td style="text-align: right; font-size: 14px;">৳ ${total.toLocaleString()}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="amount-words">
+        <strong>Amount in Words:</strong> ${amountInWords}
+      </div>
+
+      <div class="footer-section">
+        <div>
+          Computer Generated Receipt — Issued on: ${downloadedDate}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
 }
 
 export function printAdmissionFeeReceipt(application) {
@@ -346,5 +322,6 @@ export function printAdmissionFeeReceipt(application) {
   if (printWindow) {
     printWindow.document.write(html);
     printWindow.document.close();
+    printWindow.focus();
   }
 }

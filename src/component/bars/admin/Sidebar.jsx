@@ -32,6 +32,16 @@ const Sidebar = () => {
   const [historyOpen, setHistoryOpen] = useState(pathname.startsWith('/admin/history'));
   const [hostelsOpen, setHostelsOpen] = useState(pathname.startsWith('/admin/hostels'));
   const [staffOpen, setStaffOpen] = useState(pathname.startsWith('/admin/staff'));
+  const [documentsOpen, setDocumentsOpen] = useState(pathname.startsWith('/admin/documents'));
+
+  const documentLinks = [
+    { label: 'Documents Hub', href: '/admin/documents', icon: FiFileText },
+    { label: 'Transfer Certificates', href: '/admin/documents/transfer-certificates', icon: FiUserCheck },
+    { label: 'Exam Admit Cards', href: '/admin/documents/admit-cards', icon: FiFileText },
+    { label: 'Student ID Cards', href: '/admin/documents/id-cards', icon: FiAward },
+    { label: 'Testimonials', href: '/admin/documents/testimonials', icon: FiAward },
+    { label: 'Transferred Students', href: '/admin/documents/transferred-students', icon: FiUsers },
+  ];
 
   const historyLinks = [
     { label: 'History Milestones', href: '/admin/history', icon: FiClock },
@@ -263,6 +273,7 @@ const Sidebar = () => {
               <FiUsers className="text-xs" /> Directory Registry
             </span>
             <CollapsibleGroup label="Students" icon={FiUsers} isOpen={studentsOpen} setIsOpen={setStudentsOpen} prefix="/admin/students" links={studentLinks} />
+            <CollapsibleGroup label="Student Documents" icon={FiFileText} isOpen={documentsOpen} setIsOpen={setDocumentsOpen} prefix="/admin/documents" links={documentLinks} />
             <CollapsibleGroup label="Teachers" icon={FiUsers} isOpen={teachersOpen} setIsOpen={setTeachersOpen} prefix="/admin/teachers" links={teacherLinks} />
             <CollapsibleGroup label="Board Members" icon={FiShield} isOpen={authoritiesOpen} setIsOpen={setAuthoritiesOpen} prefix="/admin/authorities" links={authorityLinks} />
             <CollapsibleGroup label="Staff Members" icon={FiUsers} isOpen={staffOpen} setIsOpen={setStaffOpen} prefix="/admin/staff" links={staffLinks} />

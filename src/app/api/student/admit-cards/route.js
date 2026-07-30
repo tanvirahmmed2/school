@@ -32,9 +32,10 @@ export async function GET() {
 
     const studentId = decoded.id;
 
-    // Fetch student complete profile
+    // Fetch student profile
     const studentRes = await query(`
       SELECT s.id, s.name, s.registration_number, s.roll, s.date_of_birth, s.gender, s.class_id, s.section_id,
+             s.father_name, s.mother_name, s.parents_info, s.image, s.blood_group,
              c.name AS class_name, sec.name AS section_name
       FROM students s
       JOIN classes c ON c.id = s.class_id
@@ -62,57 +63,55 @@ export async function GET() {
       ORDER BY e.start_date DESC
     `, [student.class_id]);
 
+    // Fetch all admit card issuance logs for this student
+    const admitLogRes = await query(`
+      SELECT * FROM student_admit_cards
+      WHERE student_id = $1
+    `, [studentId]);
+
+    const issuedExamMap = new Map();
+    admitLogRes.rows.forEach(log => {
+      issuedExamMap.set(Number(log.exam_id), log);
+    });
+
     const examList = [];
 
     for (const exam of examsRes.rows) {
       // Fetch schedules
       const schedulesRes = await query(`
-        SELECT es.*, sub.name AS subject_name, sub.code AS subject_code
-        FROM exam_schedules es
-        JOIN subjects sub ON sub.id = es.subject_id
-        WHERE es.exam_id = $1
-        ORDER BY es.exam_date ASC, es.start_time ASC
-      `, [exam.id]);
+        SELECT cs.id, cs.exam_date, cs.start_time, cs.end_time, cs.room_number,
+               sub.name AS subject_name, sub.code AS subject_code
+        FROM class_subjects sub
+        LEFT JOIN class_routines cs ON cs.subject_id = sub.id AND cs.exam_id = $1
+        WHERE sub.class_id = $2
+      `, [exam.id, student.class_id]);
 
-      // Check fee payment status in student_fees
-      const feeRes = await query(`
-        SELECT * FROM student_fees
-        WHERE student_id = $1 AND (title LIKE $2 OR title LIKE $3)
-        ORDER BY id DESC
-        LIMIT 1
-      `, [studentId, `%Exam Fee: ${exam.name.trim()}%`, `%${exam.name.trim()}%`]);
-
-      const fee = feeRes.rows[0] || null;
-      const rawFeeStatus = fee ? (fee.status || 'unpaid').toLowerCase() : 'unpaid';
-      const examFeeAmount = exam.exam_fee ? parseFloat(exam.exam_fee) : 0.00;
-
-      // isPaid is true if status is paid, or fee is 0, or no fee invoice required
-      const isPaid = rawFeeStatus === 'paid' || examFeeAmount === 0 || (fee && parseFloat(fee.paid_amount || 0) >= parseFloat(fee.amount || 0) && parseFloat(fee.amount) > 0);
+      const issueRecord = issuedExamMap.get(Number(exam.id)) || null;
+      const isProvided = !!issueRecord;
 
       examList.push({
         ...exam,
         schedules: schedulesRes.rows,
-        feeRecord: fee,
-        feeStatus: fee ? fee.status : (examFeeAmount === 0 ? 'Paid' : 'Unpaid'),
-        isPaid
+        issueRecord,
+        isProvided
       });
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Fetched student admit cards data successfully',
+      message: 'Admit cards retrieved successfully',
       paylod: {
         student,
         exams: examList
       }
-    }, { status: 200 });
+    });
 
   } catch (error) {
     console.error('Error fetching student admit cards:', error);
     return NextResponse.json({
       success: false,
-      message: 'Internal server error',
-      error: 'Internal Server Error',
+      message: 'Internal Server Error',
+      error: error.message,
       paylod: null
     }, { status: 500 });
   }
