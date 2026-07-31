@@ -40,7 +40,7 @@ export default function PublicStaffPage() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs animate-pulse flex gap-4 h-36">
                 <div className="w-20 h-20 rounded-full bg-slate-100 shrink-0 my-auto"></div>
@@ -53,7 +53,7 @@ export default function PublicStaffPage() {
             ))}
           </div>
         ) : staffList.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {staffList.map((staff) => (
               <StaffCard key={staff.id} staff={staff} />
             ))}

@@ -27,15 +27,14 @@ const TeacherCard = ({ teacher, className = '' }) => {
         )}
       </div>
 
-      <div className="flex-1 min-w-0 p-5 flex flex-col justify-center gap-2">
+      <div className="flex-1 min-w-0 p-5 flex flex-col justify-center items-center gap-2">
       
         <h4 className="text-base font-semibold text-slate-900 group-hover:text-primary transition-colors leading-tight truncate">
           {teacher.name}
         </h4>
 
-        <span className="flex items-center gap-1 text-xs font-bold text-slate-400 uppercase tracking-wider leading-tight">
-          <FiBriefcase className="text-slate-300 shrink-0" />
-          <span className="truncate">{teacher.designation || 'Faculty Member'}</span>
+        <span className="flex items-center gap-1 ">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-primary-light text-primary border border-primary-light uppercase tracking-wider">{teacher.designation || 'Faculty Member'}</span>
         </span>
 
         

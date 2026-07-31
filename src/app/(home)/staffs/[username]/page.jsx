@@ -74,14 +74,11 @@ const StaffPublicProfilePage = () => {
         ) : staff ? (
           <div className="space-y-6 animate-fade-up">
 
-            {/* Profile Header Card */}
             <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-2xs">
-              <div className="h-36 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 relative">
+              <div className="h-36 bg-linear-to-tr from-primary-dark to-primary-light relative">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
                 <div className="absolute top-4 right-5">
-                  <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[11px] font-semibold rounded-full border border-white/30 uppercase tracking-wider flex items-center gap-1.5">
-                    <FiShield className="text-xs" /> {formatRole(staff.role)}
-                  </span>
+                  
                 </div>
               </div>
 
@@ -91,7 +88,7 @@ const StaffPublicProfilePage = () => {
                     {staff.image ? (
                       <Image width={400} height={400} src={staff.image} alt={staff.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-3xl font-bold">
+                      <div className="w-full h-full bg-linear-to-tr from-primary-light to-primary-dark text-white flex items-center justify-center text-3xl font-bold">
                         {getInitials(staff.name)}
                       </div>
                     )}
@@ -112,16 +109,10 @@ const StaffPublicProfilePage = () => {
                       <FiMail className="text-emerald-500" /> {staff.email}
                     </a>
                   )}
-                  {staff.phone && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-700">
-                      <FiPhone className="text-emerald-500" /> {staff.phone}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
 
-            {/* Info Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
                 { icon: FiDroplet, label: 'Blood Group', value: staff.blood_group },

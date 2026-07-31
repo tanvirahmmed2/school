@@ -183,10 +183,7 @@ const About = () => {
       <div className="w-full flex flex-col gap-16 max-w-7xl mx-auto">
         
         <div className="relative bg-slate-900 text-white rounded-3xl p-8 md:p-14 overflow-hidden shadow-xl border border-slate-800">
-          <div className="absolute inset-0 bg-linear-to-tr from-sky-950/80 via-slate-900 to-indigo-950/80 z-0" />
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-
+         
           <div className="relative z-10 text-center flex flex-col items-center gap-5">
             {logoSrc && (
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white backdrop-blur-md rounded-2xl p-2 border border-white/20 shadow-lg flex items-center justify-center">

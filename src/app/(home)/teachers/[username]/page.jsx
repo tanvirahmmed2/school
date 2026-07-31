@@ -72,7 +72,7 @@ const TeacherPublicProfilePage = () => {
 
             {/* Profile Header Card */}
             <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-2xs">
-              <div className="h-36 bg-gradient-to-r from-primary via-primary to-indigo-600 relative">
+              <div className="h-36 bg-linear-to-tr from-primary-light to-primary-dark relative">
                 <div className="absolute top-4 right-5 flex items-center gap-2">
                   <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[11px] font-semibold rounded-full border border-white/30 uppercase tracking-wider">
                     {teacher.designation || 'Faculty Member'}
@@ -86,7 +86,7 @@ const TeacherPublicProfilePage = () => {
                     {teacher.image ? (
                       <Image width={400} height={400} src={teacher.image} alt={teacher.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-tr from-primary to-indigo-500 text-white flex items-center justify-center text-3xl font-bold">
+                      <div className="w-full h-full bg-linear-to-tr from-primary-light to-primary-dark text-white flex items-center justify-center text-3xl font-bold">
                         {getInitials(teacher.name)}
                       </div>
                     )}
@@ -95,11 +95,7 @@ const TeacherPublicProfilePage = () => {
                   <div className="space-y-1 mb-1">
                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                       <h1 className="text-xl font-bold text-slate-900 tracking-tight">{teacher.name}</h1>
-                      {teacher.is_permanent && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full text-[10px] font-semibold">
-                          <FiCheckCircle className="text-xs" /> Permanent
-                        </span>
-                      )}
+                     
                     </div>
                     <p className="text-xs text-slate-500 font-medium flex items-center justify-center sm:justify-start gap-1.5">
                       <FiBriefcase className="text-primary text-xs" /> {teacher.designation || 'Faculty Member'}
