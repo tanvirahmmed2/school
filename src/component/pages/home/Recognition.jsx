@@ -53,7 +53,7 @@ const Recognition = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             
-            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">
+            <h2 className="text-2xl md:text-5xl font-semibold text-slate-900 tracking-tight">
               Recognitions
             </h2>
             <p className="text-slate-500 mt-1 text-xs md:text-sm max-w-lg">
@@ -62,7 +62,6 @@ const Recognition = () => {
           </div>
 
           <div className="flex items-center gap-2 self-start md:self-auto">
-            {/* Slider Nav Buttons */}
             <button
               onClick={() => handleScroll('left')}
               aria-label="Previous recognitions"
@@ -78,10 +77,9 @@ const Recognition = () => {
               <FiChevronRight className="text-lg" />
             </button>
 
-            {/* View All Button */}
             <Link
               href="/recognitions"
-              className="ml-2 inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary-light hover:bg-primary-light px-3.5 py-2 rounded-full border border-primary-border transition-colors"
+              className="ml-2 inline-flex items-center gap-1.5 text-xs font-bold text-secondary bg-tertiary hover:bg-primary-light px-3.5 py-2 rounded-full border border-primary-border transition-colors"
             >
               <span>View All</span>
               <FiArrowRight className="text-xs" />
@@ -89,7 +87,6 @@ const Recognition = () => {
           </div>
         </div>
 
-        {/* Single Row Touch-Slide Carousel Container */}
         <div
           ref={sliderRef}
           className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-1 touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -97,7 +94,7 @@ const Recognition = () => {
           {recognitions.map((item) => (
             <div
               key={item.id}
-              className="w-[210px] sm:w-[230px] md:w-[250px] shrink-0 snap-start"
+              className="w-50 sm:w-60 md:w-64 shrink-0 snap-start"
             >
               <RecognitionCard recognition={item} />
             </div>

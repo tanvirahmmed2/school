@@ -4,19 +4,12 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { FiUserPlus, FiMail, FiPhone, FiInfo, FiUpload, FiArrowLeft, FiCamera } from 'react-icons/fi';
+import { FiUserPlus,  FiUpload, FiArrowLeft, FiCamera } from 'react-icons/fi';
 import Link from 'next/link';
 import { Context } from '@/component/helper/Context';
+import Image from 'next/image';
 
-const DESIGNATIONS = [
-  { value: 'chairman', label: 'Chairman' },
-  { value: 'director', label: 'Managing Director' },
-  { value: 'principal', label: 'Principal' },
-  { value: 'registrar', label: 'Registrar' },
-  { value: 'council', label: 'Academic Council Member' },
-  { value: 'officers', label: 'Executive Officer' },
-  { value: 'staff', label: 'Support Staff' }
-];
+
 
 export default function NewAuthorityPage() {
   const { designations } = useContext(Context);
@@ -79,8 +72,7 @@ export default function NewAuthorityPage() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-6 animate-fade-up">
-      {/* Back Link & Header */}
+    <div className="w-full space-y-6 animate-fade-up">
       <div className="flex flex-col gap-3 pb-2 border-b border-slate-200/60">
         <Link 
           href="/admin/authorities/list"
@@ -99,14 +91,12 @@ export default function NewAuthorityPage() {
         </div>
       </div>
 
-      {/* Form Card */}
       <form onSubmit={handleSubmit} className="bg-white border border-slate-200/80 rounded-2xl p-5 md:p-6 shadow-2xs flex flex-col gap-5 text-xs">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Photo Preview Upload */}
           <div className="flex flex-col items-center justify-center border border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50">
             <div className="w-24 h-24 rounded-full overflow-hidden border border-slate-200 bg-white shadow-2xs flex items-center justify-center text-slate-400 font-bold">
               {preview ? (
-                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                <Image width={500} height={500} src={preview} alt="Preview" className="w-full h-full object-cover" />
               ) : (
                 <FiCamera className="text-2xl text-slate-400" />
               )}
@@ -124,7 +114,6 @@ export default function NewAuthorityPage() {
             <p className="text-[10px] text-slate-400 mt-1">JPEG, PNG or WEBP. Max 2MB.</p>
           </div>
 
-          {/* Details */}
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -158,7 +147,7 @@ export default function NewAuthorityPage() {
                     </option>
                   ))
                 ) : (
-                  DESIGNATIONS.map((opt) => (
+                  designations.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
                     </option>

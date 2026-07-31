@@ -12,13 +12,13 @@ import {
   FiUsers,
   FiX
 } from 'react-icons/fi';
+import Image from 'next/image';
 
 const AdminClubNewsListPage = () => {
   const [clubNews, setClubNews] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Edit Modal State
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [editForm, setEditForm] = useState({
@@ -126,9 +126,8 @@ const AdminClubNewsListPage = () => {
   };
 
   return (
-    <div className="w-full py-4 space-y-6">
+    <div className="w-full p-4 space-y-6">
       
-      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">
@@ -175,7 +174,7 @@ const AdminClubNewsListPage = () => {
                       <td className="py-3 px-4 pl-6">
                         {coverImg ? (
                           <div className="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
-                            <img src={coverImg} alt="" className="w-full h-full object-cover" />
+                            <Image width={100} height={100} src={coverImg} alt="" className="w-full h-full object-cover" />
                           </div>
                         ) : (
                           <div className="w-10 h-10 rounded-lg border border-dashed border-slate-200 bg-slate-50 flex items-center justify-center text-slate-400 shrink-0">
@@ -212,7 +211,7 @@ const AdminClubNewsListPage = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(item.id)}
-                          className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-tertiary hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                           title="Delete News Article"
                         >
                           <FiTrash2 className="text-sm" />

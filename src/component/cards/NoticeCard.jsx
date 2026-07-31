@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import React from 'react';
 import { FiBookOpen, FiInfo, FiExternalLink } from 'react-icons/fi';
 
@@ -22,7 +23,7 @@ const NoticeCard = ({ notice, className = '' }) => {
           className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
             is_pinned
               ? 'bg-primary text-secondary border border-primary-light'
-              : 'bg-primary-light text-primary border border-primary-light'
+              : 'bg-primary-light text-secondary border border-tertiary'
           }`}
         >
           {is_pinned ? <FiInfo className="text-lg" /> : <FiBookOpen className="text-lg" />}
@@ -48,19 +49,19 @@ const NoticeCard = ({ notice, className = '' }) => {
       </div>
 
       {link && (
-        <a
+        <Link
           href={link}
           target="_blank"
           rel="noopener noreferrer"
           className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs transition-all shrink-0 cursor-pointer ${
             is_pinned
               ? 'bg-primary hover:bg-primary-dark text-secondary shadow-xs'
-              : 'bg-primary-light hover:bg-primary-light text-primary border border-primary-light'
+              : 'bg-primary text-secondary border border-tertiary'
           }`}
         >
           <span>View Document</span>
           <FiExternalLink className="text-xs" />
-        </a>
+        </Link>
       )}
     </div>
   );

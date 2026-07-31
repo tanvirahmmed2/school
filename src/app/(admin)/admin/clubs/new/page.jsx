@@ -10,7 +10,6 @@ const AdminClubsNewPage = () => {
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form states
   const [name, setName] = useState('');
   const [motto, setMotto] = useState('');
   const [description, setDescription] = useState('');
@@ -129,7 +128,7 @@ const AdminClubsNewPage = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header */}
+      
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
           <FiActivity className="text-primary" /> Student Clubs &amp; Societies

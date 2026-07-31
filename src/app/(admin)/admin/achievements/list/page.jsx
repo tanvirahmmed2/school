@@ -114,13 +114,9 @@ const AchievementListPage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto py-4 space-y-6">
-      {/* Top Header */}
+    <div className="w-full p-4 space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
         <div>
-          <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-200/60">
-            Recorded Records
-          </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Institutional Achievements
           </h1>

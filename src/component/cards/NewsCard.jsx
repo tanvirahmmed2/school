@@ -13,11 +13,10 @@ const NewsCard = ({ news, href, className = '' }) => {
 
   const card = (
     <div
-      className={`bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-primary transition-all duration-250 flex flex-col group h-full ${className}`}
+      className={`bg-white rounded-2xl border border-primary overflow-hidden hover:shadow-md transition-all duration-250 flex flex-col group h-full ${className}`}
     >
-      {/* Cover Image */}
       {image ? (
-        <div className="w-full h-48 overflow-hidden bg-slate-100 shrink-0 relative">
+        <div className="w-full aspect-video rounded-xl overflow-hidden bg-slate-100 shrink-0 relative">
           <Image width={500} height={500}
             src={image}
             alt={title}
@@ -38,7 +37,7 @@ const NewsCard = ({ news, href, className = '' }) => {
           </div>
         )}
 
-        <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-tertiary transition-colors">
           {title}
         </h3>
 
@@ -46,7 +45,7 @@ const NewsCard = ({ news, href, className = '' }) => {
           {content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()}
         </p>
 
-        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-primary">
+        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-tertiary">
           <span>Read Article</span>
           <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
         </div>

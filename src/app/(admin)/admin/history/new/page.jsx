@@ -10,8 +10,7 @@ export default function NewHistoryPage() {
   const router = useRouter();
 
   return (
-    <div className="w-full flex flex-col gap-6 animate-fade-up max-w-3xl mx-auto">
-      {/* Back to List */}
+    <div className="w-full flex flex-col gap-6 animate-fade-up">
       <div>
         <Link 
           href="/admin/history"
@@ -21,7 +20,6 @@ export default function NewHistoryPage() {
         </Link>
       </div>
 
-      {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
           <FiPlusCircle className="text-primary" /> Create Historical Milestone
@@ -31,7 +29,6 @@ export default function NewHistoryPage() {
         </p>
       </div>
 
-      {/* Form Card Container */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs">
         <HistoryForm
           onSuccess={() => {

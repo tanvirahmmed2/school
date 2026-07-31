@@ -112,7 +112,7 @@ const ParticipantsContent = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 p-4 ">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex items-center justify-between">
           <Link
             href="/admin/events"

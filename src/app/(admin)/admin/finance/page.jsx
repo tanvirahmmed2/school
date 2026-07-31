@@ -13,12 +13,10 @@ const FinancePage = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Modals / Form toggles
   const [showLogExpense, setShowLogExpense] = useState(false);
   const [showLogIncome, setShowLogIncome] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
 
-  // Form states
   const [expenseForm, setExpenseForm] = useState({
     category_id: '',
     title: '',
@@ -40,34 +38,30 @@ const FinancePage = () => {
   const [categoryForm, setCategoryForm] = useState({
     name: '',
     description: '',
-    type: 'Expense' // 'Expense' or 'Income'
+    type: 'Expense' 
   });
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      // 1. Categories
       const catRes = await fetch('/api/admin/finance/categories');
       const catData = await catRes.json();
       if (catRes.ok && catData.success) {
         setCategories(catData.paylod);
       }
 
-      // 2. Expenses
       const expRes = await fetch('/api/admin/finance/expenses');
       const expData = await expRes.json();
       if (expRes.ok && expData.success) {
         setExpenses(expData.paylod.expenses || []);
       }
 
-      // 3. Incomes
       const incRes = await fetch('/api/admin/finance/incomes');
       const incData = await incRes.json();
       if (incRes.ok && incData.success) {
         setIncomes(incData.paylod.incomes || []);
       }
 
-      // 4. Transactions Ledger
       const txnRes = await fetch('/api/admin/finance/transactions');
       const txnData = await txnRes.json();
       if (txnRes.ok && txnData.success) {
@@ -188,7 +182,6 @@ const FinancePage = () => {
     }
   };
 
-  // Financial summary tallies
   const totalInflow = incomes.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
   const totalOutflow = expenses.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
   const netBalance = totalInflow - totalOutflow;
@@ -204,7 +197,7 @@ const FinancePage = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Header with actions */}
+      
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
@@ -224,7 +217,7 @@ const FinancePage = () => {
           </button>
           <button
             onClick={() => setShowLogExpense(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold cursor-pointer transition-colors shadow-xs"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-tertiary hover:bg-tertiary-dark text-white rounded-xl text-xs font-semibold cursor-pointer transition-colors shadow-xs"
           >
             <FiPlus /> Log Expense
           </button>
@@ -250,7 +243,7 @@ const FinancePage = () => {
         </div>
 
         <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex items-center gap-4">
-          <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-rose-50 text-tertiary rounded-2xl flex items-center justify-center">
             <FiTrendingDown className="text-xl" />
           </div>
           <div>
@@ -362,13 +355,13 @@ const FinancePage = () => {
                         <span className={`text-xs font-bold ${
                           txn.transaction_type === 'Credit'
                             ? 'text-primary bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full'
-                            : 'text-rose-600 bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full'
+                            : 'text-tertiary bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full'
                         }`}>
                           {txn.transaction_type === 'Credit' ? 'Inflow (+)' : 'Outflow (-)'}
                         </span>
                       </td>
                       <td className={`px-6 py-4 text-right font-bold text-sm ${
-                        txn.transaction_type === 'Credit' ? 'text-primary' : 'text-rose-600'
+                        txn.transaction_type === 'Credit' ? 'text-primary' : 'text-tertiary'
                       }`}>
                         ৳{parseFloat(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
@@ -491,7 +484,7 @@ const FinancePage = () => {
                       <td className="px-6 py-4 text-xs text-slate-600">
                         {exp.paid_by || 'Unknown'}
                       </td>
-                      <td className="px-6 py-4 text-right text-sm font-bold text-rose-600">
+                      <td className="px-6 py-4 text-right text-sm font-bold text-tertiary">
                         -৳{parseFloat(exp.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
@@ -587,7 +580,7 @@ const FinancePage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
+                  className="px-4 py-2 bg-tertiary hover:bg-rose-700 text-white rounded-xl text-xs font-semibold cursor-pointer disabled:opacity-60"
                 >
                   Log Expense
                 </button>

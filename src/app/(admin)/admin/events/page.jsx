@@ -51,14 +51,10 @@ const AdminEventsPage = () => {
   );
 
   return (
-    <div className="w-full min-h-screen bg-slate-50/50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Page Header */}
+    <div className="w-full min-h-screen  p-4 md:p-8">
+      <div className="w-full space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-xs">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit mb-2">
-              <FiCalendar /> Admin Portal
-            </div>
             <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">
               Events & Seminars
             </h1>

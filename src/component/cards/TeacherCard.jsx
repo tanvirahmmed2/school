@@ -9,9 +9,9 @@ const TeacherCard = ({ teacher, className = '' }) => {
   return (
     <Link
           href={`/teachers/${teacher.username}`}
-      className={`group bg-white w-full rounded-xl border border-slate-100 flex-col  hover:border-primary shadow-sm hover:shadow-md transition-all duration-250 overflow-hidden flex ${className}`}
+      className={`group bg-primary w-full rounded-xl border  flex-col  hover:border-primary shadow-sm hover:shadow-md transition-all duration-250 overflow-hidden flex ${className}`}
     >
-      <div className="w-full shrink-0 relative bg-primary-light overflow-hidden">
+      <div className="w-full shrink-0 relative rounded-xl overflow-hidden">
         {teacher.image ? (
           <Image width={500} height={500}
             src={teacher.image}
@@ -29,7 +29,7 @@ const TeacherCard = ({ teacher, className = '' }) => {
 
       <div className="flex-1 min-w-0 p-5 flex flex-col justify-center items-center gap-2">
       
-        <h4 className="text-base font-semibold text-slate-900 group-hover:text-primary transition-colors leading-tight truncate">
+        <h4 className="text-base font-semibold text-secondary transition-colors leading-tight truncate">
           {teacher.name}
         </h4>
 

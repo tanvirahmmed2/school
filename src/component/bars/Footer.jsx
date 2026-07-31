@@ -48,7 +48,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className='w-full bg-primary-dark text-secondary flex flex-col items-center justify-center shadow-inner px-4 md:px-8 py-8 md:py-12 overflow-x-hidden gap-12 sm:gap-16'>
+    <footer className='w-full bg-tertiary-dark text-secondary flex flex-col items-center justify-center shadow-inner px-4 md:px-8 py-8 md:py-12 overflow-x-hidden gap-12 sm:gap-16'>
       <div className='w-full flex flex-col gap-3 md:col-span-2'>
         <h3 className='font-semibold text-sm md:text-base tracking-tight border-b border-primary pb-2 text-secondary'>
           Quick Links
@@ -92,17 +92,17 @@ const Footer = () => {
           <div className='flex flex-col gap-2 mt-1'>
             {phone && (
               <p className='w-full flex flex-row gap-2 items-center text-secondary/90'>
-                <IoCall className='text-emerald-400 shrink-0' /> {phone}
+                <IoCall className='text-primary shrink-0' /> {phone}
               </p>
             )}
             {email && (
               <p className='w-full flex flex-row gap-2 items-center text-secondary/90'>
-                <IoMail className='text-emerald-400 shrink-0' /> {email}
+                <IoMail className='text-primary shrink-0' /> {email}
               </p>
             )}
             {address && (
               <p className='w-full flex flex-row gap-2 items-center text-secondary/90'>
-                <FaLocationArrow className='text-emerald-400 shrink-0' /> {address}
+                <FaLocationArrow className='text-primary shrink-0' /> {address}
               </p>
             )}
           </div>
@@ -115,7 +115,7 @@ const Footer = () => {
                   href={websiteSettings.facebook_url}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='p-2 bg-emerald-900/60 hover:bg-primary-dark text-white rounded-lg transition-colors'
+                  className='p-2 bg-secondary-dark hover:bg-primary-dark text-white rounded-lg transition-colors'
                   aria-label='Facebook'
                 >
                   <FaFacebookF className='text-sm' />
@@ -126,7 +126,7 @@ const Footer = () => {
                   href={websiteSettings.twitter_url}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='p-2 bg-emerald-900/60 hover:bg-primary-dark text-white rounded-lg transition-colors'
+                  className='p-2 bg-secondary-dark hover:bg-primary-dark text-white rounded-lg transition-colors'
                   aria-label='Twitter'
                 >
                   <FaTwitter className='text-sm' />
@@ -137,7 +137,7 @@ const Footer = () => {
                   href={websiteSettings.instagram_url}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='p-2 bg-emerald-900/60 hover:bg-primary-dark text-white rounded-lg transition-colors'
+                  className='p-2 bg-secondary-dark hover:bg-primary-dark text-white rounded-lg transition-colors'
                   aria-label='Instagram'
                 >
                   <FaInstagram className='text-sm' />
@@ -148,7 +148,7 @@ const Footer = () => {
                   href={websiteSettings.youtube_url}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='p-2 bg-emerald-900/60 hover:bg-primary-dark text-white rounded-lg transition-colors'
+                  className='p-2 bg-secondary-dark hover:bg-primary-dark text-white rounded-lg transition-colors'
                   aria-label='YouTube'
                 >
                   <FaYoutube className='text-sm' />

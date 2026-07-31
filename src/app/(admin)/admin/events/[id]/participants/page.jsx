@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { FiUsers, FiArrowLeft, FiCalendar, FiMapPin, FiMail, FiUserCheck, FiSearch, FiDownload, FiHash, FiBookOpen } from 'react-icons/fi';
 import * as XLSX from 'xlsx';
+import Image from 'next/image';
 
 const AdminEventParticipantsPage = () => {
   const { id } = useParams();
@@ -82,8 +83,7 @@ const AdminEventParticipantsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50/50 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Navigation Header */}
+      <div className="w-full space-y-6">
         <div className="flex items-center justify-between">
           <Link
             href="/admin/events"
@@ -94,12 +94,11 @@ const AdminEventParticipantsPage = () => {
           </Link>
         </div>
 
-        {/* Event Header Banner */}
         {event && (
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs flex flex-col md:flex-row gap-6 items-start md:items-center">
             {event.image && (
               <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden shrink-0 bg-slate-100">
-                <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                <Image width={500} height={500} src={event.image} alt={event.title} className="w-full h-full object-cover" />
               </div>
             )}
             <div className="space-y-2 flex-1">
@@ -127,7 +126,6 @@ const AdminEventParticipantsPage = () => {
           </div>
         )}
 
-        {/* Search & Download Controls */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex-1 flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-100 shadow-xs w-full">
             <FiSearch className="text-slate-400 text-lg" />
@@ -150,7 +148,6 @@ const AdminEventParticipantsPage = () => {
           </button>
         </div>
 
-        {/* Participants Table */}
         {loading ? (
           <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-xs animate-pulse text-center">
             <div className="h-6 w-1/3 bg-slate-200 rounded mx-auto mb-4"></div>

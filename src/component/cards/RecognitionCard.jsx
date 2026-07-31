@@ -25,16 +25,16 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
     : null;
 
   return (
-    <Link href={targetHref} className="block group h-full">
+    <Link href={targetHref} className="block group h-full w-full max-w-60 shadow-sm bg-white border border-primary-light rounded-2xl overflow-hidden">
       <div
-        className={` items-center  justify-center p-1 transition-all duration-300 flex flex-col h-full ${className}`}
+        className={` items-center  justify-center transition-all duration-300 flex flex-col h-full ${className}`}
       >
-        <div className="w-full aspect-square rounded-full hover:shadow-sm overflow-hidden bg-slate-100 relative shrink-0">
+        <div className="w-full aspect-square  overflow-hidden bg-white relative shrink-0">
           {coverImage ? (
             <Image width={500} height={500}
               src={coverImage}
               alt={cardTitle}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-contain transition-transform duration-500"
             />
           ) : (
             <div className="w-full h-full bg-primary-light flex flex-col items-center justify-center gap-1.5 p-3 text-center">
@@ -49,7 +49,7 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
 
         </div>
 
-        <div className="pt-3 px-0.5 flex flex-col items-center justify-center flex-1 gap-1.5">
+        <div className="p-4 flex flex-col items-center justify-center flex-1 gap-1.5">
           
           <h3 className="font-bold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {cardTitle}
@@ -64,15 +64,6 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
             </div>
           )}
 
-          <div className=" border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-medium">
-            {formattedDate ? (
-              <span className="flex items-center gap-1">
-                <span>{formattedDate}</span>
-              </span>
-            ) : (
-              <span />
-            )}
-          </div>
         </div>
       </div>
     </Link>

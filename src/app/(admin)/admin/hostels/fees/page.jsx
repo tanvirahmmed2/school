@@ -9,12 +9,10 @@ const AdminHostelFeesPage = () => {
   const [fees, setFees] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Search student states
   const [searchRegNo, setSearchRegNo] = useState('');
   const [searchingStudent, setSearchingStudent] = useState(false);
   const [foundStudent, setFoundStudent] = useState(null);
 
-  // Form states
   const [amount, setAmount] = useState('');
   const [dueDate, setDueDate] = useState(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]); // 7 days from now
   const [status, setStatus] = useState('Unpaid');
@@ -117,7 +115,6 @@ const AdminHostelFeesPage = () => {
 
   const handleEditClick = (fee) => {
     setEditId(fee.id);
-    // Prefill foundStudent object with student details from row
     setFoundStudent({
       id: fee.student_id,
       name: fee.student_name,
@@ -165,10 +162,9 @@ const AdminHostelFeesPage = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-          <FiDollarSign className="text-rose-600" /> Hostel Fees Invoicing
+          <FiDollarSign className="text-tertiary" /> Hostel Fees Invoicing
         </h1>
         <p className="text-sm text-slate-500">
           Issue monthly hostel bills, log payment transactions, and track outstanding ledger balances.
@@ -176,19 +172,16 @@ const AdminHostelFeesPage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Fee Form Panel */}
-        <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-5">
+        <div className="lg:col-span-1 bg-secondary border border-slate-100 rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col gap-5">
           <div>
             <h2 className="text-base font-bold text-slate-800 mb-1 flex items-center gap-2">
-              <FiPlus className="text-rose-600" />
+              <FiPlus className="text-tertiary" />
               {editId ? 'Modify Fee Invoice' : 'Invoice Hostel Fee'}
             </h2>
             <p className="text-[11px] text-slate-400">
               {editId ? 'Modify amounts or set paid status.' : 'Search for a student to assign a new fee invoice.'}
             </p>
           </div>
-
-          {/* Search section only if not in edit mode (to prevent accidentally editing another student) */}
           {!editId && (
             <div className="flex flex-col gap-2 p-4 bg-slate-50 border border-slate-100 rounded-2xl">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -199,17 +192,17 @@ const AdminHostelFeesPage = () => {
                   type="text"
                   value={searchRegNo}
                   onChange={(e) => setSearchRegNo(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-rose-500"
+                  className="w-full px-3.5 py-2 bg-secondary border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-rose-500"
                 />
                 <button
                   type="button"
                   onClick={handleSearchStudent}
                   disabled={searchingStudent}
-                  className="p-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl transition-colors cursor-pointer"
+                  className="p-2.5 bg-tertiary hover:bg-tertiary-dark text-secondary rounded-xl transition-colors cursor-pointer"
                   title="Search Student"
                 >
                   {searchingStudent ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
                   ) : (
                     <FiSearch />
                   )}
@@ -236,7 +229,6 @@ const AdminHostelFeesPage = () => {
             </div>
           )}
 
-          {/* Form fields */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-0.5">
@@ -250,7 +242,7 @@ const AdminHostelFeesPage = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-rose-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-secondary focus:border-rose-500"
               />
             </div>
 
@@ -266,7 +258,7 @@ const AdminHostelFeesPage = () => {
                 value={paidAmount}
                 onChange={(e) => setPaidAmount(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-rose-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-secondary focus:border-rose-500"
               />
             </div>
 
@@ -280,7 +272,7 @@ const AdminHostelFeesPage = () => {
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-white focus:border-rose-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-850 outline-none focus:bg-secondary focus:border-rose-500"
               />
             </div>
 
@@ -293,7 +285,7 @@ const AdminHostelFeesPage = () => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
                 disabled={submitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-white focus:border-rose-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:bg-secondary focus:border-rose-500"
               >
                 <option value="Unpaid">Unpaid</option>
                 <option value="Partially Paid">Partially Paid</option>
@@ -314,12 +306,12 @@ const AdminHostelFeesPage = () => {
               <button
                 type="submit"
                 disabled={submitting || (!foundStudent && !editId)}
-                className={`py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-sm cursor-pointer ${
-                  editId ? 'bg-rose-600 hover:bg-rose-700 w-1/2' : 'bg-rose-600 hover:bg-rose-700 w-full bg-rose-600'
+                className={`py-2.5 rounded-xl text-xs font-bold text-secondary transition-all shadow-sm cursor-pointer ${
+                  editId ? 'bg-tertiary hover:bg-tertiary-dark w-1/2' : 'bg-tertiary hover:bg-tertiary-dark w-full '
                 } disabled:opacity-50 disabled:bg-slate-300 disabled:cursor-not-allowed`}
               >
                 {submitting ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+                  <div className="w-4 h-4 border-2 border-secondary border-t-transparent rounded-full animate-spin mx-auto"></div>
                 ) : editId ? (
                   'Update Invoice'
                 ) : (
@@ -331,7 +323,7 @@ const AdminHostelFeesPage = () => {
         </div>
 
         {/* Invoices registry */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
+        <div className="lg:col-span-2 bg-secondary border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
           <div className="px-6 py-5 border-b border-slate-100">
             <h2 className="text-base font-bold text-slate-800">
               Hostel Bills Ledger ({fees.length})
@@ -340,7 +332,7 @@ const AdminHostelFeesPage = () => {
 
           {loading ? (
             <div className="w-full py-16 flex flex-col items-center justify-center gap-3">
-              <div className="w-8 h-8 border-2 border-rose-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-tertiary border-t-transparent rounded-full animate-spin"></div>
               <span className="text-sm font-semibold text-slate-400">Loading ledger data...</span>
             </div>
           ) : fees.length === 0 ? (

@@ -10,11 +10,9 @@ export default function AdminHostelApplicationsPage() {
   const [seats, setSeats] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Modal
   const [selectedApp, setSelectedApp] = useState(null);
   const [selectedSeatId, setSelectedSeatId] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -95,7 +93,6 @@ export default function AdminHostelApplicationsPage() {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
           <FiFileText className="text-primary" /> Student Hostel Applications
@@ -105,7 +102,6 @@ export default function AdminHostelApplicationsPage() {
         </p>
       </div>
 
-      {/* Main Table Card */}
       <div className="bg-white border border-slate-100 rounded-3xl shadow-xs overflow-hidden space-y-4">
         <div className="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">

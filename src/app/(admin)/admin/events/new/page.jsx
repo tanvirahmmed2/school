@@ -64,9 +64,8 @@ const AdminCreateEventPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-50/50 p-4 md:p-8">
-      <div className="max-w-3xl mx-auto space-y-6">
-        {/* Header Navigation */}
+    <div className="w-full min-h-screen bg-slate-50/50 p-4 ">
+      <div className="w-full space-y-6">
         <div className="flex items-center justify-between">
           <Link
             href="/admin/events"
@@ -77,12 +76,9 @@ const AdminCreateEventPage = () => {
           </Link>
         </div>
 
-        {/* Card Form */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden">
           <div className="p-6 border-b border-slate-100 bg-slate-50/50">
-            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full w-fit mb-1">
-              <FiCalendar /> Admin Portal
-            </div>
+            
             <h1 className="text-xl font-bold text-slate-900">Create New Institutional Event</h1>
             <p className="text-slate-500 text-xs mt-1">Fill in the event specifications, date, location, and upload a poster image.</p>
           </div>

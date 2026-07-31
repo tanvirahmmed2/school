@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fi';
 import { Context } from '@/component/helper/Context';
 import Back from '@/component/button/Back';
+import { BiMoney } from 'react-icons/bi';
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -158,6 +159,7 @@ const Sidebar = () => {
     { label: 'Student Applications', href: '/admin/hostels/applications', icon: FiFileText },
     { label: 'Rooms & Seats', href: '/admin/hostels/rooms', icon: FiGrid },
     { label: 'Student Allocations', href: '/admin/hostels/allocations', icon: FiUsers },
+    { label: 'Student Fees', href: '/admin/hostels/fees', icon: BiMoney },
     { label: 'Faculty Provosts', href: '/admin/hostels/provosts', icon: FiUserCheck },
   ];
 

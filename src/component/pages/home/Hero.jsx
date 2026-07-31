@@ -92,36 +92,36 @@ const Hero = () => {
 
         <div className="hidden md:grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-slate-300/60 w-full">
 
-          <div className="flex items-center gap-4 bg-white/90 border border-slate-200/80 hover:border-emerald-300 p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-600/5 group transition-all duration-300 backdrop-blur-xs">
-            <div className="w-12 h-12 bg-primary-light border border-primary-light rounded-xl flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform duration-300">
+          <div className="flex items-center gap-4 bg-white/90 border border-secondary hover:border-tertiary p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-tertiary-light group transition-all duration-300 backdrop-blur-xs">
+            <div className="w-12 h-12 bg-primary-light rounded-xl flex items-center justify-center text-secondary shrink-0 group-hover:scale-110 transition-transform duration-300">
               <FiUsers className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-3xl font-semibold text-slate-900 tracking-tight">
+              <p className="text-3xl font-semibold text-secondary-dark tracking-tight">
                 {stats.totalStudents ? `${stats.totalStudents.toLocaleString()}+` : '0'}
               </p>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Total Students</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-white/90 border border-slate-200/80 hover:border-emerald-300 p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-600/5 group transition-all duration-300 backdrop-blur-xs">
-            <div className="w-12 h-12 bg-primary-light border border-primary-light rounded-xl flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform duration-300">
+          <div className="flex items-center gap-4 bg-white/90 border border-secondary hover:border-tertiary p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-tertiary-light group transition-all duration-300 backdrop-blur-xs">
+            <div className="w-12 h-12 bg-primary-light  rounded-xl flex items-center justify-center text-secondary shrink-0 group-hover:scale-110 transition-transform duration-300">
               <FiBookOpen className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-3xl font-semibold text-slate-900 tracking-tight">
+              <p className="text-3xl font-semibold text-secondary-dark tracking-tight">
                 {stats.totalTeachers ? `${stats.totalTeachers}+` : '0'}
               </p>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Expert Faculty</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-white/90 border border-slate-200/80 hover:border-emerald-300 p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-600/5 group transition-all duration-300 backdrop-blur-xs">
-            <div className="w-12 h-12 bg-primary-light border border-primary-light rounded-xl flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform duration-300">
+          <div className="flex items-center gap-4 bg-white/90 border border-secondary hover:border-tertiary p-5 rounded-2xl shadow-xs hover:shadow-md hover:shadow-tertiary-light group transition-all duration-300 backdrop-blur-xs">
+            <div className="w-12 h-12 bg-primary-light rounded-xl flex items-center justify-center text-secondary shrink-0 group-hover:scale-110 transition-transform duration-300">
               <FiLayers className="w-6 h-6" />
             </div>
             <div className="text-left">
-              <p className="text-3xl font-semibold text-slate-900 tracking-tight">
+              <p className="text-3xl font-semibold text-secondary-dark tracking-tight">
                 {stats.totalClasses || '0'}
               </p>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Academic Classes</p>

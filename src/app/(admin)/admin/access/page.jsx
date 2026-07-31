@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { FiPlus, FiTrash2, FiX, FiShield, FiPhone, FiMapPin, FiMail, FiUser, FiSearch, FiCheckCircle } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiX,  FiPhone, FiMapPin, FiMail, FiUser, FiSearch, FiCheckCircle } from 'react-icons/fi';
 import AdminCreateForm from '@/component/forms/AdminCreateForm';
 
 const AdminAccessPage = () => {
@@ -63,11 +63,10 @@ const AdminAccessPage = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiShield className="text-primary" /> Access Management
+             Access Management
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Manage administrative personnel accounts, security permissions, and roles below.

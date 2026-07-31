@@ -38,28 +38,28 @@ const AnnouncementPopup = () => {
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-fade-in transition-opacity duration-300">
       <div 
-        className="relative w-full max-w-md bg-white rounded-xl p-6 shadow-2xl border border-slate-100 flex flex-col gap-4 transform scale-100 animate-zoom-in transition-all duration-300"
+        className="relative w-full max-w-md bg-white rounded-sm p-6 shadow-2xl border border-slate-100 flex flex-col gap-4 transform scale-100 animate-zoom-in transition-all duration-300"
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1.5 text-tertiary-dark hover:text-secondary hover:bg-primary-light rounded-full transition-colors cursor-pointer"
           aria-label="Close Announcement"
         >
           <FiX className="text-lg" />
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-semibold uppercase text-amber-600 tracking-widest">
-            Announcement
+          <span className=" font-semibold uppercase text-primary tracking-widest">
+            Announcement!
           </span>
         </div>
 
         <div className="flex flex-col gap-2">
-          <h2 className="text-base font-semibold text-slate-900 tracking-tight leading-snug">
+          <h2 className="text-base font-semibold text-tertiary tracking-tight leading-snug">
             {announcement.name}
           </h2>
           <div 
-            className="text-slate-600 text-xs leading-relaxed max-h-50 overflow-y-auto pr-1.5 prose prose-slate max-w-none text-left"
+            className="text-sm leading-relaxed max-h-50 overflow-y-auto pr-1.5 prose prose-slate max-w-none text-left"
             dangerouslySetInnerHTML={{ __html: announcement.description }}
           />
         </div>
@@ -73,9 +73,8 @@ const AnnouncementPopup = () => {
               </div>
             )}
             {announcement.expires_at && (
-              <div className="flex items-center gap-1.5">
-                <FiClock className="text-slate-400 shrink-0" />
-                <span>Active until: <strong className="text-slate-600">{new Date(announcement.expires_at).toLocaleString()}</strong></span>
+              <div className="flex items-center gap-1.5 text-primary">
+                <span className='w-full flex flex-row gap-2'>Active until: {new Date(announcement.expires_at).toLocaleString()}</span>
               </div>
             )}
           </div>

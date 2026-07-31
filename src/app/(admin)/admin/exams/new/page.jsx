@@ -8,7 +8,7 @@ const AdminNewExamPage = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col gap-6 animate-fade-up">
+    <div className="w-full flex flex-col gap-6 animate-fade-up">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
           Create Exam Routine

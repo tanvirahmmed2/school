@@ -62,11 +62,10 @@ const AdminClassesPage = () => {
 
   return (
     <div className="w-full flex flex-col gap-5 max-w-7xl mx-auto">
-      {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiLayers className="text-emerald-600" /> Academic Class Setup
+            <FiLayers className="text-primary" /> Academic Class Setup
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Create, edit, and manage institutional academic classes.
@@ -78,7 +77,7 @@ const AdminClassesPage = () => {
             setShowAddForm(!showAddForm);
             setEditingClass(null);
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
         >
           {showAddForm ? (
             <>
@@ -117,13 +116,13 @@ const AdminClassesPage = () => {
       <div className="w-full bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden">
         <div className="px-5 py-3.5 border-b border-slate-200/80 flex items-center justify-between">
           <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-            Active Classes <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60 font-bold text-[10px] ml-1">({classes.length})</span>
+            Active Classes <span className="text-primary bg-primary-lightpx-2 py-0.5 rounded-full border border-primary-light font-bold text-[10px] ml-1">({classes.length})</span>
           </h2>
         </div>
 
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-2">
-            <div className="w-7 h-7 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-xs font-semibold text-slate-400">Loading classes...</span>
           </div>
         ) : classes.length === 0 ? (
@@ -159,7 +158,7 @@ const AdminClassesPage = () => {
                       </span>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                      <span className="text-[10px] font-bold text-primary bg-primary-lightborder border-primary-light px-2.5 py-0.5 rounded-full">
                         {cls.code}
                       </span>
                     </td>
@@ -178,7 +177,7 @@ const AdminClassesPage = () => {
                     <td className="px-4 py-3 whitespace-nowrap text-right space-x-1">
                       <button
                         onClick={() => handleStartEdit(cls)}
-                        className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/60 rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center"
+                        className="p-1.5 bg-primary-lighthover:bg-emerald-100 text-primary border border-primary-light rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center"
                         title="Edit Class"
                       >
                         <FiEdit2 className="text-xs" />

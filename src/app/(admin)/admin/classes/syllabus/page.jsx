@@ -15,7 +15,6 @@ const AdminSyllabusPage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingSyllabus, setEditingSyllabus] = useState(null);
 
-  // Fetch classes on component load
   useEffect(() => {
     const fetchClasses = async () => {
       try {
@@ -83,7 +82,7 @@ const AdminSyllabusPage = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Header */}
+     
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
@@ -113,7 +112,6 @@ const AdminSyllabusPage = () => {
         </button>
       </div>
 
-      {/* Selector/Filter Card */}
       <div className="w-full bg-white border border-slate-100 rounded-3xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col sm:flex-row items-center gap-4">
         <div className="w-full flex flex-col gap-1.5">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
@@ -134,7 +132,6 @@ const AdminSyllabusPage = () => {
         </div>
       </div>
 
-      {/* Forms */}
       {showAddForm && !editingSyllabus && (
         <SyllabusCreateForm
           initialClassId={selectedClassId}
@@ -157,7 +154,6 @@ const AdminSyllabusPage = () => {
         />
       )}
 
-      {/* Registry Table List */}
       <div className="w-full bg-white border border-slate-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-base font-bold text-slate-800">
@@ -174,7 +170,7 @@ const AdminSyllabusPage = () => {
           <div className="w-full py-16 flex flex-col items-center justify-center text-center px-4">
             <span className="text-slate-300 text-6xl mb-4">📖</span>
             <h3 className="text-sm font-bold text-slate-600">No Syllabuses Found</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
+            <p className="text-xs text-slate-400 mt-1 max-w-72">
               {selectedClassId 
                 ? 'No syllabus records uploaded yet for the selected class.' 
                 : 'No syllabus records uploaded yet. Click the add button to publish one.'}

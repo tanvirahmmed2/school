@@ -17,9 +17,9 @@ export const BREVO_SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL;
 export const BREVO_SENDER_NAME = process.env.BREVO_SENDER_NAME;
 export const BREVO_API_KEY = process.env.BREVO_API_KEY;
 
-export const SCHOOL_NAME = 'Star Cadet Academia'
-export const LOGO_URL = 'https://res.cloudinary.com/dv30hn53t/image/upload/v1785344439/school_j4yzy9.png'
-export const META_TITLE = "Star Cadet Academia - Academic Excellence & Growth"
+export const SCHOOL_NAME = 'Unitech International Institute'
+export const LOGO_URL = 'https://res.cloudinary.com/dv30hn53t/image/upload/v1785519586/uii_logo_umzrxu.png'
+export const META_TITLE = "Unitech International Institute - Academic Excellence & Growth"
 export const META_DESCRIPTION = 'Manage student enrollments, exam records, gradesheets, timetables, and billing files dynamically.'
 
 export const MONTHLY_FEE_DUE_DAY = parseInt('6', 10);

@@ -8,11 +8,8 @@ import {
   FiClock, 
   FiEdit3, 
   FiTrash2, 
-  FiCalendar, 
   FiInfo, 
   FiX, 
-  FiAlertCircle, 
-  FiBookOpen 
 } from 'react-icons/fi';
 import HistoryForm from '@/component/forms/HistoryForm';
 
@@ -76,7 +73,6 @@ export default function AdminHistoryPage() {
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up max-w-6xl mx-auto">
       
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-100 p-6 rounded-3xl shadow-xs">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">

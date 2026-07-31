@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #059669;
-  --primary-dark: #047857;
-  --primary-light: #ecfdf5;
+  --primary: #48a0f8;
+  --primary-dark: #0087fe;
+  --primary-light: #70b7fe;
   --secondary: #ffffff;
   --secondary-dark: #0f172a;
+
+  /* Tertiary Colors */
+  --tertiary: #ffa425;
+  --tertiary-dark: #ff7402;
+  --tertiary-light: #fcbc54;
 }
 
 @theme {
@@ -14,6 +19,11 @@
   --color-primary-light: var(--primary-light);
   --color-secondary: var(--secondary);
   --color-secondary-dark: var(--secondary-dark);
+
+  /* Tertiary Theme Colors */
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-dark: var(--tertiary-dark);
+  --color-tertiary-light: var(--tertiary-light);
 }
 
 .bg-primary {
@@ -58,6 +68,35 @@
 }
 .border-secondary {
   border-color: #ffffff !important;
+}
+
+/* Tertiary Classes */
+.bg-tertiary {
+  background-color: var(--tertiary, #6366f1) !important;
+}
+.bg-tertiary-dark {
+  background-color: var(--tertiary-dark, #4338ca) !important;
+}
+.bg-tertiary-light {
+  background-color: var(--tertiary-light, #e0e7ff) !important;
+}
+
+.text-tertiary {
+  color: var(--tertiary, #6366f1) !important;
+}
+.text-tertiary-dark {
+  color: var(--tertiary-dark, #4338ca) !important;
+}
+
+.border-tertiary {
+  border-color: var(--tertiary, #6366f1) !important;
+}
+.border-tertiary-light {
+  border-color: var(--tertiary-light, #e0e7ff) !important;
+}
+
+.hover\:bg-tertiary-dark:hover {
+  background-color: var(--tertiary-dark, #4338ca) !important;
 }
 
 /* Rich text styles */

@@ -108,13 +108,9 @@ const NewsListPage = () => {
   };
 
   return (
-    <div className="w-full py-4 animate-fade-up">
-      {/* Header */}
+    <div className="w-full p-4 animate-fade-up">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <span className="text-xs font-bold text-primary bg-emerald-50 border border-emerald-200/60 px-3 py-1 rounded-full uppercase tracking-widest">
-            Control Panel
-          </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight flex items-center gap-2">
             <FiFileText className="text-primary" /> Published Campus News
           </h1>

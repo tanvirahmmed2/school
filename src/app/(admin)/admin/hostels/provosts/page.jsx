@@ -78,7 +78,6 @@ export default function AdminHostelProvostsPage() {
 
   return (
     <div className="w-full flex flex-col gap-6 animate-fade-up">
-      {/* Top Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
           <FiUserCheck className="text-primary" /> Faculty Provost Assignments
@@ -88,9 +87,7 @@ export default function AdminHostelProvostsPage() {
         </p>
       </div>
 
-      {/* Grid: Form + Provost Assignments List */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Form */}
         <div className="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-4">
           <h2 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3">
             <FiPlus className="text-primary" /> Assign Faculty Provost

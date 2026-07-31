@@ -49,7 +49,7 @@ const AccessPortalSelectionPage = () => {
               className="hidden"
             />
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              selectedRole === 'teacher' ? 'bg-primary-light text-primary' : 'bg-slate-100 text-slate-500'
+              selectedRole === 'teacher' ? 'bg-primary-light text-secondary' : 'bg-slate-100 text-slate-500'
             }`}>
               <FiUsers className="text-lg" />
             </div>
@@ -79,7 +79,7 @@ const AccessPortalSelectionPage = () => {
               className="hidden"
             />
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              selectedRole === 'staff' ? 'bg-primary-light text-primary' : 'bg-slate-100 text-slate-500'
+              selectedRole === 'staff' ? 'bg-primary-light text-secondary' : 'bg-slate-100 text-slate-500'
             }`}>
               <FiSliders className="text-lg" />
             </div>
@@ -109,7 +109,7 @@ const AccessPortalSelectionPage = () => {
               className="hidden"
             />
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              selectedRole === 'admin' ? 'bg-primary-light text-primary' : 'bg-slate-100 text-slate-500'
+              selectedRole === 'admin' ? 'bg-primary-light text-secondary' : 'bg-slate-100 text-slate-500'
             }`}>
               <FiShield className="text-lg" />
             </div>

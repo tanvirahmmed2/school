@@ -18,8 +18,8 @@ const Navbar = () => {
   const dropdownTriggerStyle = () => `px-3 w-full h-10 flex items-center justify-center transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 text-white hover:text-white rounded-lg`;
 
   return (
-    <nav className="relative w-full bg-primary text-secondary flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
-      <section className="w-full flex flex-row items-center justify-between h-14 md:h-16">
+    <nav className="relative w-full bg-primary-dark text-secondary flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
+      <section className="w-full flex flex-row items-center justify-between md:h-14 h-16">
         <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight flex flex-row items-center justify-center gap-3">
           <span className='w-8 bg-white rounded-full overflow-hidden aspect-square'><Image alt={`${SCHOOL_NAME}`} src={LOGO_URL} width={100} height={100} /></span>
           {schoolName}
@@ -53,6 +53,7 @@ const Navbar = () => {
           <MdMenu />
         </button>
       </section>
+      <div className='w-full hidden md:flex h-px bg-secondary'></div>
 
       <section className="w-full hidden md:flex flex-row items-center justify-between gap-1 text-[13px] font-semibold text-white h-10">
         <Link href={'/'} className={linkStyle()}>Home</Link>

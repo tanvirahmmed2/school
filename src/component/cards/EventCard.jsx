@@ -33,14 +33,14 @@ const EventCard = ({ event, href, className = '' }) => {
       className={`bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-md hover:border-primary transition-all duration-250 flex flex-col group h-full ${className}`}
     >
       {image ? (
-        <div className="w-full aspect-video object-cover overflow-hidden bg-slate-100 shrink-0 relative">
+        <div className="w-full aspect-video rounded-xl object-cover overflow-hidden bg-slate-100 shrink-0 relative">
           <Image width={500} height={500}
             src={image}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           {dateObj && (
-            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-primary-light text-primary px-2.5 py-1 rounded-xl flex flex-col items-center justify-center font-bold text-xs shadow-xs">
+            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-tertiary-light text-primary px-2.5 py-1 rounded-xl flex flex-col items-center justify-center font-bold text-xs shadow-xs">
               <span className="text-sm font-semibold leading-none">{day}</span>
               <span className="text-[9px] uppercase tracking-wider">{month}</span>
             </div>
@@ -48,7 +48,7 @@ const EventCard = ({ event, href, className = '' }) => {
         </div>
       ) : (
         <div className="w-full sm:w-40 bg-primary-light flex sm:flex-col items-center justify-center p-4 shrink-0 relative border-b sm:border-b-0 sm:border-r border-slate-100">
-          <div className="w-14 h-14 bg-white border border-primary-light text-primary rounded-2xl flex flex-col items-center justify-center shadow-xs">
+          <div className="w-14 h-14 bg-white border border-tertiary-light text-primary rounded-2xl flex flex-col items-center justify-center shadow-xs">
             <span className="text-lg font-semibold leading-none">{day}</span>
             <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">{month}</span>
           </div>
@@ -72,7 +72,7 @@ const EventCard = ({ event, href, className = '' }) => {
             )}
           </div>
 
-          <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-slate-900 text-base leading-snug group-hover:text-tertiary transition-colors">
             {title}
           </h3>
 
@@ -83,7 +83,7 @@ const EventCard = ({ event, href, className = '' }) => {
           )}
         </div>
 
-        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-primary">
+        <div className="pt-2 border-t border-slate-50 flex items-center gap-1 text-xs font-bold text-primary group-hover:text-tertiary">
           <span>View Details</span>
           <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
         </div>

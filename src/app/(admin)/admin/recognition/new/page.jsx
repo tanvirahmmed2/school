@@ -47,13 +47,9 @@ const CreateRecognitionPage = () => {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto py-4">
-      {/* Header */}
+    <div className="w-full p-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <span className="text-xs font-bold text-primary bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest">
-            Control Panel
-          </span>
           <h1 className="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">
             Record New Recognition
           </h1>
