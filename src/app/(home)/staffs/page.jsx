@@ -39,7 +39,6 @@ export default function PublicStaffPage() {
           </p>
         </div>
 
-        {/* Staff Directory Mapping */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[1, 2, 3, 4].map((i) => (

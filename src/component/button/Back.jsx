@@ -34,7 +34,7 @@ const Back = () => {
       <button
         type="button"
         onClick={handleBack}
-        className="flex items-center justify-center gap-1 px-2 py-2 bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200/80 hover:border-emerald-200 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-2xs group"
+        className="flex items-center justify-center gap-1 px-2 py-2 bg-secondary text-primary hover:bg-primary-light border border-secondary/30 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-2xs group"
         title="Go Back"
       >
         <FiArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />
@@ -44,7 +44,7 @@ const Back = () => {
       <button
         type="button"
         onClick={handleReload}
-        className="flex items-center justify-center gap-1 px-2 py-2 bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200/80 hover:border-emerald-200 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-2xs group"
+        className="flex items-center justify-center gap-1 px-2 py-2 bg-secondary text-primary hover:bg-primary-light border border-secondary/30 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-2xs group"
         title="Reload Page"
       >
         <FiRefreshCw className="text-xs group-hover:rotate-180 transition-transform duration-300" />
@@ -54,7 +54,7 @@ const Back = () => {
       <button
         type="button"
         onClick={handleNext}
-        className="flex items-center justify-center gap-1 px-2 py-2 bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200/80 hover:border-emerald-200 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-2xs group"
+        className="flex items-center justify-center gap-1 px-2 py-2 bg-secondary text-primary hover:bg-primary-light border border-secondary/30 text-xs font-semibold rounded-xl transition-all cursor-pointer shadow-2xs group"
         title="Go Forward"
       >
         <span>Next</span>

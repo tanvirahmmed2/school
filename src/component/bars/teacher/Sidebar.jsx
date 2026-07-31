@@ -81,20 +81,20 @@ const Sidebar = () => {
     <>
       {TeacherSidebar && (
         <div
-          className="fixed inset-0 top-16 bg-slate-900/30 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
+          className="fixed inset-0 top-16 bg-secondary-dark/40 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
           onClick={() => setTeacherSidebar(false)}
         />
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200/80 z-40 flex flex-col justify-between py-5 px-3 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-primary border-r border-secondary/20 z-40 flex flex-col justify-between py-5 px-3 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           TeacherSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col gap-4">
           <Back />
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 flex items-center gap-1.5 mb-1">
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-wider px-3 flex items-center gap-1.5 mb-1">
               Teacher Navigation
             </span>
             <nav className="flex flex-col gap-1">
@@ -109,11 +109,11 @@ const Sidebar = () => {
                     onClick={() => setTeacherSidebar(false)}
                     className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
                       isActive
-                        ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
-                        : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
+                        ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
+                        : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
                     }`}
                   >
-                    <Icon className={`text-base ${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                    <Icon className={`text-base ${isActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -126,20 +126,20 @@ const Sidebar = () => {
                     onClick={() => setClubDropdownOpen(!clubDropdownOpen)}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 cursor-pointer group ${
                       pathname.startsWith('/teacher/clubs')
-                        ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
-                        : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
+                        ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
+                        : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <FiUsers className={`text-base ${pathname.startsWith('/teacher/clubs') ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                      <FiUsers className={`text-base ${pathname.startsWith('/teacher/clubs') ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
                       <span>Club Admin</span>
                     </div>
-                    {clubDropdownOpen ? <FiChevronDown className="text-xs text-slate-400" /> : <FiChevronRight className="text-xs text-slate-400" />}
+                    {clubDropdownOpen ? <FiChevronDown className="text-xs text-secondary" /> : <FiChevronRight className="text-xs text-secondary" />}
                   </button>
 
                   {/* Sub Links */}
                   {clubDropdownOpen && (
-                    <div className="flex flex-col gap-1 pl-4 border-l border-emerald-200 ml-4 my-1">
+                    <div className="flex flex-col gap-1 pl-4 border-l border-secondary/30 ml-4 my-1">
                       {clubSubLinks.map((sub) => {
                         const SubIcon = sub.icon;
                         const isSubActive = checkIsActive(sub.href);
@@ -151,11 +151,11 @@ const Sidebar = () => {
                             onClick={() => setTeacherSidebar(false)}
                             className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all duration-150 ${
                               isSubActive
-                                ? 'bg-emerald-100/70 text-emerald-800 font-bold'
-                                : 'text-slate-500 font-medium hover:bg-slate-100 hover:text-slate-800'
+                                ? 'bg-secondary text-primary font-bold shadow-2xs'
+                                : 'text-secondary font-medium hover:bg-secondary hover:text-primary'
                             }`}
                           >
-                            <SubIcon className={`text-xs ${isSubActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                            <SubIcon className={`text-xs ${isSubActive ? 'text-primary' : 'text-secondary'}`} />
                             <span>{sub.label}</span>
                           </Link>
                         );
@@ -176,11 +176,11 @@ const Sidebar = () => {
                     onClick={() => setTeacherSidebar(false)}
                     className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
                       isActive
-                        ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
-                        : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
+                        ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
+                        : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
                     }`}
                   >
-                    <Icon className={`text-base ${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                    <Icon className={`text-base ${isActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -189,11 +189,11 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <div className="mt-6 pt-3 border-t border-slate-100">
+        <div className="mt-6 pt-3 border-t border-secondary/20">
           <Link
             href="/"
             onClick={() => setTeacherSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-secondary text-primary hover:bg-primary-light font-semibold text-xs rounded-xl shadow-xs transition-colors"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>

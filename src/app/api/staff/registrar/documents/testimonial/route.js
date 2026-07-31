@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT } from '@/lib/auth';
 import { query } from '@/lib/db';
+import { logActivity } from '@/lib/activity_logger';
 
 export async function POST(request) {
   try {
@@ -49,6 +50,17 @@ export async function POST(request) {
       ON CONFLICT (testimonial_no) DO UPDATE SET academic_character = EXCLUDED.academic_character, conduct = EXCLUDED.conduct, remarks = EXCLUDED.remarks, issue_date = CURRENT_DATE
       RETURNING *
     `, [testimonialNo, student.id, academic_character, conduct, remarks ? remarks.trim() : null, decoded.role || 'staff', decoded.id]);
+
+    await logActivity({
+      userId: decoded.id,
+      userType: decoded.role || 'staff',
+      action: 'ISSUE_TESTIMONIAL',
+      details: {
+        student_id: student.id,
+        student_name: student.name,
+        testimonial_no: testimonialNo
+      }
+    });
 
     return NextResponse.json({
       success: true,

@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { isAdmin, isRegister } from '@/lib/auth';
 
-// GET the active announcement (at most one exists)
+// GET the broadcast announcement (latest entry)
 export async function GET() {
   try {
     const result = await query(
-      'SELECT id, name, description, expires_at, location, created_at, updated_at FROM announcements WHERE expires_at IS NULL OR expires_at > NOW() LIMIT 1'
+      'SELECT id, name, description, expires_at, location, created_at, updated_at FROM announcements ORDER BY id DESC LIMIT 1'
     );
     const res_data = { announcement: result.rows[0] || null };
     return NextResponse.json({
@@ -25,7 +25,7 @@ export async function GET() {
   }
 }
 
-// POST create the single announcement (fails if one already exists)
+// POST create or replace the single broadcast announcement
 export async function POST(request) {
   try {
     const authenticated = (await isAdmin()) || (await isRegister());
@@ -49,16 +49,8 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Check if any announcement already exists
-    const checkExist = await query('SELECT COUNT(*) FROM announcements');
-    if (parseInt(checkExist.rows[0].count, 10) > 0) {
-      return NextResponse.json({
-        success: false,
-        message: 'An active announcement already exists. Please update or delete it instead.',
-        error: 'Conflict',
-        paylod: null
-      }, { status: 400 });
-    }
+    // Replace any existing announcement to ensure clean state
+    await query('DELETE FROM announcements');
 
     const result = await query(
       `INSERT INTO announcements (name, description, expires_at, location)
@@ -93,7 +85,7 @@ export async function POST(request) {
   }
 }
 
-// PUT update the single active announcement
+// PUT update or create the single broadcast announcement
 export async function PUT(request) {
   try {
     const authenticated = (await isAdmin()) || (await isRegister());
@@ -118,31 +110,37 @@ export async function PUT(request) {
     }
 
     // Check if there is an announcement to update
-    const checkExist = await query('SELECT id FROM announcements LIMIT 1');
+    const checkExist = await query('SELECT id FROM announcements ORDER BY id DESC LIMIT 1');
+    
+    let result;
     if (checkExist.rows.length === 0) {
-      return NextResponse.json({
-        success: false,
-        message: 'No announcement found to update. Please create one first.',
-        error: 'Not Found',
-        paylod: null
-      }, { status: 404 });
+      result = await query(
+        `INSERT INTO announcements (name, description, expires_at, location)
+         VALUES ($1, $2, $3, $4)
+         RETURNING id, name, description, expires_at, location, created_at, updated_at`,
+        [
+          name.trim(),
+          description.trim(),
+          expires_at,
+          location ? location.trim() : null
+        ]
+      );
+    } else {
+      const announcementId = checkExist.rows[0].id;
+      result = await query(
+        `UPDATE announcements
+         SET name = $1, description = $2, expires_at = $3, location = $4, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $5
+         RETURNING id, name, description, expires_at, location, created_at, updated_at`,
+        [
+          name.trim(),
+          description.trim(),
+          expires_at,
+          location ? location.trim() : null,
+          announcementId
+        ]
+      );
     }
-
-    const announcementId = checkExist.rows[0].id;
-
-    const result = await query(
-      `UPDATE announcements
-       SET name = $1, description = $2, expires_at = $3, location = $4, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $5
-       RETURNING id, name, description, expires_at, location, created_at, updated_at`,
-      [
-        name.trim(),
-        description.trim(),
-        expires_at,
-        location ? location.trim() : null,
-        announcementId
-      ]
-    );
 
     const res_data = {
       message: 'Announcement updated successfully.',

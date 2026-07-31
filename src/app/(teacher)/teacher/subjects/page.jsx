@@ -70,8 +70,6 @@ const SubjectsPage = () => {
                         className="px-2 py-0.5 bg-primary/5 text-primary rounded text-[10px] font-semibold hover:bg-primary/10">Lessons</Link>
                       <Link href={`/teacher/materials?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
                         className="px-2 py-0.5 bg-primary/5 text-primary rounded text-[10px] font-semibold hover:bg-primary/10">Materials</Link>
-                      <Link href={`/teacher/assignments?class_subject_id=${sub.id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                        className="px-2 py-0.5 bg-primary/5 text-primary rounded text-[10px] font-semibold hover:bg-primary/10">Assignments</Link>
                     </div>
                   </td>
                 </tr>

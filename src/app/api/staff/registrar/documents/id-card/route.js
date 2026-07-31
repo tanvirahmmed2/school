@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT } from '@/lib/auth';
 import { query } from '@/lib/db';
+import { logActivity } from '@/lib/activity_logger';
 
 export async function POST(request) {
   try {
@@ -59,6 +60,17 @@ export async function POST(request) {
       });
     }
 
+    await logActivity({
+      userId: decoded.id,
+      userType: decoded.role || 'staff',
+      action: 'ISSUE_ID_CARD',
+      details: {
+        student_count: issuedCards.length,
+        student_ids: targetStudentIds,
+        expiry_date: expDate
+      }
+    });
+
     return NextResponse.json({
       success: true,
       message: `Issued/updated ${issuedCards.length} Student ID Card(s).`,
@@ -83,6 +95,8 @@ export async function DELETE(request) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
+    const decoded = verifyJWT(token);
+
     const { student_id, student_ids } = await request.json();
 
     const targetStudentIds = student_ids && Array.isArray(student_ids) && student_ids.length > 0
@@ -97,6 +111,15 @@ export async function DELETE(request) {
       DELETE FROM student_id_cards
       WHERE student_id = ANY($1::bigint[])
     `, [targetStudentIds]);
+
+    await logActivity({
+      userId: decoded?.id,
+      userType: decoded?.role || 'staff',
+      action: 'REVOKE_ID_CARD',
+      details: {
+        student_ids: targetStudentIds
+      }
+    });
 
     return NextResponse.json({
       success: true,

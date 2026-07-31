@@ -99,8 +99,8 @@ const AdminAnnouncementsPage = () => {
               </div>
             ) : announcement ? (
               <div className="border border-slate-100 rounded-2xl p-4 bg-slate-50/50 flex flex-col gap-3">
-                <div className="flex items-center gap-2 text-amber-600 font-bold text-xs uppercase tracking-wider">
-                  <FiBell /> Active Broadcast
+                <div className={`flex items-center gap-2 font-bold text-xs uppercase tracking-wider ${new Date(announcement.expires_at) > new Date() ? 'text-amber-600' : 'text-rose-600'}`}>
+                  <FiBell /> {new Date(announcement.expires_at) > new Date() ? 'Active Broadcast' : 'Expired Broadcast'}
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-850">{announcement.name}</h3>

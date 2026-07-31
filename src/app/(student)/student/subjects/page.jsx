@@ -119,20 +119,13 @@ const SubjectsPage = () => {
                   </div>
                 )}
                 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex justify-center">
                   <Link
                     href={`/student/materials?class_subject_id=${sub.class_subject_id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex items-center justify-center gap-1 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/60 rounded-xl text-xs font-medium transition-colors text-center"
+                    className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/60 rounded-xl text-xs font-medium transition-colors text-center"
                   >
                     <FiFileText className="text-xs text-blue-500" />
-                    <span>Materials</span>
-                  </Link>
-                  <Link
-                    href={`/student/assignments?class_subject_id=${sub.class_subject_id}&subject_name=${encodeURIComponent(sub.subject_name)}`}
-                    className="flex items-center justify-center gap-1 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/60 rounded-xl text-xs font-medium transition-colors text-center"
-                  >
-                    <FiCheckSquare className="text-xs text-emerald-500" />
-                    <span>Assignments</span>
+                    <span>View Study Materials</span>
                   </Link>
                 </div>
               </div>

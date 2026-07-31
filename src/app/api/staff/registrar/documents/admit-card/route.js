@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT } from '@/lib/auth';
 import { query } from '@/lib/db';
+import { logActivity } from '@/lib/activity_logger';
 
 export async function GET(request) {
   try {
@@ -171,6 +172,18 @@ export async function POST(request) {
         schedules: scheduleRes.rows
       });
     }
+
+    await logActivity({
+      userId: decoded.id,
+      userType: decoded.role || 'staff',
+      action: 'ISSUE_ADMIT_CARD',
+      details: {
+        exam_id: exam.id,
+        exam_name: exam.name,
+        student_count: printItems.length,
+        student_ids
+      }
+    });
 
     return NextResponse.json({
       success: true,

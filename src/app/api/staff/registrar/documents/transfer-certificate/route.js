@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifyJWT } from '@/lib/auth';
 import { query } from '@/lib/db';
+import { logActivity } from '@/lib/activity_logger';
 
 export async function POST(request) {
   try {
@@ -105,6 +106,18 @@ export async function POST(request) {
           updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
     `, [student.id]);
+
+    await logActivity({
+      userId: decoded.id,
+      userType: decoded.role || 'staff',
+      action: 'ISSUE_TRANSFER_CERTIFICATE',
+      details: {
+        student_id: student.id,
+        student_name: student.name,
+        tc_number: tcNumber,
+        reason: reason_for_leaving
+      }
+    });
 
     return NextResponse.json({
       success: true,

@@ -1,44 +1,54 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #059669;
-  --color-primary-dark: #047857;
-  --color-primary-light: #ecfdf5;
-  --color-secondary: #ffffff;
-  --color-secondary-dark: #f8fafc;
+:root {
+  --primary: #059669;
+  --primary-dark: #047857;
+  --primary-light: #ecfdf5;
+  --secondary: #ffffff;
+  --secondary-dark: #0f172a;
 }
 
-/* Explicit Fail-Safe Utility Classes */
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-secondary-dark: var(--secondary-dark);
+}
+
 .bg-primary {
-  background-color: #059669 !important;
+  background-color: var(--primary, #059669) !important;
 }
 .bg-primary-dark {
-  background-color: #047857 !important;
+  background-color: var(--primary-dark, #047857) !important;
 }
 .bg-primary-light {
-  background-color: #ecfdf5 !important;
+  background-color: var(--primary-light, #ecfdf5) !important;
 }
 
 .text-primary {
-  color: #059669 !important;
+  color: var(--primary, #059669) !important;
 }
 .text-primary-dark {
-  color: #047857 !important;
+  color: var(--primary-dark, #047857) !important;
 }
 
 .border-primary {
-  border-color: #059669 !important;
+  border-color: var(--primary, #059669) !important;
 }
 .border-primary-light {
   border-color: #a7f3d0 !important;
 }
 
 .hover\:bg-primary-dark:hover {
-  background-color: #047857 !important;
+  background-color: var(--primary-dark, #047857) !important;
 }
 
 .bg-secondary {
-  background-color: #ffffff !important;
+  background-color: var(--secondary, #ffffff) !important;
+}
+.bg-secondary-dark {
+  background-color: var(--secondary-dark, #0f172a) !important;
 }
 .text-secondary {
   color: #ffffff !important;

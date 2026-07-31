@@ -14,7 +14,7 @@ const AnnouncementPopup = () => {
         const response = await axios.get('/api/announcements');
         const active = response.data.paylod.announcement;
         
-        if (active) {
+        if (active && (!active.expires_at || new Date(active.expires_at) > new Date())) {
           setAnnouncement(active);
           const timer = setTimeout(() => {
             setIsOpen(true);

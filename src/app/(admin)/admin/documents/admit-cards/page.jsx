@@ -1,4 +1,4 @@
-import AdmitCardIssuer from '@/component/documents/AdmitCardIssuer';
+import AdmitCardIssuer from '@/component/pages/documents/AdmitCardIssuer';
 
 export default function Page() {
   return <AdmitCardIssuer />;

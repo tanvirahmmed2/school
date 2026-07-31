@@ -74,9 +74,10 @@ const Footer = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <Link href={'/verify-student'} className='hover:text-secondary transition-colors duration-200'>Verify Student</Link>
+            <Link href={'/verify-id-card'} className='hover:text-secondary transition-colors duration-200'>Verify Student ID Card</Link>
+            <Link href={'/verify-testimonial'} className='hover:text-secondary transition-colors duration-200'>Verify Testimonial</Link>
+            <Link href={'/verify-tc'} className='hover:text-secondary transition-colors duration-200'>Verify Transfer Certificate</Link>
             <Link href={'/auth/student'} className='hover:text-secondary transition-colors duration-200'>Student Portal</Link>
-            <Link href={'/auth/access/teacher'} className='hover:text-secondary transition-colors duration-200'>Teacher Login</Link>
-            <Link href={'/auth/access'} className='hover:text-secondary transition-colors duration-200'>Access Portal</Link>
           </div>
         </div>
       </div>

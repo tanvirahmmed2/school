@@ -161,7 +161,7 @@ const Sidebar = () => {
     { label: 'Faculty Provosts', href: '/admin/hostels/provosts', icon: FiUserCheck },
   ];
 
-  const groupHeaderStyle = "text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1 mt-3 flex items-center gap-1.5";
+  const groupHeaderStyle = "text-[10px] font-bold text-secondary uppercase tracking-wider px-3 mb-1 mt-3 flex items-center gap-1.5";
 
   const CollapsibleGroup = ({ label, icon: CategoryIcon, isOpen, setIsOpen, prefix, links }) => {
     const isGroupActive = pathname.startsWith(prefix);
@@ -171,23 +171,23 @@ const Sidebar = () => {
           onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 cursor-pointer group ${
             isGroupActive
-              ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
-              : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
+              ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
+              : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
           }`}
         >
           <div className="flex items-center gap-3">
-            <CategoryIcon className={`text-base ${isGroupActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+            <CategoryIcon className={`text-base ${isGroupActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
             <span>{label}</span>
           </div>
           {isOpen ? (
-            <FiChevronDown className="text-slate-400 text-xs" />
+            <FiChevronDown className="text-secondary text-xs" />
           ) : (
-            <FiChevronRight className="text-slate-400 text-xs" />
+            <FiChevronRight className="text-secondary text-xs" />
           )}
         </button>
 
         {isOpen && (
-          <div className="flex flex-col gap-1 pl-4 border-l border-emerald-200 ml-4 my-0.5">
+          <div className="flex flex-col gap-1 pl-4 border-l border-secondary/30 ml-4 my-0.5">
             {links.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -199,11 +199,11 @@ const Sidebar = () => {
                   onClick={() => setAdminSidebar(false)}
                   className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-150 ${
                     isActive
-                      ? 'bg-emerald-100/70 text-emerald-800 font-bold'
-                      : 'text-slate-500 font-medium hover:bg-slate-100 hover:text-slate-800'
+                      ? 'bg-secondary text-primary font-bold shadow-2xs'
+                      : 'text-secondary font-medium hover:bg-secondary hover:text-primary'
                   }`}
                 >
-                  <Icon className={`text-xs ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} />
+                  <Icon className={`text-xs ${isActive ? 'text-primary' : 'text-secondary'}`} />
                   <span>{link.label}</span>
                 </Link>
               );
@@ -227,11 +227,11 @@ const Sidebar = () => {
             onClick={() => setAdminSidebar(false)}
             className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
               isActive
-                ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60 shadow-2xs'
-                : 'text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
+                : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
             }`}
           >
-            <Icon className={`text-base ${isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+            <Icon className={`text-base ${isActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
             <span>{link.label}</span>
           </Link>
         );
@@ -241,16 +241,15 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Backdrop for mobile view */}
       {adminSidebar && (
         <div
-          className="fixed inset-0 top-16 bg-slate-900/30 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
+          className="fixed inset-0 top-16 bg-secondary-dark/40 backdrop-blur-xs z-30 md:hidden transition-opacity duration-200"
           onClick={() => setAdminSidebar(false)}
         />
       )}
 
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200/80 z-40 flex flex-col justify-between py-5 px-3 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
+        className={`fixed top-16 left-0 bottom-0 w-64 bg-primary border-r border-secondary/20 z-40 flex flex-col justify-between py-5 px-3 transition-transform duration-200 ease-in-out md:translate-x-0 overflow-y-auto ${
           adminSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -311,11 +310,11 @@ const Sidebar = () => {
 
         </div>
 
-        <div className="mt-6 pt-3 border-t border-slate-100">
+        <div className="mt-6 pt-3 border-t border-secondary/20">
           <Link
             href="/"
             onClick={() => setAdminSidebar(false)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-secondary text-primary hover:bg-primary-light font-semibold text-xs rounded-xl shadow-xs transition-colors"
           >
             <FiHome className="text-sm" />
             <span>Go to Home Page</span>
