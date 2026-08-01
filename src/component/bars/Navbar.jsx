@@ -2,7 +2,6 @@
 
 import React, { useContext } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { Context } from '../helper/Context';
 import { MdMenu } from 'react-icons/md';
 import { LOGO_URL, SCHOOL_NAME } from '@/lib/secret';
@@ -10,125 +9,152 @@ import Image from 'next/image';
 
 const Navbar = () => {
   const { classes, clubs, designations, sidebar, setSidebar, websiteSettings } = useContext(Context);
-  const pathname = usePathname();
 
   const schoolName = websiteSettings?.school_name || SCHOOL_NAME;
 
-  const linkStyle = () => `px-3 h-10 flex w-full items-center justify-center transition-all duration-200 cursor-pointer text-xs lg:text-sm font-semibold text-white hover:text-white rounded-lg`;
-  const dropdownTriggerStyle = () => `px-3 w-full h-10 flex items-center justify-center transition-all duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold p-0 flex items-center gap-0.5 text-white hover:text-white rounded-lg`;
+  const navLinkStyle = `px-3 py-2 flex items-center justify-center transition-colors duration-200 cursor-pointer text-xs lg:text-sm font-semibold text-white hover:text-secondary rounded-md whitespace-nowrap`;
+  const dropdownTriggerStyle = `px-3 py-2 flex items-center justify-center gap-1 transition-colors duration-200 cursor-pointer bg-transparent border-none text-xs lg:text-sm font-semibold text-white hover:text-secondary rounded-md whitespace-nowrap`;
 
   return (
-    <nav className="relative w-full bg-primary-dark text-secondary flex flex-col h-auto items-center justify-center px-4 md:px-8 shadow-xs">
-      <section className="w-full flex flex-row items-center justify-between md:h-14 h-16">
-        <Link href={'/'} className="w-auto shrink-0 text-lg md:text-xl font-semibold text-white transition-colors tracking-tight flex flex-row items-center justify-center gap-3">
-          <span className='w-8 bg-white rounded-full overflow-hidden aspect-square'><Image alt={`${SCHOOL_NAME}`} src={LOGO_URL} width={100} height={100} /></span>
-          {schoolName}
+    <nav className="relative w-full bg-primary-dark text-white shadow-sm flex flex-col items-center">
+     
+      <div className="w-full  px-4 md:px-8 flex flex-row items-center justify-between h-16">
+        <Link href="/" className="flex items-center gap-3 shrink-0 group">
+          <div className="relative w-9 h-9 bg-white rounded-full overflow-hidden flex items-center justify-center shrink-0">
+            <Image 
+              alt={schoolName} 
+              src={LOGO_URL} 
+              width={36} 
+              height={36} 
+              className="object-contain p-0.5"
+            />
+          </div>
+          <span className="text-lg md:text-xl font-bold tracking-tight text-white group-hover:text-secondary transition-colors">
+            {schoolName}
+          </span>
         </Link>
 
-        <section className="hidden md:flex flex-row items-center justify-end gap-5">
-          <div className="w-auto flex flex-row items-center justify-center gap-8 text-sm font-semibold">
-
-            <Link href={'/facilities/hostels'} className="transition-colors text-white hover:text-secondary">Hostels</Link>
-            <Link href={'/gallery'} className="transition-colors text-white hover:text-secondary">Gallery</Link>
-            <Link href={'/apply'} className="transition-colors text-white hover:text-secondary">
-              Apply
-            </Link>
-            <Link href={'/auth/student'} className="transition-colors text-white hover:text-secondary">
-              Student Portal
-            </Link>
-            <Link
-              href={'/auth/access'}
-              className="text-primary transition-all bg-white hover:bg-primary-light hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs"
-            >
-              Login
-            </Link>
-          </div>
-        </section>
+        <div className="hidden md:flex items-center gap-6 text-xs lg:text-sm font-semibold">
+          <Link href="/facilities/hostels" className="transition-colors text-white hover:text-secondary">Hostels</Link>
+          <Link href="/gallery" className="transition-colors text-white hover:text-secondary">Gallery</Link>
+          <Link href="/apply" className="transition-colors text-white hover:text-secondary">Apply</Link>
+          <Link href="/auth/student" className="transition-colors text-white hover:text-secondary">Student Portal</Link>
+          <Link
+            href="/auth/access"
+            className="text-primary-dark transition-all bg-white hover:bg-slate-100 hover:shadow-md px-4 py-1.5 rounded-lg font-bold text-xs"
+          >
+            Login
+          </Link>
+        </div>
 
         <button
           onClick={() => setSidebar(!sidebar)}
-          className="md:hidden text-2xl transition-colors cursor-pointer p-2 rounded-lg text-white"
+          className="md:hidden text-2xl transition-colors p-2 rounded-lg text-white hover:bg-white/10"
           aria-label="Toggle Menu"
         >
           <MdMenu />
         </button>
-      </section>
-      <div className='w-full hidden md:flex h-px bg-secondary'></div>
+      </div>
 
-      <section className="w-full hidden md:flex flex-row items-center justify-between gap-1 text-[13px] font-semibold text-white h-10">
-        <Link href={'/'} className={linkStyle()}>Home</Link>
-        <Link href={'/events'} className={linkStyle()}>Events</Link>
+      <div className="w-full hidden md:block h-px bg-white/10" />
 
-        <div className="relative group w-full">
-          <Link href={'/authorities'} className={dropdownTriggerStyle()}>
-            Authorities
-          </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
-            {designations && designations.length > 0 ? (
-              designations.map((d) => (
-                <Link href={`/authorities/${d.slug}`} key={d.id} className="px-4 w-full py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">
-                  {d.title}
-                </Link>
-              ))
-            ) : (
-              <span className="px-4 py-2 text-slate-400 text-xs italic text-left">No authorities</span>
-            )}
+      <div className="w-full px-4 md:px-8 hidden md:flex flex-row items-center justify-between h-12">
+        <div className="flex flex-row items-center justify-between w-full gap-1">
+          <Link href="/" className={navLinkStyle}>Home</Link>
+          <Link href="/events" className={navLinkStyle}>Events</Link>
+
+          <div className="relative group">
+            <Link href="/authorities" className={dropdownTriggerStyle}>
+              Authorities
+            </Link>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block pt-2 z-50">
+              <div className="flex flex-col min-w-52 bg-white text-slate-800 rounded-lg shadow-xl border border-slate-100 overflow-hidden">
+                {designations && designations.length > 0 ? (
+                  designations.map((d) => (
+                    <Link 
+                      href={`/authorities/${d.slug}`} 
+                      key={d.id} 
+                      className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors"
+                    >
+                      {d.title}
+                    </Link>
+                  ))
+                ) : (
+                  <span className="px-4 py-2.5 text-slate-400 text-xs italic text-left">No authorities</span>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="relative group w-full">
-          <Link href={'/about'} className={dropdownTriggerStyle()}>
-            About
-          </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
-            <Link href={'/about/campus'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">My Campus</Link>
-            <Link href={'/about/mission'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">Mission</Link>
-            <Link href={'/about/vision'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">Vision</Link>
-            <Link href={'/about/history'} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">History</Link>
+          {/* About Dropdown */}
+          <div className="relative group">
+            <Link href="/about" className={dropdownTriggerStyle}>
+              About
+            </Link>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block pt-2 z-50">
+              <div className="flex flex-col min-w-48 bg-white text-slate-800 rounded-lg shadow-xl border border-slate-100 overflow-hidden">
+                <Link href="/about/campus" className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors">My Campus</Link>
+                <Link href="/about/mission" className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors">Mission</Link>
+                <Link href="/about/vision" className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors">Vision</Link>
+                <Link href="/about/history" className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors">History</Link>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="relative group w-full">
-          <Link href={'/classes'} className={dropdownTriggerStyle()}>
-            Classes
-          </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
-            {classes && classes.length > 0 ? (
-              classes.map((c) => (
-                <Link href={`/classes/${c.code || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">
-                  {c.name || c}
-                </Link>
-              ))
-            ) : (
-              <span className="px-4 py-2 text-slate-400 text-xs italic text-left">No classes</span>
-            )}
+          <div className="relative group">
+            <Link href="/classes" className={dropdownTriggerStyle}>
+              Classes
+            </Link>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block pt-2 z-50">
+              <div className="flex flex-col min-w-48 bg-white text-slate-800 rounded-lg shadow-xl border border-slate-100 overflow-hidden max-h-64 overflow-y-auto">
+                {classes && classes.length > 0 ? (
+                  classes.map((c) => (
+                    <Link 
+                      href={`/classes/${c.code || c.id || c}`} 
+                      key={c.id || c} 
+                      className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors"
+                    >
+                      {c.name || c}
+                    </Link>
+                  ))
+                ) : (
+                  <span className="px-4 py-2.5 text-slate-400 text-xs italic text-left">No classes</span>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="relative group w-full">
-          <Link href={'/clubs'} className={dropdownTriggerStyle()}>
-            Clubs
-          </Link>
-          <div className="absolute overflow-hidden top-full left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col shadow-xl min-w-60 z-50 text-slate-700 bg-white rounded-b-lg border border-primary-light">
-            {clubs && clubs.length > 0 ? (
-              clubs.map((c) => (
-                <Link href={`/clubs/${c.slug || c.id || c}`} key={c.id || c} className="px-4 py-2 hover:bg-primary-light hover:text-primary transition-colors text-xs font-semibold text-left">
-                  {c.name || c}
-                </Link>
-              ))
-            ) : (
-              <span className="px-4 py-2 text-slate-400 text-xs italic text-left">No clubs</span>
-            )}
+          <div className="relative group">
+            <Link href="/clubs" className={dropdownTriggerStyle}>
+              Clubs
+            </Link>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block pt-2 z-50">
+              <div className="flex flex-col min-w-48 bg-white text-slate-800 rounded-lg shadow-xl border border-slate-100 overflow-hidden max-h-64 overflow-y-auto">
+                {clubs && clubs.length > 0 ? (
+                  clubs.map((c) => (
+                    <Link 
+                      href={`/clubs/${c.slug || c.id || c}`} 
+                      key={c.id || c} 
+                      className="px-4 py-2.5 text-xs font-semibold text-left hover:bg-primary-light hover:text-white transition-colors"
+                    >
+                      {c.name || c}
+                    </Link>
+                  ))
+                ) : (
+                  <span className="px-4 py-2.5 text-slate-400 text-xs italic text-left">No clubs</span>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
 
-        <Link href={'/teachers'} className={linkStyle()}>Teachers</Link>
-        <Link href={'/staffs'} className={linkStyle()}>Staff</Link>
-        <Link href={'/achievements'} className={linkStyle()}>Achievements</Link>
-        <Link href={'/news'} className={linkStyle()}>News</Link>
-        <Link href={'/results'} className={linkStyle()}>Results</Link>
-        <Link href={'/contact'} className={linkStyle()}>Contact</Link>
-      </section>
+          <Link href="/teachers" className={navLinkStyle}>Teachers</Link>
+          <Link href="/staffs" className={navLinkStyle}>Staff</Link>
+          <Link href="/achievements" className={navLinkStyle}>Achievements</Link>
+          <Link href="/news" className={navLinkStyle}>News</Link>
+          <Link href="/results" className={navLinkStyle}>Results</Link>
+          <Link href="/contact" className={navLinkStyle}>Contact</Link>
+        </div>
+      </div>
     </nav>
   );
 };
