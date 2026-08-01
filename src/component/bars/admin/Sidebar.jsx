@@ -163,7 +163,7 @@ const Sidebar = () => {
     { label: 'Faculty Provosts', href: '/admin/hostels/provosts', icon: FiUserCheck },
   ];
 
-  const groupHeaderStyle = "text-[10px] font-bold text-secondary uppercase tracking-wider px-3 mb-1 mt-3 flex items-center gap-1.5";
+  const groupHeaderStyle = "text-[10px] font-bold text-white uppercase tracking-wider px-3 mb-1 mt-3 flex items-center gap-1.5";
 
   const CollapsibleGroup = ({ label, icon: CategoryIcon, isOpen, setIsOpen, prefix, links }) => {
     const isGroupActive = pathname.startsWith(prefix);
@@ -174,17 +174,17 @@ const Sidebar = () => {
           className={`flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 cursor-pointer group ${
             isGroupActive
               ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
-              : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
+              : 'text-white font-medium hover:text-primary hover:bg-secondary'
           }`}
         >
           <div className="flex items-center gap-3">
-            <CategoryIcon className={`text-base ${isGroupActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
+            <CategoryIcon className={`text-base ${isGroupActive ? 'text-primary' : 'text-white group-hover:text-primary'}`} />
             <span>{label}</span>
           </div>
           {isOpen ? (
-            <FiChevronDown className="text-secondary text-xs" />
+            <FiChevronDown className="text-white text-xs" />
           ) : (
-            <FiChevronRight className="text-secondary text-xs" />
+            <FiChevronRight className="text-white text-xs" />
           )}
         </button>
 
@@ -202,10 +202,10 @@ const Sidebar = () => {
                   className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-150 ${
                     isActive
                       ? 'bg-secondary text-primary font-bold shadow-2xs'
-                      : 'text-secondary font-medium hover:bg-secondary hover:text-primary'
+                      : 'text-white font-medium hover:bg-secondary hover:text-primary'
                   }`}
                 >
-                  <Icon className={`text-xs ${isActive ? 'text-primary' : 'text-secondary'}`} />
+                  <Icon className={`text-xs ${isActive ? 'text-primary' : 'text-white'}`} />
                   <span>{link.label}</span>
                 </Link>
               );
@@ -230,10 +230,10 @@ const Sidebar = () => {
             className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
               isActive
                 ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
-                : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
+                : 'text-white font-medium hover:text-primary hover:bg-secondary'
             }`}
           >
-            <Icon className={`text-base ${isActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
+            <Icon className={`text-base ${isActive ? 'text-primary' : 'text-white group-hover:text-primary'}`} />
             <span>{link.label}</span>
           </Link>
         );

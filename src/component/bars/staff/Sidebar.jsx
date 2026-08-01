@@ -105,7 +105,7 @@ const Sidebar = () => {
         <div className="flex flex-col gap-4">
           <Back />
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-wider px-3 flex items-center gap-1.5 mb-1">
+            <span className="text-[10px] font-bold text-white uppercase tracking-wider px-3 flex items-center gap-1.5 mb-1">
               Staff Navigation {role ? `(${role})` : ''}
             </span>
 
@@ -129,10 +129,10 @@ const Sidebar = () => {
                       className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 group ${
                         isActive
                           ? 'bg-secondary text-primary font-bold border border-secondary shadow-2xs'
-                          : 'text-secondary font-medium hover:text-primary hover:bg-secondary'
+                          : 'text-white font-medium hover:text-primary hover:bg-secondary'
                       }`}
                     >
-                      <Icon className={`text-base ${isActive ? 'text-primary' : 'text-secondary group-hover:text-primary'}`} />
+                      <Icon className={`text-base ${isActive ? 'text-primary' : 'text-white group-hover:text-primary'}`} />
                       <span>{link.label}</span>
                     </Link>
                   );
