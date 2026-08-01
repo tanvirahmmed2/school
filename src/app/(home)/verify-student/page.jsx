@@ -40,13 +40,9 @@ const VerifyStudentPage = () => {
 
   return (
     <div className="w-full min-h-[80vh] bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <div className="w-full max-w-xl flex flex-col gap-6 animate-fade-up">
+      <div className="w-full flex flex-col gap-6 animate-fade-up">
         
-        {/* Header Title */}
         <div className="text-center">
-          <span className="text-xs font-bold text-primary bg-primary-light px-3 py-1 rounded-full uppercase tracking-widest">
-            Verification Registry
-          </span>
           <h1 className="text-3xl font-semibold text-slate-900 mt-2 tracking-tight">
             Student Identity Verifier
           </h1>
@@ -106,7 +102,7 @@ const VerifyStudentPage = () => {
                 {/* Details Block */}
                 <div className="flex-1 flex flex-col gap-3.5 text-center sm:text-left">
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-light text-primary border border-primary-light rounded-full text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-light text-secondary border border-primary-light rounded-full text-[10px] font-bold">
                       <FiCheckCircle /> Verified Identity
                     </span>
                   </div>

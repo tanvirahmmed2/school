@@ -88,7 +88,7 @@ const ResultsPortalPage = () => {
     <div className="w-full min-h-[75vh] py-12 px-4 md:px-8  flex flex-col gap-8 animate-fade-up">
       {/* Header Title */}
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-light text-primary mb-3">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-light text-secondary mb-3">
           <FiAward className="text-2xl" />
         </div>
         <h1 className="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">

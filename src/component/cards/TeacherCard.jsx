@@ -9,7 +9,7 @@ const TeacherCard = ({ teacher, className = '' }) => {
   return (
     <Link
           href={`/teachers/${teacher.username}`}
-      className={`group bg-primary w-full rounded-xl border  flex-col  hover:border-primary shadow-sm hover:shadow-md transition-all duration-250 overflow-hidden flex ${className}`}
+      className={`group bg-primary w-full rounded-xl flex-col  shadow-sm hover:shadow-md transition-all duration-250 overflow-hidden flex ${className}`}
     >
       <div className="w-full shrink-0 relative rounded-xl overflow-hidden">
         {teacher.image ? (
@@ -34,7 +34,7 @@ const TeacherCard = ({ teacher, className = '' }) => {
         </h4>
 
         <span className="flex items-center gap-1 ">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-primary-light text-primary border border-primary-light uppercase tracking-wider">{teacher.designation || 'Faculty Member'}</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-primary-light text-secondary border border-primary-light uppercase tracking-wider">{teacher.designation || 'Faculty Member'}</span>
         </span>
 
         

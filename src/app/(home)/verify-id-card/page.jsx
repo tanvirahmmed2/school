@@ -33,7 +33,7 @@ const VerifyIDCardPage = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-12 space-y-8 animate-fade-up">
+    <div className="w-full px-4 py-12 space-y-8 animate-fade-up">
       {/* Header */}
       <div className="bg-white border border-slate-200/80 rounded-3xl p-8 text-center space-y-3 shadow-2xs">
         <div className="inline-flex items-center justify-center p-3 bg-indigo-50 text-indigo-600 rounded-2xl mb-1">

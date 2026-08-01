@@ -35,6 +35,7 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-6 text-xs lg:text-sm font-semibold">
+          <Link href="/notices" className="transition-colors text-white hover:text-secondary">Notices</Link>
           <Link href="/facilities/hostels" className="transition-colors text-white hover:text-secondary">Hostels</Link>
           <Link href="/gallery" className="transition-colors text-white hover:text-secondary">Gallery</Link>
           <Link href="/apply" className="transition-colors text-white hover:text-secondary">Apply</Link>
