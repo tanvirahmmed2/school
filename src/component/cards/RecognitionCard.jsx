@@ -51,18 +51,11 @@ const RecognitionCard = ({ recognition, item, href, className = '' }) => {
 
         <div className="p-4 flex flex-col items-center justify-center flex-1 gap-1.5">
           
-          <h3 className="font-bold text-slate-900 text-xs md:text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="font-semibold text-slate-900 text-center leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {cardTitle}
           </h3>
 
-          {awardedBy && (
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-600 font-medium mt-auto">
-
-              <span className="truncate">
-                <strong className="text-slate-700 font-bold">{awardedBy}</strong>
-              </span>
-            </div>
-          )}
+          
 
         </div>
       </div>

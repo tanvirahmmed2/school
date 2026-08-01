@@ -150,7 +150,7 @@ const AdmissionsPage = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-            <FiUsers className="text-emerald-600" /> Student Admission Applications
+            <FiUsers className="text-primary" /> Student Admission Applications
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Review candidate details, multi-select, and set selection/disqualification statuses.
@@ -159,7 +159,7 @@ const AdmissionsPage = () => {
 
         <Link
           href="/admin/students/admissions/circulars"
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs self-start sm:self-auto"
         >
           <FiLayers className="text-sm" />
           <span>Manage Circulars</span>
@@ -204,7 +204,7 @@ const AdmissionsPage = () => {
             placeholder="Search candidate name, email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-emerald-600"
+            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:bg-white focus:border-primary"
           />
         </div>
 
@@ -215,7 +215,7 @@ const AdmissionsPage = () => {
             <button
               disabled={bulkProcessing}
               onClick={() => handleBulkAction('selected')}
-              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors cursor-pointer text-[10px] font-bold inline-flex items-center gap-1"
+              className="px-2.5 py-1 bg-primary hover:bg-emerald-700 text-white rounded-lg transition-colors cursor-pointer text-[10px] font-bold inline-flex items-center gap-1"
             >
               <FiCheck /> Select
             </button>
@@ -234,7 +234,7 @@ const AdmissionsPage = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden">
         {loading ? (
           <div className="w-full py-16 flex flex-col items-center justify-center gap-2">
-            <div className="w-7 h-7 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             <span className="text-xs font-semibold text-slate-400">Loading admissions...</span>
           </div>
         ) : currentTabAdmissions.length === 0 ? (
@@ -260,7 +260,7 @@ const AdmissionsPage = () => {
                         selectedIds.length === currentTabAdmissions.length
                       }
                       onChange={handleSelectAll}
-                      className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-600 cursor-pointer"
+                      className="rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                     />
                   </th>
                   <th className="px-4 py-3">Applicant / ID</th>
@@ -289,7 +289,7 @@ const AdmissionsPage = () => {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleSelectOne(adm.id)}
-                          className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-600 cursor-pointer"
+                          className="rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
                         />
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">

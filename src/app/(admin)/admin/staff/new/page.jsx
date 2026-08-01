@@ -10,8 +10,7 @@ const AdminNewStaffPage = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-6 animate-fade-up">
-      {/* Back Link & Header */}
+    <div className="w-full space-y-6 animate-fade-up">
       <div className="flex flex-col gap-3 pb-2 border-b border-slate-200/60">
         <Link
           href="/admin/staff/list"

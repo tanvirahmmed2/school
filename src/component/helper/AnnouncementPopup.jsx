@@ -48,11 +48,6 @@ const AnnouncementPopup = () => {
           <FiX className="text-lg" />
         </button>
 
-        <div className="flex items-center gap-2">
-          <span className=" font-semibold uppercase text-primary tracking-widest">
-            Announcement!
-          </span>
-        </div>
 
         <div className="flex flex-col gap-2">
           <h2 className="text-base font-semibold text-tertiary tracking-tight leading-snug">

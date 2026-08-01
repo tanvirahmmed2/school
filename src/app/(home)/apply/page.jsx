@@ -45,7 +45,7 @@ const ApplyPage = () => {
             const Icon = step.icon;
             return (
               <div key={idx} className="bg-white rounded-2xl border border-slate-100 p-6 flex gap-4 hover:shadow-xs transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-primary-light flex items-center justify-center text-primary text-lg shrink-0 font-bold">
+                <div className="w-12 h-12 rounded-xl bg-primary-light flex items-center justify-center text-secondary text-lg shrink-0 font-bold">
                   <Icon />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -64,7 +64,6 @@ const ApplyPage = () => {
           })}
         </div>
 
-        {/* Institutional Grading Scale Table */}
         <GradingScaleTable 
           title="Academic Grading Standard" 
           subtitle="Official minimum marks, maximum mark percentage ranges, and grade points for applicant evaluation."
@@ -82,7 +81,7 @@ const ApplyPage = () => {
           </div>
           <Link
             href="/admission"
-            className="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-sky-950 font-semibold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
+            className="inline-flex items-center justify-center gap-2 bg-secondary text-tertiary font-semibold px-6 py-3 rounded-xl shadow-md hover:scale-[1.02] transition-all relative z-10 text-sm"
           >
             <span>Fill Application Form</span>
             <FiArrowRight />

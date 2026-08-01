@@ -53,7 +53,7 @@ const RecognitionsPage = () => {
             <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : recognitions.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+          <div className="w-full flex flex-wrap items-center justify-center gap-4">
             {recognitions.map((item) => (
               <RecognitionCard key={item.id} recognition={item} />
             ))}

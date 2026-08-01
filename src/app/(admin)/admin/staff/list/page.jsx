@@ -17,7 +17,6 @@ const AdminStaffListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
 
-  // Edit modal states
   const [editingStaff, setEditingStaff] = useState(null);
   const [editName, setEditName] = useState('');
   const [editNumber, setEditNumber] = useState('');

@@ -62,15 +62,14 @@ const AdmissionApplyForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full ">
       
-      {/* Target Circular Selector */}
       <div className="flex flex-col gap-2 w-full">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-          <FiLayers className="text-emerald-600" /> Target Admission Circular *
+          <FiLayers className="text-secondary" /> Target Admission Circular *
         </label>
         {admissionIdParam && selectedCircular ? (
-          <div className="w-full px-4 py-3 bg-emerald-50 border border-emerald-200/60 rounded-xl text-xs text-emerald-900 font-bold">
+          <div className="w-full px-4 py-3  border border-tertiary rounded-xl text-xs text-primary font-bold">
             {selectedCircular.title} (Class: {selectedCircular.class_name})
           </div>
         ) : (
@@ -78,7 +77,7 @@ const AdmissionApplyForm = ({
             required
             value={selectedCircular ? selectedCircular.id : ''}
             onChange={(e) => onCircularChange(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 cursor-pointer"
+            className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  cursor-pointer"
           >
             <option value="">Choose an open circular drive...</option>
             {circulars.map((c) => (
@@ -110,7 +109,6 @@ const AdmissionApplyForm = ({
         )}
       </div>
 
-      {/* 1. Candidate Personal Details */}
       <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col gap-4">
         <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-2">
           <FiUser className="text-emerald-600" /> 1. Candidate Personal Details
@@ -127,7 +125,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.applicant_name}
               onChange={(e) => setForm((p) => ({ ...p, applicant_name: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
 
@@ -141,7 +139,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.date_of_birth}
               onChange={(e) => setForm((p) => ({ ...p, date_of_birth: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
 
@@ -151,7 +149,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.gender}
               onChange={(e) => setForm((p) => ({ ...p, gender: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 cursor-pointer disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  cursor-pointer disabled:opacity-60"
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -169,7 +167,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.birth_regi_number}
               onChange={(e) => setForm((p) => ({ ...p, birth_regi_number: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
 
@@ -183,7 +181,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.phone}
               onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
 
@@ -197,7 +195,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.email}
               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
 
@@ -209,7 +207,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.blood_group}
               onChange={(e) => setForm((p) => ({ ...p, blood_group: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 cursor-pointer disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  cursor-pointer disabled:opacity-60"
             >
               <option value="">-- Select Blood Group --</option>
               <option value="A+">A+</option>
@@ -233,7 +231,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.address}
               onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
         </div>
@@ -253,7 +251,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.father_name}
               onChange={(e) => setForm((p) => ({ ...p, father_name: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -263,7 +261,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.father_occupation}
               onChange={(e) => setForm((p) => ({ ...p, father_occupation: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -274,7 +272,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.father_phone}
               onChange={(e) => setForm((p) => ({ ...p, father_phone: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
         </div>
@@ -294,7 +292,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.mother_name}
               onChange={(e) => setForm((p) => ({ ...p, mother_name: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -304,7 +302,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.mother_occupation}
               onChange={(e) => setForm((p) => ({ ...p, mother_occupation: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -315,7 +313,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.mother_phone}
               onChange={(e) => setForm((p) => ({ ...p, mother_phone: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
         </div>
@@ -334,7 +332,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.past_school_name}
               onChange={(e) => setForm((p) => ({ ...p, past_school_name: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -344,7 +342,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.past_school_class}
               onChange={(e) => setForm((p) => ({ ...p, past_school_class: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -354,7 +352,7 @@ const AdmissionApplyForm = ({
               disabled={isCircularLocked}
               value={form.past_school_result}
               onChange={(e) => setForm((p) => ({ ...p, past_school_result: e.target.value }))}
-              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 disabled:opacity-60"
+              className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  disabled:opacity-60"
             />
           </div>
         </div>
@@ -368,7 +366,7 @@ const AdmissionApplyForm = ({
             disabled={isCircularLocked}
             value={form.special_note}
             onChange={(e) => setForm((p) => ({ ...p, special_note: e.target.value }))}
-            className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none focus:border-emerald-600 resize-none disabled:opacity-60"
+            className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 outline-none  resize-none disabled:opacity-60"
             placeholder="Mention any physical conditions, extracurricular interests, or special instructions..."
           />
         </div>
@@ -386,7 +384,7 @@ const AdmissionApplyForm = ({
         <button
           type="submit"
           disabled={submitting || isCircularLocked}
-          className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
+          className="px-6 py-2.5 bg-primary  text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer disabled:opacity-50"
         >
           {submitting ? 'Submitting...' : 'Submit Application & Proceed'}
         </button>

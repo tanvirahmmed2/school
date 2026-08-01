@@ -29,14 +29,14 @@ const GradingScaleTable = ({ title = "Institutional Grading Scale", subtitle = "
       <div className="p-6 md:p-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2 tracking-tight">
-            <FiAward className="text-primary" /> {title}
+            <FiAward className="text-secondary" /> {title}
           </h2>
           <p className="text-xs md:text-sm text-slate-500 mt-1">
             {subtitle}
           </p>
         </div>
         <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-xl text-xs font-semibold text-slate-600 border border-slate-100 shrink-0">
-          <FiInfo className="text-primary text-sm" />
+          <FiInfo className="text-secondary text-sm" />
           <span>{grades.length} Grade Standard{grades.length === 1 ? '' : 's'}</span>
         </div>
       </div>
@@ -87,7 +87,7 @@ const GradingScaleTable = ({ title = "Institutional Grading Scale", subtitle = "
                     {parseFloat(grade.max_mark).toFixed(2)}%
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-3 py-1 rounded-xl text-xs font-extrabold bg-primary-light text-primary border border-primary-light">
+                    <span className="inline-flex items-center px-3 py-1 rounded-xl text-xs font-extrabold bg-primary-light text-secondary border border-primary-light">
                       {grade.point !== undefined && grade.point !== null ? parseFloat(grade.point).toFixed(2) : '0.00'}
                     </span>
                   </td>

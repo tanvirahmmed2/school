@@ -15,7 +15,6 @@ const AdmissionPage = () => {
         const res = await fetch('/api/admin/admissions');
         const data = await res.json();
         if (data.success && data.paylod?.circulars) {
-          // Filter to only show active circulars where finish_date >= today
           const todayStr = new Date().toISOString().split('T')[0];
           const active = data.paylod.circulars.filter(
             (c) => new Date(c.finish_date).toISOString().split('T')[0] >= todayStr
@@ -49,7 +48,7 @@ const AdmissionPage = () => {
 
         <div className="mb-12">
           <h2 className="text-base font-bold text-slate-800 uppercase tracking-widest mb-5 flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary"></span> Active Circular Intakes
+            <span className="w-2.5 h-2.5 rounded-full bg-primary"></span> Active Circulars
           </h2>
 
           {loading ? (
@@ -59,7 +58,7 @@ const AdmissionPage = () => {
           ) : circulars.length === 0 ? (
             <div className="bg-white border border-slate-100 rounded-3xl p-8 text-center shadow-xs">
               <span className="text-3xl">📭</span>
-              <p className="text-xs font-bold text-slate-500 mt-2">No Active Intakes Right Now</p>
+              <p className="text-xs font-bold text-slate-500 mt-2">No Active Circulars Right Now</p>
               <p className="text-[10px] text-slate-400 mt-0.5">Please check back later or contact the admin desk.</p>
             </div>
           ) : (

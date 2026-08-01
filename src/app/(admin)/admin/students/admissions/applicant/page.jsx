@@ -7,6 +7,7 @@ import {
   FiArrowLeft, FiUser, FiMail, FiPhone, FiCalendar, 
   FiMapPin, FiAward, FiBook, FiCheck, FiX, FiLayers, FiImage, FiFileText, FiDollarSign, FiHeart
 } from 'react-icons/fi';
+import Image from 'next/image';
 
 const ApplicantDetailsContent = () => {
   const searchParams = useSearchParams();
@@ -85,7 +86,7 @@ const ApplicantDetailsContent = () => {
   if (loading) {
     return (
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-xs font-semibold text-slate-400">Loading applicant details...</span>
       </div>
     );
@@ -113,8 +114,7 @@ const ApplicantDetailsContent = () => {
   const isDisqualified = ['disqualified', 'rejected'].includes((applicant.status || '').toLowerCase());
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-5">
-      {/* Back button */}
+    <div className="w-full  flex flex-col gap-5">
       <button
         onClick={() => router.push('/admin/students/admissions')}
         className="self-start flex items-center gap-2 px-3.5 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
@@ -130,11 +130,10 @@ const ApplicantDetailsContent = () => {
           {/* Candidate Image Card */}
           <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col items-center text-center gap-3">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider self-start flex items-center gap-1.5">
-              <FiImage className="text-xs text-emerald-600" /> Photo (500 x 500 px)
+              <FiImage className="text-xs text-primary" /> Photo (500 x 500 px)
             </p>
             {applicant.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img 
+              <Image width={500} height={500}
                 src={applicant.image} 
                 alt="Candidate Profile" 
                 className="w-40 h-40 rounded-xl object-cover border border-slate-200 shadow-2xs bg-slate-50"
@@ -146,23 +145,21 @@ const ApplicantDetailsContent = () => {
             )}
             <div>
               <h2 className="text-base font-bold text-slate-800">{applicant.applicant_name}</h2>
-              <span className="inline-flex mt-1 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+              <span className="inline-flex mt-1 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-50 text-primary border border-emerald-200/60">
                 Class: {applicant.class_name}
               </span>
             </div>
           </div>
 
-          {/* Candidate Signature Card */}
           <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col items-center text-center gap-3">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider self-start flex items-center gap-1.5">
-              <FiFileText className="text-xs text-emerald-600" /> Signature (150 x 30 px)
+              <FiFileText className="text-xs text-primary" /> Signature (150 x 30 px)
             </p>
             {applicant.signature ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img 
+              <Image width={300} height={300} 
                 src={applicant.signature} 
                 alt="Candidate Signature" 
-                className="w-full max-w-[200px] h-12 rounded-lg object-contain border border-slate-200 bg-white p-1"
+                className="w-full max-w-50 h-12 rounded-lg object-contain border border-slate-200 bg-white p-1"
               />
             ) : (
               <div className="w-full h-12 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-semibold">
@@ -174,7 +171,7 @@ const ApplicantDetailsContent = () => {
           {/* Admission Fee Card */}
           <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs flex flex-col gap-3">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-              <FiDollarSign className="text-xs text-emerald-600" /> Admission Fee Status
+              <FiDollarSign className="text-xs text-primary" /> Admission Fee Status
             </p>
             <div className="w-full flex flex-col gap-2">
               <div className="flex justify-between items-center text-xs">
@@ -185,7 +182,7 @@ const ApplicantDetailsContent = () => {
                 <span className="font-semibold text-slate-500">Status:</span>
                 <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
                   applicant.fee_status === 'Paid' || applicant.fee_status === 'paid'
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                    ? 'bg-emerald-50 text-primary border-emerald-200/60'
                     : 'bg-amber-50 text-amber-700 border-amber-200'
                 }`}>
                   {applicant.fee_status || 'Pending'}
@@ -197,7 +194,7 @@ const ApplicantDetailsContent = () => {
                 <select
                   value={applicant.fee_status || 'Pending'}
                   onChange={(e) => handleUpdateFeeStatus(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs outline-none focus:border-emerald-600 cursor-pointer"
+                  className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl text-xs outline-none focus:border-primary cursor-pointer"
                 >
                   <option value="Pending">Pending</option>
                   <option value="Paid">Paid</option>
@@ -217,7 +214,7 @@ const ApplicantDetailsContent = () => {
               <div>
                 <span className={`inline-flex px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border ${
                   isSelected 
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60' 
+                    ? 'bg-emerald-50 text-primary border-emerald-200/60' 
                     : isDisqualified
                     ? 'bg-rose-50 text-rose-700 border-rose-200'
                     : 'bg-amber-50 text-amber-700 border-amber-200'
@@ -356,7 +353,7 @@ const ApplicantDetailsContent = () => {
               <button
                 disabled={processing}
                 onClick={() => handleProcess('selected')}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer flex items-center gap-1"
+                className="px-4 py-2 bg-primary hover:bg-primary text-white rounded-xl text-xs font-semibold transition-colors shadow-2xs cursor-pointer flex items-center gap-1"
               >
                 <FiCheck className="text-xs" /> Select / Approve Candidate
               </button>
@@ -374,7 +371,7 @@ const ApplicantDetailsPage = () => {
   return (
     <Suspense fallback={
       <div className="w-full min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-xs font-semibold text-slate-400">Preparing candidate profile...</span>
       </div>
     }>

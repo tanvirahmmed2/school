@@ -62,8 +62,8 @@ const NewCircularPage = () => {
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.01)] animate-fade-up">
-      {/* Header */}
+    <div className="w-full  bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.01)] animate-fade-up">
+      
       <div className="flex items-center gap-3 mb-6 border-b border-slate-50 pb-4">
         <button
           onClick={() => router.push('/admin/students/admissions/circulars')}
