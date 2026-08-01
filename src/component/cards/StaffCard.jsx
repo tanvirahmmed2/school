@@ -40,7 +40,7 @@ const StaffCard = ({ staff, className = '' }) => {
           {staff.name}
         </h4>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-primary-light text-primary border border-primary-light uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-primary-light text-secondary border border-primary-light uppercase tracking-wider">
 
             {formatRole(staff.role)}
           </span>
